@@ -12,9 +12,10 @@
 #else
 #include <GL/glut.h>
 #endif
-#include <\Users\James\Dropbox\My Programs\C++\header files\glutPrint.h>
-#include <\Users\James\Dropbox\My Programs\C++\header files\physics_object.h>
-#include <\Users\James\Dropbox\My Programs\C++\header files\cursor.h>
+
+#include <\Users\James\Dropbox\My Programs\C++\headers\glutPrint.h>
+#include <\Users\James\Dropbox\My Programs\C++\headers\physics_object.h>
+#include <\Users\James\Dropbox\My Programs\C++\headers\cursor.h>
 
 
 //2D World
@@ -92,7 +93,7 @@ int temp_toggle[2];
 int toggle_text=1;
 
 
-cursor cursor1;
+//cursor cursor1;
 
 class world
 {
@@ -175,7 +176,7 @@ class projectile: public physics_object
 
     void update()
     {
-        set_boundaries();
+//        set_boundaries();
 
         if(fired)
         move_forward(range);
@@ -201,7 +202,7 @@ class projectile: public physics_object
         range=1000;
         fired=false;
         step_size=0.5;
-        set_boundaries();
+//        set_boundaries();
         steps_taken[up]=0;
         current_color=RED;
         printf("object %d: %s created\n", number, name);
@@ -234,22 +235,22 @@ void collision_detection()
                 if(objects[a].within_radius>0)
                 {
 
-                    if(distance(objects[a].back_side,objects[b].current)<objects[a].radius)
+                    if(distance(objects[a].back_side.midpoint,objects[b].current)<objects[a].radius)
                     {
                     objects[a].touching[down]=objects[b].number;
                     }
 
-                    if(distance(objects[a].front_side,objects[b].current)<objects[a].radius)
+                    if(distance(objects[a].front_side.midpoint,objects[b].current)<objects[a].radius)
                     {
                     objects[a].touching[up]=objects[b].number;
                     }
 
-                    if(distance(objects[a].left_side,objects[b].current)<objects[a].radius)
+                    if(distance(objects[a].left_side.midpoint,objects[b].current)<objects[a].radius)
                     {
                     objects[a].touching[left]=objects[b].number;
                     }
 
-                    if(distance(objects[a].right_side,objects[b].current) < objects[a].radius)
+                    if(distance(objects[a].right_side.midpoint,objects[b].current) < objects[a].radius)
                     {
                     objects[a].touching[right]=objects[b].number;
                     }
@@ -282,7 +283,7 @@ void collision_detection()
 
     }
 };
-object B;
+player B;
 
 void change_size(int w, int h) {
 
@@ -511,7 +512,7 @@ void init_objects()
     // object B -the control group
     B.name="control object";
     B.current_color.set(GREEN);
-    B.set_coordinates(200.0,160.0);
+    B.current.set(200.0,160.0);
     printf("object %d: %s initialized\n",B.number, B.name);
 
     //first object from objects array (player)
@@ -526,7 +527,7 @@ void init_objects()
     //second object from objects array
     objects[2].name="red square";
     objects[2].current_color.set(RED);
-    objects[2].set_coordinates(400.0,160.0);
+    objects[2].current.set(400.0,160.0);
     objects[2].rally.x=objects[2].current.x;
     objects[2].rally.y=objects[2].current.y;
     printf("object %d: %s initialized\n",objects[2].number, objects[2].name);
@@ -534,7 +535,7 @@ void init_objects()
     //third object from objects array
     objects[3].name="grey square";
     objects[3].current_color.set(0.5,0.5,0.5);
-    objects[3].set_coordinates(320.0,60);
+    objects[3].current.set(320.0,60);
     objects[3].rally.x=objects[3].current.x;
     objects[3].rally.y=objects[3].current.y;
     printf("object %d: %s initialized\n",objects[3].number, objects[3].name);
@@ -542,7 +543,7 @@ void init_objects()
     //fourth object from objects array
     objects[4].name="black square";
     objects[4].current_color.set(BLACK);
-    objects[4].set_coordinates(320,260);
+    objects[4].current.set(320,260);
     objects[4].rally.x=objects[4].current.x;
     objects[4].rally.y=objects[4].current.y;
     printf("object %d: %s initialized\n",objects[4].number, objects[4].name);
@@ -551,7 +552,7 @@ void init_objects()
     //fifth object from objects array
     objects[5].name="big cyan square";
     objects[5].current_color.set(0.0,1.0,1.0);
-    objects[5].set_coordinates(200,260);
+    objects[5].current.set(200,260);
     objects[5].width=75;
     objects[5].height=75;
     objects[5].step_size=0.001;
