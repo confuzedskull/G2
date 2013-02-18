@@ -39,10 +39,10 @@
 //global definitions
 //direction definitions - I used this to make directions less confusing when reading code
 
-const int left=2;
-const int right=3;
-const int up=4;
-const int down=5;
+const int left=1;
+const int right=2;
+const int up=3;
+const int down=4;
 GLfloat size=3.0;
 int current_object = 1;
 
