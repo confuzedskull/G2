@@ -544,6 +544,7 @@ void init_objects()
     objects[4].name="black square";
     objects[4].current_color.set(BLACK);
     objects[4].current.set(320,260);
+
     objects[4].rally.x=objects[4].current.x;
     objects[4].rally.y=objects[4].current.y;
     printf("object %d: %s initialized\n",objects[4].number, objects[4].name);
@@ -579,7 +580,7 @@ void render_scene(void) {
     objects[4].physics();
     objects[5].physics();
     bullet.update();
-    //bullet.physics();
+  //  bullet.physics();
 
     collision_detection();//calculate object collision
 //move objects
