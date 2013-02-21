@@ -356,8 +356,8 @@ void text ()
     sprintf(text11,"rotation:%.2f",objects[current_object].rotation);
     glutPrint (window_width/40,window_height-240, GLUT_BITMAP_HELVETICA_12, text11, 1.0f,0.0f,0.0f, 0.5f);
 
-    /*sprintf(text12,"front:%.2f,%.2f",objects[current_object].front.x,objects[current_object].front.y);
-    glutPrint (window_width/40,window_height-260, GLUT_BITMAP_HELVETICA_12, text12, 1.0f,0.0f,0.0f, 0.5f);*/
+    sprintf(text12,"front:%.2f,%.2f",objects[current_object].front.x,objects[current_object].front.y);
+    glutPrint (window_width/40,window_height-260, GLUT_BITMAP_HELVETICA_12, text12, 1.0f,0.0f,0.0f, 0.5f);
 }
 
 void init_objects()
@@ -371,9 +371,18 @@ void init_objects()
     printf("object %d: %s initialized\n",B.number, B.name);
 
     //first object from objects array (player)
+
+    objects[0].name="small square";
+    objects[0].current_color.set(RED);
+    objects[0].current.set(200,100);
+    objects[0].width=25;
+    objects[0].height=25;
+    objects[0].set_boundaries();
+    printf("object %d: %s initialized\n",objects[0].number, objects[0].name);
+
     objects[1].name="player 1";
     objects[1].current_color.set(BLUE);
-    objects[1].step_size=0.05;
+    objects[1].step_size=0.1;
     printf("object %d: %s initialized\n",objects[1].number, objects[1].name);
 
 
@@ -399,7 +408,6 @@ void init_objects()
     objects[4].name="black square";
     objects[4].current_color.set(BLACK);
     objects[4].current.set(320,260);
-
     objects[4].rally.x=objects[4].current.x;
     objects[4].rally.y=objects[4].current.y;
     printf("object %d: %s initialized\n",objects[4].number, objects[4].name);
@@ -412,6 +420,7 @@ void init_objects()
     objects[5].width=75;
     objects[5].height=75;
     objects[5].step_size=0.001;
+    objects[5].set_boundaries();
     objects[5].rally.x=objects[5].current.x;
     objects[5].rally.y=objects[5].current.y;
     printf("object %d: %s initialized\n",objects[5].number, objects[5].name);
@@ -429,6 +438,7 @@ void render_scene(void) {
     cursor1.selection_box();
 
 //calculate the physics for all objects
+   objects[0].physics();
     objects[1].physics();
     objects[2].physics();
     objects[3].physics();
@@ -460,6 +470,7 @@ void render_scene(void) {
     B.render();
     bullet.render();
     objects[1].render();
+    objects[0].render();
     if(toggle_text==1)
     {
         text();
