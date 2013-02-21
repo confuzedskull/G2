@@ -54,15 +54,6 @@ int frames=0;//to be used for frame count
 
 time_t gametime;//to be used for game clock
 
-enum shape
-{
-    circle,
-    line,
-    triangle,
-    rectangle,
-    polygon
-};
-
 //text
 char text0[30];
 char text1[30];
@@ -106,16 +97,12 @@ void collision_detection()
         {
             if(a!=b)
             {
-                if(objects[a].isClose(objects[b]))
+                /*if(objects[a].isClose(objects[b]))
                 {
                 objects[a].current_color.set(RED);
                 }
                 else
-                objects[a].current_color.undo();
-                    if(objects[a].touchingFront(objects[b]))
-                    {
-                        objects[a].current_color.set(GREEN);
-                    }
+                objects[a].current_color.undo();*/
 
                     if(distance(objects[a].back,objects[b].current)<objects[b].radius)
                     {
@@ -372,8 +359,8 @@ void text ()
     sprintf(text11,"rotation:%.2f",objects[current_object].rotation);
     glutPrint (window_width/40,window_height-240, GLUT_BITMAP_HELVETICA_12, text11, 1.0f,0.0f,0.0f, 0.5f);
 
-    /*sprintf(text12,"front:%.2f,%.2f",objects[current_object].front_side.x,objects[current_object].front_side.y);
-    glutPrint (window_width/40,window_height-260, GLUT_BITMAP_HELVETICA_12, text12, 1.0f,0.0f,0.0f, 0.5f);*/
+    sprintf(text12,"front:%.2f,%.2f",objects[current_object].front.x,objects[current_object].front.y);
+    glutPrint (window_width/40,window_height-260, GLUT_BITMAP_HELVETICA_12, text12, 1.0f,0.0f,0.0f, 0.5f);
 }
 
 void init_objects()
