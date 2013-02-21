@@ -97,32 +97,29 @@ void collision_detection()
         {
             if(a!=b)
             {
-                /*if(objects[a].isClose(objects[b]))
+                if(objects[a].isClose(objects[b]))
                 {
-                objects[a].current_color.set(RED);
+
+                    if(objects[a].touchingBack(objects[b]))
+                    {
+                    objects[a].current_color.set(RED);
+                    }
+
+                    if(objects[a].touchingFront(objects[b]))
+                    {
+                    objects[a].current_color.set(GREEN);
+                    }
+
+                    if(objects[a].touchingLeft(objects[b]))
+                    {
+                    objects[a].current_color.set(BLUE);
+                    }
+
+                    if(objects[a].touchingRight(objects[b]))
+                    {
+                    objects[a].current_color.set(YELLOW);
+                    }
                 }
-                else
-                objects[a].current_color.undo();*/
-
-                    if(distance(objects[a].back,objects[b].current)<objects[b].radius)
-                    {
-                    objects[a].touching[down]=objects[b].number;
-                    }
-
-                    if(distance(objects[a].front,objects[b].current)<objects[b].radius)
-                    {
-                    objects[a].touching[up]=objects[b].number;
-                    }
-
-                    if(distance(objects[a].left,objects[b].current)<objects[b].radius)
-                    {
-                    objects[a].touching[left]=objects[b].number;
-                    }
-
-                    if(distance(objects[a].right,objects[b].current) < objects[b].radius)
-                    {
-                    objects[a].touching[right]=objects[b].number;
-                    }
 
             }
 
@@ -359,8 +356,8 @@ void text ()
     sprintf(text11,"rotation:%.2f",objects[current_object].rotation);
     glutPrint (window_width/40,window_height-240, GLUT_BITMAP_HELVETICA_12, text11, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text12,"front:%.2f,%.2f",objects[current_object].front.x,objects[current_object].front.y);
-    glutPrint (window_width/40,window_height-260, GLUT_BITMAP_HELVETICA_12, text12, 1.0f,0.0f,0.0f, 0.5f);
+    /*sprintf(text12,"front:%.2f,%.2f",objects[current_object].front.x,objects[current_object].front.y);
+    glutPrint (window_width/40,window_height-260, GLUT_BITMAP_HELVETICA_12, text12, 1.0f,0.0f,0.0f, 0.5f);*/
 }
 
 void init_objects()
