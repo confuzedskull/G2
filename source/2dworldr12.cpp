@@ -16,7 +16,9 @@
 #include <\Users\James\Dropbox\My Programs\C++\headers\glutPrint.h>
 #include <\Users\James\Dropbox\My Programs\C++\headers\physics_object.h>
 #include <\Users\James\Dropbox\My Programs\C++\headers\cursor.h>
-
+#include <\Users\James\Dropbox\My Programs\C++\headers\projectile.h>
+#include <\Users\James\Dropbox\My Programs\C++\headers\player.h>
+#include <\Users\James\Dropbox\My Programs\C++\headers\world.h>
 
 //2D World
 //by James Nakano
@@ -24,17 +26,6 @@
 //This is a basic 2D game engine created from the ground up using openGL and glut
 //Disclaimer: The glut and opengl libraries are obviously not mine, but everything else is an original creation.
 //
-//NOTE: in general, position related arrays use index 2 as left, 3 as right, 4 as forward, 5 as backward
-
-//changelog
-//fixed collision_detection but touching[up]is not working
-//modified distance calculations in collision_detection to use points as parameters. code is shorter now.
-//in collision_detection, touching[side] is calculated by comparing distance of A-B and comparing it to A instead of B
-//improved the command line. now prints a lot of useful info.
-//command line now prints when each object (with regard to type) is created, destroyed or rendered
-//added window_x and window_y global variables
-//added bool "visible" to object class
-//removed color class. included color header file instead
 
 //global definitions
 //direction definitions - I used this to make directions less confusing when reading code
@@ -72,8 +63,6 @@ enum shape
     polygon
 };
 
-
-struct limits {float xmin; float xmax; float ymin; float ymax;};
 //text
 char text0[30];
 char text1[30];
@@ -95,124 +84,15 @@ int toggle_text=1;
 
 //cursor cursor1;
 
-class world
-{
-    public:
-    char* name;
-    int type;
-    int state;
-    float timer;
-    limits boundaries;
-    float gravity;
-    float wind;
-    int no_of_objects;
-    bool settings[10];
 
-
-};
 world current_world;
 
 double world_gravity=-0.01;
 
-class player: public physics_object
-{
-
-    public:
-    int health;
-    int energy;
-    int defense;
-    int attack;
-    int shield;
-    bool action[10];
-    /* action 1:resting
-    action 2: left
-    action 3: right
-    action 4: up/forward
-    action 5: down/backward
-    action 6: jumping
-    action 7: falling
-    action 8: primary
-    action 9: secondary
-    */
-
-    player()
-    {
-
-
-    }
-};
 
 player* objects = new player[max_objects];
 
-class projectile: public physics_object
-{
-    public:
 
-    int range;//how far the projectile can go until it resets
-    int power;
-    bool fired;
-
-    void reset()
-    {
-        current.x=resting.x;
-        current.y=resting.y;
-        steps_taken[up]=0;
-        fired=false;
-    }
-
-    void fire(object source)//an object fires a projectile
-    {
-        if(!fired)
-        {
-        current.x=source.current.x;
-        resting.x=source.current.x;
-        current.y=source.current.y;
-        resting.y=source.current.y;
-        rotation=source.rotation;
-        calc_step();//orient it to the direction aiming
-        fired=true;
-        }
-    }
-
-    void update()
-    {
-//        set_boundaries();
-
-        if(fired)
-        move_forward(range);
-        else
-        {//set projectile position to somewhere outside of scene
-            current.x=0;
-            current.y=0;
-        }
-
-        if(steps_taken[up]==range)
-        {
-            reset();
-        }
-
-    }
-
-    projectile()
-    {
-        name="projectile";
-        width=10;
-        height=10;
-        radius=5;
-        range=1000;
-        fired=false;
-        step_size=0.5;
-//        set_boundaries();
-        steps_taken[up]=0;
-        current_color=RED;
-        printf("object %d: %s created\n", number, name);
-    }
-
-    ~projectile()
-    {
-        printf("object %d: %s distroyed\n", number, name);
-    }
-};
 
 projectile bullet;
 
@@ -226,47 +106,38 @@ void collision_detection()
         {
             if(a!=b)
             {
-                if(distance(objects[a].current, objects[b].current) < (objects[a].radius + objects[b].radius))
+                if(objects[a].isClose(objects[b]))
                 {
-                objects[a].within_radius=objects[b].number;
-                //objects[a].current_color=objects[b].current_color;
+                objects[a].current_color.set(RED);
                 }
+                else
+                objects[a].current_color.undo();
+                    if(objects[a].touchingFront(objects[b]))
+                    {
+                        objects[a].current_color.set(GREEN);
+                    }
 
-                if(objects[a].within_radius>0)
-                {
-
-                    if(distance(objects[a].back_side.midpoint,objects[b].current)<objects[a].radius)
+                    if(distance(objects[a].back,objects[b].current)<objects[b].radius)
                     {
                     objects[a].touching[down]=objects[b].number;
                     }
 
-                    if(distance(objects[a].front_side.midpoint,objects[b].current)<objects[a].radius)
+                    if(distance(objects[a].front,objects[b].current)<objects[b].radius)
                     {
                     objects[a].touching[up]=objects[b].number;
                     }
 
-                    if(distance(objects[a].left_side.midpoint,objects[b].current)<objects[a].radius)
+                    if(distance(objects[a].left,objects[b].current)<objects[b].radius)
                     {
                     objects[a].touching[left]=objects[b].number;
                     }
 
-                    if(distance(objects[a].right_side.midpoint,objects[b].current) < objects[a].radius)
+                    if(distance(objects[a].right,objects[b].current) < objects[b].radius)
                     {
                     objects[a].touching[right]=objects[b].number;
                     }
 
-                }
-                else
-                {
-                objects[a].touching[2]=0;
-                objects[a].touching[3]=0;
-                objects[a].touching[4]=0;
-                objects[a].touching[5]=0;
-
-                }
             }
-            else
-            objects[a].within_radius=0;
 
         }
         for(int p=0; p<max_projectiles; p++)//projectile collision detection
