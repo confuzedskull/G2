@@ -95,35 +95,12 @@ void collision_detection()
     {
         for(int b=0; b<max_objects; b++)
         {
-            if(a!=b)
-            {
-                if(objects[a].isClose(objects[b]))
+            if(a!=b && objects[a].isClose(objects[b]))
                 {
-
-                    if(objects[a].touchingBack(objects[b]))
-                    {
-                    objects[a].current_color.set(RED);
-                    }
-
-                    if(objects[a].touchingFront(objects[b]))
-                    {
-                    objects[a].current_color.set(GREEN);
-                    }
-
-                    if(objects[a].touchingLeft(objects[b]))
-                    {
-                    objects[a].current_color.set(BLUE);
-                    }
-
-                    if(objects[a].touchingRight(objects[b]))
-                    {
-                    objects[a].current_color.set(YELLOW);
-                    }
+                    objects[a].repel(objects[b]);
                 }
-
-            }
-
         }
+
         for(int p=0; p<max_projectiles; p++)//projectile collision detection
             {
                 if(distance(projectiles[p].current, objects[a].current) < (objects[p].radius + objects[a].radius))
@@ -280,12 +257,12 @@ if (key_states['d'])
 
 if (key_states['q'])
     {
-        objects[current_object].rotation+=0.1;
+        objects[current_object].rotation+=0.5;
     }
 
 if (key_states['e'])
     {
-        objects[current_object].rotation-=0.1;
+        objects[current_object].rotation-=0.5;
     }
 
 if (key_states['i'])
