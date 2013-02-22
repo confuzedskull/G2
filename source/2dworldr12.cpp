@@ -100,19 +100,6 @@ void collision_detection()
                     objects[a].repel(objects[b]);
                 }
         }
-
-        for(int p=0; p<max_projectiles; p++)//projectile collision detection
-            {
-                if(distance(projectiles[p].current, objects[a].current) < (objects[p].radius + objects[a].radius))
-                {
-                projectiles[p].within_radius=objects[a].number;
-                }
-                else
-                {
-                projectiles[p].within_radius=0;
-                }
-            }
-
     }
 };
 player B;
@@ -360,6 +347,7 @@ void init_objects()
     objects[1].name="player 1";
     objects[1].current_color.set(BLUE);
     objects[1].step_size=0.1;
+    objects[1].set_boundaries();
     printf("object %d: %s initialized\n",objects[1].number, objects[1].name);
 
 
