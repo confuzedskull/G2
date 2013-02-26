@@ -14,10 +14,9 @@
 #endif
 
 #include <\Users\James\Dropbox\My Programs\C++\headers\glutPrint.h>
-#include <\Users\James\Dropbox\My Programs\C++\headers\physics_object.h>
-#include <\Users\James\Dropbox\My Programs\C++\headers\cursor.h>
-#include <\Users\James\Dropbox\My Programs\C++\headers\projectile.h>
 #include <\Users\James\Dropbox\My Programs\C++\headers\player.h>
+#include <\Users\James\Dropbox\My Programs\C++\headers\projectile.h>
+
 #include <\Users\James\Dropbox\My Programs\C++\headers\world.h>
 
 //2D World
@@ -80,10 +79,7 @@ world current_world;
 
 double world_gravity=-0.01;
 
-
 player* objects = new player[max_objects];
-
-
 
 projectile bullet;
 
@@ -97,7 +93,7 @@ void collision_detection()
         {
             if(a!=b && objects[a].isClose(objects[b]))
                 {
-                    objects[a].repel(objects[b]);
+                    objects[a].simon_says(objects[b]);
                 }
         }
     }
@@ -244,12 +240,12 @@ if (key_states['d'])
 
 if (key_states['q'])
     {
-        objects[current_object].rotation+=0.5;
+        objects[current_object].rotation++;
     }
 
 if (key_states['e'])
     {
-        objects[current_object].rotation-=0.5;
+        objects[current_object].rotation--;
     }
 
 if (key_states['i'])
@@ -346,7 +342,7 @@ void init_objects()
 
     objects[1].name="player 1";
     objects[1].current_color.set(BLUE);
-    objects[1].step_size=0.1;
+    objects[1].step_size=1;
     objects[1].set_boundaries();
     printf("object %d: %s initialized\n",objects[1].number, objects[1].name);
 
@@ -397,7 +393,7 @@ void render_scene(void) {
 	// Clear Color Buffers
 	glClear(GL_COLOR_BUFFER_BIT);
 
-    //glTranslatef(320,160,1.0);
+   // glTranslatef(0,0,1.0);
 
     cursor1.set_boundaries();
     cursor1.selection_box();
@@ -421,7 +417,7 @@ void render_scene(void) {
     objects[4].move_to_point(objects[4].rally.x,objects[4].rally.y, 6);
     objects[5].move_to_point(objects[5].rally.x,objects[5].rally.y, 5);*/
 //mouse interactivity
-/*    objects[1].mouse_function();
+/*   objects[1].mouse_function();
     objects[2].mouse_function();
     objects[3].mouse_function();
     objects[4].mouse_function();
