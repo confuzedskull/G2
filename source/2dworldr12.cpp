@@ -387,6 +387,11 @@ void init_objects()
     printf("object %d: %s initialized\n",objects[5].number, objects[5].name);
 }
 
+void animate()
+{
+    objects[0].move_back(10) || objects[0].move_forward(10);
+}
+
 void render_scene(void) {
     key_operations();
 
@@ -398,6 +403,7 @@ void render_scene(void) {
     cursor1.set_boundaries();
     cursor1.selection_box();
 
+    animate();
 //calculate the physics for all objects
    objects[0].physics();
     objects[1].physics();
