@@ -206,7 +206,7 @@ key_states[key] = false; // Set the state of the current key to not pressed
 void key_operations (void)
 {
 
-if (key_states['w'])
+if (key_states['w'] || key_states['W'])
     {
         objects[current_object].current.y+=objects[current_object].step[up].y;
         objects[current_object].current.x+=objects[current_object].step[up].x;
@@ -214,7 +214,7 @@ if (key_states['w'])
         objects[current_object].action[up]=true;
     }
 
-if (key_states['s'])
+if (key_states['s'] || key_states['S'])
     {
         objects[current_object].current.x+=objects[current_object].step[down].x;
         objects[current_object].current.y+=objects[current_object].step[down].y;
@@ -222,7 +222,7 @@ if (key_states['s'])
         objects[current_object].action[down]=true;
     }
 
-if (key_states['a'])
+if (key_states['a'] || key_states['A'])
     {
         objects[current_object].current.x+=objects[current_object].step[left].x;
         objects[current_object].current.y+=objects[current_object].step[left].y;
@@ -230,7 +230,7 @@ if (key_states['a'])
         objects[current_object].action[left]=true;
     }
 
-if (key_states['d'])
+if (key_states['d'] || key_states['D'])
     {
         objects[current_object].current.x+=objects[current_object].step[right].x;
         objects[current_object].current.y+=objects[current_object].step[right].y;
@@ -238,17 +238,17 @@ if (key_states['d'])
         objects[current_object].action[right]=true;
     }
 
-if (key_states['q'])
+if (key_states['q'] || key_states['Q'])
     {
         objects[current_object].rotation++;
     }
 
-if (key_states['e'])
+if (key_states['e'] || key_states['E'])
     {
         objects[current_object].rotation--;
     }
 
-if (key_states['i'])
+if (key_states['i'] || key_states['I'])
     {
         if(toggle_text==1)
         temp_toggle[1]=0;
@@ -335,8 +335,8 @@ void init_objects()
     objects[0].name="small square";
     objects[0].current_color.set(RED);
     objects[0].current.set(200,100);
-    objects[0].width=25;
-    objects[0].height=25;
+    objects[0].width=32;
+    objects[0].height=32;
     objects[0].set_boundaries();
     printf("object %d: %s initialized\n",objects[0].number, objects[0].name);
 
@@ -378,8 +378,8 @@ void init_objects()
     objects[5].name="big cyan square";
     objects[5].current_color.set(0.0,1.0,1.0);
     objects[5].current.set(200,260);
-    objects[5].width=75;
-    objects[5].height=75;
+    objects[5].width=64;
+    objects[5].height=64;
     objects[5].step_size=0.001;
     objects[5].set_boundaries();
     objects[5].rally.x=objects[5].current.x;
@@ -389,7 +389,7 @@ void init_objects()
 
 void animate()
 {
-    objects[0].move_back(10) || objects[0].move_forward(10);
+    objects[0].move_forward(10) || objects[0].turn_left() || objects[0].move_forward(10) || objects[0].turn_right();
 }
 
 void render_scene(void) {
@@ -398,7 +398,7 @@ void render_scene(void) {
 	// Clear Color Buffers
 	glClear(GL_COLOR_BUFFER_BIT);
 
-   // glTranslatef(0,0,1.0);
+   //glTranslatef(0,0,1.0);
 
     cursor1.set_boundaries();
     cursor1.selection_box();
