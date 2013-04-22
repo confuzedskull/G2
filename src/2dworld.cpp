@@ -43,6 +43,8 @@ int window_height=320;
 double frequency=0.01;//refresh rate in seconds
 clock_t time_started;
 double time_elapsed;
+clock_t game_start;
+double game_time;
 int random1 = rand() % 4 + 1;//random number between 1 and 4
 int random2 = rand() % 4 + 1;//another random number between 1 and 4
 
@@ -307,7 +309,7 @@ void text ()
     sprintf(text10,"touching object no. L:%d R:%d T:%d B:%d",objects[current_object].touching[left], objects[current_object].touching[right], objects[current_object].touching[up],objects[current_object].touching[down]);
     glutPrint (window_width/40,window_height-220, GLUT_BITMAP_HELVETICA_12, text10, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text11,"text");
+    sprintf(text11,"game time: %.3f",game_time);
     glutPrint (window_width/40,window_height-240, GLUT_BITMAP_HELVETICA_12, text11, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text12,"front:%.2f,%.2f",objects[current_object].front.x,objects[current_object].front.y);
@@ -412,7 +414,7 @@ void update_scene()
 {
     key_operations();
     time_elapsed = ((float)clock()-time_started)/CLOCKS_PER_SEC;//update the start time
-
+    game_time = ((float)clock()-game_start)/CLOCKS_PER_SEC;
     //calculate the physics for all objects
    objects[0].physics();
     objects[1].physics();
