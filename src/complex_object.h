@@ -70,7 +70,6 @@ class complex_object: public object
         void render()
     {
         glColor3f(current_color.r,current_color.g,current_color.b);//color the square with object.current_color
-
         if(!visible)
         {
             printf("object %d: %s rendered\n", number, name);

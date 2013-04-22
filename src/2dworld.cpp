@@ -387,8 +387,7 @@ void render_scene(void) {
 
 	cursor1.set_boundaries();
     cursor1.selection_box();
-
-
+    glTranslatef(0.0,0.0,0.0);
 //render the objects
 //NOTE: objects are rendered ontop of eachother according to order rendered below (bottom first)
 
@@ -413,7 +412,7 @@ void update_scene()
 {
     key_operations();
     time_elapsed = ((float)clock()-time_started)/CLOCKS_PER_SEC;//update the start time
-glTranslatef(0,0,0.0);
+
     //calculate the physics for all objects
    objects[0].physics();
     objects[1].physics();

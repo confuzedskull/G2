@@ -33,7 +33,7 @@ class object
 
     }
 
-       /*     void render()
+            void render()
     {
 
         glPushMatrix();//need push and pop so that entire scene isn't rotated
@@ -57,7 +57,7 @@ class object
 
         glPopMatrix();//reset transformation matrix
 
-    }*/
+    }
 
     void undo_color()
     {

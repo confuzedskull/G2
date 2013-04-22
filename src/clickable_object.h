@@ -9,7 +9,11 @@ class clickable_object: public physics_object
 
     bool left_clicked()
     {
-        if(cursor1.left_click && cursor1.left_down.x<xmax && cursor1.left_down.x>xmin && cursor1.left_down.y<ymax && cursor1.left_down.y>ymin )
+        if(cursor1.left_click &&
+           compare(cursor1.left_down.x,xmax)==-1 &&
+           compare(cursor1.left_down.x,xmin)==1 &&
+           compare(cursor1.left_down.y,ymax)==-1 &&
+           compare(cursor1.left_down.y,ymin)==1)
         return true;
         else
         return false;
@@ -17,7 +21,10 @@ class clickable_object: public physics_object
 
     bool right_clicked()
     {
-        if(cursor1.right_up.x<xmax && cursor1.right_up.x>xmin && cursor1.right_up.y<ymax && cursor1.right_up.y>ymin)
+        if(compare(cursor1.right_up.x,xmax)==-1 &&
+           compare(cursor1.right_up.x,xmin)==1 &&
+           compare(cursor1.right_up.y,ymax)==-1 &&
+           compare(cursor1.right_up.y,ymin)==1)
         return true;
         else
         return false;
@@ -25,7 +32,10 @@ class clickable_object: public physics_object
 
     bool highlighted()
     {//if object lies within selection box boundaries, return true
-        if(current.x<cursor1.xmax && current.x>cursor1.xmin && current.y>cursor1.ymax && current.y<cursor1.ymin)
+        if(compare(current.x,cursor1.xmax)==-1 &&
+           compare(current.x,cursor1.xmin)==1 &&
+           compare(current.y,cursor1.ymax)==1 &&
+           compare(current.y,cursor1.ymin)==-1)
         return true;
         else
         return false;
