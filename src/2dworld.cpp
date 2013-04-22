@@ -234,12 +234,12 @@ if (key_states['d'] || key_states['D'])
 
 if (key_states['q'] || key_states['Q'])
     {
-        objects[current_object].rotation++;
+        objects[current_object].rotation+=objects[current_object].step_size;
     }
 
 if (key_states['e'] || key_states['E'])
     {
-        objects[current_object].rotation--;
+        objects[current_object].rotation-=objects[current_object].step_size;
     }
 
 if (key_states['i'] || key_states['I'])
@@ -388,6 +388,7 @@ void render_scene(void) {
 	cursor1.set_boundaries();
     cursor1.selection_box();
 
+
 //render the objects
 //NOTE: objects are rendered ontop of eachother according to order rendered below (bottom first)
 
@@ -412,7 +413,7 @@ void update_scene()
 {
     key_operations();
     time_elapsed = ((float)clock()-time_started)/CLOCKS_PER_SEC;//update the start time
-
+glTranslatef(0,0,0.0);
     //calculate the physics for all objects
    objects[0].physics();
     objects[1].physics();
@@ -424,18 +425,18 @@ void update_scene()
     collision_detection();//calculate object collision
 
     //move objects
-
-    /*objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 9);
+/*
+    objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 9);
     objects[2].move_to_point(objects[2].rally.x,objects[2].rally.y, 8);
     objects[3].move_to_point(objects[3].rally.x,objects[3].rally.y, 7);
     objects[4].move_to_point(objects[4].rally.x,objects[4].rally.y, 6);
     objects[5].move_to_point(objects[5].rally.x,objects[5].rally.y, 5);*/
 //mouse interactivity
- /*  objects[1].mouse_function();
+   objects[1].mouse_function();
     objects[2].mouse_function();
     objects[3].mouse_function();
     objects[4].mouse_function();
-    objects[5].mouse_function();*/
+    objects[5].mouse_function();
 
     if(compare(time_elapsed,frequency)==1)//time elapsed is > frequency
     {
