@@ -5,8 +5,6 @@
 #include <windows.h>
 #include <math.h>
 #include <string>
-#include <stdio.h>
-#include <stdlib.h>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -44,7 +42,9 @@ int window_y=100;
 //width and height of program window
 int window_width=640;
 int window_height=320;
-
+double frequency=0.01;//refresh rate in seconds
+clock_t time_started;
+double time_elapsed;
 int random1 = rand() % 4 + 1;//random number between 1 and 4
 int random2 = rand() % 4 + 1;//another random number between 1 and 4
 
@@ -67,7 +67,25 @@ char text12[10];
 
 int temp_toggle[2];
 int toggle_text=1;
-
+int compare_double(double d1, double d2)
+{
+    if((d1*1000)<1000)//d1 is less than 1
+    {
+        d1*=1000;//d1 is no longer a decimal
+    }
+    if((d2*1000)<1000)
+    {
+        d2*=1000;
+    }
+    (int)d1;
+    (int)d2;
+    if(d1>d2)
+        return 1;
+    if(d1<d2)
+        return -1;
+    if(d1==d2)
+        return 0;
+}
 
 //cursor cursor1;
 
@@ -339,7 +357,7 @@ void init_objects()
 
     objects[1].name="player 1";
     objects[1].current_color.set(BLUE);
-    objects[1].step_size=0.01;
+    objects[1].step_size=0.001;
     objects[1].set_boundaries();
     printf("object %d: %s initialized\n",objects[1].number, objects[1].name);
 
@@ -385,42 +403,15 @@ void init_objects()
 }
 
 void render_scene(void) {
-    key_operations();
-
 	// Clear Color Buffers
 	glClear(GL_COLOR_BUFFER_BIT);
 
-   //glTranslatef(0,0,1.0);
-
-    cursor1.set_boundaries();
+	cursor1.set_boundaries();
     cursor1.selection_box();
 
-//calculate the physics for all objects
-   objects[0].physics();
-    objects[1].physics();
-    objects[2].physics();
-    objects[3].physics();
-    objects[4].physics();
-    objects[5].physics();
-//    bullet.update();
-  //  bullet.physics();
-
-    collision_detection();//calculate object collision
-//move objects
-
-    /*objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 9);
-    objects[2].move_to_point(objects[2].rally.x,objects[2].rally.y, 8);
-    objects[3].move_to_point(objects[3].rally.x,objects[3].rally.y, 7);
-    objects[4].move_to_point(objects[4].rally.x,objects[4].rally.y, 6);
-    objects[5].move_to_point(objects[5].rally.x,objects[5].rally.y, 5);*/
-//mouse interactivity
-   objects[1].mouse_function();
-    objects[2].mouse_function();
-    objects[3].mouse_function();
-    objects[4].mouse_function();
-    objects[5].mouse_function();
 //render the objects
 //NOTE: objects are rendered ontop of eachother according to order rendered below (bottom first)
+
     objects[5].render();
     objects[4].render();
     objects[3].render();
@@ -429,13 +420,49 @@ void render_scene(void) {
     bullet.render();
     objects[1].render();
     objects[0].render();
+
     if(toggle_text==1)
     {
         text();
     }
 
-
 	glFlush();
+}
+
+void update_scene()
+{
+    key_operations();
+    time_elapsed = ((float)clock()-time_started)/CLOCKS_PER_SEC;//update the start time
+
+    //calculate the physics for all objects
+   objects[0].physics();
+    objects[1].physics();
+    objects[2].physics();
+    objects[3].physics();
+    objects[4].physics();
+    objects[5].physics();
+
+    collision_detection();//calculate object collision
+
+    //move objects
+
+    /*objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 9);
+    objects[2].move_to_point(objects[2].rally.x,objects[2].rally.y, 8);
+    objects[3].move_to_point(objects[3].rally.x,objects[3].rally.y, 7);
+    objects[4].move_to_point(objects[4].rally.x,objects[4].rally.y, 6);
+    objects[5].move_to_point(objects[5].rally.x,objects[5].rally.y, 5);*/
+//mouse interactivity
+ /*  objects[1].mouse_function();
+    objects[2].mouse_function();
+    objects[3].mouse_function();
+    objects[4].mouse_function();
+    objects[5].mouse_function();*/
+
+    if(compare_double(time_elapsed,frequency)==1)//time elapsed is > frequency
+    {
+        time_started=clock();//reset the start time
+        glutPostRedisplay();
+    }
 }
 
 void initializeWindow()
@@ -471,7 +498,7 @@ int main(int argc, char **argv) {
 	initializeWindow();
 
 	glutReshapeFunc(change_size);
-	glutIdleFunc(render_scene); //use this for animations
+	glutIdleFunc(update_scene); //use this for animations
 	glutKeyboardFunc(key_pressed); // Tell GLUT to use the method "keyPressed" for key presses
     glutKeyboardUpFunc(key_up); // Tell GLUT to use the method "keyUp" for key releases
     glutMouseFunc(mouse_click);

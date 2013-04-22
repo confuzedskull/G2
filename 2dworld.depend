@@ -4,7 +4,7 @@
 	<GL/glut.h>
 	<stdlib.h>
 
-976695772 c:\mingw\include\gl\glut.h
+1363227174 c:\mingw\include\gl\glut.h
 	<windows.h>
 	<GL/gl.h>
 	<GL/glu.h>
@@ -419,7 +419,7 @@
 	<\Users\James\Dropbox\My Programs\C++\headers\projectile.h>
 	<\Users\James\Dropbox\My Programs\C++\headers\world.h>
 
-1366606217 source:c:\users\james\dropbox\my programs\c++\2dworld\src\2dworld.cpp
+1366609740 source:c:\users\james\dropbox\my programs\c++\2dworld\src\2dworld.cpp
 	<stdio.h>
 	<stdlib.h>
 	<time.h>
@@ -427,8 +427,6 @@
 	<windows.h>
 	<math.h>
 	<string>
-	<stdio.h>
-	<stdlib.h>
 	<GLUT/glut.h>
 	<GL/glut.h>
 	<\Users\James\Dropbox\My Programs\C++\headers\glutPrint.h>
