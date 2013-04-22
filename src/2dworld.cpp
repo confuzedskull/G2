@@ -28,7 +28,6 @@
 
 //global definitions
 //direction definitions - I used this to make directions less confusing when reading code
-
 const int left=1;
 const int right=2;
 const int up=3;
@@ -50,8 +49,6 @@ int random1 = rand() % 4 + 1;//random number between 1 and 4
 int random2 = rand() % 4 + 1;//another random number between 1 and 4
 
 int frames=0;//to be used for frame count
-
-time_t gametime;//to be used for game clock
 
 //text
 char text0[30];
@@ -91,7 +88,7 @@ void collision_detection()
     {
         for(int b=0; b<max_objects; b++)
         {
-            if(a!=b && objects[a].isClose(objects[b]))
+            if(a!=b && objects[a].is_close(objects[b]))
                 {
                     objects[a].simon_says(objects[b]);
                 }
@@ -300,7 +297,7 @@ void text ()
 
     sprintf(text6,"momentum: %.3f %.3f",objects[current_object].momentum.x,objects[current_object].momentum.y);
     glutPrint (window_width/40,window_height -140, GLUT_BITMAP_HELVETICA_12, text6, 1.0f,0.0f,0.0f, 0.5f);
-    gametime=time(NULL);
+
     sprintf(text7,"Force: %.3f %.3f",objects[current_object].force.x,objects[current_object].force.y);
     glutPrint (window_width/40,window_height -160, GLUT_BITMAP_HELVETICA_12, text7, 1.0f,0.0f,0.0f, 0.5f);
 
@@ -313,7 +310,7 @@ void text ()
     sprintf(text10,"touching object no. L:%d R:%d T:%d B:%d",objects[current_object].touching[left], objects[current_object].touching[right], objects[current_object].touching[up],objects[current_object].touching[down]);
     glutPrint (window_width/40,window_height-220, GLUT_BITMAP_HELVETICA_12, text10, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text11,"rotation:%.2f",objects[current_object].rotation);
+    sprintf(text11,"text");
     glutPrint (window_width/40,window_height-240, GLUT_BITMAP_HELVETICA_12, text11, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text12,"front:%.2f,%.2f",objects[current_object].front.x,objects[current_object].front.y);
@@ -342,7 +339,7 @@ void init_objects()
 
     objects[1].name="player 1";
     objects[1].current_color.set(BLUE);
-    objects[1].step_size=1;
+    objects[1].step_size=0.01;
     objects[1].set_boundaries();
     printf("object %d: %s initialized\n",objects[1].number, objects[1].name);
 
@@ -387,11 +384,6 @@ void init_objects()
     printf("object %d: %s initialized\n",objects[5].number, objects[5].name);
 }
 
-void animate()
-{
-    objects[0].move_forward(10) || objects[0].turn_left() || objects[0].move_forward(10) || objects[0].turn_right();
-}
-
 void render_scene(void) {
     key_operations();
 
@@ -403,7 +395,6 @@ void render_scene(void) {
     cursor1.set_boundaries();
     cursor1.selection_box();
 
-    animate();
 //calculate the physics for all objects
    objects[0].physics();
     objects[1].physics();
@@ -411,7 +402,7 @@ void render_scene(void) {
     objects[3].physics();
     objects[4].physics();
     objects[5].physics();
-    bullet.update();
+//    bullet.update();
   //  bullet.physics();
 
     collision_detection();//calculate object collision
@@ -423,11 +414,11 @@ void render_scene(void) {
     objects[4].move_to_point(objects[4].rally.x,objects[4].rally.y, 6);
     objects[5].move_to_point(objects[5].rally.x,objects[5].rally.y, 5);*/
 //mouse interactivity
-/*   objects[1].mouse_function();
+   objects[1].mouse_function();
     objects[2].mouse_function();
     objects[3].mouse_function();
     objects[4].mouse_function();
-    objects[5].mouse_function();*/
+    objects[5].mouse_function();
 //render the objects
 //NOTE: objects are rendered ontop of eachother according to order rendered below (bottom first)
     objects[5].render();
@@ -470,7 +461,7 @@ int main(int argc, char **argv) {
 	// init GLUT and create window
 	printf("initializing GLUT...\n");
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+	glutInitDisplayMode(GLUT_SINGLE| GLUT_RGB);
 	printf("creating window...\n");
 	glutInitWindowPosition(window_x,window_y);
 	printf("window position: %d, %d\n", window_x, window_y);
