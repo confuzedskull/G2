@@ -46,6 +46,24 @@
 			<Add directory="C:/MinGW/lib" />
 		</Linker>
 		<Unit filename="src/2dworld.cpp" />
+		<Unit filename="src/clickable_object.h" />
+		<Unit filename="src/color.h" />
+		<Unit filename="src/compare.h" />
+		<Unit filename="src/complex_object.h" />
+		<Unit filename="src/cursor.h" />
+		<Unit filename="src/distance.h" />
+		<Unit filename="src/glutPrint.h" />
+		<Unit filename="src/limits.h" />
+		<Unit filename="src/line.h" />
+		<Unit filename="src/movable_object.h" />
+		<Unit filename="src/object.h" />
+		<Unit filename="src/physics_object.h" />
+		<Unit filename="src/player.h" />
+		<Unit filename="src/point.h" />
+		<Unit filename="src/projectile.h" />
+		<Unit filename="src/tangible_object.h" />
+		<Unit filename="src/vect.h" />
+		<Unit filename="src/world.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

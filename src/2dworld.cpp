@@ -10,12 +10,11 @@
 #else
 #include <GL/glut.h>
 #endif
-#include <\Users\James\Dropbox\My Programs\C++\headers\compare.h>
+#include <\Users\James\Dropbox\My Programs\C++\2dworld\src\compare.h>
 #include <\Users\James\Dropbox\My Programs\C++\headers\glutPrint.h>
-#include <\Users\James\Dropbox\My Programs\C++\headers\player.h>
-#include <\Users\James\Dropbox\My Programs\C++\headers\projectile.h>
-
-#include <\Users\James\Dropbox\My Programs\C++\headers\world.h>
+#include <\Users\James\Dropbox\My Programs\C++\2dworld\src\player.h>
+#include <\Users\James\Dropbox\My Programs\C++\2dworld\src\projectile.h>
+#include <\Users\James\Dropbox\My Programs\C++\2dworld\src\world.h>
 
 //2D World
 //by James Nakano
@@ -32,7 +31,6 @@ const int up=3;
 const int down=4;
 GLfloat size=3.0;
 int current_object = 1;
-
 const int max_projectiles =2;
 bool* key_states = new bool[256]; // Create an array of boolean values of letters
 
@@ -439,7 +437,7 @@ void update_scene()
     objects[4].mouse_function();
     objects[5].mouse_function();*/
 
-    if(compare_double(time_elapsed,frequency)==1)//time elapsed is > frequency
+    if(compare(time_elapsed,frequency)==1)//time elapsed is > frequency
     {
         time_started=clock();//reset the start time
         glutPostRedisplay();
