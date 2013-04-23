@@ -17,12 +17,12 @@ class physics_object: public tangible_object
     void set_resting()
     {
 
-        if(!moving_vertical)//current y-velocity is 0
+        if(!moving_vertical)
         {
             resting.y=current.y;
         }
 
-        if(!moving_horizontal)//current x-velocity is 0
+        if(!moving_horizontal)
         {
             resting.x=current.x;
         }
@@ -77,17 +77,23 @@ class physics_object: public tangible_object
     }
     void calc_velocity()
     {
-        velocity[2].x=(current.x-resting.x)/delta_time[1];
-        velocity[2].y=(current.y-resting.y)/delta_time[2];
+        if(compare(delta_time[1],-0.001)==0)
+            velocity[1].x=0.000;
+        else
+        velocity[1].x=(current.x-resting.x)/delta_time[1];
+        if(compare(delta_time[2],-0.001)==0)
+            velocity[1].y=0.000;
+        else
+        velocity[1].y=(current.y-resting.y)/delta_time[2];
     }
 
     void calc_acceleration()
-    {   if(compare(delta_time[3],0)==0)
+    {   if(compare(delta_time[3],-0.001)==0)
         acceleration.x=0;
         else
         acceleration.x=(velocity[2].x - velocity[1].x)/delta_time[3];
 
-        if(compare(delta_time[4],0)==0)
+        if(compare(delta_time[4],-0.001)==0)
         acceleration.y=0;
         else
         acceleration.y=(velocity[2].y - velocity[1].y)/delta_time[4];
@@ -103,11 +109,11 @@ class physics_object: public tangible_object
     void calc_momentum()
     {
         momentum.x=mass*velocity[1].x;
-        //player.x+=momentum.x; //only increase player.x when momentum is not null
+        //current.x+=momentum.x; //only increase player.x when momentum is not null
         velocity[2].x = velocity[1].x + momentum.x;
 
         momentum.y=mass*velocity[1].y;
-        //player.y+=momentum.y; //only increase player.y when momentum is not null
+        //current.y+=momentum.y; //only increase player.y when momentum is not null
         velocity[2].y = velocity[1].y + momentum.y;
     }
 
@@ -126,8 +132,8 @@ class physics_object: public tangible_object
         calc_velocity();
         //friction();
         calc_acceleration();
-        //calc_momentum();
-        //calc_force();
+        calc_momentum();
+        calc_force();
         calc_direction();
         calc_step();
         calc_points();
@@ -141,10 +147,10 @@ class physics_object: public tangible_object
     {
         name="physics object";
         mass=0.01;//note: changing this seems to have an effect on set_resting
-        velocity[1].x=0;
-        velocity[1].y=0;
-        velocity[2].x=1;
-        velocity[2].y=1;
+        velocity[1].x=0.00;
+        velocity[1].y=0.00;
+        velocity[2].x=0.00;
+        velocity[2].y=0.00;
         printf("object %d: %s created\n", number, name);
     }
 

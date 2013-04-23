@@ -450,7 +450,7 @@ void update_scene()
     objects[4].move_to_point(objects[4].rally.x,objects[4].rally.y, 6);
     objects[5].move_to_point(objects[5].rally.x,objects[5].rally.y, 5);*/
 //mouse interactivity
-   objects[1].mouse_function();
+    objects[1].mouse_function();
     objects[2].mouse_function();
     objects[3].mouse_function();
     objects[4].mouse_function();
