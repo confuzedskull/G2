@@ -3,8 +3,10 @@ class physics_object: public tangible_object
 {
     public:
     float mass;
-    float delta_time[4];//each element of array represents how much time a change in a direction or velocity took
+    double delta_time[4];//each element of array represents how much time a change in a direction or velocity took
     //1:change in x, 2:change in velocity, 3:change in velocity x, 4:change in velocity y
+    double start_time[4];
+    double stop_time[4];
     vect velocity[2];// 1:initial velocity, 2: final velocity
     vect acceleration;
     vect momentum;
@@ -15,12 +17,12 @@ class physics_object: public tangible_object
     void set_resting()
     {
 
-        if(velocity[2].y>-1 && velocity[2].y<1)
+        if(!moving_vertical)//current y-velocity is 0
         {
             resting.y=current.y;
         }
 
-        if(velocity[2].x>-1 && velocity[2].x<1)
+        if(!moving_horizontal)//current x-velocity is 0
         {
             resting.x=current.x;
         }
@@ -29,39 +31,63 @@ class physics_object: public tangible_object
     void calc_delta_time()
     {
 
-        if(current.x==resting.x)
-        delta_time[1]=0;
+        if(compare(current.x,resting.x)==0)//x-position is not changing
+        {
+            stop_time[1]=get_game_time();
+            delta_time[1]=0;
+        }
         else
-        delta_time[1]+=0.004;
+        {
+            start_time[1]=get_game_time();
+            delta_time[1]=stop_time[1]-start_time[1];
+        }
 
-        if(current.y==resting.y)
-        delta_time[2]=0;
+        if(compare(current.y,resting.y)==0)//y-position is not changing
+        {
+            stop_time[2]=get_game_time();
+            delta_time[2]=0;
+        }
         else
-        delta_time[2]+=0.004;
+        {
+            start_time[2]=get_game_time();
+            delta_time[2]=stop_time[2]-start_time[2];
+        }
 
-        if(velocity[2].x==velocity[1].x)
-        delta_time[3]=0;
+        if(compare(velocity[2].x,velocity[1].x)==0)//x-velocity is not changing
+        {
+            stop_time[3]=get_game_time();
+            delta_time[3]=0;
+        }
         else
-        delta_time[3]+=0.004;
+        {
+            start_time[3]=get_game_time();
+            delta_time[3]=stop_time[3]-start_time[3];
+        }
 
-        if(velocity[2].y==velocity[1].y)
-        delta_time[4]=0;
+        if(compare(velocity[2].y,velocity[1].y)==0)//y-velocity is not changing
+        {
+            stop_time[4]=get_game_time();
+            delta_time[4]=0;
+        }
         else
-        delta_time[4]+=0.004;
+        {
+            start_time[4]=get_game_time();
+            delta_time[4]=stop_time[4]-start_time[4];
+        }
     }
     void calc_velocity()
     {
-        velocity[1].x=(current.x-resting.x)/delta_time[1];
-        velocity[1].y=(current.y-resting.y)/delta_time[2];
+        velocity[2].x=(current.x-resting.x)/delta_time[1];
+        velocity[2].y=(current.y-resting.y)/delta_time[2];
     }
 
     void calc_acceleration()
-    {   if(delta_time[3]!=0)
+    {   if(compare(delta_time[3],0)==0)
         acceleration.x=0;
         else
         acceleration.x=(velocity[2].x - velocity[1].x)/delta_time[3];
 
-        if(delta_time[4]!=0)
+        if(compare(delta_time[4],0)==0)
         acceleration.y=0;
         else
         acceleration.y=(velocity[2].y - velocity[1].y)/delta_time[4];
@@ -95,11 +121,11 @@ class physics_object: public tangible_object
 
     void physics()
     {
-        //set_resting();
-        //calc_delta_time();
-        //calc_velocity();
+        set_resting();
+        calc_delta_time();
+        calc_velocity();
         //friction();
-        //calc_acceleration();
+        calc_acceleration();
         //calc_momentum();
         //calc_force();
         calc_direction();
@@ -115,6 +141,10 @@ class physics_object: public tangible_object
     {
         name="physics object";
         mass=0.01;//note: changing this seems to have an effect on set_resting
+        velocity[1].x=0;
+        velocity[1].y=0;
+        velocity[2].x=1;
+        velocity[2].y=1;
         printf("object %d: %s created\n", number, name);
     }
 

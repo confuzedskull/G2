@@ -11,6 +11,8 @@ class movable_object: public complex_object
     int steps_taken[4];
     double degrees_rotated;
     double step_size;
+    bool moving_vertical;
+    bool moving_horizontal;
 
     void calc_step()
     {

@@ -10,6 +10,12 @@
 #else
 #include <GL/glut.h>
 #endif
+clock_t game_start;
+double game_time;
+float get_game_time()
+{
+    return ((float)clock()-game_start)/CLOCKS_PER_SEC;
+}
 #include <\Users\James\Dropbox\My Programs\C++\2dworld\src\compare.h>
 #include <\Users\James\Dropbox\My Programs\C++\headers\glutPrint.h>
 #include <\Users\James\Dropbox\My Programs\C++\2dworld\src\player.h>
@@ -43,8 +49,6 @@ int window_height=320;
 double frequency=0.01;//refresh rate in seconds
 clock_t time_started;
 double time_elapsed;
-clock_t game_start;
-double game_time;
 int random1 = rand() % 4 + 1;//random number between 1 and 4
 int random2 = rand() % 4 + 1;//another random number between 1 and 4
 
@@ -69,7 +73,6 @@ int temp_toggle[2];
 int toggle_text=1;
 
 //cursor cursor1;
-
 
 world current_world;
 
@@ -202,6 +205,20 @@ key_states[key] = false; // Set the state of the current key to not pressed
 void key_operations (void)
 {
 
+if(key_states['w'] || key_states['W'] || key_states['s'] || key_states['S'])
+{
+    objects[current_object].moving_vertical=true;
+}
+else
+    objects[current_object].moving_vertical=false;
+
+if(key_states['a'] || key_states['A'] || key_states['d'] || key_states['D'])
+{
+    objects[current_object].moving_horizontal=true;
+}
+else
+    objects[current_object].moving_horizontal=false;
+
 if (key_states['w'] || key_states['W'])
     {
         objects[current_object].current.y+=objects[current_object].step[up].y;
@@ -282,16 +299,16 @@ void text ()
     sprintf(text1,"coordinates=%.3f,%.3f", objects[current_object].current.x,objects[current_object].current.y);
     glutPrint (window_width/40,window_height-40, GLUT_BITMAP_HELVETICA_12, text1, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text2,"velocity %.4f,%.4f",objects[current_object].velocity[1].x,objects[current_object].velocity[1].y);
+    sprintf(text2,"velocity %.3f,%.3f",objects[current_object].velocity[1].x,objects[current_object].velocity[1].y);
     glutPrint (window_width/40,window_height -60, GLUT_BITMAP_HELVETICA_12, text2, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text3,"velocity2 %.4f,%.4f",objects[current_object].velocity[2].x,objects[current_object].velocity[2].y);
+    sprintf(text3,"velocity2 %.3f,%.3f",objects[current_object].velocity[2].x,objects[current_object].velocity[2].y);
     glutPrint (window_width/40,window_height -80, GLUT_BITMAP_HELVETICA_12, text3, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text4,"resting: %.3f, %.3f",objects[current_object].resting.x,objects[current_object].resting.y);
     glutPrint (window_width/40,window_height -100, GLUT_BITMAP_HELVETICA_12, text4, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text5,"delta_time distance: %.3f %.3f",objects[current_object].delta_time[1],objects[current_object].delta_time[2]);
+    sprintf(text5,"delta_time x: %.3f y:%.3f",objects[current_object].delta_time[1],objects[current_object].delta_time[2]);
     glutPrint (window_width/40,window_height -120, GLUT_BITMAP_HELVETICA_12, text5, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text6,"momentum: %.3f %.3f",objects[current_object].momentum.x,objects[current_object].momentum.y);
