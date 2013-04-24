@@ -9,7 +9,7 @@ class tangible_object: public movable_object
     touching 2: right
     touching 3: front
     touching 4: back*/
-    void repel(object B)
+    void repel(object B)//object moves away from other object
     {
         if(near_front(B))
         move_back(1);
@@ -22,7 +22,7 @@ class tangible_object: public movable_object
 
     }
 
-    void attract(object B)
+    void attract(object B)//object moves toward the other object
     {
         if(near_front(B))
         move_forward(1);
@@ -35,7 +35,7 @@ class tangible_object: public movable_object
 
     }
 
-    void simon_says(object B)
+    void simon_says(object B)//object changes color according to side touched
     {
         if(near_front(B))
         current_color.set(RED);
@@ -46,6 +46,26 @@ class tangible_object: public movable_object
         if(near_right(B))
         current_color.set(YELLOW);
 
+    }
+
+    void identify(object B)//variable touching[] is updated with number of the touched object
+    {
+        if(near_left(B))
+            touching[1]=B.number;
+        else
+            touching[1]=0;
+        if(near_right(B))
+            touching[2]=B.number;
+        else
+            touching[2]=0;
+        if(near_front(B))
+            touching[3]=B.number;
+        else
+            touching[3]=0;
+        if(near_back(B))
+            touching[4]=B.number;
+        else
+            touching[4]=0;
     }
 
     bool is_close(object B)
