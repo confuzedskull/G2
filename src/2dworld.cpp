@@ -296,37 +296,37 @@ void text ()
     sprintf(text0,"object no.%i", objects[current_object].number);
     glutPrint (window_width/40,window_height -20, GLUT_BITMAP_HELVETICA_12, text0, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text1,"coordinates=%.3f,%.3f", objects[current_object].current.x,objects[current_object].current.y);
+    sprintf(text1,"coordinates=%.2f,%.2f", objects[current_object].current.x,objects[current_object].current.y);
     glutPrint (window_width/40,window_height-40, GLUT_BITMAP_HELVETICA_12, text1, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text2,"velocity %.3f,%.3f",objects[current_object].velocity[1].x,objects[current_object].velocity[1].y);
+    sprintf(text2,"velocity %.2f,%.2f",objects[current_object].velocity[1].x,objects[current_object].velocity[1].y);
     glutPrint (window_width/40,window_height -60, GLUT_BITMAP_HELVETICA_12, text2, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text3,"velocity2 %.3f,%.3f",objects[current_object].velocity[2].x,objects[current_object].velocity[2].y);
+    sprintf(text3,"velocity2 %.2f,%.2f",objects[current_object].velocity[2].x,objects[current_object].velocity[2].y);
     glutPrint (window_width/40,window_height -80, GLUT_BITMAP_HELVETICA_12, text3, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text4,"resting: %.3f, %.3f",objects[current_object].resting.x,objects[current_object].resting.y);
+    sprintf(text4,"resting: %.2f, %.2f",objects[current_object].resting.x,objects[current_object].resting.y);
     glutPrint (window_width/40,window_height -100, GLUT_BITMAP_HELVETICA_12, text4, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text5,"delta_time x: %.3f y:%.3f",objects[current_object].delta_time[1],objects[current_object].delta_time[2]);
+    sprintf(text5,"delta_time x: %.2f y:%.2f",objects[current_object].delta_time[1],objects[current_object].delta_time[2]);
     glutPrint (window_width/40,window_height -120, GLUT_BITMAP_HELVETICA_12, text5, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text6,"momentum: %.3f %.3f",objects[current_object].momentum.x,objects[current_object].momentum.y);
+    sprintf(text6,"momentum: %.2f %.2f",objects[current_object].momentum.x,objects[current_object].momentum.y);
     glutPrint (window_width/40,window_height -140, GLUT_BITMAP_HELVETICA_12, text6, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text7,"Force: %.3f %.3f",objects[current_object].force.x,objects[current_object].force.y);
+    sprintf(text7,"Force: %.2f %.2f",objects[current_object].force.x,objects[current_object].force.y);
     glutPrint (window_width/40,window_height -160, GLUT_BITMAP_HELVETICA_12, text7, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text8,"acceleration: %.3f %.3f",objects[current_object].acceleration.x,objects[current_object].acceleration.y);
+    sprintf(text8,"acceleration: %.2f %.2f",objects[current_object].acceleration.x,objects[current_object].acceleration.y);
     glutPrint (window_width/40,window_height-180, GLUT_BITMAP_HELVETICA_12, text8, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text9,"delta_time velocity: %.3f %.3f",objects[current_object].delta_time[3],objects[current_object].delta_time[4]);
+    sprintf(text9,"delta_time velocity: %.2f %.2f",objects[current_object].delta_time[3],objects[current_object].delta_time[4]);
     glutPrint (window_width/40,window_height-200, GLUT_BITMAP_HELVETICA_12, text9, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text10,"touching object no. L:%d R:%d T:%d B:%d",objects[current_object].touching[left], objects[current_object].touching[right], objects[current_object].touching[up],objects[current_object].touching[down]);
     glutPrint (window_width/40,window_height-220, GLUT_BITMAP_HELVETICA_12, text10, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text11,"game time: %.3f",game_time);
+    sprintf(text11,"game time: %.2f",game_time);
     glutPrint (window_width/40,window_height-240, GLUT_BITMAP_HELVETICA_12, text11, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text12,"front:%.2f,%.2f",objects[current_object].front.x,objects[current_object].front.y);
@@ -443,18 +443,18 @@ void update_scene()
     collision_detection();//calculate object collision
 
     //move objects
-/*
-    objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 9);
+
+    /*objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 9);
     objects[2].move_to_point(objects[2].rally.x,objects[2].rally.y, 8);
     objects[3].move_to_point(objects[3].rally.x,objects[3].rally.y, 7);
     objects[4].move_to_point(objects[4].rally.x,objects[4].rally.y, 6);
     objects[5].move_to_point(objects[5].rally.x,objects[5].rally.y, 5);*/
 //mouse interactivity
-    objects[1].mouse_function();
+/*    objects[1].mouse_function();
     objects[2].mouse_function();
     objects[3].mouse_function();
     objects[4].mouse_function();
-    objects[5].mouse_function();
+    objects[5].mouse_function();*/
 
     if(compare(time_elapsed,frequency)==1)//time elapsed is > frequency
     {
