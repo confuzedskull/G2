@@ -12,26 +12,26 @@ class tangible_object: public movable_object
     void repel(object B)//object moves away from other object
     {
         if(near_front(B))
-        move_back(1);
+        move_back();
         if(near_back(B))
-        move_forward(1);
+        move_forward();
         if(near_left(B))
-        move_right(1);
+        move_right();
         if(near_right(B))
-        move_left(1);
+        move_left();
 
     }
 
     void attract(object B)//object moves toward the other object
     {
         if(near_front(B))
-        move_forward(1);
+        move_forward();
         if(near_back(B))
-        move_back(1);
+        move_back();
         if(near_left(B))
-        move_left(1);
+        move_left();
         if(near_right(B))
-        move_right(1);
+        move_right();
 
     }
 
@@ -70,14 +70,14 @@ class tangible_object: public movable_object
 
     bool is_close(object B)
     {
-        if(compare(distance(current,B.current),(getRadius()+B.getRadius()))==-1)
+        if(compare(distance(current,B.current),(getRadius()+B.getRadius()))<=0)
         return true;
         else
         return false;
     }
     bool near_front(object B)
     {
-        if(compare(distance(front,B.current),B.getRadius())==-1)
+        if(compare(distance(front,B.current),B.getRadius())<=0)
                     {
                     return true;
                     }
@@ -86,7 +86,7 @@ class tangible_object: public movable_object
     }
     bool near_back(object B)
     {
-        if(compare(distance(back,B.current),B.getRadius())==-1)
+        if(compare(distance(back,B.current),B.getRadius())<=0)
                     {
                     return true;
                     }
@@ -96,7 +96,7 @@ class tangible_object: public movable_object
 
     bool near_left(object B)
     {
-        if(compare(distance(left,B.current),B.getRadius())==-1)
+        if(compare(distance(left,B.current),B.getRadius())<=0)
                     {
                     return true;
                     }
@@ -106,7 +106,7 @@ class tangible_object: public movable_object
 
     bool near_right(object B)
     {
-        if(compare(distance(right,B.current),B.getRadius())==-1)
+        if(compare(distance(right,B.current),B.getRadius())<=0)
                     {
                     return true;
                     }

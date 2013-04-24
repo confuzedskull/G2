@@ -58,7 +58,8 @@ class movable_object: public complex_object
 
     bool move_left()
     {
-        if(steps_taken[1]<100)
+        moving_horizontal=true;
+        if(steps_taken[1]<1)
         {
             current.x+=step[1].x;
             current.y+=step[1].y;
@@ -72,7 +73,8 @@ class movable_object: public complex_object
 
     bool move_left(int steps_left)
     {
-        if(steps_taken[1]<steps_left*100)
+        moving_horizontal=true;
+        if(steps_taken[1]<steps_left)
         {
             current.x+=step[1].x;
             current.y+=step[1].y;
@@ -86,7 +88,8 @@ class movable_object: public complex_object
 
     bool move_right()
     {
-        if(steps_taken[2]<100)
+        moving_horizontal=true;
+        if(steps_taken[2]<1)
         {
             current.x+=step[2].x;
             current.y+=step[2].y;
@@ -100,7 +103,8 @@ class movable_object: public complex_object
 
     bool move_right(int steps_right)
     {
-        if(steps_taken[2]<steps_right*100)
+        moving_horizontal=true;
+        if(steps_taken[2]<steps_right)
         {
             current.x+=step[2].x;
             current.y+=step[2].y;
@@ -114,7 +118,8 @@ class movable_object: public complex_object
 
     bool move_forward()
     {
-        if(steps_taken[3]<100)
+        moving_vertical=true;
+        if(steps_taken[3]<1)
         {
             current.x+=step[3].x;
             current.y+=step[3].y;
@@ -128,7 +133,8 @@ class movable_object: public complex_object
 
     bool move_forward(int steps_forward)
     {
-        if(steps_taken[3]<steps_forward*100)
+        moving_vertical=true;
+        if(steps_taken[3]<steps_forward)
         {
             current.x+=step[3].x;
             current.y+=step[3].y;
@@ -142,7 +148,8 @@ class movable_object: public complex_object
 
     bool move_back()
     {
-        if(steps_taken[4]<100)
+        moving_vertical=true;
+        if(steps_taken[4]<1)
         {
             current.x+=step[4].x;
             current.y+=step[4].y;
@@ -155,7 +162,8 @@ class movable_object: public complex_object
 
     bool move_back(int steps_back)
     {
-        if(steps_taken[4]<steps_back*100)
+        moving_vertical=true;
+        if(steps_taken[4]<steps_back)
         {
             current.x+=step[4].x;
             current.y+=step[4].y;
@@ -166,9 +174,9 @@ class movable_object: public complex_object
         return false;
     }
 
-    bool move(int direction,int steps)//moves object steps in direction
+    bool move(int direction,int steps)//moves object steps in direction[1,2,3,or 4]
     {
-        if(steps_taken[direction]<steps*100)
+        if(steps_taken[direction]<steps)
         {
             current.x+=step[direction].x;
             current.y+=step[direction].y;

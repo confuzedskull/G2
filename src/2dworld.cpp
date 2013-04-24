@@ -92,6 +92,7 @@ void collision_detection()
         {
             if(a!=b && objects[a].is_close(objects[b]))
                 {
+                    objects[a].repel(objects[b]);
                     objects[a].identify(objects[b]);
                 }
         }
@@ -368,6 +369,7 @@ void init_objects()
     objects[2].current.set(400.0,160.0);
     objects[2].rally.x=objects[2].current.x;
     objects[2].rally.y=objects[2].current.y;
+    objects[2].set_boundaries();
     printf("object %d: %s initialized\n",objects[2].number, objects[2].name);
 
     //third object from objects array
@@ -376,6 +378,7 @@ void init_objects()
     objects[3].current.set(320.0,60);
     objects[3].rally.x=objects[3].current.x;
     objects[3].rally.y=objects[3].current.y;
+    objects[3].set_boundaries();
     printf("object %d: %s initialized\n",objects[3].number, objects[3].name);
 
     //fourth object from objects array
@@ -406,7 +409,6 @@ void render_scene(void) {
 
 	cursor1.set_boundaries();
     cursor1.selection_box();
-    glTranslatef(0.0,0.0,0.0);
 //render the objects
 //NOTE: objects are rendered ontop of eachother according to order rendered below (bottom first)
 
@@ -443,7 +445,7 @@ void update_scene()
     collision_detection();//calculate object collision
 
     //move objects
-
+//    objects[0].move_forward()||objects[0].move_left()||objects[0].move_back()||objects[0].move_right()||objects[0].move_forward();
     /*objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 9);
     objects[2].move_to_point(objects[2].rally.x,objects[2].rally.y, 8);
     objects[3].move_to_point(objects[3].rally.x,objects[3].rally.y, 7);
