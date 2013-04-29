@@ -128,6 +128,7 @@ class physics_object: public tangible_object
     void physics()
     {
         set_resting();
+        set_boundaries();
         calc_delta_time();
         calc_velocity();
         //friction();

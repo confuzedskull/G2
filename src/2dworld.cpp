@@ -54,7 +54,7 @@ int random2 = rand() % 4 + 1;//another random number between 1 and 4
 
 int frames=0;//to be used for frame count
 
-//text
+//text for HUD
 char text0[30];
 char text1[30];
 char text2[20];
@@ -179,7 +179,7 @@ void mouse_drag(int x, int y)
     {
         cursor1.highlighting=true;
         cursor1.left_drag.x=x;
-        cursor1.left_drag.y=window_height-y;
+        cursor1.left_drag.y=(window_height-y);
         cursor1.right_dragging=false;
 
     }
@@ -187,7 +187,7 @@ void mouse_drag(int x, int y)
     {
         cursor1.highlighting=false;
         cursor1.right_drag.x=x;
-        cursor1.right_drag.y=window_height-y;
+        cursor1.right_drag.y=(window_height-y);
         cursor1.right_dragging=true;
 
     }
@@ -297,7 +297,7 @@ void text ()
     sprintf(text0,"object no.%i", objects[current_object].number);
     glutPrint (window_width/40,window_height -20, GLUT_BITMAP_HELVETICA_12, text0, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text1,"coordinates=%.2f,%.2f", objects[current_object].current.x,objects[current_object].current.y);
+    sprintf(text1,"coordinates=%.2f,%.2f", objects[current_object].front_right.x,objects[current_object].front_right.y);
     glutPrint (window_width/40,window_height-40, GLUT_BITMAP_HELVETICA_12, text1, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text2,"velocity %.2f,%.2f",objects[current_object].velocity[1].x,objects[current_object].velocity[1].y);
@@ -330,7 +330,7 @@ void text ()
     sprintf(text11,"game time: %.2f",game_time);
     glutPrint (window_width/40,window_height-240, GLUT_BITMAP_HELVETICA_12, text11, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text12,"front:%.2f,%.2f",objects[current_object].front.x,objects[current_object].front.y);
+    sprintf(text12,"click:%.2f,%.2f",cursor1.left_down.x,cursor1.left_down.y);
     glutPrint (window_width/40,window_height-260, GLUT_BITMAP_HELVETICA_12, text12, 1.0f,0.0f,0.0f, 0.5f);
 }
 
@@ -387,6 +387,7 @@ void init_objects()
     objects[4].current.set(320,260);
     objects[4].rally.x=objects[4].current.x;
     objects[4].rally.y=objects[4].current.y;
+    objects[4].set_boundaries();
     printf("object %d: %s initialized\n",objects[4].number, objects[4].name);
 
 
@@ -406,8 +407,6 @@ void init_objects()
 void render_scene(void) {
 	// Clear Color Buffers
 	glClear(GL_COLOR_BUFFER_BIT);
-
-	cursor1.set_boundaries();
     cursor1.selection_box();
 //render the objects
 //NOTE: objects are rendered ontop of eachother according to order rendered below (bottom first)
@@ -432,10 +431,12 @@ void render_scene(void) {
 void update_scene()
 {
     key_operations();
+    cursor1.set_boundaries();
+
     time_elapsed = ((float)clock()-time_started)/CLOCKS_PER_SEC;//update the start time
     game_time = ((float)clock()-game_start)/CLOCKS_PER_SEC;
     //calculate the physics for all objects
-   objects[0].physics();
+    objects[0].physics();
     objects[1].physics();
     objects[2].physics();
     objects[3].physics();
@@ -446,17 +447,18 @@ void update_scene()
 
     //move objects
 //    objects[0].move_forward()||objects[0].move_left()||objects[0].move_back()||objects[0].move_right()||objects[0].move_forward();
-    /*objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 9);
+/*
+    objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 9);
     objects[2].move_to_point(objects[2].rally.x,objects[2].rally.y, 8);
     objects[3].move_to_point(objects[3].rally.x,objects[3].rally.y, 7);
     objects[4].move_to_point(objects[4].rally.x,objects[4].rally.y, 6);
     objects[5].move_to_point(objects[5].rally.x,objects[5].rally.y, 5);*/
 //mouse interactivity
-/*    objects[1].mouse_function();
+    objects[1].mouse_function();
     objects[2].mouse_function();
     objects[3].mouse_function();
     objects[4].mouse_function();
-    objects[5].mouse_function();*/
+    objects[5].mouse_function();
 
     if(compare(time_elapsed,frequency)==1)//time elapsed is > frequency
     {

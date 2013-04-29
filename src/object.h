@@ -17,12 +17,12 @@ class object
     int x,y;
 
     double rotation;
-    int width, height;
+    float width, height;
     color current_color;//RGB values
     color prev_color;
     bool visible;
 
-    int xmax,xmin,ymax,ymin;
+    float xmax,xmin,ymax,ymin;
 
     void set_boundaries()
     {
@@ -84,10 +84,10 @@ class object
         name="generic object";
         object_no++;
         number=object_no;
-        current.x=320;
-        current.y=160;
-        resting.x=320;
-        resting.y=160;
+        current.x=320.0;
+        current.y=160.0;
+        resting.x=320.0;
+        resting.y=160.0;
         width=64;
         height=64;
         current_color.set(0.0,0.0,0.0);

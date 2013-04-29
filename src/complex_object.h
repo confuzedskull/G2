@@ -60,10 +60,10 @@ class complex_object: public object
         back.set(current.x+(backward.x*(height/2)),current.y+(backward.y*(height/2)));
         left.set(current.x+(leftward.x*(width/2)),current.y+(leftward.y*(width/2)));
         right.set(current.x+(rightward.x*(width/2)),current.y+(rightward.y*(width/2)));
-        front_left.set((front.x+left.x),front.y+left.y);
-        front_right.set(front.x+right.x,front.y+right.y);
-        back_left.set(back.x+left.x,back.y+left.y);
-        back_right.set(back.x+right.x,back.y+right.y);
+        front_left.set(front.x-(width/2),front.y);
+        front_right.set(front.x+(width/2),front.y);
+        back_left.set(back.x-(width/2),back.y);
+        back_right.set(back.x+(width/2),back.y);
 
     }
 
@@ -81,7 +81,6 @@ class complex_object: public object
             glVertex2f(front_right.x, front_right.y); // The top right corner
             glVertex2f(back_right.x, back_right.y); // The bottom right corner
         glEnd();//finish drawing
-
     }
     complex_object()
     {
