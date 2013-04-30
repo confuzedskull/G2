@@ -215,8 +215,8 @@ class movable_object: public complex_object
 
         if(compare(distance(current.x,current.y,destination_x,destination_y),0)==1)
         {
-            current.x+=step[4].x*rate;
-            current.y+=step[4].y*rate;
+            current.x+=step[3].x*rate;
+            current.y+=step[3].y*rate;
         }
 
     }
@@ -225,7 +225,7 @@ class movable_object: public complex_object
         name="movable object";
         rally.x=resting.x;
         rally.y=resting.y;
-        step_size=0.01;
+        step_size=0.001;
         steps_taken[1]=0;
         steps_taken[2]=0;
         steps_taken[3]=0;

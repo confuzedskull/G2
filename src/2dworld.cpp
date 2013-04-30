@@ -356,7 +356,6 @@ void init_objects()
 
     objects[1].name="player 1";
     objects[1].current_color.set(BLUE);
-    objects[1].step_size=0.001;
     objects[1].set_boundaries();
     printf("object %d: %s initialized\n",objects[1].number, objects[1].name);
 
@@ -397,7 +396,6 @@ void init_objects()
     objects[5].current.set(200,260);
     objects[5].width=64;
     objects[5].height=64;
-    objects[5].step_size=0.001;
     objects[5].set_boundaries();
     objects[5].rally.x=objects[5].current.x;
     objects[5].rally.y=objects[5].current.y;
@@ -449,11 +447,11 @@ void update_scene()
     //move objects
     //objects[0].move_forward(2)||objects[0].move_left(2)||objects[0].move_back(2)||objects[0].move_right(2)||objects[0].move_forward(2);
 
-    /*objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 1);
+    objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 1);
     objects[2].move_to_point(objects[2].rally.x,objects[2].rally.y, 1);
     objects[3].move_to_point(objects[3].rally.x,objects[3].rally.y, 1);
     objects[4].move_to_point(objects[4].rally.x,objects[4].rally.y, 1);
-    objects[5].move_to_point(objects[5].rally.x,objects[5].rally.y, 1);*/
+    objects[5].move_to_point(objects[5].rally.x,objects[5].rally.y, 1);
 //mouse interactivity
     objects[0].mouse_function();
     objects[1].mouse_function();
