@@ -16,7 +16,7 @@ class object
     point2f resting;//resting point
     int x,y;
 
-    double rotation;
+    float rotation;
     float width, height;
     color current_color;//RGB values
     color prev_color;

@@ -9,8 +9,8 @@ class movable_object: public complex_object
     bool rally_set;
     vect step[4];//unit by which an object moves in x and y directions.
     int steps_taken[4];
-    double degrees_rotated;
-    double step_size;
+    float degrees_rotated;
+    float step_size;
     bool moving_vertical;
     bool moving_horizontal;
 
@@ -189,31 +189,31 @@ class movable_object: public complex_object
     //moves object to destination over time at specified rate
     void move_to_point(float destination_x, float destination_y, float rate)
     {
-        if(destination_x>current.x && destination_y>current.y)//destination lies in quadrant 1
-        rotation=atan((destination_y-current.y)/(destination_x-current.x))*180/PI;
+        if(compare(destination_x,current.x)==1 && compare(destination_y,current.y)==1)//destination lies in quadrant 1
+        rotation = atan((destination_y-current.y)/(destination_x-current.x))*180/PI;
 
-        if(destination_x<current.x && destination_y>current.y)//destination lies in quadrant 2
-        rotation=atan((destination_y-current.y)/(destination_x-current.x))*180/PI + 180;
+        if(compare(destination_x,current.x)==-1 && compare(destination_y,current.y)==1)//destination lies in quadrant 2
+        rotation = atan((destination_y-current.y)/(destination_x-current.x))*180/PI + 180;
 
-        if(destination_x<current.x && destination_y<current.y)//destination lies in quadrant 3
-        rotation=atan((destination_y-current.y)/(destination_x-current.x))*180/PI + 180;
+        if(compare(destination_x,current.x)==-1 && compare(destination_y,current.y)==-1)//destination lies in quadrant 3
+        rotation = atan((destination_y-current.y)/(destination_x-current.x))*180/PI + 180;
 
-        if(destination_x>current.x && destination_y<current.y)//destination lies in quadrant 4
-        rotation=atan((destination_y-current.y)/(destination_x-current.x))*180/PI + 360;
+        if(compare(destination_x,current.x)==1 && compare(destination_y,current.y)==-1)//destination lies in quadrant 4
+        rotation = atan((destination_y-current.y)/(destination_x-current.x))*180/PI + 360;
 
-        if(destination_x==current.x && destination_y>current.y)//destination lies at 12 O'clock
-        rotation=90;
+        if(compare(destination_x,current.x)==0 && compare(destination_y,current.y)==1)//destination lies at 12 O'clock
+        rotation = 90;
 
-        if(destination_x==current.x && destination_y<current.y)//destination lies at 6'O'clock
-        rotation=270;
+        if(compare(destination_x,current.x)==0 && compare(destination_y,current.y)==-1)//destination lies at 6'O'clock
+        rotation = 270;
 
-        if(destination_x<current.x && destination_y==current.y)//destination lies at 9 O'clock
-        rotation=180;
+        if(compare(destination_x,current.x)==-1 && compare(destination_y,current.y)==0)//destination lies at 9 O'clock
+        rotation = 180;
 
-        if(destination_x>current.x && destination_y==current.y)//destination lies at 3 O'clock
-        rotation=360;
+        if(compare(destination_x,current.x)==1 && compare(destination_y,current.y)==0)//destination lies at 3 O'clock
+        rotation = 0;
 
-        if(distance(current.x,current.y,destination_x,destination_y)>0)
+        if(compare(distance(current.x,current.y,destination_x,destination_y),0)==1)
         {
             current.x+=step[4].x*rate;
             current.y+=step[4].y*rate;

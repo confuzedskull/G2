@@ -45,26 +45,24 @@ class complex_object: public object
         backward.set(-(cos(rotation*PI/180)),-(sin(rotation*PI/180)));
     }
 
-    void rotate(double angle)
+    void rotate(float angle)
     {
         rotation+=angle;
         calc_direction();
-        calc_points();
+        calc_sides();
     }
 
 
     void calc_points()
     {
-
         front.set(current.x+(forward.x*(height/2)),current.y+(forward.y*(height/2)));
         back.set(current.x+(backward.x*(height/2)),current.y+(backward.y*(height/2)));
         left.set(current.x+(leftward.x*(width/2)),current.y+(leftward.y*(width/2)));
         right.set(current.x+(rightward.x*(width/2)),current.y+(rightward.y*(width/2)));
-        front_left.set(front.x-(width/2),front.y);
-        front_right.set(front.x+(width/2),front.y);
-        back_left.set(back.x-(width/2),back.y);
-        back_right.set(back.x+(width/2),back.y);
-
+        front_left.set(current.x+((forward.x+leftward.x)*(height/2)),current.y+((forward.y+leftward.y)*(height/2)));
+        front_right.set(current.x+((forward.x+rightward.x)*(height/2)),current.y+((forward.y+rightward.y)*(height/2)));
+        back_left.set(current.x+((backward.x+leftward.x)*(width/2)),current.y+((backward.y+leftward.y)*(width/2)));
+        back_right.set(current.x+((backward.x+rightward.x)*(width/2)),current.y+((backward.y+rightward.y)*(width/2)));
     }
 
         void render()

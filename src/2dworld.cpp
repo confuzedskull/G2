@@ -92,7 +92,7 @@ void collision_detection()
         {
             if(a!=b && objects[a].is_close(objects[b]))
                 {
-                    objects[a].repel(objects[b]);
+
                     objects[a].identify(objects[b]);
                 }
         }
@@ -297,7 +297,7 @@ void text ()
     sprintf(text0,"object no.%i", objects[current_object].number);
     glutPrint (window_width/40,window_height -20, GLUT_BITMAP_HELVETICA_12, text0, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text1,"coordinates=%.2f,%.2f", objects[current_object].front_right.x,objects[current_object].front_right.y);
+    sprintf(text1,"coordinates=%.2f,%.2f", objects[current_object].current.x,objects[current_object].current.y);
     glutPrint (window_width/40,window_height-40, GLUT_BITMAP_HELVETICA_12, text1, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text2,"velocity %.2f,%.2f",objects[current_object].velocity[1].x,objects[current_object].velocity[1].y);
@@ -446,13 +446,13 @@ void update_scene()
     collision_detection();//calculate object collision
 
     //move objects
-//    objects[0].move_forward()||objects[0].move_left()||objects[0].move_back()||objects[0].move_right()||objects[0].move_forward();
-/*
-    objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 9);
-    objects[2].move_to_point(objects[2].rally.x,objects[2].rally.y, 8);
-    objects[3].move_to_point(objects[3].rally.x,objects[3].rally.y, 7);
-    objects[4].move_to_point(objects[4].rally.x,objects[4].rally.y, 6);
-    objects[5].move_to_point(objects[5].rally.x,objects[5].rally.y, 5);*/
+    //objects[0].move_forward(10)||objects[0].move_left(10)||objects[0].move_back(10)||objects[0].move_right(10)||objects[0].move_forward(10);
+
+    /*objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 1);
+    objects[2].move_to_point(objects[2].rally.x,objects[2].rally.y, 1);
+    objects[3].move_to_point(objects[3].rally.x,objects[3].rally.y, 1);
+    objects[4].move_to_point(objects[4].rally.x,objects[4].rally.y, 1);
+    objects[5].move_to_point(objects[5].rally.x,objects[5].rally.y, 1);*/
 //mouse interactivity
     objects[1].mouse_function();
     objects[2].mouse_function();
