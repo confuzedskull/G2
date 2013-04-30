@@ -432,6 +432,7 @@ void update_scene()
 {
     key_operations();
     cursor1.set_boundaries();
+    current_object=cursor1.selected_object-1;
 
     time_elapsed = ((float)clock()-time_started)/CLOCKS_PER_SEC;//update the start time
     game_time = ((float)clock()-game_start)/CLOCKS_PER_SEC;
@@ -446,7 +447,7 @@ void update_scene()
     collision_detection();//calculate object collision
 
     //move objects
-    //objects[0].move_forward(10)||objects[0].move_left(10)||objects[0].move_back(10)||objects[0].move_right(10)||objects[0].move_forward(10);
+    //objects[0].move_forward(2)||objects[0].move_left(2)||objects[0].move_back(2)||objects[0].move_right(2)||objects[0].move_forward(2);
 
     /*objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 1);
     objects[2].move_to_point(objects[2].rally.x,objects[2].rally.y, 1);
@@ -454,6 +455,7 @@ void update_scene()
     objects[4].move_to_point(objects[4].rally.x,objects[4].rally.y, 1);
     objects[5].move_to_point(objects[5].rally.x,objects[5].rally.y, 1);*/
 //mouse interactivity
+    objects[0].mouse_function();
     objects[1].mouse_function();
     objects[2].mouse_function();
     objects[3].mouse_function();
