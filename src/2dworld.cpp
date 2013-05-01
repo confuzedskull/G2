@@ -93,7 +93,7 @@ void collision_detection()
             if(a!=b && objects[a].is_close(objects[b]))
             {
                 objects[a].identify(objects[b]);
-
+                objects[a].repel(objects[b]);
             }
         }
     }
@@ -307,7 +307,7 @@ void text ()
     sprintf(text3,"velocity2 %.2f,%.2f",objects[current_object].velocity[2].x,objects[current_object].velocity[2].y);
     glutPrint (window_width/40,window_height -80, GLUT_BITMAP_HELVETICA_12, text3, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text4,"resting: %.2f, %.2f",objects[current_object].resting.x,objects[current_object].resting.y);
+    sprintf(text4,"resting: %.2f, %.2f",objects[current_object].backward.x,objects[current_object].backward.y);
     glutPrint (window_width/40,window_height -100, GLUT_BITMAP_HELVETICA_12, text4, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text5,"delta_time x: %.2f y:%.2f",objects[current_object].delta_time[1],objects[current_object].delta_time[2]);
@@ -325,7 +325,7 @@ void text ()
     sprintf(text9,"delta_time velocity: %.2f %.2f",objects[current_object].delta_time[3],objects[current_object].delta_time[4]);
     glutPrint (window_width/40,window_height-200, GLUT_BITMAP_HELVETICA_12, text9, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text10,"touching object no. L:%d R:%d T:%d B:%d",objects[current_object].steps_taken[left], objects[current_object].steps_taken[right], objects[current_object].touching[up],objects[current_object].touching[down]);
+    sprintf(text10,"touching object no. L:%d R:%d T:%d B:%d",objects[current_object].touching[left], objects[current_object].touching[right], objects[current_object].touching[up],objects[current_object].touching[down]);
     glutPrint (window_width/40,window_height-220, GLUT_BITMAP_HELVETICA_12, text10, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text11,"game time: %.2f",game_time);
@@ -459,7 +459,7 @@ void update_scene()
     {
         time_started=clock();//reset the start time
         //move objects
-        objects[0].move_forward(100);
+        objects[0].move_forward(100)||objects[0].move_right(100)||objects[0].move_back(100)||objects[0].move_left(100);
 
         objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 1);
         objects[2].move_to_point(objects[2].rally.x,objects[2].rally.y, 1);

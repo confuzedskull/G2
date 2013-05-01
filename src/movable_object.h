@@ -14,6 +14,7 @@ public:
     float step_size;
     bool moving_vertical;
     bool moving_horizontal;
+    bool moves_reset;
 
     void calc_step()
     {
@@ -37,6 +38,14 @@ public:
         steps_taken[2]=0;
         steps_taken[3]=0;
         steps_taken[4]=0;
+    }
+
+    void reset_moved()
+    {
+        units_moved[1]=0;
+        units_moved[2]=0;
+        units_moved[3]=0;
+        units_moved[4]=0;
     }
 
     bool turn_right()
@@ -65,19 +74,10 @@ public:
 
     }
 
-    bool move_left()
+    void move_left()
     {
-        moving_horizontal=true;
-        if(units_moved[1]<1)
-        {
-            current.x+=left.x;
-            current.y+=left.y;
-            units_moved[1]++;
-            return true;
-        }
-        else
-            return false;
-
+            current.x+=leftward.x;
+            current.y+=leftward.y;
     }
 
     bool move_left(int units_left)
@@ -85,8 +85,7 @@ public:
         moving_horizontal=true;
         if(units_moved[1]<units_left)
         {
-            current.x+=left.x;
-            current.y+=left.y;
+            move_left();
             units_moved[1]++;
             return true;
         }
@@ -97,25 +96,15 @@ public:
 
     bool move_right()
     {
-        moving_horizontal=true;
-        if(units_moved[2]<1)
-        {
-            current.x+=right.x;
-            current.y+=right.y;
-            units_moved[2]++;
-            return true;
-        }
-        else
-            return false;
-
+            current.x+=rightward.x;
+            current.y+=rightward.y;
     }
 
     bool move_right(int units_right)
     {
         if(units_moved[2]<units_right)
         {
-            current.x+=right.x;
-            current.y+=right.y;
+            move_right();
             units_moved[2]++;
             return true;
         }
@@ -124,19 +113,10 @@ public:
 
     }
 
-    bool move_forward()
+    void move_forward()
     {
-        moving_vertical=true;
-        if(units_moved[3]<1)
-        {
             current.x+=forward.x;
             current.y+=forward.y;
-            units_moved[3]++;
-            return true;
-        }
-        else
-            return false;
-
     }
 
     bool move_forward(int units_forward)
@@ -144,8 +124,7 @@ public:
         moving_vertical=true;
         if(units_moved[3]<units_forward)
         {
-            current.x+=forward.x;
-            current.y+=forward.y;
+            move_forward();
             units_moved[3]++;
             return true;
         }
@@ -153,18 +132,10 @@ public:
             return false;
     }
 
-    bool move_back()
+    void move_back()
     {
-        moving_vertical=true;
-        if(units_moved[4]<1)
-        {
-            current.x+=back.x;
-            current.y+=back.y;
-            units_moved[4]++;
-            return true;
-        }
-        else
-            return false;
+            current.x+=backward.x;
+            current.y+=backward.y;
     }
 
     bool move_back(int units_back)
@@ -172,8 +143,7 @@ public:
         moving_vertical=true;
         if(units_moved[4]<units_back)
         {
-            current.x+=back.x;
-            current.y+=back.y;
+            move_back();
             units_moved[4]++;
             return true;
         }
@@ -181,19 +151,10 @@ public:
             return false;
     }
 
-    bool walk_left()
+    void walk_left()
     {
-        moving_horizontal=true;
-        if(steps_taken[1]<1)
-        {
             current.x+=step[1].x;
             current.y+=step[1].y;
-            steps_taken[1]++;
-            return true;
-        }
-        else
-            return false;
-
     }
 
     bool walk_left(int steps_left)
@@ -201,8 +162,7 @@ public:
         moving_horizontal=true;
         if(steps_taken[1]<steps_left)
         {
-            current.x+=step[1].x;
-            current.y+=step[1].y;
+            walk_left();
             steps_taken[1]++;
             return true;
         }
@@ -211,27 +171,17 @@ public:
 
     }
 
-    bool walk_right()
+    void walk_right()
     {
-        moving_horizontal=true;
-        if(steps_taken[2]<1)
-        {
             current.x+=step[2].x;
             current.y+=step[2].y;
-            steps_taken[2]++;
-            return true;
-        }
-        else
-            return false;
-
     }
 
     bool walk_right(int steps_right)
     {
         if(steps_taken[2]<steps_right)
         {
-            current.x+=step[2].x;
-            current.y+=step[2].y;
+            walk_right();
             steps_taken[2]++;
             return true;
         }
@@ -240,19 +190,10 @@ public:
 
     }
 
-    bool walk_forward()
+    void walk_forward()
     {
-        moving_vertical=true;
-        if(steps_taken[3]<1)
-        {
             current.x+=step[3].x;
             current.y+=step[3].y;
-            steps_taken[3]++;
-            return true;
-        }
-        else
-            return false;
-
     }
 
     bool walk_forward(int steps_forward)
@@ -260,8 +201,7 @@ public:
         moving_vertical=true;
         if(steps_taken[3]<steps_forward)
         {
-            current.x+=step[3].x;
-            current.y+=step[3].y;
+            walk_forward();
             steps_taken[3]++;
             return true;
         }
@@ -269,18 +209,10 @@ public:
             return false;
     }
 
-    bool walk_back()
+    void walk_back()
     {
-        moving_vertical=true;
-        if(steps_taken[4]<1)
-        {
             current.x+=step[4].x;
             current.y+=step[4].y;
-            steps_taken[4]++;
-            return true;
-        }
-        else
-            return false;
     }
 
     bool walk_back(int steps_back)
@@ -288,8 +220,7 @@ public:
         moving_vertical=true;
         if(steps_taken[4]<steps_back)
         {
-            current.x+=step[4].x;
-            current.y+=step[4].y;
+            walk_back();
             steps_taken[4]++;
             return true;
         }
@@ -392,6 +323,7 @@ public:
         rally.y=resting.y;
         rally_set=false;
         step_size=0.001;
+        reset_moved();
         reset_steps();
         printf("object %d: %s created\n", number, name);
 
