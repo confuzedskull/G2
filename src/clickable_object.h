@@ -90,11 +90,13 @@ class clickable_object: public physics_object
             {
                 rally.x=cursor1.right_down.x;
                 rally.y=cursor1.right_down.y;
+                rally_set=true;
             }
             if(cursor1.right_dragging==true && right_clicked()==false)
             {
                 rally.x=cursor1.right_drag.x;
                 rally.y=cursor1.right_drag.y;
+                rally_set=true;
             }
             current_color.set(GREEN);
         }

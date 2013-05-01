@@ -4,7 +4,7 @@
 
 class movable_object: public complex_object
 {
-    public:
+public:
     point2i rally;
     bool rally_set;
     vect step[4];//unit by which an object moves in x and y directions.
@@ -39,7 +39,7 @@ class movable_object: public complex_object
             return true;
         }
         else
-        return false;
+            return false;
 
     }
 
@@ -52,7 +52,7 @@ class movable_object: public complex_object
             return true;
         }
         else
-        return false;
+            return false;
 
     }
 
@@ -67,7 +67,7 @@ class movable_object: public complex_object
             return true;
         }
         else
-        return false;
+            return false;
 
     }
 
@@ -82,7 +82,7 @@ class movable_object: public complex_object
             return true;
         }
         else
-        return false;
+            return false;
 
     }
 
@@ -97,7 +97,7 @@ class movable_object: public complex_object
             return true;
         }
         else
-        return false;
+            return false;
 
     }
 
@@ -112,7 +112,7 @@ class movable_object: public complex_object
             return true;
         }
         else
-        return false;
+            return false;
 
     }
 
@@ -127,7 +127,7 @@ class movable_object: public complex_object
             return true;
         }
         else
-        return false;
+            return false;
 
     }
 
@@ -142,7 +142,7 @@ class movable_object: public complex_object
             return true;
         }
         else
-        return false;
+            return false;
 
     }
 
@@ -157,7 +157,7 @@ class movable_object: public complex_object
             return true;
         }
         else
-        return false;
+            return false;
     }
 
     bool move_back(int steps_back)
@@ -171,7 +171,7 @@ class movable_object: public complex_object
             return true;
         }
         else
-        return false;
+            return false;
     }
 
     bool move(int direction,int steps)//moves object steps in direction[1,2,3,or 4]
@@ -184,37 +184,40 @@ class movable_object: public complex_object
             return true;
         }
         else
-        return false;
+            return false;
     }
     //moves object to destination over time at specified rate
     void move_to_point(float destination_x, float destination_y, float rate)
     {
-        if(compare(destination_x,current.x)==1 && compare(destination_y,current.y)==1)//destination lies in quadrant 1
-        rotation = atan((destination_y-current.y)/(destination_x-current.x))*180/PI;
-
-        if(compare(destination_x,current.x)==-1 && compare(destination_y,current.y)==1)//destination lies in quadrant 2
-        rotation = atan((destination_y-current.y)/(destination_x-current.x))*180/PI + 180;
-
-        if(compare(destination_x,current.x)==-1 && compare(destination_y,current.y)==-1)//destination lies in quadrant 3
-        rotation = atan((destination_y-current.y)/(destination_x-current.x))*180/PI + 180;
-
-        if(compare(destination_x,current.x)==1 && compare(destination_y,current.y)==-1)//destination lies in quadrant 4
-        rotation = atan((destination_y-current.y)/(destination_x-current.x))*180/PI + 360;
-
-        if(compare(destination_x,current.x)==0 && compare(destination_y,current.y)==1)//destination lies at 12 O'clock
-        rotation = 90;
-
-        if(compare(destination_x,current.x)==0 && compare(destination_y,current.y)==-1)//destination lies at 6'O'clock
-        rotation = 270;
-
-        if(compare(destination_x,current.x)==-1 && compare(destination_y,current.y)==0)//destination lies at 9 O'clock
-        rotation = 180;
-
-        if(compare(destination_x,current.x)==1 && compare(destination_y,current.y)==0)//destination lies at 3 O'clock
-        rotation = 0;
-
-        if(compare(distance(current.x,current.y,destination_x,destination_y),0)==1)
+        if(rally_set)
         {
+            if(compare(destination_x,current.x)==1 && compare(destination_y,current.y)==1)//destination lies in quadrant 1
+                rotation = atan((destination_y-current.y)/(destination_x-current.x))*180/PI;
+
+            if(compare(destination_x,current.x)==-1 && compare(destination_y,current.y)==1)//destination lies in quadrant 2
+                rotation = atan((destination_y-current.y)/(destination_x-current.x))*180/PI + 180;
+
+            if(compare(destination_x,current.x)==-1 && compare(destination_y,current.y)==-1)//destination lies in quadrant 3
+                rotation = atan((destination_y-current.y)/(destination_x-current.x))*180/PI + 180;
+
+            if(compare(destination_x,current.x)==1 && compare(destination_y,current.y)==-1)//destination lies in quadrant 4
+                rotation = atan((destination_y-current.y)/(destination_x-current.x))*180/PI + 360;
+
+            if(compare(destination_x,current.x)==0 && compare(destination_y,current.y)==1)//destination lies at 12 O'clock
+                rotation = 90;
+
+            if(compare(destination_x,current.x)==0 && compare(destination_y,current.y)==-1)//destination lies at 6'O'clock
+                rotation = 270;
+
+            if(compare(destination_x,current.x)==-1 && compare(destination_y,current.y)==0)//destination lies at 9 O'clock
+                rotation = 180;
+
+            if(compare(destination_x,current.x)==1 && compare(destination_y,current.y)==0)//destination lies at 3 O'clock
+                rotation = 0;
+
+            if(compare(distance(current.x,current.y,destination_x,destination_y),1.5)==-1)
+                rally_set=false;
+
             current.x+=step[3].x*rate;
             current.y+=step[3].y*rate;
         }
@@ -225,6 +228,7 @@ class movable_object: public complex_object
         name="movable object";
         rally.x=resting.x;
         rally.y=resting.y;
+        rally_set=false;
         step_size=0.001;
         steps_taken[1]=0;
         steps_taken[2]=0;

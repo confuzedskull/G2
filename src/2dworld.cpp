@@ -92,7 +92,6 @@ void collision_detection()
         {
             if(a!=b && objects[a].is_close(objects[b]))
                 {
-
                     objects[a].identify(objects[b]);
                 }
         }
