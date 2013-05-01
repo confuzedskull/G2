@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="src\compare.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\complex_object.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="499" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\complex_object.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2222" topLine="39" />
+			<Cursor1 position="2222" topLine="6" />
 		</Cursor>
 	</File>
 	<File name="src\cursor.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -16,29 +11,29 @@
 			<Cursor1 position="1371" topLine="38" />
 		</Cursor>
 	</File>
-	<File name="src\2dworld.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\2dworld.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="14443" topLine="446" />
+			<Cursor1 position="13545" topLine="352" />
 		</Cursor>
 	</File>
-	<File name="src\clickable_object.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\movable_object.h" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1109" topLine="0" />
+			<Cursor1 position="3220" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\movable_object.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\clickable_object.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2073" topLine="78" />
+			<Cursor1 position="1109" topLine="79" />
 		</Cursor>
 	</File>
-	<File name="src\object.h" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\object.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="475" topLine="39" />
+			<Cursor1 position="548" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\physics_object.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\physics_object.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3741" topLine="0" />
+			<Cursor1 position="3741" topLine="114" />
 		</Cursor>
 	</File>
 	<File name="src\player.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -46,14 +41,19 @@
 			<Cursor1 position="59" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\tangible_object.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\tangible_object.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="459" topLine="18" />
+			<Cursor1 position="1061" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src\world.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="248" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\compare.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="499" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

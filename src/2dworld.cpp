@@ -307,7 +307,7 @@ void text ()
     sprintf(text3,"velocity2 %.2f,%.2f",objects[current_object].velocity[2].x,objects[current_object].velocity[2].y);
     glutPrint (window_width/40,window_height -80, GLUT_BITMAP_HELVETICA_12, text3, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text4,"resting: %.2f, %.2f",objects[current_object].backward.x,objects[current_object].backward.y);
+    sprintf(text4,"resting: %.2f, %.2f",objects[current_object].resting.x,objects[current_object].resting.y);
     glutPrint (window_width/40,window_height -100, GLUT_BITMAP_HELVETICA_12, text4, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text5,"delta_time x: %.2f y:%.2f",objects[current_object].delta_time[1],objects[current_object].delta_time[2]);
