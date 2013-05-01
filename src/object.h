@@ -75,7 +75,7 @@ class object
 
     int getRadius()
     {
-        return (width+height)/8;
+        return ((width/2)+(height/2))/2;
     }
 
 
