@@ -91,43 +91,44 @@ void collision_detection()
         for(int b=0; b<max_objects; b++)
         {
             if(a!=b && objects[a].is_close(objects[b]))
-                {
-                    objects[a].repel(objects[b]);
-                    objects[a].identify(objects[b]);
-                }
+            {
+                objects[a].identify(objects[b]);
+
+            }
         }
     }
 };
 player B;
 
-void change_size(int w, int h) {
+void change_size(int w, int h)
+{
 
-	// Prevent a divide by zero, when window is too short
-	// (you cant make a window of zero width).
-	if (h == 0)
-		h = 1;
-	float ratio =  w * 1.0 / h;
+    // Prevent a divide by zero, when window is too short
+    // (you cant make a window of zero width).
+    if (h == 0)
+        h = 1;
+    float ratio =  w * 1.0 / h;
 
-        // Use the Projection Matrix
-	glMatrixMode(GL_PROJECTION);
+    // Use the Projection Matrix
+    glMatrixMode(GL_PROJECTION);
 
-        // Reset Matrix
-	glLoadIdentity();
+    // Reset Matrix
+    glLoadIdentity();
 
-	glOrtho(0.0,(GLdouble)w,0.0,(GLdouble)h, -1.0,1.0);
+    glOrtho(0.0,(GLdouble)w,0.0,(GLdouble)h, -1.0,1.0);
 
-	// Get Back to the Modelview
-	glMatrixMode(GL_MODELVIEW);
+    // Get Back to the Modelview
+    glMatrixMode(GL_MODELVIEW);
 
-	glLoadIdentity();
+    glLoadIdentity();
 
-	// Set the viewport to be the entire window
-	glViewport(0, 0, w, h);
+    // Set the viewport to be the entire window
+    glViewport(0, 0, w, h);
     glClear(GL_COLOR_BUFFER_BIT);
-	glFlush();
+    glFlush();
 
-	// Set the correct perspective.
-	//gluPerspective(45.0f, ratio, 0.1f, 100.0f);
+    // Set the correct perspective.
+    //gluPerspective(45.0f, ratio, 0.1f, 100.0f);
 
     window_width=w;
     window_height=h;
@@ -135,26 +136,26 @@ void change_size(int w, int h) {
 
 void mouse_click( int button, int state, int x, int y )
 {
-	if ( button==GLUT_LEFT_BUTTON && state==GLUT_DOWN )
-	{
-	    cursor1.left_down.x=x;
-	    cursor1.left_down.y=window_height-y;
-	    cursor1.left_click=true;
-	}
+    if ( button==GLUT_LEFT_BUTTON && state==GLUT_DOWN )
+    {
+        cursor1.left_down.x=x;
+        cursor1.left_down.y=window_height-y;
+        cursor1.left_click=true;
+    }
 
     if ( button==GLUT_LEFT_BUTTON && state==GLUT_UP )
-	{
+    {
         cursor1.left_up.x=x;
         cursor1.left_up.y=window_height-y;
         cursor1.highlighting=false;
         cursor1.left_click=false;
 
-	}
+    }
 
-	if ( button==GLUT_RIGHT_BUTTON && state==GLUT_DOWN )
-	{
-	    cursor1.highlighting=false;
-	    cursor1.right_click=true;
+    if ( button==GLUT_RIGHT_BUTTON && state==GLUT_DOWN )
+    {
+        cursor1.highlighting=false;
+        cursor1.right_click=true;
         cursor1.right_down.x=x;
         cursor1.right_down.y=window_height-y;
         cursor1.right_dragging=false;
@@ -162,9 +163,9 @@ void mouse_click( int button, int state, int x, int y )
     }
 
     if ( button==GLUT_RIGHT_BUTTON && state==GLUT_UP )
-	{
-	    cursor1.highlighting=false;
-	    cursor1.right_click=false;
+    {
+        cursor1.highlighting=false;
+        cursor1.right_click=false;
         cursor1.right_up.x=x;
         cursor1.right_up.y=window_height-y;
 
@@ -195,32 +196,32 @@ void mouse_drag(int x, int y)
 
 void key_pressed (unsigned char key, int x, int y)
 {
-key_states[key] = true; // Set the state of the current key to pressed
+    key_states[key] = true; // Set the state of the current key to pressed
 }
 
 void key_up (unsigned char key, int x, int y)
 {
-key_states[key] = false; // Set the state of the current key to not pressed
+    key_states[key] = false; // Set the state of the current key to not pressed
 }
 
 void key_operations (void)
 {
 
-if(key_states['w'] || key_states['W'] || key_states['s'] || key_states['S'])
-{
-    objects[current_object].moving_vertical=true;
-}
-else
-    objects[current_object].moving_vertical=false;
+    if(key_states['w'] || key_states['W'] || key_states['s'] || key_states['S'])
+    {
+        objects[current_object].moving_vertical=true;
+    }
+    else
+        objects[current_object].moving_vertical=false;
 
-if(key_states['a'] || key_states['A'] || key_states['d'] || key_states['D'])
-{
-    objects[current_object].moving_horizontal=true;
-}
-else
-    objects[current_object].moving_horizontal=false;
+    if(key_states['a'] || key_states['A'] || key_states['d'] || key_states['D'])
+    {
+        objects[current_object].moving_horizontal=true;
+    }
+    else
+        objects[current_object].moving_horizontal=false;
 
-if (key_states['w'] || key_states['W'])
+    if (key_states['w'] || key_states['W'])
     {
         objects[current_object].current.y+=objects[current_object].step[up].y;
         objects[current_object].current.x+=objects[current_object].step[up].x;
@@ -228,7 +229,7 @@ if (key_states['w'] || key_states['W'])
         objects[current_object].action[up]=true;
     }
 
-if (key_states['s'] || key_states['S'])
+    if (key_states['s'] || key_states['S'])
     {
         objects[current_object].current.x+=objects[current_object].step[down].x;
         objects[current_object].current.y+=objects[current_object].step[down].y;
@@ -236,7 +237,7 @@ if (key_states['s'] || key_states['S'])
         objects[current_object].action[down]=true;
     }
 
-if (key_states['a'] || key_states['A'])
+    if (key_states['a'] || key_states['A'])
     {
         objects[current_object].current.x+=objects[current_object].step[left].x;
         objects[current_object].current.y+=objects[current_object].step[left].y;
@@ -244,7 +245,7 @@ if (key_states['a'] || key_states['A'])
         objects[current_object].action[left]=true;
     }
 
-if (key_states['d'] || key_states['D'])
+    if (key_states['d'] || key_states['D'])
     {
         objects[current_object].current.x+=objects[current_object].step[right].x;
         objects[current_object].current.y+=objects[current_object].step[right].y;
@@ -252,30 +253,30 @@ if (key_states['d'] || key_states['D'])
         objects[current_object].action[right]=true;
     }
 
-if (key_states['q'] || key_states['Q'])
+    if (key_states['q'] || key_states['Q'])
     {
         objects[current_object].rotation+=objects[current_object].step_size;
     }
 
-if (key_states['e'] || key_states['E'])
+    if (key_states['e'] || key_states['E'])
     {
         objects[current_object].rotation-=objects[current_object].step_size;
     }
 
-if (key_states['i'] || key_states['I'])
+    if (key_states['i'] || key_states['I'])
     {
         if(toggle_text==1)
-        temp_toggle[1]=0;
+            temp_toggle[1]=0;
 
         if(toggle_text==0)
-        temp_toggle[1]=1;
+            temp_toggle[1]=1;
 
     }
-else
-toggle_text=temp_toggle[1];
+    else
+        toggle_text=temp_toggle[1];
 
 // spacebar
-if (key_states[32])
+    if (key_states[32])
     {
         objects[current_object].action[8]=true;
         bullet.fire(objects[current_object]);
@@ -287,8 +288,8 @@ if (key_states[32])
     }
 
 //escape
-if (key_states[27])
-		exit(0);
+    if (key_states[27])
+        exit(0);
 }
 
 void text ()
@@ -324,7 +325,7 @@ void text ()
     sprintf(text9,"delta_time velocity: %.2f %.2f",objects[current_object].delta_time[3],objects[current_object].delta_time[4]);
     glutPrint (window_width/40,window_height-200, GLUT_BITMAP_HELVETICA_12, text9, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text10,"touching object no. L:%d R:%d T:%d B:%d",objects[current_object].touching[left], objects[current_object].touching[right], objects[current_object].touching[up],objects[current_object].touching[down]);
+    sprintf(text10,"touching object no. L:%d R:%d T:%d B:%d",objects[current_object].steps_taken[left], objects[current_object].steps_taken[right], objects[current_object].touching[up],objects[current_object].touching[down]);
     glutPrint (window_width/40,window_height-220, GLUT_BITMAP_HELVETICA_12, text10, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text11,"game time: %.2f",game_time);
@@ -402,9 +403,10 @@ void init_objects()
     printf("object %d: %s initialized\n",objects[5].number, objects[5].name);
 }
 
-void render_scene(void) {
-	// Clear Color Buffers
-	glClear(GL_COLOR_BUFFER_BIT);
+void render_scene(void)
+{
+    // Clear Color Buffers
+    glClear(GL_COLOR_BUFFER_BIT);
     cursor1.selection_box();
 //render the objects
 //NOTE: objects are rendered ontop of eachother according to order rendered below (bottom first)
@@ -423,7 +425,7 @@ void render_scene(void) {
         text();
     }
 
-	glFlush();
+    glFlush();
 }
 
 void update_scene()
@@ -444,14 +446,7 @@ void update_scene()
 
     collision_detection();//calculate object collision
 
-    //move objects
-    //objects[0].move_forward(2)||objects[0].move_left(2)||objects[0].move_back(2)||objects[0].move_right(2)||objects[0].move_forward(2);
 
-    objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 1);
-    objects[2].move_to_point(objects[2].rally.x,objects[2].rally.y, 1);
-    objects[3].move_to_point(objects[3].rally.x,objects[3].rally.y, 1);
-    objects[4].move_to_point(objects[4].rally.x,objects[4].rally.y, 1);
-    objects[5].move_to_point(objects[5].rally.x,objects[5].rally.y, 1);
 //mouse interactivity
     objects[0].mouse_function();
     objects[1].mouse_function();
@@ -463,6 +458,14 @@ void update_scene()
     if(compare(time_elapsed,frequency)==1)//time elapsed is > frequency
     {
         time_started=clock();//reset the start time
+        //move objects
+        objects[0].move_forward(100);
+
+        objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 1);
+        objects[2].move_to_point(objects[2].rally.x,objects[2].rally.y, 1);
+        objects[3].move_to_point(objects[3].rally.x,objects[3].rally.y, 1);
+        objects[4].move_to_point(objects[4].rally.x,objects[4].rally.y, 1);
+        objects[5].move_to_point(objects[5].rally.x,objects[5].rally.y, 1);
         glutPostRedisplay();
     }
 }
@@ -479,7 +482,8 @@ void initializeWindow()
     glFlush();
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     printf("entering main...\n");
     /* initialize random seed: */
     srand ( time(NULL) );
@@ -487,29 +491,29 @@ int main(int argc, char **argv) {
     printf("initializing objects...\n");
     init_objects();
 
-	// init GLUT and create window
-	printf("initializing GLUT...\n");
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_SINGLE| GLUT_RGB);
-	printf("creating window...\n");
-	glutInitWindowPosition(window_x,window_y);
-	printf("window position: %d, %d\n", window_x, window_y);
-	glutInitWindowSize(window_width,window_height);
-	printf("window size: %dX%d\n", window_width, window_height);
-	glutCreateWindow("2D World");
-	initializeWindow();
+    // init GLUT and create window
+    printf("initializing GLUT...\n");
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_SINGLE| GLUT_RGB);
+    printf("creating window...\n");
+    glutInitWindowPosition(window_x,window_y);
+    printf("window position: %d, %d\n", window_x, window_y);
+    glutInitWindowSize(window_width,window_height);
+    printf("window size: %dX%d\n", window_width, window_height);
+    glutCreateWindow("2D World");
+    initializeWindow();
 
-	glutReshapeFunc(change_size);
-	glutIdleFunc(update_scene); //use this for animations
-	glutKeyboardFunc(key_pressed); // Tell GLUT to use the method "keyPressed" for key presses
+    glutReshapeFunc(change_size);
+    glutIdleFunc(update_scene); //use this for animations
+    glutKeyboardFunc(key_pressed); // Tell GLUT to use the method "keyPressed" for key presses
     glutKeyboardUpFunc(key_up); // Tell GLUT to use the method "keyUp" for key releases
     glutMouseFunc(mouse_click);
     glutMotionFunc(mouse_drag);
-  //  glutPassiveMotionFunc(mouseMovement);
-	// enter GLUT event processing cycle
+    //  glutPassiveMotionFunc(mouseMovement);
+    // enter GLUT event processing cycle
     glutDisplayFunc(render_scene);
-	printf("rendering...\n");
+    printf("rendering...\n");
 
-	glutMainLoop();
+    glutMainLoop();
 
 }

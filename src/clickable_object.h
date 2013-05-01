@@ -98,10 +98,10 @@ class clickable_object: public physics_object
                 rally.y=cursor1.right_drag.y;
                 rally_set=true;
             }
-            current_color.set(GREEN);
+            //current_color.set(GREEN);
         }
-        else
-        undo_color();
+        /*else
+        undo_color();*/
     }
 
     clickable_object()
