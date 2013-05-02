@@ -240,12 +240,10 @@ public:
         else
             return false;
     }
-    //moves object to destination over time at specified rate
-    void walk_to_point(float destination_x, float destination_y, float rate)
+
+    void turn_to_point(float destination_x, float destination_y)//rotates object to face the given coordinates
     {
-        if(rally_set)
-        {
-            if(compare(destination_x,current.x)==1 && compare(destination_y,current.y)==1)//destination lies in quadrant 1
+        if(compare(destination_x,current.x)==1 && compare(destination_y,current.y)==1)//destination lies in quadrant 1
                 rotation = atan((destination_y-current.y)/(destination_x-current.x))*180/PI;
 
             if(compare(destination_x,current.x)==-1 && compare(destination_y,current.y)==1)//destination lies in quadrant 2
@@ -268,52 +266,48 @@ public:
 
             if(compare(destination_x,current.x)==1 && compare(destination_y,current.y)==0)//destination lies at 3 O'clock
                 rotation = 0;
+    }
 
+    turn_to_point(point2f destination)
+    {
+        turn_to_point(destination.x,destination.y);
+    }
+    //moves object to destination over time at specified rate
+    void walk_to_point(float destination_x, float destination_y, float rate)
+    {
+        if(rally_set)
+        {
+            turn_to_point(destination_x,destination_y);
             if(compare(distance(current.x,current.y,destination_x,destination_y),1.5)==-1)
                 rally_set=false;
-
             current.x+=step[3].x*rate;
             current.y+=step[3].y*rate;
         }
 
     }
 
+     void walk_to_point(point2f destination, float rate)
+     {
+         walk_to_point(destination.x,destination.y,rate);
+     }
+
     //moves object to destination over time at specified rate
     void move_to_point(float destination_x, float destination_y, float rate)
     {
         if(rally_set)
         {
-            if(compare(destination_x,current.x)==1 && compare(destination_y,current.y)==1)//destination lies in quadrant 1
-                rotation = atan((destination_y-current.y)/(destination_x-current.x))*180/PI;
-
-            if(compare(destination_x,current.x)==-1 && compare(destination_y,current.y)==1)//destination lies in quadrant 2
-                rotation = atan((destination_y-current.y)/(destination_x-current.x))*180/PI + 180;
-
-            if(compare(destination_x,current.x)==-1 && compare(destination_y,current.y)==-1)//destination lies in quadrant 3
-                rotation = atan((destination_y-current.y)/(destination_x-current.x))*180/PI + 180;
-
-            if(compare(destination_x,current.x)==1 && compare(destination_y,current.y)==-1)//destination lies in quadrant 4
-                rotation = atan((destination_y-current.y)/(destination_x-current.x))*180/PI + 360;
-
-            if(compare(destination_x,current.x)==0 && compare(destination_y,current.y)==1)//destination lies at 12 O'clock
-                rotation = 90;
-
-            if(compare(destination_x,current.x)==0 && compare(destination_y,current.y)==-1)//destination lies at 6'O'clock
-                rotation = 270;
-
-            if(compare(destination_x,current.x)==-1 && compare(destination_y,current.y)==0)//destination lies at 9 O'clock
-                rotation = 180;
-
-            if(compare(destination_x,current.x)==1 && compare(destination_y,current.y)==0)//destination lies at 3 O'clock
-                rotation = 0;
-
+            turn_to_point(destination_x,destination_y);
             if(compare(distance(current.x,current.y,destination_x,destination_y),1.5)==-1)
                 rally_set=false;
-
             current.x+=forward.x*rate;
             current.y+=forward.y*rate;
         }
 
+    }
+
+    void move_to_point(point2f destination,float rate)
+    {
+        move_to_point(destination.x,destination.y,rate)
     }
 
     movable_object()
