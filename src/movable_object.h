@@ -14,7 +14,7 @@ public:
     float step_size;
     bool moving_vertical;
     bool moving_horizontal;
-    bool moves_reset;
+    std::queue< std::vector<int> > actions;
 
     void calc_step()
     {
@@ -268,7 +268,7 @@ public:
                 rotation = 0;
     }
 
-    turn_to_point(point2f destination)
+    void turn_to_point(point2f destination)
     {
         turn_to_point(destination.x,destination.y);
     }
@@ -307,7 +307,44 @@ public:
 
     void move_to_point(point2f destination,float rate)
     {
-        move_to_point(destination.x,destination.y,rate)
+        move_to_point(destination.x,destination.y,rate);
+    }
+
+    void add_action(int action_no, int times)
+    {
+        std::vector<int> action;
+        action.push_back(action_no);//number of the action to do
+        action.push_back(times);//number of times to do the action
+        action.push_back(0);//how many times its already been done
+        actions.push(action);
+    }
+
+    void perform_actions()
+    {
+        if(!actions.empty())
+        {
+            if(actions.front().at(2)<actions.front().at(1))//times done is less than times to do
+        {
+            switch(actions.front().at(0))
+            {
+            case 1://move left
+                move_left();
+                break;
+            case 2://move right
+                move_right();
+                break;
+            case 3://move up
+                move_forward();
+                break;
+            case 4://move down
+                move_back();
+                break;
+            }
+            actions.front().at(2)++;
+        }
+        else
+            actions.pop();
+        }
     }
 
     movable_object()

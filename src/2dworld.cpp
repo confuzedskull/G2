@@ -5,6 +5,7 @@
 #include <windows.h>
 #include <math.h>
 #include <string>
+#include <queue>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -353,6 +354,10 @@ void init_objects()
     objects[0].width=32;
     objects[0].height=32;
     objects[0].set_boundaries();
+    objects[0].add_action(3,100);
+    objects[0].add_action(2,100);
+    objects[0].add_action(4,100);
+    objects[0].add_action(3,100);
     printf("object %d: %s initialized\n",objects[0].number, objects[0].name);
 
     objects[1].name="player 1";
@@ -459,7 +464,7 @@ void update_scene()
     {
         time_started=clock();//reset the start time
         //move objects
-        objects[0].move_forward(100)||objects[0].move_right(100)||objects[0].move_back(100)||objects[0].move_left(100);
+        objects[0].perform_actions();
 
         objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 1);
         objects[2].move_to_point(objects[2].rally.x,objects[2].rally.y, 1);
