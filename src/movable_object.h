@@ -48,30 +48,14 @@ public:
         units_moved[4]=0;
     }
 
-    bool turn_right()
+    void turn_right()
     {
-        if(degrees_rotated>-90)
-        {
-            rotate(-1);
-            degrees_rotated--;
-            return true;
-        }
-        else
-            return false;
-
+        rotation++;
     }
 
-    bool turn_left()
+    void turn_left()
     {
-        if(degrees_rotated<90)
-        {
-            rotate(1);
-            degrees_rotated++;
-            return true;
-        }
-        else
-            return false;
-
+        rotation--;
     }
 
     void move_left()
@@ -80,37 +64,29 @@ public:
             current.y+=leftward.y;
     }
 
-    bool move_left(int units_left)
+    void move_left(int units_left)
     {
         moving_horizontal=true;
         if(units_moved[1]<units_left)
         {
             move_left();
             units_moved[1]++;
-            return true;
         }
-        else
-            return false;
-
     }
 
-    bool move_right()
+    void move_right()
     {
             current.x+=rightward.x;
             current.y+=rightward.y;
     }
 
-    bool move_right(int units_right)
+    void move_right(int units_right)
     {
         if(units_moved[2]<units_right)
         {
             move_right();
             units_moved[2]++;
-            return true;
         }
-        else
-            return false;
-
     }
 
     void move_forward()
@@ -119,17 +95,14 @@ public:
             current.y+=forward.y;
     }
 
-    bool move_forward(int units_forward)
+    void move_forward(int units_forward)
     {
         moving_vertical=true;
         if(units_moved[3]<units_forward)
         {
             move_forward();
             units_moved[3]++;
-            return true;
         }
-        else
-            return false;
     }
 
     void move_back()
@@ -138,17 +111,14 @@ public:
             current.y+=backward.y;
     }
 
-    bool move_back(int units_back)
+    void move_back(int units_back)
     {
         moving_vertical=true;
         if(units_moved[4]<units_back)
         {
             move_back();
             units_moved[4]++;
-            return true;
         }
-        else
-            return false;
     }
 
     void walk_left()
@@ -157,18 +127,14 @@ public:
             current.y+=step[1].y;
     }
 
-    bool walk_left(int steps_left)
+    void walk_left(int steps_left)
     {
         moving_horizontal=true;
         if(steps_taken[1]<steps_left)
         {
             walk_left();
             steps_taken[1]++;
-            return true;
         }
-        else
-            return false;
-
     }
 
     void walk_right()
@@ -177,17 +143,13 @@ public:
             current.y+=step[2].y;
     }
 
-    bool walk_right(int steps_right)
+    void walk_right(int steps_right)
     {
         if(steps_taken[2]<steps_right)
         {
             walk_right();
             steps_taken[2]++;
-            return true;
         }
-        else
-            return false;
-
     }
 
     void walk_forward()
@@ -196,17 +158,14 @@ public:
             current.y+=step[3].y;
     }
 
-    bool walk_forward(int steps_forward)
+    void walk_forward(int steps_forward)
     {
         moving_vertical=true;
         if(steps_taken[3]<steps_forward)
         {
             walk_forward();
             steps_taken[3]++;
-            return true;
         }
-        else
-            return false;
     }
 
     void walk_back()
@@ -215,30 +174,24 @@ public:
             current.y+=step[4].y;
     }
 
-    bool walk_back(int steps_back)
+    void walk_back(int steps_back)
     {
         moving_vertical=true;
         if(steps_taken[4]<steps_back)
         {
             walk_back();
             steps_taken[4]++;
-            return true;
         }
-        else
-            return false;
     }
 
-    bool move(int direction,int steps)//moves object steps in direction[1,2,3,or 4]
+    void move(int direction,int steps)//moves object steps in direction[1,2,3,or 4]
     {
         if(steps_taken[direction]<steps)
         {
             current.x+=step[direction].x;
             current.y+=step[direction].y;
             steps_taken[direction]++;
-            return true;
         }
-        else
-            return false;
     }
 
     void turn_to_point(float destination_x, float destination_y)//rotates object to face the given coordinates
