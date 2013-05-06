@@ -339,6 +339,12 @@ public:
             case 4://move down
                 move_back();
                 break;
+            case 5://turn left
+                turn_left();
+                break;
+            case 6://turn right
+                turn_right();
+                break;
             }
             actions.front().at(2)++;
         }

@@ -357,7 +357,10 @@ void init_objects()
     objects[0].add_action(3,100);
     objects[0].add_action(2,100);
     objects[0].add_action(4,100);
-    objects[0].add_action(3,100);
+    objects[0].add_action(1,100);
+    objects[0].add_action(5,90);
+    objects[0].add_action(6,90);
+
     printf("object %d: %s initialized\n",objects[0].number, objects[0].name);
 
     objects[1].name="player 1";
