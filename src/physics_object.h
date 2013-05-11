@@ -7,10 +7,10 @@ class physics_object: public tangible_object
     //1:change in x, 2:change in velocity, 3:change in velocity x, 4:change in velocity y
     double start_time[4];
     double stop_time[4];
-    vect velocity[2];// 1:initial velocity, 2: final velocity
-    vect acceleration;
-    vect momentum;
-    vect force;
+    vector2f velocity[2];// 1:initial velocity, 2: final velocity
+    vector2f acceleration;
+    vector2f momentum;
+    vector2f force;
     int solidity;//a value from 1 to 5 that indicates the density of the object
 
 

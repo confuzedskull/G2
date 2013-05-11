@@ -1,5 +1,5 @@
 #include <\Users\James\Dropbox\My Programs\C++\2dworld\src\complex_object.h>
-#include <\Users\James\Dropbox\My Programs\C++\2dworld\src\vect.h>
+#include <\Users\James\Dropbox\My Programs\C++\2dworld\src\vectors.h>
 
 
 class movable_object: public complex_object
@@ -7,7 +7,7 @@ class movable_object: public complex_object
 public:
     point2i rally;
     bool rally_set;
-    vect step[4];//unit by which an object moves in x and y directions.
+    vector2f step[4];//unit by which an object moves in x and y directions.
     float degrees_rotated;
     float step_size;
     bool moving_vertical;
@@ -136,7 +136,7 @@ public:
         current.y+=step[4].y*steps_back;
     }
 
-    void move(int direction,int steps)//moves object steps in direction[1,2,3,or 4]
+    void walk(int direction,int steps)//moves object steps in direction[1,2,3,or 4]
     {
         current.x+=step[direction].x*steps;
         current.y+=step[direction].y*steps;

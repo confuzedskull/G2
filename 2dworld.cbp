@@ -62,7 +62,7 @@
 		<Unit filename="src/point.h" />
 		<Unit filename="src/projectile.h" />
 		<Unit filename="src/tangible_object.h" />
-		<Unit filename="src/vect.h" />
+		<Unit filename="src/vectors.h" />
 		<Unit filename="src/world.h" />
 		<Extensions>
 			<code_completion />
