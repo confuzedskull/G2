@@ -8,8 +8,6 @@ public:
     point2i rally;
     bool rally_set;
     vect step[4];//unit by which an object moves in x and y directions.
-    int steps_taken[4];
-    int units_moved[4];
     float degrees_rotated;
     float step_size;
     bool moving_vertical;
@@ -32,22 +30,6 @@ public:
         step[4].y=backward.y*step_size;
     }
 
-    void reset_steps()
-    {
-        steps_taken[1]=0;
-        steps_taken[2]=0;
-        steps_taken[3]=0;
-        steps_taken[4]=0;
-    }
-
-    void reset_moved()
-    {
-        units_moved[1]=0;
-        units_moved[2]=0;
-        units_moved[3]=0;
-        units_moved[4]=0;
-    }
-
     void turn_right()
     {
         rotation++;
@@ -66,27 +48,20 @@ public:
 
     void move_left(int units_left)
     {
-        moving_horizontal=true;
-        if(units_moved[1]<units_left)
-        {
-            move_left();
-            units_moved[1]++;
-        }
+        current.x+=leftward.x*units_left;
+        current.y+=leftward.x*units_left;
     }
 
     void move_right()
     {
-            current.x+=rightward.x;
-            current.y+=rightward.y;
+        current.x+=rightward.x;
+        current.y+=rightward.y;
     }
 
     void move_right(int units_right)
     {
-        if(units_moved[2]<units_right)
-        {
-            move_right();
-            units_moved[2]++;
-        }
+        current.x+=rightward.x*units_right;
+        current.y+=rightward.y*units_right;
     }
 
     void move_forward()
@@ -97,28 +72,20 @@ public:
 
     void move_forward(int units_forward)
     {
-        moving_vertical=true;
-        if(units_moved[3]<units_forward)
-        {
-            move_forward();
-            units_moved[3]++;
-        }
+        current.x+=forward.x*units_forward;
+        current.y+=forward.y*units_forward;
     }
 
     void move_back()
     {
-            current.x+=backward.x;
-            current.y+=backward.y;
+        current.x+=backward.x;
+        current.y+=backward.y;
     }
 
     void move_back(int units_back)
     {
-        moving_vertical=true;
-        if(units_moved[4]<units_back)
-        {
-            move_back();
-            units_moved[4]++;
-        }
+        current.x+=backward.x*units_back;
+        current.y+=backward.y*units_back;
     }
 
     void walk_left()
@@ -129,12 +96,8 @@ public:
 
     void walk_left(int steps_left)
     {
-        moving_horizontal=true;
-        if(steps_taken[1]<steps_left)
-        {
-            walk_left();
-            steps_taken[1]++;
-        }
+        current.x+=step[1].x*steps_left;
+        current.y+=step[1].y*steps_left;
     }
 
     void walk_right()
@@ -145,53 +108,38 @@ public:
 
     void walk_right(int steps_right)
     {
-        if(steps_taken[2]<steps_right)
-        {
-            walk_right();
-            steps_taken[2]++;
-        }
+        current.x+=step[2].x*steps_right;
+        current.y+=step[2].y*steps_right;
     }
 
     void walk_forward()
     {
-            current.x+=step[3].x;
-            current.y+=step[3].y;
+        current.x+=step[3].x;
+        current.y+=step[3].y;
     }
 
     void walk_forward(int steps_forward)
     {
-        moving_vertical=true;
-        if(steps_taken[3]<steps_forward)
-        {
-            walk_forward();
-            steps_taken[3]++;
-        }
+        current.x+=step[3].x*steps_forward;
+        current.y+=step[3].y*steps_forward;
     }
 
     void walk_back()
     {
-            current.x+=step[4].x;
-            current.y+=step[4].y;
+        current.x+=step[4].x;
+        current.y+=step[4].y;
     }
 
     void walk_back(int steps_back)
     {
-        moving_vertical=true;
-        if(steps_taken[4]<steps_back)
-        {
-            walk_back();
-            steps_taken[4]++;
-        }
+        current.x+=step[4].x*steps_back;
+        current.y+=step[4].y*steps_back;
     }
 
     void move(int direction,int steps)//moves object steps in direction[1,2,3,or 4]
     {
-        if(steps_taken[direction]<steps)
-        {
-            current.x+=step[direction].x;
-            current.y+=step[direction].y;
-            steps_taken[direction]++;
-        }
+        current.x+=step[direction].x*steps;
+        current.y+=step[direction].y*steps;
     }
 
     void turn_to_point(float destination_x, float destination_y)//rotates object to face the given coordinates
@@ -313,8 +261,6 @@ public:
         rally.y=resting.y;
         rally_set=false;
         step_size=0.001;
-        reset_moved();
-        reset_steps();
         printf("object %d: %s created\n", number, name);
 
     }

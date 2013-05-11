@@ -10,7 +10,6 @@ class projectile: public physics_object
     {
         current.x=resting.x;
         current.y=resting.y;
-        steps_taken[3]=0;
         fired=false;
     }
 
@@ -39,12 +38,6 @@ class projectile: public physics_object
             current.x=0;
             current.y=0;
         }
-
-        if(steps_taken[3]==range)
-        {
-            reset();
-        }
-
     }
 
     projectile()
@@ -56,7 +49,6 @@ class projectile: public physics_object
         fired=false;
         step_size=0.5;
 //        set_boundaries();
-        steps_taken[3]=0;
         current_color=RED;
         printf("object %d: %s created\n", number, name);
     }
