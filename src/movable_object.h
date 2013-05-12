@@ -32,12 +32,22 @@ public:
 
     void turn_right()
     {
-        rotation++;
+        rotation--;
+    }
+
+    void turn_right(float degrees)
+    {
+        rotation-=degrees;
     }
 
     void turn_left()
     {
-        rotation--;
+        rotation++;
+    }
+
+    void turn_left(float degrees)
+    {
+        rotation+=degrees;
     }
 
     void move_left()
@@ -46,10 +56,10 @@ public:
             current.y+=leftward.y;
     }
 
-    void move_left(int units_left)
+    void move_left(float units_left)
     {
         current.x+=leftward.x*units_left;
-        current.y+=leftward.x*units_left;
+        current.y+=leftward.y*units_left;
     }
 
     void move_right()
@@ -58,7 +68,7 @@ public:
         current.y+=rightward.y;
     }
 
-    void move_right(int units_right)
+    void move_right(float units_right)
     {
         current.x+=rightward.x*units_right;
         current.y+=rightward.y*units_right;
@@ -70,7 +80,7 @@ public:
             current.y+=forward.y;
     }
 
-    void move_forward(int units_forward)
+    void move_forward(float units_forward)
     {
         current.x+=forward.x*units_forward;
         current.y+=forward.y*units_forward;
@@ -82,7 +92,7 @@ public:
         current.y+=backward.y;
     }
 
-    void move_back(int units_back)
+    void move_back(float units_back)
     {
         current.x+=backward.x*units_back;
         current.y+=backward.y*units_back;

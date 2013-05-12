@@ -224,44 +224,32 @@ void key_operations (void)
 
     if (key_states['w'] || key_states['W'])
     {
-        objects[current_object].current.y+=objects[current_object].step[up].y;
-        objects[current_object].current.x+=objects[current_object].step[up].x;
-        //objects[current_object].move_forward(1);
-        objects[current_object].action[up]=true;
+        objects[current_object].move_forward(0.01);
     }
 
     if (key_states['s'] || key_states['S'])
     {
-        objects[current_object].current.x+=objects[current_object].step[down].x;
-        objects[current_object].current.y+=objects[current_object].step[down].y;
-        //objects[current_object].move_back(1);
-        objects[current_object].action[down]=true;
+        objects[current_object].move_back(0.01);
     }
 
     if (key_states['a'] || key_states['A'])
     {
-        objects[current_object].current.x+=objects[current_object].step[left].x;
-        objects[current_object].current.y+=objects[current_object].step[left].y;
-        //objects[current_object].move_left(1);
-        objects[current_object].action[left]=true;
+        objects[current_object].move_left(0.01);
     }
 
     if (key_states['d'] || key_states['D'])
     {
-        objects[current_object].current.x+=objects[current_object].step[right].x;
-        objects[current_object].current.y+=objects[current_object].step[right].y;
-        //objects[current_object].move_right(1);
-        objects[current_object].action[right]=true;
+        objects[current_object].move_right(0.01);
     }
 
     if (key_states['q'] || key_states['Q'])
     {
-        objects[current_object].rotation+=objects[current_object].step_size;
+        objects[current_object].turn_left(0.01);
     }
 
     if (key_states['e'] || key_states['E'])
     {
-        objects[current_object].rotation-=objects[current_object].step_size;
+        objects[current_object].turn_right(0.01);
     }
 
     if (key_states['i'] || key_states['I'])
