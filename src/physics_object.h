@@ -152,11 +152,11 @@ class physics_object: public tangible_object
         velocity[1].y=0.00;
         velocity[2].x=0.00;
         velocity[2].y=0.00;
-        printf("object %d: %s created\n", number, name);
+
     }
 
     ~physics_object()
     {
-        printf("object %d: %s distroyed\n", number, name);
+
     }
 };

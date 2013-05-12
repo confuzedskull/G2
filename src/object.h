@@ -38,7 +38,7 @@ class object
 
         if(!visible)
         {
-            printf("object %d: %s rendered\n", number, name);
+            std::clog<<"object#"<<number<<": "<<name<<" rendered."<<std::endl;
             visible=true;
         }
         glBegin(GL_POLYGON);//draws a filled in rectangle
@@ -86,7 +86,7 @@ class object
         prev_color.set(current_color.r,current_color.g,current_color.b);
         rotation=90;
         visible=false;
-        printf("object %d: %s created\n", number, name);
+        std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
     }
 
     object(float x, float y, float w, float h, color c)
@@ -98,11 +98,6 @@ class object
         current_color=c;
         rotation=90;
         visible=false;
-    }
-
-    ~object()
-    {
-        printf("object %d: %s distroyed\n", number, name);
     }
 
 };

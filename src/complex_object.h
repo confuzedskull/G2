@@ -70,7 +70,7 @@ class complex_object: public object
         glColor3f(current_color.r,current_color.g,current_color.b);//color the square with object.current_color
         if(!visible)
         {
-            printf("object %d: %s rendered\n", number, name);
+            std::clog<<"object#"<<number<<": "<<name<<" rendered."<<std::endl;
             visible=true;
         }
         glBegin(GL_POLYGON);//draws a filled in rectangle
@@ -84,11 +84,11 @@ class complex_object: public object
     {
         name="complex object";
         set_boundaries();
-        printf("object %d: %s created\n", number, name);
+
     }
 
     ~complex_object()
     {
-        printf("object %d: %s distroyed\n", number, name);
+
     }
 };

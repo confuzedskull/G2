@@ -50,11 +50,11 @@ class projectile: public physics_object
         step_size=0.5;
 //        set_boundaries();
         current_color=RED;
-        printf("object %d: %s created\n", number, name);
+
     }
 
     ~projectile()
     {
-        printf("object %d: %s distroyed\n", number, name);
+
     }
 };

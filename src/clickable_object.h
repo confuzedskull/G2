@@ -108,12 +108,12 @@ class clickable_object: public physics_object
     {
         name="clickable object";
         selected=false;
-        printf("object %d: %s initialized\n", number, name);
+
 
     }
 
     ~clickable_object()
     {
-        printf("object %d: %s distroyed\n", number, name);
+
     }
 };

@@ -117,11 +117,11 @@ class tangible_object: public movable_object
     tangible_object()
     {
         name="tangible object";
-        printf("object %d: %s created\n", number, name);
+
     }
 
     ~tangible_object()
     {
-        printf("object %d: %s distroyed\n", number, name);
+
     }
 };

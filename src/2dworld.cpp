@@ -332,7 +332,7 @@ void init_objects()
     B.name="control object";
     B.current_color.set(GREEN);
     B.current.set(200.0,160.0);
-    printf("object %d: %s initialized\n",B.number, B.name);
+    std::clog<<"object#"<<B.number<<": "<<B.name<<" initialized."<<std::endl;
 
     //first object from objects array (player)
 
@@ -349,12 +349,12 @@ void init_objects()
     objects[0].add_action(5,90);
     objects[0].add_action(6,90);
 
-    printf("object %d: %s initialized\n",objects[0].number, objects[0].name);
+    std::clog<<"object#"<<objects[0].number<<": "<<objects[0].name<<" initialized."<<std::endl;
 
     objects[1].name="player 1";
     objects[1].current_color.set(BLUE);
     objects[1].set_boundaries();
-    printf("object %d: %s initialized\n",objects[1].number, objects[1].name);
+    std::clog<<"object#"<<objects[1].number<<": "<<objects[1].name<<" initialized."<<std::endl;
 
 
     //objects[1].rotation=90;
@@ -366,7 +366,7 @@ void init_objects()
     objects[2].rally.x=objects[2].current.x;
     objects[2].rally.y=objects[2].current.y;
     objects[2].set_boundaries();
-    printf("object %d: %s initialized\n",objects[2].number, objects[2].name);
+    std::clog<<"object#"<<objects[2].number<<": "<<objects[2].name<<" initialized."<<std::endl;
 
     //third object from objects array
     objects[3].name="grey square";
@@ -375,7 +375,7 @@ void init_objects()
     objects[3].rally.x=objects[3].current.x;
     objects[3].rally.y=objects[3].current.y;
     objects[3].set_boundaries();
-    printf("object %d: %s initialized\n",objects[3].number, objects[3].name);
+    std::clog<<"object#"<<objects[3].number<<": "<<objects[3].name<<" initialized."<<std::endl;
 
     //fourth object from objects array
     objects[4].name="black square";
@@ -384,7 +384,7 @@ void init_objects()
     objects[4].rally.x=objects[4].current.x;
     objects[4].rally.y=objects[4].current.y;
     objects[4].set_boundaries();
-    printf("object %d: %s initialized\n",objects[4].number, objects[4].name);
+    std::clog<<"object#"<<objects[4].number<<": "<<objects[4].name<<" initialized."<<std::endl;
 
 
     //fifth object from objects array
@@ -396,7 +396,7 @@ void init_objects()
     objects[5].set_boundaries();
     objects[5].rally.x=objects[5].current.x;
     objects[5].rally.y=objects[5].current.y;
-    printf("object %d: %s initialized\n",objects[5].number, objects[5].name);
+    std::clog<<"object#"<<objects[5].number<<": "<<objects[5].name<<" initialized."<<std::endl;
 }
 
 void render_scene(void)
@@ -480,22 +480,22 @@ void initializeWindow()
 
 int main(int argc, char **argv)
 {
-    printf("entering main...\n");
+    std::clog<<"entering main...\n";
     /* initialize random seed: */
     srand ( time(NULL) );
     //initialize objects
-    printf("initializing objects...\n");
+    std::clog<<"initializing objects...\n";
     init_objects();
 
     // init GLUT and create window
-    printf("initializing GLUT...\n");
+    std::clog<<"initializing GLUT...\n";
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE| GLUT_RGB);
-    printf("creating window...\n");
+    std::clog<<"creating window...\n";
     glutInitWindowPosition(window_x,window_y);
-    printf("window position: %d, %d\n", window_x, window_y);
+    std::clog<<"window position: "<< window_x<< ","<< window_y<<std::endl;
     glutInitWindowSize(window_width,window_height);
-    printf("window size: %dX%d\n", window_width, window_height);
+    std::clog<<"window size: "<<window_width<<"X"<< window_height<<std::endl;
     glutCreateWindow("2D World");
     initializeWindow();
 
@@ -508,7 +508,7 @@ int main(int argc, char **argv)
     //  glutPassiveMotionFunc(mouseMovement);
     // enter GLUT event processing cycle
     glutDisplayFunc(render_scene);
-    printf("rendering...\n");
+    std::clog<<"rendering...\n";
 
     glutMainLoop();
 

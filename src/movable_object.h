@@ -271,12 +271,11 @@ public:
         rally.y=resting.y;
         rally_set=false;
         step_size=0.001;
-        printf("object %d: %s created\n", number, name);
 
     }
 
     ~movable_object()
     {
-        printf("object %d: %s distroyed\n", number, name);
+
     }
 };
