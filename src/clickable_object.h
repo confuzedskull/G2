@@ -6,7 +6,6 @@ class clickable_object: public physics_object
     public:
     bool selected;
 
-
     bool left_clicked()
     {
         if(cursor1.left_click &&
@@ -21,7 +20,8 @@ class clickable_object: public physics_object
 
     bool right_clicked()
     {
-        if(compare(cursor1.right_up.x,xmax)==-1 &&
+        if(!cursor1.right_click &&
+           compare(cursor1.right_up.x,xmax)==-1 &&
            compare(cursor1.right_up.x,xmin)==1 &&
            compare(cursor1.right_up.y,ymax)==-1 &&
            compare(cursor1.right_up.y,ymin)==1)
@@ -43,56 +43,60 @@ class clickable_object: public physics_object
 
     void mouse_function()
     {
-        if(left_clicked()==true && cursor1.left_click==true)//clicked this object
+        if(left_clicked())//clicked this object
         {
             cursor1.objects_selected=1;
+            cursor1.left_clicked_object=this;
             cursor1.selected_object=number;
             cursor1.highlighted_objects[number]=true;
 
-            }
+        }
 
-        if(cursor1.left_click==true && cursor1.objects_selected>0 && cursor1.highlighted_objects[number]==false)//clicked another object
+        if(cursor1.left_click && cursor1.objects_selected>0 && !cursor1.highlighted_objects[number])//clicked another object
         {
             cursor1.highlighted_objects[number]=false;
         }
 
-        if(cursor1.left_click==true && left_clicked()==false )
+        if(cursor1.left_click && !left_clicked())
         {
             cursor1.highlighted_objects[number]=false;
             cursor1.objects_selected=0;
         }
 
-        if(highlighted()==true)
+        if(highlighted())
         {
 
             cursor1.highlighted_objects[number]=true;
         }
 
-        if(highlighted()==false && cursor1.highlighted_objects[number]==true)
+        if(!highlighted() && cursor1.highlighted_objects[number])
         {
-            if(left_clicked()==false && selected==false)
+            if(!left_clicked() && !selected)
             cursor1.objects_selected++;
-
             cursor1.highlighted_objects[number]=true;
         }
 
-        if(right_clicked()==true)
+        if(right_clicked())
         {
-            cursor1.rally.x=current.x;
-            cursor1.rally.y=current.y;
+            cursor1.right_clicked_object=this;
+            cursor1.right_up.x=current.x;
+            cursor1.right_up.y=current.y;
         }
 
         selected=cursor1.highlighted_objects[number];
 
-        if(selected==true)
+        if(selected)
         {
-            if(cursor1.right_click==true && right_clicked()==false)
+            if(cursor1.right_click && !right_clicked())
             {
-                rally.x=cursor1.right_down.x;
-                rally.y=cursor1.right_down.y;
+                rally.x=cursor1.right_up.x;
+                rally.y=cursor1.right_up.y;
+                //rally.x=cursor1.right_clicked_object->current.x;
+                //rally.y=cursor1.right_clicked_object->current.y;
                 rally_set=true;
             }
-            if(cursor1.right_dragging==true && right_clicked()==false)
+
+            if(cursor1.right_dragging && !right_clicked())
             {
                 rally.x=cursor1.right_drag.x;
                 rally.y=cursor1.right_drag.y;
@@ -100,8 +104,10 @@ class clickable_object: public physics_object
             }
             //current_color.set(GREEN);
         }
-        /*else
-        undo_color();*/
+        else
+        {
+            //undo_color();
+        }
     }
 
     clickable_object()

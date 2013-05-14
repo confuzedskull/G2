@@ -24,6 +24,9 @@ class cursor
     bool highlighted_objects[max_objects];
     int selected_object;
     int objects_selected;
+    object * left_clicked_object;
+    object * right_clicked_object;
+    bool set_rally;
 
     void set_color(float R,float G,float B)
     {

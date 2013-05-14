@@ -23,6 +23,7 @@ float get_game_time()
 #include <\Users\James\Dropbox\My Programs\C++\2dworld\src\projectile.h>
 #include <\Users\James\Dropbox\My Programs\C++\2dworld\src\world.h>
 
+
 //2D World
 //by James Nakano
 
@@ -342,10 +343,11 @@ void init_objects()
     objects[0].width=32;
     objects[0].height=32;
     objects[0].set_boundaries();
-    objects[0].add_action(3,100);
-    objects[0].add_action(2,100);
-    objects[0].add_action(4,100);
     objects[0].add_action(1,100);
+    objects[0].add_action(3,200);
+    objects[0].add_action(2,500);
+    objects[0].add_action(4,200);
+    objects[0].add_action(1,500);
     objects[0].add_action(5,90);
     objects[0].add_action(6,90);
 
@@ -441,7 +443,6 @@ void update_scene()
     objects[5].physics();
 
     collision_detection();//calculate object collision
-
 
 //mouse interactivity
     objects[0].mouse_function();

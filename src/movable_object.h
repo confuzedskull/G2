@@ -5,7 +5,7 @@
 class movable_object: public complex_object
 {
 public:
-    point2i rally;
+    point2f rally;
     bool rally_set;
     vector2f step[4];//unit by which an object moves in x and y directions.
     float degrees_rotated;
