@@ -87,12 +87,13 @@ class clickable_object: public physics_object
 
         if(selected)
         {
-            if(cursor1.right_click && !right_clicked())
+            if(!cursor1.right_click && !right_clicked())
             {
                 rally.x=cursor1.right_up.x;
                 rally.y=cursor1.right_up.y;
                 //rally.x=cursor1.right_clicked_object->current.x;
                 //rally.y=cursor1.right_clicked_object->current.y;
+
                 rally_set=true;
             }
 
