@@ -170,29 +170,28 @@ void mouse_click( int button, int state, int x, int y )
         cursor1.right_click=false;
         cursor1.right_up.x=x;
         cursor1.right_up.y=window_height-y;
-
     }
-
 }
 
 //This is called when user clicks and drags
 void mouse_drag(int x, int y)
 {
-    if(x>cursor1.left_down.x+10 && (window_height - y)<cursor1.left_down.y+10 && cursor1.left_click==true)
+    if(cursor1.left_click)
     {
+        //this condition makes it so that the user has to make a rectangle larger than 10x10. That way, highlighting is less sensitive
+        if(compare(x,cursor1.left_down.x+10)==1 && compare((window_height - y),cursor1.left_down.y+10)==-1)
         cursor1.highlighting=true;
+
         cursor1.left_drag.x=x;
         cursor1.left_drag.y=(window_height-y);
         cursor1.right_dragging=false;
-
     }
-    else
+    if(cursor1.right_click)
     {
         cursor1.highlighting=false;
         cursor1.right_drag.x=x;
         cursor1.right_drag.y=(window_height-y);
         cursor1.right_dragging=true;
-
     }
 }
 

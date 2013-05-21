@@ -20,11 +20,11 @@ class clickable_object: public physics_object
 
     bool right_clicked()
     {
-        if(!cursor1.right_click &&
-           compare(cursor1.right_up.x,xmax)==-1 &&
-           compare(cursor1.right_up.x,xmin)==1 &&
-           compare(cursor1.right_up.y,ymax)==-1 &&
-           compare(cursor1.right_up.y,ymin)==1)
+        if(cursor1.right_click &&
+           compare(cursor1.right_down.x,xmax)==-1 &&
+           compare(cursor1.right_down.x,xmin)==1 &&
+           compare(cursor1.right_down.y,ymax)==-1 &&
+           compare(cursor1.right_down.y,ymin)==1)
         return true;
         else
         return false;
@@ -32,7 +32,8 @@ class clickable_object: public physics_object
 
     bool highlighted()
     {//if object lies within selection box boundaries, return true
-        if(compare(current.x,cursor1.xmax)==-1 &&
+        if(cursor1.highlighting &&
+           compare(current.x,cursor1.xmax)==-1 &&
            compare(current.x,cursor1.xmin)==1 &&
            compare(current.y,cursor1.ymax)==1 &&
            compare(current.y,cursor1.ymin)==-1)
@@ -79,18 +80,18 @@ class clickable_object: public physics_object
         if(right_clicked())
         {
             cursor1.right_clicked_object=this;
-            cursor1.right_up.x=current.x;
-            cursor1.right_up.y=current.y;
+            cursor1.right_down.x=current.x;
+            cursor1.right_down.y=current.y;
         }
 
         selected=cursor1.highlighted_objects[number];
 
         if(selected)
         {
-            if(!cursor1.right_click && !right_clicked())
+            if(cursor1.right_click && !right_clicked())
             {
-                rally.x=cursor1.right_up.x;
-                rally.y=cursor1.right_up.y;
+                rally.x=cursor1.right_down.x;
+                rally.y=cursor1.right_down.y;
                 //rally.x=cursor1.right_clicked_object->current.x;
                 //rally.y=cursor1.right_clicked_object->current.y;
 
@@ -115,8 +116,6 @@ class clickable_object: public physics_object
     {
         name="clickable object";
         selected=false;
-
-
     }
 
     ~clickable_object()

@@ -267,8 +267,8 @@ public:
     movable_object()
     {
         name="movable object";
-        rally.x=resting.x;
-        rally.y=resting.y;
+        rally.x= resting.x;
+        rally.y= resting.y;
         rally_set=false;
         step_size=0.001;
 

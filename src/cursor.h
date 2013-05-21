@@ -16,8 +16,8 @@ class cursor
     point2f rally;
     bool left_click;
     bool right_click;
+    bool right_clicked;
     bool right_dragging;
-    int solidity;
     float xmin,xmax,ymin,ymax;
     color box_color;//RGB values
     bool highlighting;
