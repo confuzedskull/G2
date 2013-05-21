@@ -58,7 +58,7 @@ class clickable_object: public physics_object
             cursor1.highlighted_objects[number]=false;
         }
 
-        if(cursor1.left_click && !left_clicked())
+        if(cursor1.left_click && !left_clicked())//clicked nothing
         {
             cursor1.highlighted_objects[number]=false;
             cursor1.objects_selected=0;
@@ -80,8 +80,7 @@ class clickable_object: public physics_object
         if(right_clicked())
         {
             cursor1.right_clicked_object=this;
-            cursor1.right_down.x=current.x;
-            cursor1.right_down.y=current.y;
+            cursor1.right_clicked_an_object=true;
         }
 
         selected=cursor1.highlighted_objects[number];
@@ -90,18 +89,16 @@ class clickable_object: public physics_object
         {
             if(cursor1.right_click && !right_clicked())
             {
-                rally.x=cursor1.right_down.x;
-                rally.y=cursor1.right_down.y;
-                //rally.x=cursor1.right_clicked_object->current.x;
-                //rally.y=cursor1.right_clicked_object->current.y;
-
+                if(!cursor1.right_clicked_an_object)
+                rally = new point2f(cursor1.right_down.x,cursor1.right_down.y);
+                else
+                rally = &cursor1.right_clicked_object->current;
                 rally_set=true;
             }
 
             if(cursor1.right_dragging && !right_clicked())
             {
-                rally.x=cursor1.right_drag.x;
-                rally.y=cursor1.right_drag.y;
+                rally = &cursor1.right_drag;
                 rally_set=true;
             }
             //current_color.set(GREEN);
@@ -116,6 +113,7 @@ class clickable_object: public physics_object
     {
         name="clickable object";
         selected=false;
+        std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
     }
 
     ~clickable_object()

@@ -102,6 +102,19 @@ void collision_detection()
 };
 player B;
 
+void check_right_clicked()
+{
+    cursor1.right_clicked_an_object=true;
+    for(int a=0; a<max_objects; a++)
+    {
+        if(!cursor1.right_clicked_an_object && !objects[a].right_clicked())
+        {
+            cursor1.right_clicked_an_object=false;
+            break;
+        }
+    }
+}
+
 void change_size(int w, int h)
 {
 
@@ -364,8 +377,6 @@ void init_objects()
     objects[2].name="red square";
     objects[2].current_color.set(RED);
     objects[2].current.set(400.0,160.0);
-    objects[2].rally.x=objects[2].current.x;
-    objects[2].rally.y=objects[2].current.y;
     objects[2].set_boundaries();
     std::clog<<"object#"<<objects[2].number<<": "<<objects[2].name<<" initialized."<<std::endl;
 
@@ -373,8 +384,6 @@ void init_objects()
     objects[3].name="grey square";
     objects[3].current_color.set(0.5,0.5,0.5);
     objects[3].current.set(320.0,60);
-    objects[3].rally.x=objects[3].current.x;
-    objects[3].rally.y=objects[3].current.y;
     objects[3].set_boundaries();
     std::clog<<"object#"<<objects[3].number<<": "<<objects[3].name<<" initialized."<<std::endl;
 
@@ -382,8 +391,6 @@ void init_objects()
     objects[4].name="black square";
     objects[4].current_color.set(BLACK);
     objects[4].current.set(320,260);
-    objects[4].rally.x=objects[4].current.x;
-    objects[4].rally.y=objects[4].current.y;
     objects[4].set_boundaries();
     std::clog<<"object#"<<objects[4].number<<": "<<objects[4].name<<" initialized."<<std::endl;
 
@@ -395,8 +402,6 @@ void init_objects()
     objects[5].width=64;
     objects[5].height=64;
     objects[5].set_boundaries();
-    objects[5].rally.x=objects[5].current.x;
-    objects[5].rally.y=objects[5].current.y;
     std::clog<<"object#"<<objects[5].number<<": "<<objects[5].name<<" initialized."<<std::endl;
 }
 
@@ -428,6 +433,7 @@ void render_scene(void)
 void update_scene()
 {
     key_operations();
+    check_right_clicked();
     cursor1.set_boundaries();
     current_object=cursor1.selected_object-1;
 
@@ -457,11 +463,11 @@ void update_scene()
         //move objects
         objects[0].perform_actions();
 
-        objects[1].move_to_point(objects[1].rally.x,objects[1].rally.y, 1);
-        objects[2].move_to_point(objects[2].rally.x,objects[2].rally.y, 1);
-        objects[3].move_to_point(objects[3].rally.x,objects[3].rally.y, 1);
-        objects[4].move_to_point(objects[4].rally.x,objects[4].rally.y, 1);
-        objects[5].move_to_point(objects[5].rally.x,objects[5].rally.y, 1);
+        objects[1].move_to_point(objects[1].rally->x,objects[1].rally->y, 1);
+        objects[2].move_to_point(objects[2].rally->x,objects[2].rally->y, 1);
+        objects[3].move_to_point(objects[3].rally->x,objects[3].rally->y, 1);
+        objects[4].move_to_point(objects[4].rally->x,objects[4].rally->y, 1);
+        objects[5].move_to_point(objects[5].rally->x,objects[5].rally->y, 1);
         glutPostRedisplay();
     }
 }

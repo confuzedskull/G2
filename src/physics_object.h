@@ -152,6 +152,7 @@ class physics_object: public tangible_object
         velocity[1].y=0.00;
         velocity[2].x=0.00;
         velocity[2].y=0.00;
+        std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
 
     }
 

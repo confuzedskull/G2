@@ -5,7 +5,7 @@
 class movable_object: public complex_object
 {
 public:
-    point2f rally;
+    point2f * rally;
     bool rally_set;
     vector2f step[4];//unit by which an object moves in x and y directions.
     float degrees_rotated;
@@ -267,10 +267,10 @@ public:
     movable_object()
     {
         name="movable object";
-        rally.x= resting.x;
-        rally.y= resting.y;
+        rally = &resting;
         rally_set=false;
         step_size=0.001;
+        std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
 
     }
 

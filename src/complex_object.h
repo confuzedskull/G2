@@ -84,7 +84,7 @@ class complex_object: public object
     {
         name="complex object";
         set_boundaries();
-
+        std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
     }
 
     ~complex_object()

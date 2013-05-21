@@ -117,6 +117,7 @@ class tangible_object: public movable_object
     tangible_object()
     {
         name="tangible object";
+        std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
 
     }
 
