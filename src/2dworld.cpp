@@ -104,7 +104,7 @@ player B;
 
 void check_right_clicked()
 {
-    cursor1.right_clicked_an_object=true;
+    cursor1.right_clicked_an_object=false;
     for(int a=0; a<max_objects; a++)
     {
         if(!cursor1.right_clicked_an_object && !objects[a].right_clicked())
