@@ -313,7 +313,7 @@ void text ()
     sprintf(text6,"momentum: %.2f %.2f",objects[current_object].momentum.x,objects[current_object].momentum.y);
     glutPrint (window_width/40,window_height -140, GLUT_BITMAP_HELVETICA_12, text6, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text7,"Force: %.2f %.2f",objects[current_object].force.x,objects[current_object].force.y);
+    sprintf(text7,"force: %.2f %.2f",objects[current_object].force.x,objects[current_object].force.y);
     glutPrint (window_width/40,window_height -160, GLUT_BITMAP_HELVETICA_12, text7, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text8,"acceleration: %.2f %.2f",objects[current_object].acceleration.x,objects[current_object].acceleration.y);
@@ -345,23 +345,22 @@ void init_objects()
     //first object from objects array (player)
 
     objects[0].name="small square";
-    objects[0].current_color.set(RED);
-    objects[0].current.set(200,100);
+    objects[0].current_color.set(0.5,0.5,0.5);
+    objects[0].current.set(272,208);
     objects[0].width=32;
     objects[0].height=32;
     objects[0].set_boundaries();
-    objects[0].add_action(1,100);
-    objects[0].add_action(3,200);
-    objects[0].add_action(2,500);
-    objects[0].add_action(4,200);
-    objects[0].add_action(1,500);
+    objects[0].add_action(2,96);
+    objects[0].add_action(4,96);
+    objects[0].add_action(1,96);
+    objects[0].add_action(3,96);
     objects[0].add_action(5,90);
     objects[0].add_action(6,90);
 
     std::clog<<"object#"<<objects[0].number<<": "<<objects[0].name<<" initialized."<<std::endl;
 
-    objects[1].name="player 1";
-    objects[1].current_color.set(BLUE);
+    objects[1].name="black square";
+    objects[1].current_color.set(BLACK);
     objects[1].set_boundaries();
     std::clog<<"object#"<<objects[1].number<<": "<<objects[1].name<<" initialized."<<std::endl;
 
@@ -369,31 +368,31 @@ void init_objects()
     //objects[1].rotation=90;
 
     //second object from objects array
-    objects[2].name="red square";
-    objects[2].current_color.set(RED);
-    objects[2].current.set(400.0,160.0);
+    objects[2].name="yellow square";
+    objects[2].current_color.set(YELLOW);
+    objects[2].current.set(416.0,160.0);
     objects[2].set_boundaries();
     std::clog<<"object#"<<objects[2].number<<": "<<objects[2].name<<" initialized."<<std::endl;
 
     //third object from objects array
-    objects[3].name="grey square";
-    objects[3].current_color.set(0.5,0.5,0.5);
-    objects[3].current.set(320.0,60);
+    objects[3].name="green square";
+    objects[3].current_color.set(GREEN);
+    objects[3].current.set(320.0,64);
     objects[3].set_boundaries();
     std::clog<<"object#"<<objects[3].number<<": "<<objects[3].name<<" initialized."<<std::endl;
 
     //fourth object from objects array
-    objects[4].name="black square";
-    objects[4].current_color.set(BLACK);
-    objects[4].current.set(320,260);
+    objects[4].name="red square";
+    objects[4].current_color.set(RED);
+    objects[4].current.set(320,256);
     objects[4].set_boundaries();
     std::clog<<"object#"<<objects[4].number<<": "<<objects[4].name<<" initialized."<<std::endl;
 
 
     //fifth object from objects array
-    objects[5].name="big cyan square";
-    objects[5].current_color.set(0.0,1.0,1.0);
-    objects[5].current.set(200,260);
+    objects[5].name="blue square";
+    objects[5].current_color.set(BLUE);
+    objects[5].current.set(224,160);
     objects[5].width=64;
     objects[5].height=64;
     objects[5].set_boundaries();
