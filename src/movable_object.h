@@ -263,6 +263,7 @@ public:
                 rally_set=false;
             }
             move_forward(rate);
+            moving_forward=true;
         }
 
     }

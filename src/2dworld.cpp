@@ -298,13 +298,13 @@ void text ()
     sprintf(text1,"coordinates=%.2f,%.2f", objects[current_object].current.x,objects[current_object].current.y);
     glutPrint (window_width/40,window_height-40, GLUT_BITMAP_HELVETICA_12, text1, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text2,"velocity %.2f,%.2f",objects[current_object].velocity[1].x,objects[current_object].velocity[1].y);
+    sprintf(text2,"resting: %.2f, %.2f",objects[current_object].rest.x,objects[current_object].rest.y);
     glutPrint (window_width/40,window_height -60, GLUT_BITMAP_HELVETICA_12, text2, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text3,"velocity2 %.2f,%.2f",objects[current_object].velocity[2].x,objects[current_object].velocity[2].y);
+    sprintf(text3,"velocity %.2f,%.2f",objects[current_object].velocity[1].x,objects[current_object].velocity[1].y);
     glutPrint (window_width/40,window_height -80, GLUT_BITMAP_HELVETICA_12, text3, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text4,"resting: %.2f, %.2f",objects[current_object].rest.x,objects[current_object].rest.y);
+    sprintf(text4,"velocity2 %.2f,%.2f",objects[current_object].velocity[2].x,objects[current_object].velocity[2].y);
     glutPrint (window_width/40,window_height -100, GLUT_BITMAP_HELVETICA_12, text4, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text5,"delta_time x: %.2f y:%.2f",objects[current_object].delta_time[1],objects[current_object].delta_time[2]);
