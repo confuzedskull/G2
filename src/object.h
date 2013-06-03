@@ -10,7 +10,7 @@ class object
     char* name;
     int number;
     point2f current;
-    point2f resting;//resting point
+    point2f rest;//resting point
     float rotation;
     float width, height;
     color current_color;//RGB values
@@ -78,8 +78,8 @@ class object
         number=object_no;
         current.x=320.0;
         current.y=160.0;
-        resting.x=320.0;
-        resting.y=160.0;
+        rest.x=320.0;
+        rest.y=160.0;
         width=64;
         height=64;
         current_color.set(0.0,0.0,0.0);
@@ -96,7 +96,7 @@ class object
         width=w;
         height=h;
         current_color=c;
-        rotation=90;
+        rotation=90.1;
         visible=false;
     }
 

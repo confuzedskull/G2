@@ -230,21 +230,6 @@ void key_up (unsigned char key, int x, int y)
 
 void key_operations (void)
 {
-
-    if(key_states['w'] || key_states['W'] || key_states['s'] || key_states['S'])
-    {
-        objects[current_object].moving_vertical=true;
-    }
-    else
-        objects[current_object].moving_vertical=false;
-
-    if(key_states['a'] || key_states['A'] || key_states['d'] || key_states['D'])
-    {
-        objects[current_object].moving_horizontal=true;
-    }
-    else
-        objects[current_object].moving_horizontal=false;
-
     if (key_states['w'] || key_states['W'])
     {
         objects[current_object].move_forward(0.01);
@@ -319,7 +304,7 @@ void text ()
     sprintf(text3,"velocity2 %.2f,%.2f",objects[current_object].velocity[2].x,objects[current_object].velocity[2].y);
     glutPrint (window_width/40,window_height -80, GLUT_BITMAP_HELVETICA_12, text3, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text4,"resting: %.2f, %.2f",objects[current_object].resting.x,objects[current_object].resting.y);
+    sprintf(text4,"resting: %.2f, %.2f",objects[current_object].rest.x,objects[current_object].rest.y);
     glutPrint (window_width/40,window_height -100, GLUT_BITMAP_HELVETICA_12, text4, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text5,"delta_time x: %.2f y:%.2f",objects[current_object].delta_time[1],objects[current_object].delta_time[2]);

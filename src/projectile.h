@@ -8,8 +8,8 @@ class projectile: public physics_object
 
     void reset()
     {
-        current.x=resting.x;
-        current.y=resting.y;
+        current.x=rest.x;
+        current.y=rest.y;
         fired=false;
     }
 
@@ -18,9 +18,9 @@ class projectile: public physics_object
         if(!fired)
         {
         current.x=source.current.x;
-        resting.x=source.current.x;
+        rest.x=source.current.x;
         current.y=source.current.y;
-        resting.y=source.current.y;
+        rest.y=source.current.y;
         rotation=source.rotation;
         calc_step();//orient it to the direction aiming
         fired=true;

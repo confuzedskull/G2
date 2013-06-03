@@ -16,22 +16,16 @@ class physics_object: public tangible_object
 
     void set_resting()
     {
+        if(!moving_horizontal())
+        rest.x=current.x;
 
-        if(!moving_vertical)
-        {
-            resting.y=current.y;
-        }
-
-        if(!moving_horizontal)
-        {
-            resting.x=current.x;
-        }
+        if(!moving_vertical())
+        rest.y=current.y;
     }
 
     void calc_delta_time()
     {
-
-        if(compare(current.x,resting.x)==0)//x-position is not changing
+        if(!moving_horizontal())//x-position is not changing
         {
             stop_time[1]=get_game_time();
             delta_time[1]=0;
@@ -42,7 +36,7 @@ class physics_object: public tangible_object
             delta_time[1]=stop_time[1]-start_time[1];
         }
 
-        if(compare(current.y,resting.y)==0)//y-position is not changing
+        if(!moving_vertical())//y-position is not changing
         {
             stop_time[2]=get_game_time();
             delta_time[2]=0;
@@ -77,23 +71,24 @@ class physics_object: public tangible_object
     }
     void calc_velocity()
     {
-        if(compare(delta_time[1],-0.001)==0)
-            velocity[1].x=0.000;
+        if(!moving_horizontal())
+        velocity[1].x=0.000;
         else
-        velocity[1].x=(current.x-resting.x)/delta_time[1];
-        if(compare(delta_time[2],-0.001)==0)
-            velocity[1].y=0.000;
+        velocity[1].x=(current.x-rest.x)/delta_time[1];
+
+        if(!moving_vertical())
+        velocity[1].y=0.000;
         else
-        velocity[1].y=(current.y-resting.y)/delta_time[2];
+        velocity[1].y=(current.y-rest.y)/delta_time[2];
     }
 
     void calc_acceleration()
-    {   if(compare(delta_time[3],-0.001)==0)
+    {   if(!moving_horizontal())
         acceleration.x=0;
         else
         acceleration.x=(velocity[2].x - velocity[1].x)/delta_time[3];
 
-        if(compare(delta_time[4],-0.001)==0)
+        if(!moving_vertical())
         acceleration.y=0;
         else
         acceleration.y=(velocity[2].y - velocity[1].y)/delta_time[4];
@@ -109,12 +104,16 @@ class physics_object: public tangible_object
     void calc_momentum()
     {
         momentum.x=mass*velocity[1].x;
-        //current.x+=momentum.x; //only increase player.x when momentum is not null
         velocity[2].x = velocity[1].x + momentum.x;
 
         momentum.y=mass*velocity[1].y;
-        //current.y+=momentum.y; //only increase player.y when momentum is not null
         velocity[2].y = velocity[1].y + momentum.y;
+    }
+
+    void inertia()
+    {
+        current.x+=momentum.x;//only increase player.x when momentum is not null
+        current.y+=momentum.y;//only increase player.y when momentum is not null
     }
 
     void friction()
@@ -138,8 +137,9 @@ class physics_object: public tangible_object
         calc_direction();
         calc_step();
         calc_points();
-
         calc_sides();
+        //inertia();
+        reset_motion();
 
         //collision();
     }
@@ -147,7 +147,7 @@ class physics_object: public tangible_object
     physics_object()
     {
         name="physics object";
-        mass=0.01;//note: changing this seems to have an effect on set_resting
+        mass=0.001;//note: changing this seems to have an effect on set_resting
         velocity[1].x=0.00;
         velocity[1].y=0.00;
         velocity[2].x=0.00;

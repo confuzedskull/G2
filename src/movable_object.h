@@ -10,8 +10,10 @@ public:
     vector2f step[4];//unit by which an object moves in x and y directions.
     float degrees_rotated;
     float step_size;
-    bool moving_vertical;
-    bool moving_horizontal;
+    bool moving_forward;
+    bool moving_backward;
+    bool moving_left;
+    bool moving_right;
     std::queue< std::vector<int> > actions;
 
     void calc_step()
@@ -28,6 +30,46 @@ public:
         //backward step
         step[4].x=backward.x*step_size;
         step[4].y=backward.y*step_size;
+    }
+
+    void reset_motion()
+    {
+        moving_forward=false;
+        moving_backward=false;
+        moving_left=false;
+        moving_right=false;
+    }
+
+    bool moving_vertical()
+    {
+        if(moving() && compare(current.y,rest.y)!=0)
+            return true;
+        else
+            return false;
+    }
+
+    bool moving_horizontal()
+    {
+        if(moving() && compare(current.x,rest.x)!=0)
+            return true;
+        else
+            return false;
+    }
+
+    bool resting()
+    {
+        if(!moving_vertical() && !moving_horizontal())
+            return true;
+        else
+            return false;
+    }
+
+    bool moving()
+    {
+        if(moving_forward||moving_backward||moving_left||moving_right)
+            return true;
+        else
+            return false;
     }
 
     void turn_right()
@@ -52,50 +94,58 @@ public:
 
     void move_left()
     {
-            current.x+=leftward.x;
-            current.y+=leftward.y;
+        current.x+=leftward.x;
+        current.y+=leftward.y;
+        moving_left=true;
     }
 
     void move_left(float units_left)
     {
         current.x+=leftward.x*units_left;
         current.y+=leftward.y*units_left;
+        moving_left=true;
     }
 
     void move_right()
     {
         current.x+=rightward.x;
         current.y+=rightward.y;
+        moving_right=true;
     }
 
     void move_right(float units_right)
     {
         current.x+=rightward.x*units_right;
         current.y+=rightward.y*units_right;
+        moving_right=true;
     }
 
     void move_forward()
     {
-            current.x+=forward.x;
-            current.y+=forward.y;
+        current.x+=forward.x;
+        current.y+=forward.y;
+        moving_forward=true;
     }
 
     void move_forward(float units_forward)
     {
         current.x+=forward.x*units_forward;
         current.y+=forward.y*units_forward;
+        moving_forward=true;
     }
 
     void move_back()
     {
         current.x+=backward.x;
         current.y+=backward.y;
+        moving_backward=true;
     }
 
     void move_back(float units_back)
     {
         current.x+=backward.x*units_back;
         current.y+=backward.y*units_back;
+        moving_backward=true;
     }
 
     void walk_left()
@@ -209,9 +259,10 @@ public:
         {
             turn_to_point(destination_x,destination_y);
             if(compare(distance(current.x,current.y,destination_x,destination_y),1.5f)==-1)//less than or same
+            {
                 rally_set=false;
-            current.x+=forward.x*rate;
-            current.y+=forward.y*rate;
+            }
+            move_forward(rate);
         }
 
     }
@@ -267,7 +318,7 @@ public:
     movable_object()
     {
         name="movable object";
-        rally = &resting;
+        rally = &rest;
         rally_set=false;
         step_size=0.001;
         std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
