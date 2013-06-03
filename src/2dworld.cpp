@@ -104,13 +104,16 @@ player B;
 
 void check_right_clicked()
 {
-    cursor1.right_clicked_an_object=false;
+    cursor1.right_clicked_an_object=true;
     for(int a=0; a<max_objects; a++)
     {
-        if(!cursor1.right_clicked_an_object && !objects[a].right_clicked())
+        if(cursor1.right_clicked_an_object && objects[a].right_clicked())
+        {
+            cursor1.right_clicked_an_object=true;
+        }
+        else
         {
             cursor1.right_clicked_an_object=false;
-            break;
         }
     }
 }
@@ -194,6 +197,8 @@ void mouse_drag(int x, int y)
         //this condition makes it so that the user has to make a rectangle larger than 10x10. That way, highlighting is less sensitive
         if(compare(x,cursor1.left_down.x+10)==1 && compare((window_height - y),cursor1.left_down.y+10)==-1)
         cursor1.highlighting=true;
+        else
+            cursor1.highlighting=false;
 
         cursor1.left_drag.x=x;
         cursor1.left_drag.y=(window_height-y);
@@ -204,8 +209,13 @@ void mouse_drag(int x, int y)
         cursor1.highlighting=false;
         cursor1.right_drag.x=x;
         cursor1.right_drag.y=(window_height-y);
+        if(compare(x,cursor1.right_down.x)!=0 && compare((window_height - y),cursor1.right_down.y)!=0)
         cursor1.right_dragging=true;
+        else
+            cursor1.right_dragging=false;
     }
+        else
+            cursor1.right_dragging=false;
 }
 
 void key_pressed (unsigned char key, int x, int y)

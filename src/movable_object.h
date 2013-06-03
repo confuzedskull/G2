@@ -208,7 +208,7 @@ public:
         if(rally_set)
         {
             turn_to_point(destination_x,destination_y);
-            if(compare(distance(current.x,current.y,destination_x,destination_y),1.5)==-1)
+            if(compare(distance(current.x,current.y,destination_x,destination_y),1.5f)==-1)//less than or same
                 rally_set=false;
             current.x+=forward.x*rate;
             current.y+=forward.y*rate;

@@ -87,20 +87,28 @@ class clickable_object: public physics_object
 
         if(selected)
         {
+
             if(cursor1.right_click && !right_clicked())
             {
-                if(!cursor1.right_clicked_an_object)
-                rally = new point2f(cursor1.right_down.x,cursor1.right_down.y);
+                if(cursor1.right_clicked_an_object)
+                {
+                    rally = &cursor1.right_clicked_object->current;//used a reference because current is always changing
+                }
                 else
-                rally = &cursor1.right_clicked_object->current;
+                {
+                    rally = new point2f(cursor1.right_down.x,cursor1.right_down.y);
+                }
                 rally_set=true;
+
             }
 
             if(cursor1.right_dragging && !right_clicked())
             {
-                rally = &cursor1.right_drag;
+                rally =  new point2f(cursor1.right_drag.x,cursor1.right_drag.y);
                 rally_set=true;
             }
+
+
             //current_color.set(GREEN);
         }
         else
