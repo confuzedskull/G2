@@ -397,6 +397,7 @@ void init_objects()
     objects[5].height=64;
     objects[5].set_boundaries();
     std::clog<<"object#"<<objects[5].number<<": "<<objects[5].name<<" initialized."<<std::endl;
+
 }
 
 void render_scene(void)

@@ -12,17 +12,13 @@ class point2f
 
     point2f()
     {
-
-    }
-
-    ~point2f()
-    {
-
+        std::clog << "point2f created"<<std::endl;
     }
 
     point2f(float a, float b)
     {
         set(a,b);
+        std::clog << "point2f created"<<std::endl;
     }
 };
 

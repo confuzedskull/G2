@@ -87,7 +87,6 @@ class clickable_object: public physics_object
 
         if(selected)
         {
-
             if(cursor1.right_click && !right_clicked())
             {
                 if(cursor1.right_clicked_an_object)
@@ -96,19 +95,17 @@ class clickable_object: public physics_object
                 }
                 else
                 {
+                    delete &rally;
                     rally = new point2f(cursor1.right_down.x,cursor1.right_down.y);
+                    //rally = &cursor1.right_down;
                 }
                 rally_set=true;
-
             }
-
             if(cursor1.right_dragging && !right_clicked())
             {
-                rally =  new point2f(cursor1.right_drag.x,cursor1.right_drag.y);
+                rally = &cursor1.right_drag;
                 rally_set=true;
             }
-
-
             //current_color.set(GREEN);
         }
         else
