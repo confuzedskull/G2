@@ -14,6 +14,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add library="C:\Users\James\Dropbox\My Programs\C\glut32.lib" />
@@ -27,6 +28,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -35,7 +37,8 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add directory="C:/MinGW/include" />
+			<Add directory="C:/MinGW/mingw32" />
+			<Add directory="C:/MinGW/mingw32/include" />
 		</Compiler>
 		<Linker>
 			<Add library="glut32" />
@@ -45,25 +48,51 @@
 			<Add library="gdi32" />
 			<Add directory="C:/MinGW/lib" />
 		</Linker>
-		<Unit filename="src/2dworld.cpp" />
-		<Unit filename="src/clickable_object.h" />
-		<Unit filename="src/color.h" />
-		<Unit filename="src/compare.h" />
-		<Unit filename="src/complex_object.h" />
-		<Unit filename="src/cursor.h" />
-		<Unit filename="src/distance.h" />
-		<Unit filename="src/glutPrint.h" />
-		<Unit filename="src/limits.h" />
-		<Unit filename="src/line.h" />
-		<Unit filename="src/movable_object.h" />
-		<Unit filename="src/object.h" />
-		<Unit filename="src/physics_object.h" />
-		<Unit filename="src/player.h" />
-		<Unit filename="src/point.h" />
-		<Unit filename="src/projectile.h" />
-		<Unit filename="src/tangible_object.h" />
-		<Unit filename="src/vectors.h" />
-		<Unit filename="src/world.h" />
+		<Unit filename="include/clickable_object.h" />
+		<Unit filename="include/color.h" />
+		<Unit filename="include/compare.h" />
+		<Unit filename="include/complex_object.h" />
+		<Unit filename="include/cursor.h" />
+		<Unit filename="include/distance.h" />
+		<Unit filename="include/game.h" />
+		<Unit filename="include/line2f.h" />
+		<Unit filename="include/movable_object.h" />
+		<Unit filename="include/object.h" />
+		<Unit filename="include/physics_object.h" />
+		<Unit filename="include/point2f.h" />
+		<Unit filename="include/point2i.h" />
+		<Unit filename="include/point3f.h" />
+		<Unit filename="include/projectile.h" />
+		<Unit filename="include/tangible_object.h" />
+		<Unit filename="include/vector2d.h" />
+		<Unit filename="include/vector2f.h" />
+		<Unit filename="include/vector2i.h" />
+		<Unit filename="include/vector3d.h" />
+		<Unit filename="include/vector3f.h" />
+		<Unit filename="include/vector3i.h" />
+		<Unit filename="src/clickable_object.cpp" />
+		<Unit filename="src/color.cpp" />
+		<Unit filename="src/compare.cpp" />
+		<Unit filename="src/complex_object.cpp" />
+		<Unit filename="src/cursor.cpp" />
+		<Unit filename="src/distance.cpp" />
+		<Unit filename="src/game.cpp" />
+		<Unit filename="src/line2f.cpp" />
+		<Unit filename="src/main.cpp" />
+		<Unit filename="src/movable_object.cpp" />
+		<Unit filename="src/object.cpp" />
+		<Unit filename="src/physics_object.cpp" />
+		<Unit filename="src/point2f.cpp" />
+		<Unit filename="src/point2i.cpp" />
+		<Unit filename="src/point3f.cpp" />
+		<Unit filename="src/projectile.cpp" />
+		<Unit filename="src/tangible_object.cpp" />
+		<Unit filename="src/vector2d.cpp" />
+		<Unit filename="src/vector2f.cpp" />
+		<Unit filename="src/vector2i.cpp" />
+		<Unit filename="src/vector3d.cpp" />
+		<Unit filename="src/vector3f.cpp" />
+		<Unit filename="src/vector3i.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

@@ -1,5 +1,8 @@
-#include <\Users\James\Dropbox\My Programs\C++\2dworld\src\clickable_object.h>
-class player:public clickable_object
+#ifndef PLAYER_H
+#define PLAYER_H
+#include "clickable_object.h"
+
+class player: public clickable_object
 {
 
     public:
@@ -19,6 +22,6 @@ class player:public clickable_object
     action 8: primary
     action 9: secondary
     */
-
-
 };
+#endif // PLAYER_H
+

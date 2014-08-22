@@ -1,4 +1,7 @@
-#include <\Users\James\Dropbox\My Programs\C++\2dworld\src\limits.h>
+#ifndef WORLD_H
+#define WORLD_H
+#include "limits.h"
+
 class world
 {
     public:
@@ -6,11 +9,10 @@ class world
     int type;
     int state;
     float timer;
-    limits boundaries;
     float gravity;
     float wind;
     int no_of_objects;
     bool settings[10];
-
-
 };
+#endif // WORLD_H
+
