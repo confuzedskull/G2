@@ -99,6 +99,7 @@ publish
 # Others
 [Bb]in
 [Oo]bj
+src/old/
 sql
 TestResults
 *.Cache
@@ -161,3 +162,9 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
+
+# CodeBlocks stuff
+*.cbp
+*.cscope_file_list
+*.depend
+*.layout

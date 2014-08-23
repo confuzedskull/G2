@@ -494,7 +494,7 @@
 
 1375823502 c:\users\james\dropbox\my programs\c++\2dworld\include\glutprint.h
 
-1408678295 c:\users\james\dropbox\my programs\c++\2dworld\include\object.h
+1408754133 c:\users\james\dropbox\my programs\c++\2dworld\include\object.h
 	"color.h"
 	"point2f.h"
 	<stdio.h>
@@ -556,7 +556,7 @@
 	"compare.h"
 	"cursor.h"
 
-1408669753 source:c:\users\james\dropbox\my programs\c++\2dworld\src\clickable_object.cpp
+1408763848 source:c:\users\james\dropbox\my programs\c++\2dworld\src\clickable_object.cpp
 	"clickable_object.h"
 	"cursor.h"
 	"compare.h"
@@ -572,7 +572,7 @@
 	<math.h>
 	<iostream>
 
-1408676963 source:c:\users\james\dropbox\my programs\c++\2dworld\src\cursor.cpp
+1408757037 source:c:\users\james\dropbox\my programs\c++\2dworld\src\cursor.cpp
 	"cursor.h"
 	"point2f.h"
 	"object.h"
@@ -588,7 +588,7 @@
 	"line2f.h"
 	"compare.h"
 
-1408669643 source:c:\users\james\dropbox\my programs\c++\2dworld\src\main.cpp
+1408757379 source:c:\users\james\dropbox\my programs\c++\2dworld\src\main.cpp
 	<stdio.h>
 	<stdlib.h>
 	<iostream>
@@ -614,7 +614,7 @@
 	<queue>
 	<iostream>
 
-1408678474 source:c:\users\james\dropbox\my programs\c++\2dworld\src\object.cpp
+1408754133 source:c:\users\james\dropbox\my programs\c++\2dworld\src\object.cpp
 	"object.h"
 
 1408493840 source:c:\users\james\dropbox\my programs\c++\2dworld\src\physics_object.cpp
@@ -665,7 +665,7 @@
 	"compare.h"
 	"cursor.h"
 
-1408677181 source:c:\users\james\dropbox\my programs\c++\2dworld\src\game.cpp
+1408753076 source:c:\users\james\dropbox\my programs\c++\2dworld\src\game.cpp
 	"game.h"
 
 1408676832 c:\users\james\dropbox\my programs\c++\2dworld\include\game.h
