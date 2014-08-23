@@ -45,26 +45,28 @@ void clickable_object::mouse_function()
     if(left_clicked())//clicked this object
     {
         cursor::left_clicked_object=this;
+        cursor::left_clicked_an_object = true;
         cursor::selected_object=number;
         cursor::highlighted_objects[number]=true;
         selected = true;
     }
 
-    if(!left_clicked() && cursor::left_clicked_an_object)//clicked another object
+    if(cursor::left_click && cursor::selected_object !=number)//clicked another object
     {
         cursor::highlighted_objects[number]=false;
         selected = false;
     }
 
-    if(!cursor::left_clicked_an_object)//clicked nothing
+    if(cursor::left_click && !cursor::left_clicked_an_object)//clicked nothing
     {
         cursor::highlighted_objects[number]=false;
+        selected = false;
     }
 
     if(highlighted())
     {
         cursor::highlighted_objects[number]=true;
-        selected=true;
+        //selected=true;
     }
 
     if(right_clicked())
@@ -82,24 +84,24 @@ void clickable_object::mouse_function()
             }
             else
             {
-                delete &rally;
+                //delete &rally;
                 rally = new point2f(cursor::right_down.x,cursor::right_down.y);
-                //rally = &cursor1.right_down;
+                //rally = &cursor::right_down;
             }
             rally_set=true;
         }
         if(cursor::right_dragging && !right_clicked())
         {
+            rally = new point2f(cursor::right_drag.x,cursor::right_drag.y);
             //rally = &cursor::right_drag;
             rally_set=true;
         }
-        if(cursor::objects_selected()==1 && cursor::left_dragging)
+        /*if(left_clicked() && cursor::left_dragging)//allows user to drag the object around
         {
             current.x = cursor::left_drag.x;
             current.y = cursor::left_drag.y;
-        }
-
-        //current_color.set(GREEN);
+        }*/
+        //current_color.set(GREEN); highlighted color
     }
     else
     {

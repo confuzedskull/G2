@@ -15,7 +15,7 @@
 class object
 {
     public:
-    static int object_no;
+    static int total_objects;
     char* name;
     int number;
     point2f current;

@@ -1,7 +1,7 @@
 #include "object.h"
 
 //initialize static variable
-int object::object_no=0;
+int object::total_objects=0;
 
 void object::set_boundaries()//calculates the max's and mins
 {
@@ -58,8 +58,8 @@ int object::get_radius()//calculates a radius from the width and height
 object::object()//constructs an object
 {
     name="generic object";
-    object_no++;
-    number=object_no;
+    number=total_objects;
+    total_objects++;
     current.x=320.0;
     current.y=160.0;
     rest.x=320.0;
@@ -76,7 +76,8 @@ object::object()//constructs an object
 object::object(float x, float y, float w, float h, color c)
 {
     name="generic object";
-    object_no++;
+    number=total_objects;
+    total_objects++;
     current.x=x;
     current.y=y;
     rest.x=x;

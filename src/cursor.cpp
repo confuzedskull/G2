@@ -38,7 +38,7 @@ int cursor::objects_selected()
     return selected;
 }
 
-void cursor::set_color(float R,float G,float B)
+void cursor::set_color(float R,float G,float B)//sets the color of the selection box
 {
     box_color.r=R;
     box_color.g=G;
@@ -57,7 +57,6 @@ void cursor::selection_box()//this is the box that is created when user clicks a
 {
     if(highlighting==true)
     {
-
         glColor3f(box_color.r,box_color.g,box_color.b);
         glBegin(GL_QUADS);
 
@@ -67,6 +66,5 @@ void cursor::selection_box()//this is the box that is created when user clicks a
         glVertex2f(xmax, ymin); // The bottom right corner
 
         glEnd();
-
     }
 }
