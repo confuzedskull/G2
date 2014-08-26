@@ -26,8 +26,8 @@ class color
 
     };//color with red, green, blue
 const color RED(1.0,0.0,0.0,0.5);
-const color YELLOW(1.0,1.0,0.0,1.0);
-const color GREEN(0.0,1.0,0.0,0.5);
+const color YELLOW(1.0,1.0,0.0,0.0);
+const color GREEN(0.0,1.0,0.0,0.0);
 const color BLUE(0.0,0.0,1.0,0.0);
 const color BLACK(0.0,0.0,0.0,0.0);
 const color WHITE(1.0,1.0,1.0,0.0);

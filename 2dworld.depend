@@ -456,7 +456,7 @@
 	<GL/gl.h>
 	<GL/glu.h>
 
-1389830457 c:\users\james\dropbox\my programs\c++\2dworld\include\color.h
+1409096102 c:\users\james\dropbox\my programs\c++\2dworld\include\color.h
 
 1389990345 c:\users\james\dropbox\my programs\c++\2dworld\include\distance.h
 	"point2f.h"
@@ -494,7 +494,7 @@
 
 1375823502 c:\users\james\dropbox\my programs\c++\2dworld\include\glutprint.h
 
-1408754133 c:\users\james\dropbox\my programs\c++\2dworld\include\object.h
+1409087697 c:\users\james\dropbox\my programs\c++\2dworld\include\object.h
 	"color.h"
 	"point2f.h"
 	<stdio.h>
@@ -556,7 +556,7 @@
 	"compare.h"
 	"cursor.h"
 
-1408763848 source:c:\users\james\dropbox\my programs\c++\2dworld\src\clickable_object.cpp
+1409096323 source:c:\users\james\dropbox\my programs\c++\2dworld\src\clickable_object.cpp
 	"clickable_object.h"
 	"cursor.h"
 	"compare.h"
@@ -567,7 +567,7 @@
 
 1366679502 source:c:\users\james\dropbox\my programs\c++\2dworld\src\compare.cpp
 
-1408672256 source:c:\users\james\dropbox\my programs\c++\2dworld\src\complex_object.cpp
+1409087697 source:c:\users\james\dropbox\my programs\c++\2dworld\src\complex_object.cpp
 	"complex_object.h"
 	<math.h>
 	<iostream>
@@ -588,13 +588,11 @@
 	"line2f.h"
 	"compare.h"
 
-1408757379 source:c:\users\james\dropbox\my programs\c++\2dworld\src\main.cpp
+1409094847 source:c:\users\james\dropbox\my programs\c++\2dworld\src\main.cpp
 	<stdio.h>
 	<stdlib.h>
 	<iostream>
-	<time.h>
 	<math.h>
-	<queue>
 	"game.h"
 	"cursor.h"
 	"distance.h"
@@ -614,7 +612,7 @@
 	<queue>
 	<iostream>
 
-1408754133 source:c:\users\james\dropbox\my programs\c++\2dworld\src\object.cpp
+1409087794 source:c:\users\james\dropbox\my programs\c++\2dworld\src\object.cpp
 	"object.h"
 
 1408493840 source:c:\users\james\dropbox\my programs\c++\2dworld\src\physics_object.cpp
@@ -634,10 +632,10 @@
 1390267397 source:c:\users\james\dropbox\my programs\c++\2dworld\src\point3f.cpp
 	"point3f.h"
 
-1408480333 source:c:\users\james\dropbox\my programs\c++\2dworld\src\projectile.cpp
+1409087697 source:c:\users\james\dropbox\my programs\c++\2dworld\src\projectile.cpp
 	"projectile.h"
 
-1408671967 source:c:\users\james\dropbox\my programs\c++\2dworld\src\tangible_object.cpp
+1409087697 source:c:\users\james\dropbox\my programs\c++\2dworld\src\tangible_object.cpp
 	"tangible_object.h"
 	"compare.h"
 	"distance.h"
@@ -665,8 +663,9 @@
 	"compare.h"
 	"cursor.h"
 
-1408753076 source:c:\users\james\dropbox\my programs\c++\2dworld\src\game.cpp
+1409095079 source:c:\users\james\dropbox\my programs\c++\2dworld\src\game.cpp
 	"game.h"
+	<time.h>
 
 1408676832 c:\users\james\dropbox\my programs\c++\2dworld\include\game.h
 	<time.h>

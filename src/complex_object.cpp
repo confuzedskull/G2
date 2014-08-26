@@ -41,7 +41,7 @@ void complex_object::calc_points()
 
 void complex_object::render()
 {
-    glColor3f(current_color.r,current_color.g,current_color.b);//color the square with object.current_color
+    glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
     if(!visible)
     {
         std::clog<<"object#"<<number<<": "<<name<<" rendered."<<std::endl;

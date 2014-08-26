@@ -31,13 +31,13 @@ void tangible_object::attract(object B)//object moves toward object B
 void tangible_object::simon_says(object B)//object changes color according to side touched
 {
     if(near_front(B))
-        current_color.set(RED);
+        primary_color.set(RED);
     if(near_back(B))
-        current_color.set(GREEN);
+        primary_color.set(GREEN);
     if(near_left(B))
-        current_color.set(BLUE);
+        primary_color.set(BLUE);
     if(near_right(B))
-        current_color.set(YELLOW);
+        primary_color.set(YELLOW);
 
 }
 

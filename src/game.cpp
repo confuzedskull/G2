@@ -1,4 +1,5 @@
 #include "game.h"
+#include <time.h>
 namespace game{
     //initialize variables
     float time_started = 0.00;

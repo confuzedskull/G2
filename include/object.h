@@ -22,13 +22,11 @@ class object
     point2f rest;//resting point
     float rotation;
     float width, height;
-    color current_color;//RGB values
-    color prev_color;
+    color primary_color;//RGB values
     bool visible;
     float xmax,xmin,ymax,ymin;
     void set_boundaries();//calculates the max's and mins
     void render();//draws the object
-    void undo_color();//sets the current color to the previous
     void rotate(float angle);
     int get_radius();//calculates a radius from the width and height
     object();//constructs an object

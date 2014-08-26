@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-#include <time.h>
 #include <math.h>
-#include <queue>
 #include "game.h"
 #include "cursor.h"
 #include "distance.h"
@@ -91,6 +89,7 @@ void collision_detection()
         }
     }
 }
+//The only way to check if no objects are being clicked is by checking every object
 void check_clicked()
 {
     bool left_clicked = true;
@@ -343,7 +342,7 @@ void init_objects()
 
     //first object from clickable_objects array (player)
     clickable_objects[0].name="small square";
-    clickable_objects[0].current_color.set(0.5,0.5,0.5);
+    clickable_objects[0].primary_color.set(0.5,0.5,0.5);
     clickable_objects[0].current.set(272,208);
     clickable_objects[0].width=32;
     clickable_objects[0].height=32;
@@ -357,7 +356,7 @@ void init_objects()
     std::clog<<"object#"<<clickable_objects[0].number<<": "<<clickable_objects[0].name<<" initialized."<<std::endl;
 
     clickable_objects[1].name="black square";
-    clickable_objects[1].current_color.set(BLACK);
+    clickable_objects[1].primary_color.set(BLACK);
     clickable_objects[1].set_boundaries();
     std::clog<<"object#"<<clickable_objects[1].number<<": "<<clickable_objects[1].name<<" initialized."<<std::endl;
 
@@ -366,21 +365,21 @@ void init_objects()
 
     //second object from clickable_objects array
     clickable_objects[2].name="yellow square";
-    clickable_objects[2].current_color.set(YELLOW);
+    clickable_objects[2].primary_color.set(YELLOW);
     clickable_objects[2].current.set(416.0,160.0);
     clickable_objects[2].set_boundaries();
     std::clog<<"object#"<<clickable_objects[2].number<<": "<<clickable_objects[2].name<<" initialized."<<std::endl;
 
     //third object from clickable_objects array
     clickable_objects[3].name="green square";
-    clickable_objects[3].current_color.set(GREEN);
+    clickable_objects[3].primary_color.set(GREEN);
     clickable_objects[3].current.set(320.0,64);
     clickable_objects[3].set_boundaries();
     std::clog<<"object#"<<clickable_objects[3].number<<": "<<clickable_objects[3].name<<" initialized."<<std::endl;
 
     //fourth object from clickable_objects array
     clickable_objects[4].name="red square";
-    clickable_objects[4].current_color.set(RED);
+    clickable_objects[4].primary_color.set(RED);
     clickable_objects[4].current.set(320,256);
     clickable_objects[4].set_boundaries();
     std::clog<<"object#"<<clickable_objects[4].number<<": "<<clickable_objects[4].name<<" initialized."<<std::endl;
@@ -388,7 +387,7 @@ void init_objects()
 
     //fifth object from clickable_objects array
     clickable_objects[5].name="blue square";
-    clickable_objects[5].current_color.set(BLUE);
+    clickable_objects[5].primary_color.set(BLUE);
     clickable_objects[5].current.set(224,160);
     clickable_objects[5].width=64;
     clickable_objects[5].height=64;
@@ -435,7 +434,7 @@ void update_scene()
     clickable_objects[4].physics();
     clickable_objects[5].physics();
     bullet.update();
-
+    check_clicked();
     collision_detection();//calculate object collision
 
 //mouse interactivity

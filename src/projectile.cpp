@@ -44,6 +44,6 @@ projectile::projectile()
     fired=false;
     step_size=0.5;
 //        set_boundaries();
-    current_color=RED;
+    primary_color=RED;
 
 }

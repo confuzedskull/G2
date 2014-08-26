@@ -66,10 +66,10 @@ void clickable_object::mouse_function()
     if(highlighted())
     {
         cursor::highlighted_objects[number]=true;
-        //selected=true;
+        selected=true;
     }
 
-    if(right_clicked())
+    if(right_clicked())//right clicked this object
     {
         cursor::right_clicked_object=this;
     }
@@ -84,16 +84,13 @@ void clickable_object::mouse_function()
             }
             else
             {
-                //delete &rally;
                 rally = new point2f(cursor::right_down.x,cursor::right_down.y);
-                //rally = &cursor::right_down;
             }
             rally_set=true;
         }
         if(cursor::right_dragging && !right_clicked())
         {
             rally = new point2f(cursor::right_drag.x,cursor::right_drag.y);
-            //rally = &cursor::right_drag;
             rally_set=true;
         }
         /*if(left_clicked() && cursor::left_dragging)//allows user to drag the object around
@@ -101,11 +98,6 @@ void clickable_object::mouse_function()
             current.x = cursor::left_drag.x;
             current.y = cursor::left_drag.y;
         }*/
-        //current_color.set(GREEN); highlighted color
-    }
-    else
-    {
-        //undo_color();
     }
 }
 

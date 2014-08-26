@@ -18,7 +18,7 @@ void object::render()//draws the object
     glTranslatef(current.x,current.y,0.0);//translate object according to coordinates
     glRotatef(rotation,0,0,1);//rotates object with object.rotation
     glTranslatef(-current.x,-current.y,0.0);//translate object according to coordinates
-    glColor3f(current_color.r,current_color.g,current_color.b);//color the square with object.current_color
+    glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
 
     if(!visible)
     {
@@ -35,13 +35,6 @@ void object::render()//draws the object
 
     glPopMatrix();//reset transformation matrix
 
-}
-
-void object::undo_color()//sets the current color to the previous
-{
-    current_color.r=prev_color.r;
-    current_color.g=prev_color.g;
-    current_color.b=prev_color.b;
 }
 
 void object::rotate(float angle)
@@ -66,8 +59,7 @@ object::object()//constructs an object
     rest.y=160.0;
     width=64;
     height=64;
-    prev_color.set(0.0,0.0,0.0);
-    current_color.set(0.0,0.0,0.0);
+    primary_color.set(0.0,0.0,0.0);
     rotation=90;
     visible=false;
     std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
@@ -84,7 +76,7 @@ object::object(float x, float y, float w, float h, color c)
     rest.y=y;
     width=w;
     height=h;
-    current_color=c;
+    primary_color.set(c);
     rotation=90.1;
     visible=false;
 }
