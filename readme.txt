@@ -4,10 +4,11 @@
 Controls:
 <Mouse>
 -left click object to select
--left drag box around objects to select multiple
+-left drag box around objects to select multiples
+-left click empty space to deselect
 -right click empty space to set rally point and make selected object move to it
 -right click an object to make selected object follow it
--right hold to have selected object follow cursor
+-right drag to have selected object follow cursor
 <Keyboard>
 -W,A,S,D to move up,left,down,right
 -Q and E to rotate
@@ -15,8 +16,7 @@ Controls:
 -esc to quit
 
 Known Bugs:
--right clicking empty space and then left clicking an object will send the object to the rally point
--highlighting doesn't work after clicking an object
+-right dragging empty space and then left clicking an object will send the object to the rally point
 -shooting is disabled
 -game time isn't displayed correctly in the information overlay
 -right clicking objects doesn't work
