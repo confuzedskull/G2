@@ -27,25 +27,26 @@
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-O2" />
 					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add option="-DGLUT_STATIC_LIB" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-D GLUT_STATIC_LIB" />
 			<Add directory="C:/MinGW/mingw32" />
 			<Add directory="C:/MinGW/mingw32/include" />
 		</Compiler>
 		<Linker>
-			<Add library="glut32" />
 			<Add library="opengl32" />
 			<Add library="glu32" />
 			<Add library="winmm" />
 			<Add library="gdi32" />
+			<Add library="glut32" />
 			<Add directory="C:/MinGW/lib" />
 		</Linker>
 		<Unit filename="include/clickable_object.h" />
