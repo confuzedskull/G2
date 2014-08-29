@@ -34,7 +34,6 @@ static bool set_rally;
 static bool left_clicked_an_object;
 static bool right_clicked_an_object;
 static int objects_selected();
-static void set_color(float R,float G,float B);
 static void set_boundaries();
 static void selection_box();
 };

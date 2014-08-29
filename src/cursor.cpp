@@ -38,13 +38,6 @@ int cursor::objects_selected()
     return selected;
 }
 
-void cursor::set_color(float R,float G,float B)//sets the color of the selection box
-{
-    box_color.r=R;
-    box_color.g=G;
-    box_color.b=B;
-}
-
 void cursor::set_boundaries()//boundaries of the selection box
 {
     xmin= left_down.x;
@@ -57,7 +50,9 @@ void cursor::selection_box()//this is the box that is created when user clicks a
 {
     if(highlighting==true)
     {
-        glColor3f(box_color.r,box_color.g,box_color.b);
+        glEnable (GL_BLEND);
+        glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glColor4f(box_color.r,box_color.g,box_color.b,0.5);
         glBegin(GL_QUADS);
 
         glVertex2f(xmin, ymin); // The bottom left corner

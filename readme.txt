@@ -1,5 +1,6 @@
 2DWorld
 =======
+by James Nakano AKA confuzedskull
 NOTICE:
 If the program doesn't run, then you must right click it and select "Run as Administrator"
 
@@ -18,10 +19,9 @@ Controls:
 -esc to quit
 
 Known Bugs:
--left clicking object after right dragging empty space will cause the object to go to that rally point even if it was from another object
 -shooting is disabled
 -game time isn't displayed correctly in the information overlay
--right clicking objects doesn't work
+
 
 Disclaimer:
 This program was made using the OpenGL Utility Toolkit(GLUT) created by Mark Kilgard.

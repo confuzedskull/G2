@@ -47,7 +47,6 @@ void clickable_object::mouse_function()
         cursor::left_clicked_object=this;
         cursor::left_clicked_an_object = true;
         cursor::selected_object=number;
-        cursor::highlighted_objects[number]=true;
         selected = true;
     }
 
@@ -72,6 +71,7 @@ void clickable_object::mouse_function()
     if(right_clicked())//right clicked this object
     {
         cursor::right_clicked_object=this;
+        cursor::right_clicked_an_object=true;
     }
 
     if(selected)

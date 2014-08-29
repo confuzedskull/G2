@@ -17,7 +17,6 @@
 //This is a basic 2D game engine created from the ground up using openGL and glut
 //Disclaimer: The glut and opengl libraries are obviously not mine, but everything else is an original creation.
 //
-// object.total_objects=0;//initial object number. This gets incremented and assigned to object.number after each object is created.
 const int left=1;
 const int right=2;
 const int up=3;
@@ -35,9 +34,7 @@ double frequency=0.01;//refresh rate in seconds
 int random1 = rand() % 4 + 1;//random number between 1 and 4
 int random2 = rand() % 4 + 1;//another random number between 1 and 4
 
-int frames=0;//to be used for frame count
-
-//text for HUD
+//text for information overlay
 char text0[30];
 char text1[30];
 char text2[20];
@@ -53,7 +50,6 @@ char text11[15];
 char text12[15];
 int temp_toggle[2];
 int toggle_text=1;
-double world_gravity=-0.01;
 clickable_object* clickable_objects = new clickable_object[game::max_objects];
 projectile bullet;
 
@@ -65,8 +61,6 @@ void glutPrint(float x, float y, LPVOID font, char* text, float r, float g, floa
     glEnable(GL_BLEND);
     glColor4f(r,g,b,a);
     glRasterPos2f(x,y);
-
-
     while (*text)
     {
         glutBitmapCharacter(font, *text);
@@ -123,7 +117,6 @@ void check_clicked()
 
 void change_size(int w, int h)
 {
-
     // Prevent a divide by zero, when window is too short
     // (you cant make a window of zero width).
     if (h == 0)
@@ -170,7 +163,6 @@ void mouse_click( int button, int state, int x, int y )
         cursor::left_up.y=window_height-y;
         cursor::highlighting=false;
         cursor::left_click=false;
-
     }
 
     if ( button==GLUT_RIGHT_BUTTON && state==GLUT_DOWN )
@@ -179,8 +171,6 @@ void mouse_click( int button, int state, int x, int y )
         cursor::right_click=true;
         cursor::right_down.x=x;
         cursor::right_down.y=window_height-y;
-        cursor::right_dragging=false;
-
     }
 
     if ( button==GLUT_RIGHT_BUTTON && state==GLUT_UP )
@@ -189,6 +179,7 @@ void mouse_click( int button, int state, int x, int y )
         cursor::right_click=false;
         cursor::right_up.x=x;
         cursor::right_up.y=window_height-y;
+        cursor::right_dragging=false;
     }
 }
 
@@ -398,12 +389,11 @@ void init_objects()
 
 void render_scene(void)
 {
-    // Clear Color Buffers
-    glClear(GL_COLOR_BUFFER_BIT);
-    cursor::selection_box();
-//render the clickable_objects
-//NOTE: clickable_objects are rendered ontop of eachother according to order rendered below (bottom first)
+    glClear(GL_COLOR_BUFFER_BIT);// Clear Color Buffers
 
+//render the clickable_objects
+//NOTE: clickable_objects are rendered ontop of eachother according to the order in which they are rendered
+//BOTTOM
     clickable_objects[5].render();
     clickable_objects[4].render();
     clickable_objects[3].render();
@@ -411,7 +401,8 @@ void render_scene(void)
     clickable_objects[1].render();
     clickable_objects[0].render();
     bullet.render();
-
+    cursor::selection_box();
+//TOP
     if(toggle_text==1)
     {
         text();
@@ -422,8 +413,8 @@ void render_scene(void)
 
 void update_scene()
 {
-    key_operations();
-    cursor::set_boundaries();
+    key_operations();//keyboard controls
+    cursor::set_boundaries();//calculate the size of the selection box
     game::time_elapsed = ((float)clock()-game::time_started)/CLOCKS_PER_SEC;//update the start time
     game::time = ((float)clock()-game::time_started)/CLOCKS_PER_SEC;
     //calculate the physics for all clickable_objects
@@ -449,24 +440,24 @@ void update_scene()
     {
         game::time_started=clock();//reset the start time
         //move clickable_objects
-        clickable_objects[0].perform_actions();
+        clickable_objects[0].perform_actions();//scripted movement
         clickable_objects[1].move_to_point(clickable_objects[1].rally->x,clickable_objects[1].rally->y, 1);
         clickable_objects[2].move_to_point(clickable_objects[2].rally->x,clickable_objects[2].rally->y, 1);
         clickable_objects[3].move_to_point(clickable_objects[3].rally->x,clickable_objects[3].rally->y, 1);
         clickable_objects[4].move_to_point(clickable_objects[4].rally->x,clickable_objects[4].rally->y, 1);
         clickable_objects[5].move_to_point(clickable_objects[5].rally->x,clickable_objects[5].rally->y, 1);
-        glutPostRedisplay();
+        glutPostRedisplay();//update the scene
     }
 }
 
 void initializeWindow()
 {
-    glClearColor (1.0, 1.0, 1.0, 1.0);
+    glClearColor (1.0, 1.0, 1.0, 1.0);//white background
     glViewport(0,0,window_width,window_height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0.0, (GLdouble) window_width , 0.0, (GLdouble) window_height , -1.0, 1.0);
-    glClearColor (1.0, 1.0, 1.0, 1.0);
+    glClearColor (1.0, 1.0, 1.0, 1.0);//white background
     glClear(GL_COLOR_BUFFER_BIT);
     glFlush();
 }
@@ -491,7 +482,6 @@ int main(int argc, char **argv)
     std::clog<<"window size: "<<window_width<<"X"<< window_height<<std::endl;
     glutCreateWindow("2D World");
     initializeWindow();
-
     glutReshapeFunc(change_size);
     glutIdleFunc(update_scene); //use this for animations
     glutKeyboardFunc(key_pressed); // Tell GLUT to use the method "keyPressed" for key presses

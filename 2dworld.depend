@@ -456,7 +456,7 @@
 	<GL/gl.h>
 	<GL/glu.h>
 
-1409096102 c:\users\james\dropbox\my programs\c++\2dworld\include\color.h
+1409345755 c:\users\james\dropbox\my programs\c++\2dworld\include\color.h
 
 1389990345 c:\users\james\dropbox\my programs\c++\2dworld\include\distance.h
 	"point2f.h"
@@ -494,7 +494,7 @@
 
 1375823502 c:\users\james\dropbox\my programs\c++\2dworld\include\glutprint.h
 
-1409087697 c:\users\james\dropbox\my programs\c++\2dworld\include\object.h
+1409101942 c:\users\james\dropbox\my programs\c++\2dworld\include\object.h
 	"color.h"
 	"point2f.h"
 	<stdio.h>
@@ -536,7 +536,7 @@
 
 1389989286 c:\users\james\dropbox\my programs\c++\2dworld\include\limits.h
 
-1408671695 c:\users\james\dropbox\my programs\c++\2dworld\include\cursor.h
+1409340787 c:\users\james\dropbox\my programs\c++\2dworld\include\cursor.h
 	"point2f.h"
 	"color.h"
 	"object.h"
@@ -556,7 +556,7 @@
 	"compare.h"
 	"cursor.h"
 
-1409096323 source:c:\users\james\dropbox\my programs\c++\2dworld\src\clickable_object.cpp
+1409347739 source:c:\users\james\dropbox\my programs\c++\2dworld\src\clickable_object.cpp
 	"clickable_object.h"
 	"cursor.h"
 	"compare.h"
@@ -572,7 +572,7 @@
 	<math.h>
 	<iostream>
 
-1408757037 source:c:\users\james\dropbox\my programs\c++\2dworld\src\cursor.cpp
+1409340746 source:c:\users\james\dropbox\my programs\c++\2dworld\src\cursor.cpp
 	"cursor.h"
 	"point2f.h"
 	"object.h"
@@ -588,7 +588,7 @@
 	"line2f.h"
 	"compare.h"
 
-1409094847 source:c:\users\james\dropbox\my programs\c++\2dworld\src\main.cpp
+1409345760 source:c:\users\james\dropbox\my programs\c++\2dworld\src\main.cpp
 	<stdio.h>
 	<stdlib.h>
 	<iostream>
