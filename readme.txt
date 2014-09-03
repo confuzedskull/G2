@@ -9,6 +9,7 @@ Controls:
 -left click object to select
 -left drag box around objects to select multiples
 -left click empty space to deselect
+-left click and drag an object to move it around
 -right click empty space to set rally point and make selected object move to it
 -right click an object to make selected object follow it
 -right drag to have selected object follow cursor
@@ -21,7 +22,7 @@ Controls:
 Known Bugs:
 -shooting is disabled
 -game time isn't displayed correctly in the information overlay
-
+-grabbing an object and moving it into another sometimes makes them stack ontop of eachother
 
 Disclaimer:
 This program was made using the OpenGL Utility Toolkit(GLUT) created by Mark Kilgard.

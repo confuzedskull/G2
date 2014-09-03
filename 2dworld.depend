@@ -525,7 +525,7 @@
 1390586101 c:\users\james\dropbox\my programs\c++\2dworld\include\player.h
 	"clickable_object.h"
 
-1408496239 c:\users\james\dropbox\my programs\c++\2dworld\include\clickable_object.h
+1409707578 c:\users\james\dropbox\my programs\c++\2dworld\include\clickable_object.h
 	"physics_object.h"
 
 1408484049 c:\users\james\dropbox\my programs\c++\2dworld\include\projectile.h
@@ -536,7 +536,7 @@
 
 1389989286 c:\users\james\dropbox\my programs\c++\2dworld\include\limits.h
 
-1409340787 c:\users\james\dropbox\my programs\c++\2dworld\include\cursor.h
+1409715822 c:\users\james\dropbox\my programs\c++\2dworld\include\cursor.h
 	"point2f.h"
 	"color.h"
 	"object.h"
@@ -556,7 +556,7 @@
 	"compare.h"
 	"cursor.h"
 
-1409347739 source:c:\users\james\dropbox\my programs\c++\2dworld\src\clickable_object.cpp
+1409715089 source:c:\users\james\dropbox\my programs\c++\2dworld\src\clickable_object.cpp
 	"clickable_object.h"
 	"cursor.h"
 	"compare.h"
@@ -572,7 +572,7 @@
 	<math.h>
 	<iostream>
 
-1409340746 source:c:\users\james\dropbox\my programs\c++\2dworld\src\cursor.cpp
+1409714851 source:c:\users\james\dropbox\my programs\c++\2dworld\src\cursor.cpp
 	"cursor.h"
 	"point2f.h"
 	"object.h"
@@ -588,7 +588,7 @@
 	"line2f.h"
 	"compare.h"
 
-1409345760 source:c:\users\james\dropbox\my programs\c++\2dworld\src\main.cpp
+1409714953 source:c:\users\james\dropbox\my programs\c++\2dworld\src\main.cpp
 	<stdio.h>
 	<stdlib.h>
 	<iostream>

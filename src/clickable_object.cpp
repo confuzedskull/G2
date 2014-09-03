@@ -40,6 +40,18 @@ bool clickable_object::highlighted()
         return false;
 }
 
+bool clickable_object::grabbed()
+{
+    if(cursor::left_dragging &&
+            compare(cursor::left_drag.x,xmax)==-1 &&
+            compare(cursor::left_drag.x,xmin)==1 &&
+            compare(cursor::left_drag.y,ymax)==-1 &&
+            compare(cursor::left_drag.y,ymin)==1)
+        return true;
+    else
+        return false;
+}
+
 void clickable_object::mouse_function()
 {
     if(left_clicked())//clicked this object
@@ -74,13 +86,20 @@ void clickable_object::mouse_function()
         cursor::right_clicked_an_object=true;
     }
 
+    if(grabbed() && !cursor::highlighting)
+    {
+        current.set(cursor::left_drag.x,cursor::left_drag.y);
+        cursor::grabbed_an_object=true;
+    }
+
     if(selected)
     {
         if(cursor::right_click && !right_clicked())
         {
             if(cursor::right_clicked_an_object)
             {
-                rally = &cursor::right_clicked_object->current;//used a reference because current is always changing
+                //here I used a reference because current is always changing
+                rally = &cursor::right_clicked_object->current;
             }
             else
             {
@@ -93,11 +112,6 @@ void clickable_object::mouse_function()
             rally = new point2f(cursor::right_drag.x,cursor::right_drag.y);
             rally_set=true;
         }
-        /*if(left_clicked() && cursor::left_dragging)//allows user to drag the object around
-        {
-            current.x = cursor::left_drag.x;
-            current.y = cursor::left_drag.y;
-        }*/
     }
 }
 
@@ -107,5 +121,3 @@ clickable_object::clickable_object()
     selected=false;
     std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
 }
-
-

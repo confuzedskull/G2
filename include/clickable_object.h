@@ -9,9 +9,9 @@ class clickable_object: public physics_object
     bool left_clicked();
     bool right_clicked();
     bool highlighted();
+    bool grabbed();
     void mouse_function();
     clickable_object();
 
 };
 #endif // CLICKABLE_H
-

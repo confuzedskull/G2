@@ -31,8 +31,6 @@ int window_y=100;
 int window_width=640;
 int window_height=320;
 double frequency=0.01;//refresh rate in seconds
-int random1 = rand() % 4 + 1;//random number between 1 and 4
-int random2 = rand() % 4 + 1;//another random number between 1 and 4
 
 //text for information overlay
 char text0[30];
@@ -99,7 +97,6 @@ void check_clicked()
         }
     }
     cursor::left_clicked_an_object = left_clicked;
-
     bool right_clicked=true;
     for(int a=0; a<game::max_objects; a++)
     {
@@ -113,6 +110,19 @@ void check_clicked()
         }
     }
     cursor::right_clicked_an_object = right_clicked;
+    bool grabbed=true;
+    for(int a=0; a<game::max_objects; a++)
+    {
+        if(grabbed && clickable_objects[a].grabbed())
+        {
+            grabbed=true;
+        }
+        else
+        {
+            grabbed=false;
+        }
+    }
+    cursor::grabbed_an_object = grabbed;
 }
 
 void change_size(int w, int h)
@@ -141,9 +151,6 @@ void change_size(int w, int h)
     glClear(GL_COLOR_BUFFER_BIT);
     glFlush();
 
-    // Set the correct perspective.
-    //gluPerspective(45.0f, ratio, 0.1f, 100.0f);
-
     window_width=w;
     window_height=h;
 }
@@ -152,15 +159,13 @@ void mouse_click( int button, int state, int x, int y )
 {
     if ( button==GLUT_LEFT_BUTTON && state==GLUT_DOWN )
     {
-        cursor::left_down.x=x;
-        cursor::left_down.y=window_height-y;
+        cursor::left_down.set(x,window_height-y);
         cursor::left_click=true;
     }
 
     if ( button==GLUT_LEFT_BUTTON && state==GLUT_UP )
     {
-        cursor::left_up.x=x;
-        cursor::left_up.y=window_height-y;
+        cursor::left_up.set(x,window_height-y);
         cursor::highlighting=false;
         cursor::left_click=false;
     }
@@ -169,16 +174,14 @@ void mouse_click( int button, int state, int x, int y )
     {
         cursor::highlighting=false;
         cursor::right_click=true;
-        cursor::right_down.x=x;
-        cursor::right_down.y=window_height-y;
+        cursor::right_down.set(x,window_height-y);
     }
 
     if ( button==GLUT_RIGHT_BUTTON && state==GLUT_UP )
     {
         cursor::highlighting=false;
         cursor::right_click=false;
-        cursor::right_up.x=x;
-        cursor::right_up.y=window_height-y;
+        cursor::right_up.set(x,window_height-y);
         cursor::right_dragging=false;
     }
 }
@@ -188,15 +191,19 @@ void mouse_drag(int x, int y)
 {
     if(cursor::left_click)
     {
-        //this condition makes it so that the user has to make a rectangle larger than 10x10. That way, highlighting is less sensitive
-        if(!cursor::left_clicked_an_object && compare(x,cursor::left_down.x+10)==1 && compare((window_height - y),cursor::left_down.y+10)==-1)
-        cursor::highlighting=true;
+        if(!cursor::left_clicked_an_object && !cursor::grabbed_an_object)
+        {
+            //this condition makes it so that the user has to make a rectangle larger than 10x10. That way, highlighting is less sensitive
+            if(compare(x,cursor::left_down.x+10)==1 && compare((window_height - y),cursor::left_down.y+10)==-1)
+                cursor::highlighting=true;
+            else
+                cursor::highlighting=false;
+        }
         else
             cursor::highlighting=false;
-        cursor::left_drag.x=x;
-        cursor::left_drag.y=(window_height-y);
+        cursor::left_drag.set(x,(window_height-y));
         //see if drag point is different from start point
-        if(compare(x,cursor::left_down.x)!=0 && compare((window_height - y),cursor::left_down.y)!=0)//drag point is different from start point
+        if(compare(x,cursor::left_down.x)!=0 && compare((window_height - y),cursor::left_down.y)!=0)
             cursor::left_dragging=true;
         else
             cursor::left_dragging=false;
@@ -207,29 +214,28 @@ void mouse_drag(int x, int y)
     if(cursor::right_click)
     {
         cursor::highlighting=false;
-        cursor::right_drag.x=x;
-        cursor::right_drag.y=(window_height-y);
+        cursor::right_drag.set(x,(window_height-y));
         //see if drag point is different from start point
         if(compare(x,cursor::right_down.x)!=0 && compare((window_height - y),cursor::right_down.y)!=0)
             cursor::right_dragging=true;
         else
             cursor::right_dragging=false;
     }
-        else
-            cursor::right_dragging=false;
+    else
+        cursor::right_dragging=false;
 }
 
-void key_pressed (unsigned char key, int x, int y)
+void key_pressed(unsigned char key, int x, int y)
 {
     key_states[key] = true; // Set the state of the current key to pressed
 }
 
-void key_up (unsigned char key, int x, int y)
+void key_up(unsigned char key, int x, int y)
 {
     key_states[key] = false; // Set the state of the current key to not pressed
 }
 
-void key_operations (void)
+void key_operations(void)
 {
     if (key_states['w'] || key_states['W'])
     {
@@ -268,7 +274,6 @@ void key_operations (void)
 
         if(toggle_text==0)
             temp_toggle[1]=1;
-
     }
     else
         toggle_text=temp_toggle[1];
@@ -286,7 +291,6 @@ void key_operations (void)
 
 void text()
 {
-
     sprintf(text0,"object no.%i", clickable_objects[cursor::selected_object].number);
     glutPrint (window_width/40,window_height -20, GLUT_BITMAP_HELVETICA_12, text0, 1.0f,0.0f,0.0f, 0.5f);
 
@@ -329,9 +333,9 @@ void text()
 
 void init_objects()
 {
-    //initialize the clickable_objects
+//initialize the clickable_objects
 
-    //first object from clickable_objects array (player)
+    //first object (yes first, because the index starts at 0) from clickable_objects array
     clickable_objects[0].name="small square";
     clickable_objects[0].primary_color.set(0.5,0.5,0.5);
     clickable_objects[0].current.set(272,208);
@@ -346,29 +350,27 @@ void init_objects()
     clickable_objects[0].add_action(6,90);
     std::clog<<"object#"<<clickable_objects[0].number<<": "<<clickable_objects[0].name<<" initialized."<<std::endl;
 
+    //second object from clickable objects array
     clickable_objects[1].name="black square";
     clickable_objects[1].primary_color.set(BLACK);
     clickable_objects[1].set_boundaries();
     std::clog<<"object#"<<clickable_objects[1].number<<": "<<clickable_objects[1].name<<" initialized."<<std::endl;
 
-
-    //clickable_objects[1].rotation=90;
-
-    //second object from clickable_objects array
+    //third object from clickable_objects array
     clickable_objects[2].name="yellow square";
     clickable_objects[2].primary_color.set(YELLOW);
     clickable_objects[2].current.set(416.0,160.0);
     clickable_objects[2].set_boundaries();
     std::clog<<"object#"<<clickable_objects[2].number<<": "<<clickable_objects[2].name<<" initialized."<<std::endl;
 
-    //third object from clickable_objects array
+    //fourth object from clickable_objects array
     clickable_objects[3].name="green square";
     clickable_objects[3].primary_color.set(GREEN);
     clickable_objects[3].current.set(320.0,64);
     clickable_objects[3].set_boundaries();
     std::clog<<"object#"<<clickable_objects[3].number<<": "<<clickable_objects[3].name<<" initialized."<<std::endl;
 
-    //fourth object from clickable_objects array
+    //fifth object from clickable_objects array
     clickable_objects[4].name="red square";
     clickable_objects[4].primary_color.set(RED);
     clickable_objects[4].current.set(320,256);
@@ -400,7 +402,9 @@ void render_scene(void)
     clickable_objects[2].render();
     clickable_objects[1].render();
     clickable_objects[0].render();
+//render the projectiles
     bullet.render();
+//render the selection box
     cursor::selection_box();
 //TOP
     if(toggle_text==1)
@@ -425,8 +429,8 @@ void update_scene()
     clickable_objects[4].physics();
     clickable_objects[5].physics();
     bullet.update();
-    check_clicked();
     collision_detection();//calculate object collision
+    check_clicked();
 
 //mouse interactivity
     clickable_objects[0].mouse_function();
@@ -467,11 +471,11 @@ int main(int argc, char **argv)
     std::clog<<"entering main...\n";
     /* initialize random seed: */
     srand ( time(NULL) );
-    //initialize players
+    //initialize objects
     std::clog<<"initializing objects...\n";
     init_objects();
 
-    // init GLUT and create window
+    // initialize GLUT and create window
     std::clog<<"initializing GLUT...\n";
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE| GLUT_RGB);
@@ -488,7 +492,7 @@ int main(int argc, char **argv)
     glutKeyboardUpFunc(key_up); // Tell GLUT to use the method "keyUp" for key releases
     glutMouseFunc(mouse_click);
     glutMotionFunc(mouse_drag);
-    //  glutPassiveMotionFunc(mouseMovement);
+    //  glutPassiveMotionFunc(mouseMovement); //this is not being used
     // enter GLUT event processing cycle
     glutDisplayFunc(render_scene);
     std::clog<<"rendering...\n";

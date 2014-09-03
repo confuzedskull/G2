@@ -33,6 +33,7 @@ static object * right_clicked_object;
 static bool set_rally;
 static bool left_clicked_an_object;
 static bool right_clicked_an_object;
+static bool grabbed_an_object;
 static int objects_selected();
 static void set_boundaries();
 static void selection_box();

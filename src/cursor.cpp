@@ -21,6 +21,7 @@ bool cursor::right_dragging = false;
 object* cursor::right_clicked_object = new object;
 bool cursor::right_clicked_an_object = false;
 bool cursor::left_dragging = false;
+bool cursor::grabbed_an_object=false;
 point2f cursor::left_drag = point2f(0.0,0.0);
 color cursor::box_color = GREEN;
 point2f cursor::left_up = point2f(0.0,0.0);
@@ -48,7 +49,7 @@ void cursor::set_boundaries()//boundaries of the selection box
 
 void cursor::selection_box()//this is the box that is created when user clicks and drags
 {
-    if(highlighting==true)
+    if(highlighting)
     {
         glEnable (GL_BLEND);
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
