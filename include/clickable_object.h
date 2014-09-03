@@ -11,6 +11,7 @@ class clickable_object: public physics_object
     bool highlighted();
     bool grabbed();
     void mouse_function();
+    void render();
     clickable_object();
 
 };

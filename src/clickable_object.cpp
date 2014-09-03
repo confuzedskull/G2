@@ -1,6 +1,8 @@
 #include "clickable_object.h"
 #include "cursor.h"
 #include "compare.h"
+#include "distance.h"
+#include <math.h>
 #include <iostream>
 
 bool clickable_object::left_clicked()
@@ -74,7 +76,7 @@ void clickable_object::mouse_function()
         selected = false;
     }
 
-    if(highlighted())
+    if(highlighted())//object lies within selection box
     {
         cursor::highlighted_objects[number]=true;
         selected=true;
@@ -86,32 +88,65 @@ void clickable_object::mouse_function()
         cursor::right_clicked_an_object=true;
     }
 
-    if(grabbed() && !cursor::highlighting)
+    if(grabbed() && !cursor::highlighting)//object is left clicked and dragged
     {
         current.set(cursor::left_drag.x,cursor::left_drag.y);
         cursor::grabbed_an_object=true;
     }
 
-    if(selected)
+    if(selected)//you can only move an object when it is selected
     {
         if(cursor::right_click && !right_clicked())
         {
-            if(cursor::right_clicked_an_object)
+            if(cursor::right_clicked_an_object)//move to right clicked object
             {
-                //here I used a reference because current is always changing
-                rally = &cursor::right_clicked_object->current;
+                rally = &cursor::right_clicked_object->current;//set rally to reference point because current is always changing
             }
-            else
+            else//move to right clicked empty space
             {
                 rally = new point2f(cursor::right_down.x,cursor::right_down.y);
             }
             rally_set=true;
         }
-        if(cursor::right_dragging && !right_clicked())
+        if(cursor::right_dragging && !right_clicked())//move to right drag
         {
             rally = new point2f(cursor::right_drag.x,cursor::right_drag.y);
             rally_set=true;
         }
+    }
+}
+//clickable objects need their own render method because they have a selection indicator
+void clickable_object::render()
+{
+    glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
+    if(!visible)
+    {
+        std::clog<<"object#"<<number<<": "<<name<<" rendered."<<std::endl;
+        visible=true;
+    }
+    glBegin(GL_POLYGON);//draws a solid shape
+    glVertex2f(back_left.x, back_left.y); // The bottom left corner
+    glVertex2f(front_left.x, front_left.y); // The top left corner
+    glVertex2f(front_right.x, front_right.y); // The top right corner
+    glVertex2f(back_right.x, back_right.y); // The bottom right corner
+    glEnd();//finish drawing
+
+    if(selected)//selected objects are marked by a green ellipse
+    {
+        //we need an x and y radius so that the ellipse matches the object's dimensions
+        float x_radius = distance(front_left,back_right)/2;//measure half the diagonal
+        float y_radius = distance(back_left,front_right)/2;//measure the other diagonal
+        glPushMatrix();//modify transformation matrix
+        glTranslatef(current.x,current.y,0.0);//translate ellipse according to object coordinates
+        glColor3f(0.0,1.0,0.0);//make the lines green
+        glBegin(GL_LINE_LOOP);//draws a series of lines
+        for (int i=0; i<360; i++)
+        {
+            float deg_rad = i*3.14159/180;//calculate degrees in radians
+            glVertex2f(cos(deg_rad)*x_radius,sin(deg_rad)*y_radius);//ellipse function
+        }
+        glEnd();//finish drawing
+        glPopMatrix();//reset transformation matrix
     }
 }
 

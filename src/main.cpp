@@ -474,7 +474,6 @@ int main(int argc, char **argv)
     //initialize objects
     std::clog<<"initializing objects...\n";
     init_objects();
-
     // initialize GLUT and create window
     std::clog<<"initializing GLUT...\n";
     glutInit(&argc, argv);
@@ -492,11 +491,8 @@ int main(int argc, char **argv)
     glutKeyboardUpFunc(key_up); // Tell GLUT to use the method "keyUp" for key releases
     glutMouseFunc(mouse_click);
     glutMotionFunc(mouse_drag);
-    //  glutPassiveMotionFunc(mouseMovement); //this is not being used
     // enter GLUT event processing cycle
     glutDisplayFunc(render_scene);
     std::clog<<"rendering...\n";
-
     glutMainLoop();
-
 }

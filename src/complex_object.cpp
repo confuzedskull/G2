@@ -22,10 +22,9 @@ void complex_object::calc_direction()
 void complex_object::rotate(float angle)
 {
     rotation+=angle;
-    calc_direction();
-    calc_sides();
+    calc_direction();//direction is relative to rotation so it must be updated
+    calc_sides();//sides must move with rotation
 }
-
 
 void complex_object::calc_points()
 {
@@ -38,7 +37,7 @@ void complex_object::calc_points()
     back_left.set(current.x+((backward.x+leftward.x)*(width/2)),current.y+((backward.y+leftward.y)*(width/2)));
     back_right.set(current.x+((backward.x+rightward.x)*(width/2)),current.y+((backward.y+rightward.y)*(width/2)));
 }
-
+//complex objects have their own render method because each vertex is an object whose properties are constantly changing
 void complex_object::render()
 {
     glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color

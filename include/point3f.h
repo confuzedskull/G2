@@ -1,7 +1,6 @@
 #ifndef POINT3F_H
 #define POINT3F_H
 
-
 class point3f
 {
    public:

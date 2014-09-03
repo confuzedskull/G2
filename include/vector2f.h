@@ -1,7 +1,6 @@
 #ifndef VECTOR2F_H
 #define VECTOR2F_H
 
-
 class vector2f
 {
     public:
