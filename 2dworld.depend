@@ -4,14 +4,14 @@
 	<GL/glut.h>
 	<stdlib.h>
 
-1408676832 
+1409091334 
 
 976695772 c:\mingw\include\gl\glut.h
 	<windows.h>
 	<GL/gl.h>
 	<GL/glu.h>
 
-1409101942 >
+1409084097 >
 
 1301111162 c:\mingw\include\windows.h
 	<winresrc.h>
@@ -51,7 +51,7 @@
 	<dlgs.h>
 	<commctrl.h>
 
-1389992133 h>
+1389988504 h>
 
 1301111164 c:\mingw\include\winuser.h
 
@@ -475,7 +475,7 @@
 	"point2i.h"
 	"point3f.h"
 
-1390267397 "
+1390263797 "
 
 1408676354 c:\users\james\dropbox\my programs\c++\2dworld\include\point2f.h
 
@@ -494,17 +494,17 @@
 1389992193 c:\users\james\dropbox\my programs\c++\2dworld\include\vector3i.h
 	"vector2i.h"
 
-1390267620 h"
+1389988593 h"
 
 1409789659 c:\users\james\dropbox\my programs\c++\2dworld\include\vector2f.h
 
-1409789607 c:\users\james\dropbox\my programs\c++\2dworld\include\vector3f.h
-	<vector2f.h>
+1409875396 c:\users\james\dropbox\my programs\c++\2dworld\include\vector3f.h
+	"vector2f.h"
 
 1409789668 c:\users\james\dropbox\my programs\c++\2dworld\include\vector2d.h
 
-1409789619 c:\users\james\dropbox\my programs\c++\2dworld\include\vector3d.h
-	<vector2d.h>
+1409875385 c:\users\james\dropbox\my programs\c++\2dworld\include\vector3d.h
+	"vector2d.h"
 
 1375826937 c:\users\james\dropbox\my programs\c++\2dworld\include\compare.h
 
@@ -531,12 +531,12 @@
 	"point2f.h"
 	<queue>
 
-1408671991 c:\users\james\dropbox\my programs\c++\2dworld\include\tangible_object.h
+1409955528 c:\users\james\dropbox\my programs\c++\2dworld\include\tangible_object.h
 	"movable_object.h"
 
-1408484049 bject.h"
+1408480024 bject.h"
 
-1408480377 c:\users\james\dropbox\my programs\c++\2dworld\include\physics_object.h
+1409962755 c:\users\james\dropbox\my programs\c++\2dworld\include\physics_object.h
 	"tangible_object.h"
 	"vector2f.h"
 
@@ -576,7 +576,7 @@
 	"compare.h"
 	"cursor.h"
 
-1409788847 source:c:\users\james\dropbox\my programs\c++\2dworld\src\clickable_object.cpp
+1409790797 source:c:\users\james\dropbox\my programs\c++\2dworld\src\clickable_object.cpp
 	"clickable_object.h"
 	"cursor.h"
 	"compare.h"
@@ -610,7 +610,7 @@
 	"line2f.h"
 	"compare.h"
 
-1409786442 source:c:\users\james\dropbox\my programs\c++\2dworld\src\main.cpp
+1409965076 source:c:\users\james\dropbox\my programs\c++\2dworld\src\main.cpp
 	<stdio.h>
 	<stdlib.h>
 	<iostream>
@@ -624,9 +624,9 @@
 	"clickable_object.h"
 	"projectile.h"
 
-1409087697 e.h"
+1409084097 e.h"
 
-1408488052 source:c:\users\james\dropbox\my programs\c++\2dworld\src\movable_object.cpp
+1409964917 source:c:\users\james\dropbox\my programs\c++\2dworld\src\movable_object.cpp
 	"movable_object.h"
 	"compare.h"
 	"distance.h"
@@ -639,7 +639,7 @@
 1409087794 source:c:\users\james\dropbox\my programs\c++\2dworld\src\object.cpp
 	"object.h"
 
-1408493840 source:c:\users\james\dropbox\my programs\c++\2dworld\src\physics_object.cpp
+1409964118 source:c:\users\james\dropbox\my programs\c++\2dworld\src\physics_object.cpp
 	"physics_object.h"
 	"game.h"
 	"compare.h"
@@ -659,7 +659,7 @@
 1409087697 source:c:\users\james\dropbox\my programs\c++\2dworld\src\projectile.cpp
 	"projectile.h"
 
-1409087697 source:c:\users\james\dropbox\my programs\c++\2dworld\src\tangible_object.cpp
+1409955432 source:c:\users\james\dropbox\my programs\c++\2dworld\src\tangible_object.cpp
 	"tangible_object.h"
 	"compare.h"
 	"distance.h"
@@ -687,11 +687,11 @@
 	"compare.h"
 	"cursor.h"
 
-1409095079 source:c:\users\james\dropbox\my programs\c++\2dworld\src\game.cpp
+1409963364 source:c:\users\james\dropbox\my programs\c++\2dworld\src\game.cpp
 	"game.h"
 	<time.h>
 
-1408676832 c:\users\james\dropbox\my programs\c++\2dworld\include\game.h
+1409963484 c:\users\james\dropbox\my programs\c++\2dworld\include\game.h
 	<time.h>
 
 1409711489 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/clickable_object.cpp
@@ -706,11 +706,18 @@
 1408476777 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/physics_object.h
 	"tangible_object.h"
 	"vector2f.h"
+	"tangible_object.h"
+	"vector2f.h"
 
 1408668391 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/tangible_object.h
 	"movable_object.h"
+	"movable_object.h"
 
 1408668422 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/movable_object.h
+	"complex_object.h"
+	"vector2f.h"
+	"point2f.h"
+	<queue>
 	"complex_object.h"
 	"vector2f.h"
 	"point2f.h"
@@ -720,8 +727,19 @@
 	"object.h"
 	"point2f.h"
 	"line2f.h"
+	"object.h"
+	"point2f.h"
+	"line2f.h"
 
 1409084097 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/object.h
+	"color.h"
+	"point2f.h"
+	<stdio.h>
+	<stdlib.h>
+	<iostream>
+	<windows.h>
+	<GLUT/glut.h>
+	<GL/glut.h>
 	"color.h"
 	"point2f.h"
 	<stdio.h>
@@ -737,10 +755,15 @@
 
 1390260284 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/line2f.h
 	"point2f.h"
+	"point2f.h"
 
-1389988486 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/vector2f.h
+1409786059 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/vector2f.h
 
 1409712222 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/cursor.h
+	"point2f.h"
+	"color.h"
+	"object.h"
+	"game.h"
 	"point2f.h"
 	"color.h"
 	"object.h"
@@ -748,20 +771,29 @@
 
 1408673232 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/game.h
 	<time.h>
+	<time.h>
 
 1375823337 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/compare.h
 
 1408675026 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/color.cpp
 	"color.h"
+	"color.h"
 
 1366675902 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/compare.cpp
 
-1409084097 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/complex_object.cpp
+1409786434 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/complex_object.cpp
+	"complex_object.h"
+	<math.h>
+	<iostream>
 	"complex_object.h"
 	<math.h>
 	<iostream>
 
 1409712228 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/cursor.cpp
+	"cursor.h"
+	"point2f.h"
+	"object.h"
+	"game.h"
 	"cursor.h"
 	"point2f.h"
 	"object.h"
@@ -772,16 +804,24 @@
 	"point3f.h"
 	"point2i.h"
 	"point2f.h"
+	<math.h>
+	"point3f.h"
+	"point2i.h"
+	"point2f.h"
 
-1389985985 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/point3f.h
+1409785949 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/point3f.h
 
 1389986377 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/point2i.h
 
 1409091334 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/game.cpp
 	"game.h"
 	<time.h>
+	"game.h"
+	<time.h>
 
 1408672888 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/line2f.cpp
+	"line2f.h"
+	"compare.h"
 	"line2f.h"
 	"compare.h"
 
@@ -803,8 +843,12 @@
 	"point2f.h"
 	"point2i.h"
 	"point3f.h"
+	"point2f.h"
+	"point2i.h"
+	"point3f.h"
 
 1408480024 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/projectile.h
+	"physics_object.h"
 	"physics_object.h"
 
 1408484452 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/movable_object.cpp
@@ -816,60 +860,88 @@
 	"vector2f.h"
 	<queue>
 	<iostream>
+	"movable_object.h"
+	"compare.h"
+	"distance.h"
+	<math.h>
+	"point2f.h"
+	"vector2f.h"
+	<queue>
+	<iostream>
 
 1409084194 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/object.cpp
+	"object.h"
 	"object.h"
 
 1408490240 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/physics_object.cpp
 	"physics_object.h"
 	"game.h"
 	"compare.h"
+	"physics_object.h"
+	"game.h"
+	"compare.h"
 
 1408672816 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/point2f.cpp
+	"point2f.h"
 	"point2f.h"
 
 1390263748 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/point2i.cpp
 	"point2i.h"
+	"point2i.h"
 
 1390263797 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/point3f.cpp
 	"point3f.h"
+	"point3f.h"
 
 1409084097 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/projectile.cpp
+	"projectile.h"
 	"projectile.h"
 
 1409084097 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/tangible_object.cpp
 	"tangible_object.h"
 	"compare.h"
 	"distance.h"
+	"tangible_object.h"
+	"compare.h"
+	"distance.h"
 
 1390263996 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/vector2d.cpp
 	"vector2d.h"
+	"vector2d.h"
 
-1389988521 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/vector2d.h
+1409786068 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/vector2d.h
 
 1390264002 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/vector2f.cpp
 	"vector2f.h"
+	"vector2f.h"
 
 1390264007 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/vector2i.cpp
+	"vector2i.h"
 	"vector2i.h"
 
 1389988329 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/vector2i.h
 
 1390264012 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/vector3d.cpp
 	"vector3d.h"
+	"vector3d.h"
 
-1389988533 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/vector3d.h
+1409786019 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/vector3d.h
+	<vector2d.h>
 	<vector2d.h>
 
 1390264015 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/vector3f.cpp
 	"vector3f.h"
+	"vector3f.h"
 
-1389988504 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/vector3f.h
+1409786007 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/vector3f.h
+	<vector2f.h>
 	<vector2f.h>
 
 1390264020 source:/Users/jamesnakano/Dropbox/My Programs/C++/2dworld/src/vector3i.cpp
 	"vector3i.h"
+	"vector3i.h"
 
 1389988593 /Users/jamesnakano/Dropbox/My Programs/C++/2dworld/include/vector3i.h
+	"vector2i.h"
 	"vector2i.h"
 

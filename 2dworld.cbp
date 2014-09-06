@@ -16,9 +16,6 @@
 					<Add option="-g" />
 					<Add directory="include" />
 				</Compiler>
-				<Linker>
-					<Add library="C:\Users\James\Dropbox\My Programs\C\glut32.lib" />
-				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/2dworld" prefix_auto="1" extension_auto="1" />

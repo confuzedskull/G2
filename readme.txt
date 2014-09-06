@@ -21,7 +21,7 @@ Controls:
 
 Known Bugs:
 -shooting is disabled
--game time isn't displayed correctly in the information overlay
+-keyboard movement not regulated by the game clock
 -grabbing an object and moving it into another sometimes makes them stack ontop of eachother
 
 Disclaimer:

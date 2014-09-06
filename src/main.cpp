@@ -17,10 +17,6 @@
 //This is a basic 2D game engine created from the ground up using openGL and glut
 //Disclaimer: The glut and opengl libraries are obviously not mine, but everything else is an original creation.
 //
-const int left=1;
-const int right=2;
-const int up=3;
-const int down=4;
 GLfloat size=3.0;
 bool* key_states = new bool[256]; // Create an array of boolean values of letters
 
@@ -44,10 +40,10 @@ char text7[10];
 char text8[10];
 char text9[10];
 char text10[20];
-char text11[15];
-char text12[15];
-int temp_toggle[2];
-int toggle_text=1;
+char text11[20];
+char text12[20];
+bool temp_toggle=false;
+bool toggle_text=false;
 clickable_object* clickable_objects = new clickable_object[game::max_objects];
 projectile bullet;
 
@@ -101,26 +97,18 @@ void check_clicked()
     for(int a=0; a<game::max_objects; a++)
     {
         if(right_clicked && clickable_objects[a].right_clicked())
-        {
             right_clicked=true;
-        }
         else
-        {
             right_clicked=false;
-        }
     }
     cursor::right_clicked_an_object = right_clicked;
     bool grabbed=true;
     for(int a=0; a<game::max_objects; a++)
     {
         if(grabbed && clickable_objects[a].grabbed())
-        {
             grabbed=true;
-        }
         else
-        {
             grabbed=false;
-        }
     }
     cursor::grabbed_an_object = grabbed;
 }
@@ -155,29 +143,29 @@ void change_size(int w, int h)
     window_height=h;
 }
 
-void mouse_click( int button, int state, int x, int y )
+void mouse_click(int button, int state, int x, int y)
 {
-    if ( button==GLUT_LEFT_BUTTON && state==GLUT_DOWN )
+    if(button==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
     {
         cursor::left_down.set(x,window_height-y);
         cursor::left_click=true;
     }
 
-    if ( button==GLUT_LEFT_BUTTON && state==GLUT_UP )
+    if(button==GLUT_LEFT_BUTTON && state==GLUT_UP)
     {
         cursor::left_up.set(x,window_height-y);
         cursor::highlighting=false;
         cursor::left_click=false;
     }
 
-    if ( button==GLUT_RIGHT_BUTTON && state==GLUT_DOWN )
+    if(button==GLUT_RIGHT_BUTTON && state==GLUT_DOWN)
     {
         cursor::highlighting=false;
         cursor::right_click=true;
         cursor::right_down.set(x,window_height-y);
     }
 
-    if ( button==GLUT_RIGHT_BUTTON && state==GLUT_UP )
+    if(button==GLUT_RIGHT_BUTTON && state==GLUT_UP)
     {
         cursor::highlighting=false;
         cursor::right_click=false;
@@ -237,52 +225,37 @@ void key_up(unsigned char key, int x, int y)
 
 void key_operations(void)
 {
-    if (key_states['w'] || key_states['W'])
-    {
-        clickable_objects[cursor::selected_object].move_forward(0.01);
-    }
+    if(key_states['w'] || key_states['W'])
+    clickable_objects[cursor::selected_object].move_forward(0.01);
 
-    if (key_states['s'] || key_states['S'])
-    {
-        clickable_objects[cursor::selected_object].move_back(0.01);
-    }
+    if(key_states['s'] || key_states['S'])
+    clickable_objects[cursor::selected_object].move_back(0.01);
 
-    if (key_states['a'] || key_states['A'])
-    {
-        clickable_objects[cursor::selected_object].move_left(0.01);
-    }
+    if(key_states['a'] || key_states['A'])
+    clickable_objects[cursor::selected_object].move_left(0.01);
 
-    if (key_states['d'] || key_states['D'])
-    {
-        clickable_objects[cursor::selected_object].move_right(0.01);
-    }
+    if(key_states['d'] || key_states['D'])
+    clickable_objects[cursor::selected_object].move_right(0.01);
 
-    if (key_states['q'] || key_states['Q'])
-    {
-        clickable_objects[cursor::selected_object].turn_left(0.01);
-    }
+    if(key_states['q'] || key_states['Q'])
+    clickable_objects[cursor::selected_object].turn_left(0.01);
 
-    if (key_states['e'] || key_states['E'])
-    {
-        clickable_objects[cursor::selected_object].turn_right(0.01);
-    }
+    if(key_states['e'] || key_states['E'])
+    clickable_objects[cursor::selected_object].turn_right(0.01);
 
-    if (key_states['i'] || key_states['I'])
+    if(key_states['i'] || key_states['I'])
     {
-        if(toggle_text==1)
-            temp_toggle[1]=0;
-
-        if(toggle_text==0)
-            temp_toggle[1]=1;
+        if(toggle_text)
+            temp_toggle=false;
+        else
+            temp_toggle=true;
     }
     else
-        toggle_text=temp_toggle[1];
+        toggle_text=temp_toggle;
 
 // spacebar
     if (key_states[32])
-    {
         bullet.fire(clickable_objects[cursor::selected_object]);
-    }
 
 //escape
     if (key_states[27])
@@ -292,36 +265,36 @@ void key_operations(void)
 void text()
 {
     sprintf(text0,"object no.%i", clickable_objects[cursor::selected_object].number);
-    glutPrint (window_width/40,window_height -20, GLUT_BITMAP_HELVETICA_12, text0, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window_width/40,window_height-20, GLUT_BITMAP_HELVETICA_12, text0, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text1,"coordinates=%.2f,%.2f", clickable_objects[cursor::selected_object].current.x,clickable_objects[cursor::selected_object].current.y);
     glutPrint (window_width/40,window_height-40, GLUT_BITMAP_HELVETICA_12, text1, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text2,"resting: %.2f, %.2f",clickable_objects[cursor::selected_object].rest.x,clickable_objects[cursor::selected_object].rest.y);
-    glutPrint (window_width/40,window_height -60, GLUT_BITMAP_HELVETICA_12, text2, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window_width/40,window_height-60, GLUT_BITMAP_HELVETICA_12, text2, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text3,"velocity %.2f,%.2f",clickable_objects[cursor::selected_object].velocity[1].x,clickable_objects[cursor::selected_object].velocity[1].y);
-    glutPrint (window_width/40,window_height -80, GLUT_BITMAP_HELVETICA_12, text3, 1.0f,0.0f,0.0f, 0.5f);
+    sprintf(text3,"velocity %.2f,%.2f",clickable_objects[cursor::selected_object].velocity[0].x,clickable_objects[cursor::selected_object].velocity[0].y);
+    glutPrint (window_width/40,window_height-80, GLUT_BITMAP_HELVETICA_12, text3, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text4,"velocity2 %.2f,%.2f",clickable_objects[cursor::selected_object].velocity[2].x,clickable_objects[cursor::selected_object].velocity[2].y);
-    glutPrint (window_width/40,window_height -100, GLUT_BITMAP_HELVETICA_12, text4, 1.0f,0.0f,0.0f, 0.5f);
+    sprintf(text4,"velocity2 %.2f,%.2f",clickable_objects[cursor::selected_object].velocity[1].x,clickable_objects[cursor::selected_object].velocity[1].y);
+    glutPrint (window_width/40,window_height-100, GLUT_BITMAP_HELVETICA_12, text4, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text5,"delta_time x: %.2f y:%.2f",clickable_objects[cursor::selected_object].delta_time[1],clickable_objects[cursor::selected_object].delta_time[2]);
-    glutPrint (window_width/40,window_height -120, GLUT_BITMAP_HELVETICA_12, text5, 1.0f,0.0f,0.0f, 0.5f);
+    sprintf(text5,"delta_time x: %.2f y:%.2f",clickable_objects[cursor::selected_object].delta_time[0],clickable_objects[cursor::selected_object].delta_time[1]);
+    glutPrint (window_width/40,window_height-120, GLUT_BITMAP_HELVETICA_12, text5, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text6,"momentum: %.2f %.2f",clickable_objects[cursor::selected_object].momentum.x,clickable_objects[cursor::selected_object].momentum.y);
-    glutPrint (window_width/40,window_height -140, GLUT_BITMAP_HELVETICA_12, text6, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window_width/40,window_height-140, GLUT_BITMAP_HELVETICA_12, text6, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text7,"force: %.2f %.2f",clickable_objects[cursor::selected_object].force.x,clickable_objects[cursor::selected_object].force.y);
-    glutPrint (window_width/40,window_height -160, GLUT_BITMAP_HELVETICA_12, text7, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window_width/40,window_height-160, GLUT_BITMAP_HELVETICA_12, text7, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text8,"acceleration: %.2f %.2f",clickable_objects[cursor::selected_object].acceleration.x,clickable_objects[cursor::selected_object].acceleration.y);
     glutPrint (window_width/40,window_height-180, GLUT_BITMAP_HELVETICA_12, text8, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text9,"delta_time velocity: %.2f %.2f",clickable_objects[cursor::selected_object].delta_time[3],clickable_objects[cursor::selected_object].delta_time[4]);
+    sprintf(text9,"delta_time velocity: %.2f %.2f",clickable_objects[cursor::selected_object].delta_time[2],clickable_objects[cursor::selected_object].delta_time[3]);
     glutPrint (window_width/40,window_height-200, GLUT_BITMAP_HELVETICA_12, text9, 1.0f,0.0f,0.0f, 0.5f);
 
-    sprintf(text10,"touching object no. L:%d R:%d T:%d B:%d",clickable_objects[cursor::selected_object].touching[left], clickable_objects[cursor::selected_object].touching[right], clickable_objects[cursor::selected_object].touching[up],clickable_objects[cursor::selected_object].touching[down]);
+    sprintf(text10,"touching object no. L:%d R:%d T:%d B:%d",clickable_objects[cursor::selected_object].touching[0], clickable_objects[cursor::selected_object].touching[1], clickable_objects[cursor::selected_object].touching[2],clickable_objects[cursor::selected_object].touching[3]);
     glutPrint (window_width/40,window_height-220, GLUT_BITMAP_HELVETICA_12, text10, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text11,"game time: %.2f",game::time);
@@ -377,7 +350,6 @@ void init_objects()
     clickable_objects[4].set_boundaries();
     std::clog<<"object#"<<clickable_objects[4].number<<": "<<clickable_objects[4].name<<" initialized."<<std::endl;
 
-
     //fifth object from clickable_objects array
     clickable_objects[5].name="blue square";
     clickable_objects[5].primary_color.set(BLUE);
@@ -386,7 +358,6 @@ void init_objects()
     clickable_objects[5].height=64;
     clickable_objects[5].set_boundaries();
     std::clog<<"object#"<<clickable_objects[5].number<<": "<<clickable_objects[5].name<<" initialized."<<std::endl;
-
 }
 
 void render_scene(void)
@@ -407,11 +378,8 @@ void render_scene(void)
 //render the selection box
     cursor::selection_box();
 //TOP
-    if(toggle_text==1)
-    {
-        text();
-    }
-
+    if(toggle_text)
+    text();
     glFlush();
 }
 
@@ -420,7 +388,6 @@ void update_scene()
     key_operations();//keyboard controls
     cursor::set_boundaries();//calculate the size of the selection box
     game::time_elapsed = ((float)clock()-game::time_started)/CLOCKS_PER_SEC;//update the start time
-    game::time = ((float)clock()-game::time_started)/CLOCKS_PER_SEC;
     //calculate the physics for all clickable_objects
     clickable_objects[0].physics();
     clickable_objects[1].physics();
@@ -429,7 +396,8 @@ void update_scene()
     clickable_objects[4].physics();
     clickable_objects[5].physics();
     bullet.update();
-    collision_detection();//calculate object collision
+    bullet.physics();
+    collision_detection();
     check_clicked();
 
 //mouse interactivity
@@ -440,9 +408,11 @@ void update_scene()
     clickable_objects[4].mouse_function();
     clickable_objects[5].mouse_function();
 
+//This function acts like timer so that events occur at the set frequency
     if(compare(game::time_elapsed,frequency)==1)//time elapsed is > frequency
     {
         game::time_started=clock();//reset the start time
+        game::time+=frequency;//increment the game clock
         //move clickable_objects
         clickable_objects[0].perform_actions();//scripted movement
         clickable_objects[1].move_to_point(clickable_objects[1].rally->x,clickable_objects[1].rally->y, 1);
@@ -470,7 +440,7 @@ int main(int argc, char **argv)
 {
     std::clog<<"entering main...\n";
     /* initialize random seed: */
-    srand ( time(NULL) );
+    srand (time(NULL));
     //initialize objects
     std::clog<<"initializing objects...\n";
     init_objects();

@@ -7,11 +7,11 @@ class physics_object: public tangible_object
 {
     public:
     float mass;
-    double delta_time[4];//each element of array represents how much time a change in a direction or velocity took
-    //1:change in x, 2:change in velocity, 3:change in velocity x, 4:change in velocity y
-    double start_time[4];
-    double stop_time[4];
-    vector2f velocity[2];// 1:initial velocity, 2: final velocity
+    float delta_time[4];//each element of array represents how much time a change in a direction or velocity took
+    //0:change in x, 1:change in velocity, 2:change in velocity x, 3:change in velocity y
+    float start_time[4];
+    float stop_time[4];
+    vector2f velocity[2];// 0:initial velocity, 1: final velocity
     vector2f acceleration;
     vector2f momentum;
     vector2f force;
