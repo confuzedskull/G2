@@ -99,7 +99,6 @@ publish
 # Others
 [Bb]in
 [Oo]bj
-src/old/
 sql
 TestResults
 *.Cache
@@ -164,7 +163,8 @@ pip-log.txt
 .DS_Store
 
 # CodeBlocks stuff
-*.cbp
-*.cscope_file_list
-*.depend
-*.layout
+2dworld.cbp
+2dworld.cscope_file_list
+2dworld.depend
+2dworld.layout
+src/old/
