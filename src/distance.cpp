@@ -1,5 +1,4 @@
 #include <math.h>
-#include "point3f.h"
 #include "point2i.h"
 #include "point2f.h"
 
@@ -11,11 +10,6 @@ float distance(float x1, float y1, float x2, float y2)//calculates distance give
 int distance(int x1, int y1, int x2, int y2)//calculates distance given x,y values
 {
     return (sqrt(pow((x2 - x1),2) + pow((y2 - y1),2)));
-}
-
-float distance(point3f A, point3f B)//calculates distance from A to B
-{
-    return (sqrt(pow((B.x - A.x),2) + pow((B.y - A.y),2)));
 }
 
 int distance(point2i A, point2i B)//calculates distance from A to B

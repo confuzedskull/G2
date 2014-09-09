@@ -1,11 +1,11 @@
 #include "movable_object.h"
-#include "compare.h"
-#include "distance.h"
 #include <math.h>
-#include "point2f.h"
-#include "vector2f.h"
 #include <queue>
 #include <iostream>
+#include "compare.h"
+#include "distance.h"
+#include "point2f.h"
+#include "vector2f.h"
 
 std::queue< std::vector<int> > actions;
 

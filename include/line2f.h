@@ -2,6 +2,7 @@
 #define LINE2F_H
 #include "point2f.h"
 
+//A line2f is a 2D line that consists of three point2f's
 class line2f
 {
     public:
@@ -14,5 +15,4 @@ class line2f
     line2f();
     line2f(point2f a, point2f b);
 };
-
 #endif // LINE2F_H

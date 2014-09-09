@@ -3,15 +3,16 @@
 #include "tangible_object.h"
 #include "vector2f.h"
 
+//A physics object has physical properties and inherits the ability to detect collision from the tangible object class
 class physics_object: public tangible_object
 {
     public:
     float mass;
-    float delta_time[4];//each element of array represents how much time a change in a direction or velocity took
-    //0:change in x, 1:change in velocity, 2:change in velocity x, 3:change in velocity y
-    float start_time[4];
-    float stop_time[4];
-    vector2f velocity[2];// 0:initial velocity, 1: final velocity
+    float delta_time[4];/*each element of this array represents how much time a change in a direction or velocity took
+    0:change in x, 1:change in y, 2:change in velocity x, 3:change in velocity y*/
+    float start_time[4];//same as above except it stores the start times
+    float stop_time[4];//same as above except it stores the stop times
+    vector2f velocity[2];// index 0:initial velocity, index 1: final velocity
     vector2f acceleration;
     vector2f momentum;
     vector2f force;
@@ -26,8 +27,5 @@ class physics_object: public tangible_object
     void friction();
     void physics();
     physics_object();
-
 };
-
 #endif // PHYSICS_H
-

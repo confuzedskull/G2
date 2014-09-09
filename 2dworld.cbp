@@ -61,7 +61,6 @@
 		<Unit filename="include/point2i.h" />
 		<Unit filename="include/projectile.h" />
 		<Unit filename="include/tangible_object.h" />
-		<Unit filename="include/vector2d.h" />
 		<Unit filename="include/vector2f.h" />
 		<Unit filename="include/vector2i.h" />
 		<Unit filename="src/clickable_object.cpp" />
@@ -80,7 +79,6 @@
 		<Unit filename="src/point2i.cpp" />
 		<Unit filename="src/projectile.cpp" />
 		<Unit filename="src/tangible_object.cpp" />
-		<Unit filename="src/vector2d.cpp" />
 		<Unit filename="src/vector2f.cpp" />
 		<Unit filename="src/vector2i.cpp" />
 		<Extensions>

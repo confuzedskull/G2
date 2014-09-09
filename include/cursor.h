@@ -5,12 +5,10 @@
 #include "object.h"
 #include "game.h"
 
+//The cursor class stores data from the mouse that it's interfaced with. Since there can only be one mouse, all the data is static.
 class cursor
 {
 public:
-
-char* name;
-int number;
 static point2f passive;
 static point2f left_down;
 static point2f left_up;
@@ -38,5 +36,4 @@ static int objects_selected();
 static void set_boundaries();
 static void selection_box();
 };
-
 #endif // CURSOR_H

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <math.h>
+#include <windows.h>
 #include "game.h"
 #include "cursor.h"
 #include "distance.h"
@@ -17,9 +18,7 @@
 //This is a basic 2D game engine created from the ground up using openGL and glut
 //Disclaimer: The glut and opengl libraries are obviously not mine, but everything else is an original creation.
 //
-GLfloat size=3.0;
-bool* key_states = new bool[256]; // Create an array of boolean values of letters
-
+bool* key_states = new bool[256]; //stores each on/off state of a keyboard key
 //coordinates of program window
 int window_x=100;
 int window_y=100;
@@ -27,7 +26,6 @@ int window_y=100;
 int window_width=640;
 int window_height=320;
 double frequency=0.01;//refresh rate in seconds
-
 //text for information overlay
 char text0[30];
 char text1[30];
@@ -46,7 +44,7 @@ bool temp_toggle=false;
 bool toggle_text=false;
 clickable_object* clickable_objects = new clickable_object[game::max_objects];
 projectile bullet;
-
+//This prints text of rgba color at x,y on the screen
 void glutPrint(float x, float y, LPVOID font, char* text, float r, float g, float b, float a)
 {
     if(!text || !strlen(text)) return;
@@ -112,35 +110,27 @@ void check_clicked()
     }
     cursor::grabbed_an_object = grabbed;
 }
-
+//resize the window
 void change_size(int w, int h)
 {
     // Prevent a divide by zero, when window is too short
     // (you cant make a window of zero width).
     if (h == 0)
         h = 1;
-    float ratio =  w * 1.0 / h;
-
     // Use the Projection Matrix
     glMatrixMode(GL_PROJECTION);
-
     // Reset Matrix
     glLoadIdentity();
-
     glOrtho(0.0,(GLdouble)w,0.0,(GLdouble)h, -1.0,1.0);
-
     // Get Back to the Modelview
     glMatrixMode(GL_MODELVIEW);
-
     glLoadIdentity();
-
     // Set the viewport to be the entire window
     glViewport(0, 0, w, h);
     glClear(GL_COLOR_BUFFER_BIT);
     glFlush();
-
-    window_width=w;
-    window_height=h;
+    window_width=w;//set the global window width
+    window_height=h;//set the global window height
 }
 
 void mouse_click(int button, int state, int x, int y)
@@ -252,11 +242,9 @@ void key_operations(void)
     }
     else
         toggle_text=temp_toggle;
-
 // spacebar
     if (key_states[32])
         bullet.fire(clickable_objects[cursor::selected_object]);
-
 //escape
     if (key_states[27])
         exit(0);
@@ -350,7 +338,7 @@ void init_objects()
     clickable_objects[4].set_boundaries();
     std::clog<<"object#"<<clickable_objects[4].number<<": "<<clickable_objects[4].name<<" initialized."<<std::endl;
 
-    //fifth object from clickable_objects array
+    //sixth object from clickable_objects array
     clickable_objects[5].name="blue square";
     clickable_objects[5].primary_color.set(BLUE);
     clickable_objects[5].current.set(224,160);
@@ -363,7 +351,6 @@ void init_objects()
 void render_scene(void)
 {
     glClear(GL_COLOR_BUFFER_BIT);// Clear Color Buffers
-
 //render the clickable_objects
 //NOTE: clickable_objects are rendered ontop of eachother according to the order in which they are rendered
 //BOTTOM
@@ -399,7 +386,6 @@ void update_scene()
     bullet.physics();
     collision_detection();
     check_clicked();
-
 //mouse interactivity
     clickable_objects[0].mouse_function();
     clickable_objects[1].mouse_function();
@@ -407,7 +393,6 @@ void update_scene()
     clickable_objects[3].mouse_function();
     clickable_objects[4].mouse_function();
     clickable_objects[5].mouse_function();
-
 //This function acts like timer so that events occur at the set frequency
     if(compare(game::time_elapsed,frequency)==1)//time elapsed is > frequency
     {
@@ -461,7 +446,6 @@ int main(int argc, char **argv)
     glutKeyboardUpFunc(key_up); // Tell GLUT to use the method "keyUp" for key releases
     glutMouseFunc(mouse_click);
     glutMotionFunc(mouse_drag);
-    // enter GLUT event processing cycle
     glutDisplayFunc(render_scene);
     std::clog<<"rendering...\n";
     glutMainLoop();
