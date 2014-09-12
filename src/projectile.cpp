@@ -15,39 +15,34 @@
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "projectile.h"
+#include "distance.h"
+#include "compare.h"
 
-void projectile::reset()
+void projectile::fire(complex_object source)//an object fires a projectile
 {
-    current.x=rest.x;
-    current.y=rest.y;
-    fired=false;
-}
-
-void projectile::fire(object source)//an object fires a projectile
-{
-    if(!fired)
-    {
-        current.x=source.current.x;
-        rest.x=source.current.x;
-        current.y=source.current.y;
-        rest.y=source.current.y;
-        rotation=source.rotation;
-        calc_step();//orient it to the direction aiming
-        fired=true;
-    }
+    current.set(source.current.x,source.current.y);//put the projectile where the source is
+    rotation=source.rotation;//match the rotation of the source
+    fired=true;
+    visible=true;
 }
 
 void projectile::update()
 {
-//        set_boundaries();
-
     if(fired)
-        move_forward(range);
+    {
+        if(compare(traveled,range)==-1)//projectile is fired and not out of range
+        {
+            move_forward(speed);
+            traveled+=speed;
+        }
+        else
+            fired=false;
+    }
     else
     {
-        //set projectile position to somewhere outside of scene
-        current.x=0;
-        current.y=0;
+        current.set(0.0f,0.0f);//set projectile position to somewhere outside of scene
+        traveled=0.0f;
+        visible=false;
     }
 }
 
@@ -56,10 +51,9 @@ projectile::projectile()
     name="projectile";
     width=10;
     height=10;
-    range=1000;
+    range=500.0f;
+    traveled=0.0f;
+    speed=25.0f;
     fired=false;
-    step_size=0.5;
-//        set_boundaries();
     primary_color=RED;
-
 }

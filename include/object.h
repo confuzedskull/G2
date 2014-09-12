@@ -40,6 +40,7 @@ class object
     float width, height;
     color primary_color;//RGB values
     bool visible;
+    bool rendered;
     float xmax,xmin,ymax,ymin;//the boundaries of the object
     void set_boundaries();//calculates the max's and mins
     void render();//draws the object

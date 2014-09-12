@@ -242,6 +242,17 @@ void movable_object::turn_to_point(point2f destination)
 {
     turn_to_point(destination.x,destination.y);
 }
+
+void movable_object::walk_to_point(point2f destination)
+{
+    walk_to_point(destination.x,destination.y,1.0f);
+}
+
+void movable_object::walk_to_point(float destination_x, float destination_y)
+{
+    walk_to_point(destination_x,destination_y,1.0f);
+}
+
 //moves object to destination over time at specified rate
 void movable_object::walk_to_point(float destination_x, float destination_y, float rate)
 {
@@ -250,10 +261,8 @@ void movable_object::walk_to_point(float destination_x, float destination_y, flo
         turn_to_point(destination_x,destination_y);
         if(compare(distance(current.x,current.y,destination_x,destination_y),1.5)==-1)
             rally_set=false;
-        current.x+=step[3].x*rate;
-        current.y+=step[3].y*rate;
+        walk_forward(rate);
     }
-
 }
 
 void movable_object::walk_to_point(point2f destination, float rate)
@@ -266,7 +275,7 @@ void movable_object::move_to_point(float destination_x, float destination_y, flo
 {
     if(rally_set)
     {
-        movable_object::     turn_to_point(destination_x,destination_y);
+        movable_object::turn_to_point(destination_x,destination_y);
         if(compare(distance(current.x,current.y,destination_x,destination_y),1.5f)==-1)//less than or same
         {
             rally_set=false;
@@ -274,7 +283,6 @@ void movable_object::move_to_point(float destination_x, float destination_y, flo
         move_forward(rate);
         moving_forward=true;
     }
-
 }
 
 void movable_object::move_to_point(point2f destination,float rate)
@@ -282,13 +290,23 @@ void movable_object::move_to_point(point2f destination,float rate)
     move_to_point(destination.x,destination.y,rate);
 }
 
+void movable_object::move_to_point(point2f destination)
+{
+    move_to_point(destination.x,destination.y,1.0f);
+}
+
+void movable_object::move_to_point(float destination_x,float destination_y)
+{
+    move_to_point(destination_x,destination_y,1.0f);
+}
+
 void movable_object::add_action(int action_no, int times)
 {
     std::vector<int> action;
-    action.push_back(action_no);//number of the action to do
-    action.push_back(times);//number of times to do the action
-    action.push_back(0);//how many times its already been done
-    actions.push(action);
+    action.push_back(action_no);//number of the action to do. this will be put at index 0
+    action.push_back(times);//number of times to do the action. this will be stored at index 1
+    action.push_back(0);//how many times its already been done. this will be stored at index 2
+    actions.push(action);//add this vector to the actions queue
 }
 
 void movable_object::perform_actions()
@@ -297,7 +315,7 @@ void movable_object::perform_actions()
     {
         if(actions.front().at(2)<actions.front().at(1))//times done is less than times to do
         {
-            switch(actions.front().at(0))
+            switch(actions.front().at(0))//action number from index 0 of the stored vector
             {
             case 1://move left
                 move_left();

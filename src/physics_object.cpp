@@ -142,7 +142,6 @@ void physics_object::physics()
     calc_points();
     calc_sides();
     reset_motion();
-    //collision();
 }
 
 physics_object::physics_object()
@@ -154,5 +153,4 @@ physics_object::physics_object()
     velocity[1].x=0.00;
     velocity[1].y=0.00;
     std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
-
 }

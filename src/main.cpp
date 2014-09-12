@@ -254,7 +254,7 @@ void key_operations(void)
     else
         toggle_text=temp_toggle;
 // spacebar
-    if (key_states[32])
+    if(key_states[32] && !bullet.fired)
         bullet.fire(clickable_objects[cursor::selected_object]);
 //escape
     if (key_states[27])
@@ -362,6 +362,8 @@ void init_objects()
 void render_scene(void)
 {
     glClear(GL_COLOR_BUFFER_BIT);// Clear Color Buffers
+//render the projectiles
+    bullet.render();
 //render the clickable_objects
 //NOTE: clickable_objects are rendered ontop of eachother according to the order in which they are rendered
 //BOTTOM
@@ -371,8 +373,6 @@ void render_scene(void)
     clickable_objects[2].render();
     clickable_objects[1].render();
     clickable_objects[0].render();
-//render the projectiles
-    bullet.render();
 //render the selection box
     cursor::selection_box();
 //TOP
@@ -393,7 +393,6 @@ void update_scene()
     clickable_objects[3].physics();
     clickable_objects[4].physics();
     clickable_objects[5].physics();
-    bullet.update();
     bullet.physics();
     collision_detection();
     check_clicked();
@@ -409,6 +408,8 @@ void update_scene()
     {
         game::time_started=clock();//reset the start time
         game::time+=frequency;//increment the game clock
+        //move bullet
+        bullet.update();
         //move clickable_objects
         clickable_objects[0].perform_actions();//scripted movement
         clickable_objects[1].move_to_point(clickable_objects[1].rally->x,clickable_objects[1].rally->y, 1);

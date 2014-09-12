@@ -57,17 +57,20 @@ void complex_object::calc_points()
 void complex_object::render()
 {
     glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
-    if(!visible)
+    if(!rendered)
     {
         std::clog<<"object#"<<number<<": "<<name<<" rendered."<<std::endl;
-        visible=true;
+        rendered=true;
     }
-    glBegin(GL_POLYGON);//draws a filled in rectangle
-    glVertex2f(back_left.x, back_left.y); // The bottom left corner
-    glVertex2f(front_left.x, front_left.y); // The top left corner
-    glVertex2f(front_right.x, front_right.y); // The top right corner
-    glVertex2f(back_right.x, back_right.y); // The bottom right corner
-    glEnd();//finish drawing
+    if(visible)
+    {
+        glBegin(GL_POLYGON);//draws a filled in rectangle
+        glVertex2f(back_left.x, back_left.y); // The bottom left corner
+        glVertex2f(front_left.x, front_left.y); // The top left corner
+        glVertex2f(front_right.x, front_right.y); // The top right corner
+        glVertex2f(back_right.x, back_right.y); // The bottom right corner
+        glEnd();//finish drawing
+    }
 }
 
 complex_object::complex_object()
@@ -76,4 +79,3 @@ complex_object::complex_object()
     set_boundaries();
     std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
 }
-

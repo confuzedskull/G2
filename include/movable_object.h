@@ -46,7 +46,6 @@ public:
     void turn_right(float degrees);
     void turn_left();
     void turn_left(float degrees);
-    //move functions make the object move immediately in given direction
     void move_left();
     void move_left(float units_left);
     void move_right();
@@ -55,7 +54,8 @@ public:
     void move_forward(float units_forward);
     void move_back();
     void move_back(float units_back);
-    //walking functions make the object move over time in a given direction
+    /*walking functions make the object move a set distance called a step.
+    This gives objects their own movement speed whereas the move functions move all objects at the same rate.*/
     void walk_left();
     void walk_left(int steps_left);
     void walk_right();
@@ -71,9 +71,13 @@ public:
     //moves object to destination over time at specified rate
     void walk_to_point(float destination_x, float destination_y, float rate);
     void walk_to_point(point2f destination, float rate);
+    void walk_to_point(point2f destination);
+    void walk_to_point(float destination_x, float destination_y);
     //moves object to destination over time at specified rate
     void move_to_point(float destination_x, float destination_y, float rate);
     void move_to_point(point2f destination,float rate);
+    void move_to_point(point2f destination);
+    void move_to_point(float destination_x, float destination_y);
     void add_action(int action_no, int times);//adds an action to be performed n times to the action cue
     void perform_actions();//makes the object perform the cued actions
     movable_object();

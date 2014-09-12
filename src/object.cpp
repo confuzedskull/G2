@@ -36,21 +36,21 @@ void object::render()//draws the object
     glTranslatef(-current.x,-current.y,0.0);//translate object according to coordinates
     glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
 
-    if(!visible)
+    if(!rendered)
     {
         std::clog<<"object#"<<number<<": "<<name<<" rendered."<<std::endl;
-        visible=true;
+        rendered=true;
     }
-    glBegin(GL_POLYGON);//draws a filled in rectangle
-    glVertex2f(xmin, ymin); // The bottom left corner
-    glVertex2f(xmin, ymax); // The top left corner
-    glVertex2f(xmax, ymax); // The top right corner
-    glVertex2f(xmax, ymin); // The bottom right corner
-
-    glEnd();//finish drawing
-
-    glPopMatrix();//reset transformation matrix
-
+    if(visible)
+    {
+        glBegin(GL_POLYGON);//draws a filled in rectangle
+        glVertex2f(xmin, ymin); // The bottom left corner
+        glVertex2f(xmin, ymax); // The top left corner
+        glVertex2f(xmax, ymax); // The top right corner
+        glVertex2f(xmax, ymin); // The bottom right corner
+        glEnd();//finish drawing
+        glPopMatrix();//reset transformation matrix
+    }
 }
 
 void object::rotate(float angle)
@@ -77,7 +77,8 @@ object::object()//constructs an object
     height=64;
     primary_color.set(0.0,0.0,0.0);
     rotation=90;
-    visible=false;
+    visible=true;
+    rendered=false;
     std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
 }
 
@@ -94,5 +95,6 @@ object::object(float x, float y, float w, float h, color c)
     height=h;
     primary_color.set(c);
     rotation=90.1;
-    visible=false;
+    visible=true;
+    rendered=false;
 }

@@ -27,11 +27,11 @@ Controls:
 <Keyboard>
 -W,A,S,D to move up,left,down,right
 -Q and E to rotate
+-spacebar to shoot
 -i for information overlay
 -esc to quit
 
 Known Bugs:
--shooting is disabled
 -keyboard movement not regulated by the game clock
 -grabbing an object and moving it into another sometimes makes them stack ontop of eachother
 

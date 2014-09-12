@@ -135,34 +135,37 @@ void clickable_object::mouse_function()
 void clickable_object::render()
 {
     glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
-    if(!visible)
+    if(!rendered)
     {
         std::clog<<"object#"<<number<<": "<<name<<" rendered."<<std::endl;
-        visible=true;
+        rendered=true;
     }
-    glBegin(GL_POLYGON);//draws a solid shape
-    glVertex2f(back_left.x, back_left.y); // The bottom left corner
-    glVertex2f(front_left.x, front_left.y); // The top left corner
-    glVertex2f(front_right.x, front_right.y); // The top right corner
-    glVertex2f(back_right.x, back_right.y); // The bottom right corner
-    glEnd();//finish drawing
-
-    if(selected)//selected objects are marked by a green ellipse
+    if(visible)
     {
-        //we need an x and y radius so that the ellipse matches the object's dimensions
-        float x_radius = distance(front_left,back_right)/2;//measure half the diagonal
-        float y_radius = distance(back_left,front_right)/2;//measure the other diagonal
-        glPushMatrix();//modify transformation matrix
-        glTranslatef(current.x,current.y,0.0);//translate ellipse according to object coordinates
-        glColor3f(0.0,1.0,0.0);//make the lines green
-        glBegin(GL_LINE_LOOP);//draws a series of lines
-        for (int i=0; i<360; i++)
-        {
-            float deg_rad = i*3.14159/180;//calculate degrees in radians
-            glVertex2f(cos(deg_rad)*x_radius,sin(deg_rad)*y_radius);//ellipse function
-        }
+        glBegin(GL_POLYGON);//draws a solid shape
+        glVertex2f(back_left.x, back_left.y); // The bottom left corner
+        glVertex2f(front_left.x, front_left.y); // The top left corner
+        glVertex2f(front_right.x, front_right.y); // The top right corner
+        glVertex2f(back_right.x, back_right.y); // The bottom right corner
         glEnd();//finish drawing
-        glPopMatrix();//reset transformation matrix
+
+        if(selected)//selected objects are marked by a green ellipse
+        {
+            //we need an x and y radius so that the ellipse matches the object's dimensions
+            float x_radius = distance(front_left,back_right)/2;//measure half the diagonal
+            float y_radius = distance(back_left,front_right)/2;//measure the other diagonal
+            glPushMatrix();//modify transformation matrix
+            glTranslatef(current.x,current.y,0.0);//translate ellipse according to object coordinates
+            glColor3f(0.0,1.0,0.0);//make the lines green
+            glBegin(GL_LINE_LOOP);//draws a series of lines
+            for (int i=0; i<360; i++)
+            {
+                float deg_rad = i*3.14159/180;//calculate degrees in radians
+                glVertex2f(cos(deg_rad)*x_radius,sin(deg_rad)*y_radius);//ellipse function
+            }
+            glEnd();//finish drawing
+            glPopMatrix();//reset transformation matrix
+        }
     }
 }
 
