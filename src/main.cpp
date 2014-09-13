@@ -54,7 +54,9 @@ char text12[20];
 bool temp_toggle=false;
 bool toggle_text=false;
 clickable_object* clickable_objects = new clickable_object[game::max_objects];
-projectile bullet;
+projectile* bullets = new projectile[game::max_projectiles];
+int current_bullet=0;
+double fire_rate=0.0001;
 //This prints text of rgba color at x,y on the screen
 void glutPrint(float x, float y, LPVOID font, char* text, float r, float g, float b, float a)
 {
@@ -254,8 +256,12 @@ void key_operations(void)
     else
         toggle_text=temp_toggle;
 // spacebar
-    if(key_states[32] && !bullet.fired)
-        bullet.fire(clickable_objects[cursor::selected_object]);
+    if(key_states[32])
+    {
+        if(!bullets[current_bullet].fired)
+        bullets[current_bullet].fire(clickable_objects[cursor::selected_object]);
+    }
+
 //escape
     if (key_states[27])
         exit(0);
@@ -357,13 +363,23 @@ void init_objects()
     clickable_objects[5].height=64;
     clickable_objects[5].set_boundaries();
     std::clog<<"object#"<<clickable_objects[5].number<<": "<<clickable_objects[5].name<<" initialized."<<std::endl;
+
+    bullets[0].primary_color=RED;
+    bullets[1].primary_color=YELLOW;
+    bullets[2].primary_color=GREEN;
+    bullets[3].primary_color=BLUE;
+    bullets[4].primary_color=BLACK;
 }
 
 void render_scene(void)
 {
     glClear(GL_COLOR_BUFFER_BIT);// Clear Color Buffers
 //render the projectiles
-    bullet.render();
+    bullets[0].render();
+    bullets[1].render();
+    bullets[2].render();
+    bullets[3].render();
+    bullets[4].render();
 //render the clickable_objects
 //NOTE: clickable_objects are rendered ontop of eachother according to the order in which they are rendered
 //BOTTOM
@@ -393,31 +409,54 @@ void update_scene()
     clickable_objects[3].physics();
     clickable_objects[4].physics();
     clickable_objects[5].physics();
-    bullet.physics();
+    //calculate the physics for all projectiles
+    bullets[0].physics();
+    bullets[1].physics();
+    bullets[2].physics();
+    bullets[3].physics();
+    bullets[4].physics();
+    //apply collision effects
     collision_detection();
+    //check if objects are clicked
     check_clicked();
-//mouse interactivity
+    //mouse interactivity
     clickable_objects[0].mouse_function();
     clickable_objects[1].mouse_function();
     clickable_objects[2].mouse_function();
     clickable_objects[3].mouse_function();
     clickable_objects[4].mouse_function();
     clickable_objects[5].mouse_function();
-//This function acts like timer so that events occur at the set frequency
+    //This function acts like timer so that events occur at the set frequency
     if(compare(game::time_elapsed,frequency)==1)//time elapsed is > frequency
     {
         game::time_started=clock();//reset the start time
         game::time+=frequency;//increment the game clock
-        //move bullet
-        bullet.update();
         //move clickable_objects
         clickable_objects[0].perform_actions();//scripted movement
-        clickable_objects[1].move_to_point(clickable_objects[1].rally->x,clickable_objects[1].rally->y, 1);
-        clickable_objects[2].move_to_point(clickable_objects[2].rally->x,clickable_objects[2].rally->y, 1);
-        clickable_objects[3].move_to_point(clickable_objects[3].rally->x,clickable_objects[3].rally->y, 1);
-        clickable_objects[4].move_to_point(clickable_objects[4].rally->x,clickable_objects[4].rally->y, 1);
-        clickable_objects[5].move_to_point(clickable_objects[5].rally->x,clickable_objects[5].rally->y, 1);
+        clickable_objects[1].move_to_point(*clickable_objects[1].rally);
+        clickable_objects[2].move_to_point(*clickable_objects[2].rally);
+        clickable_objects[3].move_to_point(*clickable_objects[3].rally);
+        clickable_objects[4].move_to_point(*clickable_objects[4].rally);
+        clickable_objects[5].move_to_point(*clickable_objects[5].rally);
+        //move bullets
+        bullets[0].update();
+        bullets[1].update();
+        bullets[2].update();
+        bullets[3].update();
+        bullets[4].update();
         glutPostRedisplay();//update the scene
+    }
+    if(compare(game::time_elapsed,fire_rate)==1)
+    {
+        game::shoot_time_started=clock();
+        game::shoot_time+=fire_rate;
+        if(bullets[current_bullet].fired)
+        {
+            if(current_bullet+1<game::max_projectiles)
+            current_bullet++;
+            else
+            current_bullet=0;
+        }
     }
 }
 

@@ -30,13 +30,18 @@ void projectile::update()
 {
     if(fired)
     {
-        if(compare(traveled,range)==-1)//projectile is fired and not out of range
+        if(compare(traveled,range)==-1)//projectile is not out of range
         {
             move_forward(speed);
             traveled+=speed;
         }
         else
+        {
             fired=false;
+            current.set(0.0f,0.0f);//set projectile position to somewhere outside of scene
+            traveled=0.0f;
+            visible=false;
+        }
     }
     else
     {
@@ -51,9 +56,9 @@ projectile::projectile()
     name="projectile";
     width=10;
     height=10;
-    range=500.0f;
+    range=1000.0f;
     traveled=0.0f;
-    speed=25.0f;
+    speed=10.0f;
     fired=false;
     primary_color=RED;
 }

@@ -21,8 +21,11 @@
 namespace game
 {
     const int max_objects = 6;//maximum number of objects to be created for collision testing. must be constant so that array can be made using this number
+    const int max_projectiles = 5;
     extern float time;
     extern clock_t time_started;
     extern double time_elapsed;
+    extern float shoot_time;
+    extern clock_t shoot_time_started;
 }
 #endif // GAME_H
