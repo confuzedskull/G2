@@ -21,6 +21,7 @@
 #include <math.h>
 #include <windows.h>
 #include "game.h"
+#include "window.h"
 #include "cursor.h"
 #include "distance.h"
 #include "compare.h"
@@ -30,13 +31,13 @@
 #include "projectile.h"
 
 bool* key_states = new bool[256]; //stores each on/off state of a keyboard key
-//coordinates of program window
-int window_x=100;
-int window_y=100;
-//width and height of program window
-int window_width=640;
-int window_height=320;
-double frequency=0.01;//refresh rate in seconds
+bool temp_toggle=false;
+bool toggle_text=false;
+clickable_object* clickable_objects = new clickable_object[game::max_objects];
+projectile* bullets = new projectile[game::max_projectiles];
+int current_bullet=0;
+double fire_rate=0.0001;
+
 //text for information overlay
 char text0[30];
 char text1[30];
@@ -51,12 +52,7 @@ char text9[10];
 char text10[20];
 char text11[20];
 char text12[20];
-bool temp_toggle=false;
-bool toggle_text=false;
-clickable_object* clickable_objects = new clickable_object[game::max_objects];
-projectile* bullets = new projectile[game::max_projectiles];
-int current_bullet=0;
-double fire_rate=0.0001;
+
 //This prints text of rgba color at x,y on the screen
 void glutPrint(float x, float y, LPVOID font, char* text, float r, float g, float b, float a)
 {
@@ -123,40 +119,18 @@ void check_clicked()
     }
     cursor::grabbed_an_object = grabbed;
 }
-//resize the window
-void change_size(int w, int h)
-{
-    // Prevent a divide by zero, when window is too short
-    // (you cant make a window of zero width).
-    if (h == 0)
-        h = 1;
-    // Use the Projection Matrix
-    glMatrixMode(GL_PROJECTION);
-    // Reset Matrix
-    glLoadIdentity();
-    glOrtho(0.0,(GLdouble)w,0.0,(GLdouble)h, -1.0,1.0);
-    // Get Back to the Modelview
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    // Set the viewport to be the entire window
-    glViewport(0, 0, w, h);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glFlush();
-    window_width=w;//set the global window width
-    window_height=h;//set the global window height
-}
 
 void mouse_click(int button, int state, int x, int y)
 {
     if(button==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
     {
-        cursor::left_down.set(x,window_height-y);
+        cursor::left_down.set(x,window::height-y);
         cursor::left_click=true;
     }
 
     if(button==GLUT_LEFT_BUTTON && state==GLUT_UP)
     {
-        cursor::left_up.set(x,window_height-y);
+        cursor::left_up.set(x,window::height-y);
         cursor::highlighting=false;
         cursor::left_click=false;
     }
@@ -165,14 +139,14 @@ void mouse_click(int button, int state, int x, int y)
     {
         cursor::highlighting=false;
         cursor::right_click=true;
-        cursor::right_down.set(x,window_height-y);
+        cursor::right_down.set(x,window::height-y);
     }
 
     if(button==GLUT_RIGHT_BUTTON && state==GLUT_UP)
     {
         cursor::highlighting=false;
         cursor::right_click=false;
-        cursor::right_up.set(x,window_height-y);
+        cursor::right_up.set(x,window::height-y);
         cursor::right_dragging=false;
     }
 }
@@ -185,16 +159,16 @@ void mouse_drag(int x, int y)
         if(!cursor::left_clicked_an_object && !cursor::grabbed_an_object)
         {
             //this condition makes it so that the user has to make a rectangle larger than 10x10. That way, highlighting is less sensitive
-            if(compare(x,cursor::left_down.x+10)==1 && compare((window_height - y),cursor::left_down.y+10)==-1)
+            if(compare(x,cursor::left_down.x+10)==1 && compare((window::height - y),cursor::left_down.y+10)==-1)
                 cursor::highlighting=true;
             else
                 cursor::highlighting=false;
         }
         else
             cursor::highlighting=false;
-        cursor::left_drag.set(x,(window_height-y));
+        cursor::left_drag.set(x,(window::height-y));
         //see if drag point is different from start point
-        if(compare(x,cursor::left_down.x)!=0 && compare((window_height - y),cursor::left_down.y)!=0)
+        if(compare(x,cursor::left_down.x)!=0 && compare((window::height - y),cursor::left_down.y)!=0)
             cursor::left_dragging=true;
         else
             cursor::left_dragging=false;
@@ -205,9 +179,9 @@ void mouse_drag(int x, int y)
     if(cursor::right_click)
     {
         cursor::highlighting=false;
-        cursor::right_drag.set(x,(window_height-y));
+        cursor::right_drag.set(x,(window::height-y));
         //see if drag point is different from start point
-        if(compare(x,cursor::right_down.x)!=0 && compare((window_height - y),cursor::right_down.y)!=0)
+        if(compare(x,cursor::right_down.x)!=0 && compare((window::height - y),cursor::right_down.y)!=0)
             cursor::right_dragging=true;
         else
             cursor::right_dragging=false;
@@ -270,43 +244,43 @@ void key_operations(void)
 void text()
 {
     sprintf(text0,"object no.%i", clickable_objects[cursor::selected_object].number);
-    glutPrint (window_width/40,window_height-20, GLUT_BITMAP_HELVETICA_12, text0, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-20, GLUT_BITMAP_HELVETICA_12, text0, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text1,"coordinates=%.2f,%.2f", clickable_objects[cursor::selected_object].current.x,clickable_objects[cursor::selected_object].current.y);
-    glutPrint (window_width/40,window_height-40, GLUT_BITMAP_HELVETICA_12, text1, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-40, GLUT_BITMAP_HELVETICA_12, text1, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text2,"resting: %.2f, %.2f",clickable_objects[cursor::selected_object].rest.x,clickable_objects[cursor::selected_object].rest.y);
-    glutPrint (window_width/40,window_height-60, GLUT_BITMAP_HELVETICA_12, text2, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-60, GLUT_BITMAP_HELVETICA_12, text2, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text3,"velocity %.2f,%.2f",clickable_objects[cursor::selected_object].velocity[0].x,clickable_objects[cursor::selected_object].velocity[0].y);
-    glutPrint (window_width/40,window_height-80, GLUT_BITMAP_HELVETICA_12, text3, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-80, GLUT_BITMAP_HELVETICA_12, text3, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text4,"velocity2 %.2f,%.2f",clickable_objects[cursor::selected_object].velocity[1].x,clickable_objects[cursor::selected_object].velocity[1].y);
-    glutPrint (window_width/40,window_height-100, GLUT_BITMAP_HELVETICA_12, text4, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-100, GLUT_BITMAP_HELVETICA_12, text4, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text5,"delta_time x: %.2f y:%.2f",clickable_objects[cursor::selected_object].delta_time[0],clickable_objects[cursor::selected_object].delta_time[1]);
-    glutPrint (window_width/40,window_height-120, GLUT_BITMAP_HELVETICA_12, text5, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-120, GLUT_BITMAP_HELVETICA_12, text5, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text6,"momentum: %.2f %.2f",clickable_objects[cursor::selected_object].momentum.x,clickable_objects[cursor::selected_object].momentum.y);
-    glutPrint (window_width/40,window_height-140, GLUT_BITMAP_HELVETICA_12, text6, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-140, GLUT_BITMAP_HELVETICA_12, text6, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text7,"force: %.2f %.2f",clickable_objects[cursor::selected_object].force.x,clickable_objects[cursor::selected_object].force.y);
-    glutPrint (window_width/40,window_height-160, GLUT_BITMAP_HELVETICA_12, text7, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-160, GLUT_BITMAP_HELVETICA_12, text7, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text8,"acceleration: %.2f %.2f",clickable_objects[cursor::selected_object].acceleration.x,clickable_objects[cursor::selected_object].acceleration.y);
-    glutPrint (window_width/40,window_height-180, GLUT_BITMAP_HELVETICA_12, text8, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-180, GLUT_BITMAP_HELVETICA_12, text8, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text9,"delta_time velocity: %.2f %.2f",clickable_objects[cursor::selected_object].delta_time[2],clickable_objects[cursor::selected_object].delta_time[3]);
-    glutPrint (window_width/40,window_height-200, GLUT_BITMAP_HELVETICA_12, text9, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-200, GLUT_BITMAP_HELVETICA_12, text9, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text10,"touching object no. L:%d R:%d T:%d B:%d",clickable_objects[cursor::selected_object].touching[0], clickable_objects[cursor::selected_object].touching[1], clickable_objects[cursor::selected_object].touching[2],clickable_objects[cursor::selected_object].touching[3]);
-    glutPrint (window_width/40,window_height-220, GLUT_BITMAP_HELVETICA_12, text10, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-220, GLUT_BITMAP_HELVETICA_12, text10, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text11,"game time: %.2f",game::time);
-    glutPrint (window_width/40,window_height-240, GLUT_BITMAP_HELVETICA_12, text11, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-240, GLUT_BITMAP_HELVETICA_12, text11, 1.0f,0.0f,0.0f, 0.5f);
 
     sprintf(text12,"click:%.2f,%.2f",cursor::left_down.x,cursor::left_down.y);
-    glutPrint (window_width/40,window_height-260, GLUT_BITMAP_HELVETICA_12, text12, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-260, GLUT_BITMAP_HELVETICA_12, text12, 1.0f,0.0f,0.0f, 0.5f);
 }
 
 void init_objects()
@@ -316,7 +290,7 @@ void init_objects()
     //first object (yes first, because the index starts at 0) from clickable_objects array
     clickable_objects[0].name="small square";
     clickable_objects[0].primary_color.set(0.5,0.5,0.5);
-    clickable_objects[0].current.set(272,208);
+    clickable_objects[0].current.set(window::width/2-48,window::height/2+48);
     clickable_objects[0].width=32;
     clickable_objects[0].height=32;
     clickable_objects[0].set_boundaries();
@@ -337,28 +311,28 @@ void init_objects()
     //third object from clickable_objects array
     clickable_objects[2].name="yellow square";
     clickable_objects[2].primary_color.set(YELLOW);
-    clickable_objects[2].current.set(416.0,160.0);
+    clickable_objects[2].current.set(window::width/2+96,window::height/2);
     clickable_objects[2].set_boundaries();
     std::clog<<"object#"<<clickable_objects[2].number<<": "<<clickable_objects[2].name<<" initialized."<<std::endl;
 
     //fourth object from clickable_objects array
     clickable_objects[3].name="green square";
     clickable_objects[3].primary_color.set(GREEN);
-    clickable_objects[3].current.set(320.0,64);
+    clickable_objects[3].current.set(window::width/2,window::height/2-96);
     clickable_objects[3].set_boundaries();
     std::clog<<"object#"<<clickable_objects[3].number<<": "<<clickable_objects[3].name<<" initialized."<<std::endl;
 
     //fifth object from clickable_objects array
     clickable_objects[4].name="red square";
     clickable_objects[4].primary_color.set(RED);
-    clickable_objects[4].current.set(320,256);
+    clickable_objects[4].current.set(window::width/2,window::height/2+96);
     clickable_objects[4].set_boundaries();
     std::clog<<"object#"<<clickable_objects[4].number<<": "<<clickable_objects[4].name<<" initialized."<<std::endl;
 
     //sixth object from clickable_objects array
     clickable_objects[5].name="blue square";
     clickable_objects[5].primary_color.set(BLUE);
-    clickable_objects[5].current.set(224,160);
+    clickable_objects[5].current.set(window::width/2-96,window::height/2);
     clickable_objects[5].width=64;
     clickable_objects[5].height=64;
     clickable_objects[5].set_boundaries();
@@ -371,7 +345,7 @@ void init_objects()
     bullets[4].primary_color=BLACK;
 }
 
-void render_scene(void)
+void render_scene()
 {
     glClear(GL_COLOR_BUFFER_BIT);// Clear Color Buffers
 //render the projectiles
@@ -426,11 +400,11 @@ void update_scene()
     clickable_objects[3].mouse_function();
     clickable_objects[4].mouse_function();
     clickable_objects[5].mouse_function();
-    //This function acts like timer so that events occur at the set frequency
-    if(compare(game::time_elapsed,frequency)==1)//time elapsed is > frequency
+    //This function acts like timer so that events occur at the set window::refresh_rate
+    if(compare(game::time_elapsed,window::refresh_rate)==1)//time elapsed is > frequency
     {
         game::time_started=clock();//reset the start time
-        game::time+=frequency;//increment the game clock
+        game::time+=window::refresh_rate;//increment the game clock
         //move clickable_objects
         clickable_objects[0].perform_actions();//scripted movement
         clickable_objects[1].move_to_point(*clickable_objects[1].rally);
@@ -460,18 +434,6 @@ void update_scene()
     }
 }
 
-void initializeWindow()
-{
-    glClearColor (1.0, 1.0, 1.0, 1.0);//white background
-    glViewport(0,0,window_width,window_height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0.0, (GLdouble) window_width , 0.0, (GLdouble) window_height , -1.0, 1.0);
-    glClearColor (1.0, 1.0, 1.0, 1.0);//white background
-    glClear(GL_COLOR_BUFFER_BIT);
-    glFlush();
-}
-
 int main(int argc, char **argv)
 {
     std::clog<<"entering main...\n";
@@ -485,13 +447,13 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE| GLUT_RGB);
     std::clog<<"creating window...\n";
-    glutInitWindowPosition(window_x,window_y);
-    std::clog<<"window position: "<< window_x<< ","<< window_y<<std::endl;
-    glutInitWindowSize(window_width,window_height);
-    std::clog<<"window size: "<<window_width<<"X"<< window_height<<std::endl;
+    glutInitWindowPosition(window::position_x,window::position_y);
+    std::clog<<"window position: "<< window::position_x<< ","<< window::position_y<<std::endl;
+    glutInitWindowSize(window::width,window::height);
+    std::clog<<"window size: "<<window::width<<"X"<< window::height<<std::endl;
     glutCreateWindow("2D World");
-    initializeWindow();
-    glutReshapeFunc(change_size);
+    window::initialize();
+    glutReshapeFunc(window::change_size);
     glutIdleFunc(update_scene); //use this for animations
     glutKeyboardFunc(key_pressed); // Tell GLUT to use the method "keyPressed" for key presses
     glutKeyboardUpFunc(key_up); // Tell GLUT to use the method "keyUp" for key releases

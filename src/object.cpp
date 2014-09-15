@@ -15,7 +15,7 @@
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "object.h"
-
+#include "window.h"
 //initialize static variable
 int object::total_objects=0;
 
@@ -69,10 +69,8 @@ object::object()//constructs an object
     name="generic object";
     number=total_objects;
     total_objects++;
-    current.x=320.0;
-    current.y=160.0;
-    rest.x=320.0;
-    rest.y=160.0;
+    current.set(window::width/2,window::height/2);
+    rest.set(current.x,current.y);
     width=64;
     height=64;
     primary_color.set(0.0,0.0,0.0);
