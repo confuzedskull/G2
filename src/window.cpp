@@ -14,7 +14,15 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 #include "window.h"
-#include "object.h"
+#include "game.h"
+#include "ui.h"
+#include "cursor.h"
+#include "compare.h"
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
 //initialize the variables
 int window::width=640;
 int window::height=480;
@@ -55,4 +63,93 @@ void window::initialize()
     glClearColor(1.0, 1.0, 1.0, 1.0);//white background
     glClear(GL_COLOR_BUFFER_BIT);
     glFlush();
+}
+
+void window::render_scene()
+{
+    glClear(GL_COLOR_BUFFER_BIT);// Clear Color Buffers
+//render the projectiles
+    game::bullets[0].render();
+    game::bullets[1].render();
+    game::bullets[2].render();
+    game::bullets[3].render();
+    game::bullets[4].render();
+//render the clickable_objects
+//NOTE: clickable_objects are rendered ontop of eachother according to the order in which they are rendered
+//BOTTOM
+    game::clickable_objects[5].render();
+    game::clickable_objects[4].render();
+    game::clickable_objects[3].render();
+    game::clickable_objects[2].render();
+    game::clickable_objects[1].render();
+    game::clickable_objects[0].render();
+//render the selection box
+    cursor::selection_box();
+//TOP
+    if(ui::toggle_text)
+    ui::text();
+    glFlush();
+}
+
+void window::update_scene()
+{
+    ui::key_operations();//keyboard controls
+    cursor::set_boundaries();//calculate the size of the selection box
+    game::time_elapsed = ((float)clock()-game::time_started)/CLOCKS_PER_SEC;//update the start time
+    //calculate the physics for all clickable_objects
+    game::clickable_objects[0].physics();
+    game::clickable_objects[1].physics();
+    game::clickable_objects[2].physics();
+    game::clickable_objects[3].physics();
+    game::clickable_objects[4].physics();
+    game::clickable_objects[5].physics();
+    //calculate the physics for all projectiles
+    game::bullets[0].physics();
+    game::bullets[1].physics();
+    game::bullets[2].physics();
+    game::bullets[3].physics();
+    game::bullets[4].physics();
+    //apply collision effects
+    game::collision_detection();
+    //check if objects are clicked
+    ui::check_clicked();
+    //mouse interactivity
+    game::clickable_objects[0].mouse_function();
+    game::clickable_objects[1].mouse_function();
+    game::clickable_objects[2].mouse_function();
+    game::clickable_objects[3].mouse_function();
+    game::clickable_objects[4].mouse_function();
+    game::clickable_objects[5].mouse_function();
+    //This function acts like timer so that events occur at the set refresh rate
+    if(compare(game::time_elapsed,window::refresh_rate)==1)//time elapsed is > refresh rate
+    {
+        game::time_started=clock();//reset the start time
+        game::time+=window::refresh_rate;//increment the game clock
+        //move clickable_objects
+        game::clickable_objects[0].perform_actions();//scripted movement
+        game::clickable_objects[1].move_to_point(*game::clickable_objects[1].rally);
+        game::clickable_objects[2].move_to_point(*game::clickable_objects[2].rally);
+        game::clickable_objects[3].move_to_point(*game::clickable_objects[3].rally);
+        game::clickable_objects[4].move_to_point(*game::clickable_objects[4].rally);
+        game::clickable_objects[5].move_to_point(*game::clickable_objects[5].rally);
+        //move game::bullets
+        game::bullets[0].update();
+        game::bullets[1].update();
+        game::bullets[2].update();
+        game::bullets[3].update();
+        game::bullets[4].update();
+        glutPostRedisplay();//update the scene
+    }
+    if(compare(game::time_elapsed,game::fire_rate)==1)
+    {
+        game::shoot_time_started=clock();
+        game::shoot_time+=game::fire_rate;
+        if(game::bullets[game::current_bullet].fired)
+        {
+            if(game::current_bullet+1<game::max_projectiles)
+            game::current_bullet++;
+            else
+            game::current_bullet=0;
+        }
+    }
 }

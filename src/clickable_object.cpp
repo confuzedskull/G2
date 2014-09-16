@@ -20,7 +20,11 @@
 #include "distance.h"
 #include <math.h>
 #include <iostream>
-
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
 bool clickable_object::left_clicked()
 {
     if(cursor::left_click &&

@@ -17,7 +17,6 @@
 #ifndef CLICKABLE_H
 #define CLICKABLE_H
 #include "physics_object.h"
-
 //A clickable object interfaces with the cursor
 class clickable_object: public physics_object
 {

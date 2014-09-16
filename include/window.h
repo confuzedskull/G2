@@ -25,5 +25,7 @@ class window
         static double refresh_rate;
         static void change_size(int w, int h);
         static void initialize();
+        static void render_scene();
+        static void update_scene();
 };
 #endif // WINDOW_H

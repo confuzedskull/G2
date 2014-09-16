@@ -13,11 +13,14 @@
 
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
-
 #include "complex_object.h"
 #include <math.h>
 #include <iostream>
-
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
 void complex_object::calc_sides()
 {
     calc_points();

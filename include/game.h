@@ -13,10 +13,11 @@
 
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
-
 #ifndef GAME_H
 #define GAME_H
 #include <time.h>
+#include "clickable_object.h"
+#include "projectile.h"
 //The game namespace stores important settings and global variables for the program
 namespace game
 {
@@ -27,5 +28,11 @@ namespace game
     extern double time_elapsed;
     extern float shoot_time;
     extern clock_t shoot_time_started;
+    extern clickable_object* clickable_objects;
+    extern projectile* bullets;
+    extern int current_bullet;
+    const double fire_rate=0.0001;
+    void init_objects();
+    void collision_detection();
 }
 #endif // GAME_H

@@ -16,16 +16,11 @@
 
 #ifndef OBJECT_H
 #define OBJECT_H
-#include "color.h"
-#include "point2f.h"
 #include <stdlib.h>
 #include <iostream>
 #include <windows.h>
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#endif
+#include "color.h"
+#include "point2f.h"
 
 //This is the base class for all other object types. It has basic properties such as name, color, and dimensions.
 class object

@@ -35,7 +35,7 @@ Known Bugs:
 -keyboard movement not regulated by the game clock
 -grabbing an object and moving it into another sometimes makes them stack ontop of eachother
 -the program starts out with the small grey object shooting until you hit spacebar
-
+-the small grey object has RTS controls disabled in order for the scripted movement to work
 Disclaimer:
 This program was made using the OpenGL Utility Toolkit(GLUT) created by Mark Kilgard.
 I do not own the rights to this API nor do I claim them as my own.

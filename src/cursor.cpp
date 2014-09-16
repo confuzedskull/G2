@@ -15,10 +15,11 @@
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "cursor.h"
-#include "point2f.h"
-#include "object.h"
-#include "game.h"
-
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
 //initialize static variables
 bool cursor::left_click = false;
 point2f cursor::left_down =  point2f(0.0,0.0);

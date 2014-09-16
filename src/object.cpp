@@ -16,6 +16,12 @@
 
 #include "object.h"
 #include "window.h"
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
 //initialize static variable
 int object::total_objects=0;
 
