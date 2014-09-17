@@ -25,10 +25,10 @@
 #endif
 //initialize the variables
 int window::width=640;
-int window::height=480;
+int window::height=360;
 int window::position_x=100;
 int window::position_y=100;
-double window::refresh_rate=0.01;
+double window::refresh_rate=0.0166d;
 
 //resize the window
 void window::change_size(int w, int h)
@@ -69,11 +69,12 @@ void window::render_scene()
 {
     glClear(GL_COLOR_BUFFER_BIT);// Clear Color Buffers
 //render the projectiles
-    game::bullets[0].render();
-    game::bullets[1].render();
-    game::bullets[2].render();
-    game::bullets[3].render();
-    game::bullets[4].render();
+    game::projectiles[0].render();
+    game::projectiles[1].render();
+    game::projectiles[2].render();
+    game::projectiles[3].render();
+    game::projectiles[4].render();
+    game::projectiles[5].render();
 //render the clickable_objects
 //NOTE: clickable_objects are rendered ontop of eachother according to the order in which they are rendered
 //BOTTOM
@@ -87,7 +88,7 @@ void window::render_scene()
     cursor::selection_box();
 //TOP
     if(ui::toggle_text)
-    ui::text();
+    ui::print_text();
     glFlush();
 }
 
@@ -104,11 +105,12 @@ void window::update_scene()
     game::clickable_objects[4].physics();
     game::clickable_objects[5].physics();
     //calculate the physics for all projectiles
-    game::bullets[0].physics();
-    game::bullets[1].physics();
-    game::bullets[2].physics();
-    game::bullets[3].physics();
-    game::bullets[4].physics();
+    game::projectiles[0].physics();
+    game::projectiles[1].physics();
+    game::projectiles[2].physics();
+    game::projectiles[3].physics();
+    game::projectiles[4].physics();
+    game::projectiles[5].physics();
     //apply collision effects
     game::collision_detection();
     //check if objects are clicked
@@ -132,24 +134,13 @@ void window::update_scene()
         game::clickable_objects[3].move_to_point(*game::clickable_objects[3].rally);
         game::clickable_objects[4].move_to_point(*game::clickable_objects[4].rally);
         game::clickable_objects[5].move_to_point(*game::clickable_objects[5].rally);
-        //move game::bullets
-        game::bullets[0].update();
-        game::bullets[1].update();
-        game::bullets[2].update();
-        game::bullets[3].update();
-        game::bullets[4].update();
+        //move game::projectiles
+        game::projectiles[0].update();
+        game::projectiles[1].update();
+        game::projectiles[2].update();
+        game::projectiles[3].update();
+        game::projectiles[4].update();
+        game::projectiles[5].update();
         glutPostRedisplay();//update the scene
-    }
-    if(compare(game::time_elapsed,game::fire_rate)==1)
-    {
-        game::shoot_time_started=clock();
-        game::shoot_time+=game::fire_rate;
-        if(game::bullets[game::current_bullet].fired)
-        {
-            if(game::current_bullet+1<game::max_projectiles)
-            game::current_bullet++;
-            else
-            game::current_bullet=0;
-        }
     }
 }

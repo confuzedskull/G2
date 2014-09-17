@@ -22,6 +22,7 @@ void projectile::fire(complex_object source)//an object fires a projectile
 {
     current.set(source.current.x,source.current.y);//put the projectile where the source is
     rotation=source.rotation;//match the rotation of the source
+    primary_color.set(source.primary_color);//match the color of the source
     fired=true;
     visible=true;
 }
@@ -30,7 +31,7 @@ void projectile::update()
 {
     if(fired)
     {
-        if(compare(traveled,range)==-1)//projectile is not out of range
+        if(compare(traveled,range)==-1)//projectile is within range
         {
             move_forward(speed);
             traveled+=speed;
@@ -58,7 +59,7 @@ projectile::projectile()
     height=10;
     range=1000.0f;
     traveled=0.0f;
-    speed=10.0f;
+    speed=50.0f;
     fired=false;
     primary_color=RED;
 }

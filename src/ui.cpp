@@ -43,13 +43,13 @@ char ui::text11[20] = "";
 char ui::text12[20] = "";
 
 //This prints text of rgba color at x,y on the screen
-void ui::glutPrint(float x, float y, LPVOID font, char* text, float r, float g, float b, float a)
+void ui::glutPrint(float x, float y, LPVOID font, char* text, color c)
 {
     if(!text || !strlen(text)) return;
     bool blending = false;
     if(glIsEnabled(GL_BLEND)) blending = true;
     glEnable(GL_BLEND);
-    glColor4f(r,g,b,a);
+    glColor4f(c.r,c.g,c.b,c.a);
     glRasterPos2f(x,y);
     while (*text)
     {
@@ -59,46 +59,46 @@ void ui::glutPrint(float x, float y, LPVOID font, char* text, float r, float g, 
     if(!blending) glDisable(GL_BLEND);
 }
 
-void ui::text()
+void ui::print_text()
 {
     sprintf(text0,"object no.%i", game::clickable_objects[cursor::selected_object].number);
-    glutPrint (window::width/40,window::height-20, GLUT_BITMAP_HELVETICA_12, text0, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-20, GLUT_BITMAP_HELVETICA_12, text0, BLACK);
 
     sprintf(text1,"coordinates=%.2f,%.2f", game::clickable_objects[cursor::selected_object].current.x,game::clickable_objects[cursor::selected_object].current.y);
-    glutPrint (window::width/40,window::height-40, GLUT_BITMAP_HELVETICA_12, text1, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-40, GLUT_BITMAP_HELVETICA_12, text1, BLACK);
 
     sprintf(text2,"resting: %.2f, %.2f",game::clickable_objects[cursor::selected_object].rest.x,game::clickable_objects[cursor::selected_object].rest.y);
-    glutPrint (window::width/40,window::height-60, GLUT_BITMAP_HELVETICA_12, text2, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-60, GLUT_BITMAP_HELVETICA_12, text2, BLACK);
 
     sprintf(text3,"velocity %.2f,%.2f",game::clickable_objects[cursor::selected_object].velocity[0].x,game::clickable_objects[cursor::selected_object].velocity[0].y);
-    glutPrint (window::width/40,window::height-80, GLUT_BITMAP_HELVETICA_12, text3, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-80, GLUT_BITMAP_HELVETICA_12, text3, BLACK);
 
     sprintf(text4,"velocity2 %.2f,%.2f",game::clickable_objects[cursor::selected_object].velocity[1].x,game::clickable_objects[cursor::selected_object].velocity[1].y);
-    glutPrint (window::width/40,window::height-100, GLUT_BITMAP_HELVETICA_12, text4, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-100, GLUT_BITMAP_HELVETICA_12, text4, BLACK);
 
     sprintf(text5,"delta_time x: %.2f y:%.2f",game::clickable_objects[cursor::selected_object].delta_time[0],game::clickable_objects[cursor::selected_object].delta_time[1]);
-    glutPrint (window::width/40,window::height-120, GLUT_BITMAP_HELVETICA_12, text5, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-120, GLUT_BITMAP_HELVETICA_12, text5, BLACK);
 
     sprintf(text6,"momentum: %.2f %.2f",game::clickable_objects[cursor::selected_object].momentum.x,game::clickable_objects[cursor::selected_object].momentum.y);
-    glutPrint (window::width/40,window::height-140, GLUT_BITMAP_HELVETICA_12, text6, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-140, GLUT_BITMAP_HELVETICA_12, text6, BLACK);
 
     sprintf(text7,"force: %.2f %.2f",game::clickable_objects[cursor::selected_object].force.x,game::clickable_objects[cursor::selected_object].force.y);
-    glutPrint (window::width/40,window::height-160, GLUT_BITMAP_HELVETICA_12, text7, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-160, GLUT_BITMAP_HELVETICA_12, text7, BLACK);
 
     sprintf(text8,"acceleration: %.2f %.2f",game::clickable_objects[cursor::selected_object].acceleration.x,game::clickable_objects[cursor::selected_object].acceleration.y);
-    glutPrint (window::width/40,window::height-180, GLUT_BITMAP_HELVETICA_12, text8, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-180, GLUT_BITMAP_HELVETICA_12, text8, BLACK);
 
     sprintf(text9,"delta_time velocity: %.2f %.2f",game::clickable_objects[cursor::selected_object].delta_time[2],game::clickable_objects[cursor::selected_object].delta_time[3]);
-    glutPrint (window::width/40,window::height-200, GLUT_BITMAP_HELVETICA_12, text9, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-200, GLUT_BITMAP_HELVETICA_12, text9, BLACK);
 
     sprintf(text10,"touching object no. L:%d R:%d T:%d B:%d",game::clickable_objects[cursor::selected_object].touching[0], game::clickable_objects[cursor::selected_object].touching[1], game::clickable_objects[cursor::selected_object].touching[2],game::clickable_objects[cursor::selected_object].touching[3]);
-    glutPrint (window::width/40,window::height-220, GLUT_BITMAP_HELVETICA_12, text10, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-220, GLUT_BITMAP_HELVETICA_12, text10, BLACK);
 
     sprintf(text11,"game time: %.2f",game::time);
-    glutPrint (window::width/40,window::height-240, GLUT_BITMAP_HELVETICA_12, text11, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-240, GLUT_BITMAP_HELVETICA_12, text11, BLACK);
 
     sprintf(text12,"click:%.2f,%.2f",cursor::left_down.x,cursor::left_down.y);
-    glutPrint (window::width/40,window::height-260, GLUT_BITMAP_HELVETICA_12, text12, 1.0f,0.0f,0.0f, 0.5f);
+    glutPrint (window::width/40,window::height-260, GLUT_BITMAP_HELVETICA_12, text12, BLACK);
 }
 
 void ui::mouse_click(int button, int state, int x, int y)
@@ -249,8 +249,8 @@ void ui::key_operations(void)
 // spacebar
     if(key_states[32])
     {
-        if(!game::bullets[game::current_bullet].fired)
-        game::bullets[game::current_bullet].fire(game::clickable_objects[cursor::selected_object]);
+        if(!game::projectiles[cursor::selected_object].fired)
+            game::projectiles[cursor::selected_object].fire(game::clickable_objects[cursor::selected_object]);
     }
 //escape
     if (key_states[27])

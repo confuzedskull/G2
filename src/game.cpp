@@ -20,13 +20,10 @@
 
 //initialize variables
 clock_t game::time_started;
-clock_t game::shoot_time_started;
 float game::time = 0.0f;
-float game::shoot_time = 0.0f;
 double game::time_elapsed = 0.0d;
 clickable_object* game::clickable_objects = new clickable_object[max_objects];
-projectile* game::bullets = new projectile[max_projectiles];
-int game::current_bullet=0;
+projectile* game::projectiles = new projectile[max_projectiles];
 
 void game::collision_detection()
 {
@@ -97,10 +94,4 @@ void game::init_objects()
     clickable_objects[5].height=64;
     clickable_objects[5].set_boundaries();
     std::clog<<"object#"<<clickable_objects[5].number<<": "<<clickable_objects[5].name<<" initialized."<<std::endl;
-
-    bullets[0].primary_color=RED;
-    bullets[1].primary_color=YELLOW;
-    bullets[2].primary_color=GREEN;
-    bullets[3].primary_color=BLUE;
-    bullets[4].primary_color=BLACK;
 }

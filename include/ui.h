@@ -15,6 +15,7 @@
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 #ifndef UI_H
 #define UI_H
+#include "color.h"
 namespace ui
 {
         extern bool* key_states; //stores each on/off state of a keyboard key
@@ -34,8 +35,8 @@ namespace ui
         extern char text10[20];
         extern char text11[20];
         extern char text12[20];
-        void glutPrint(float x, float y, void* font, char* text, float r, float g, float b, float a);
-        void text();
+        void glutPrint(float x, float y, void* font, char* text, color c);
+        void print_text();
         void mouse_click(int button, int state, int x, int y);
         void check_clicked();
         void mouse_drag(int x, int y);
