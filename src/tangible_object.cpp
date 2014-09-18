@@ -59,22 +59,29 @@ void tangible_object::simon_says(object B)//object changes color according to si
 
 void tangible_object::identify(object B)//variable touching[] is updated with number of the touched object
 {
-    if(near_left(B))
-        touching[0]=B.number;
+    if(is_close(B))
+    {
+        if(near_left(B))
+            touching[0]=B.number;
+        else
+            touching[0]=0;
+        if(near_right(B))
+            touching[1]=B.number;
+        else
+            touching[1]=0;
+        if(near_front(B))
+            touching[2]=B.number;
+        else
+            touching[2]=0;
+        if(near_back(B))
+            touching[3]=B.number;
+        else
+            touching[3]=0;
+        collided=true;
+    }
     else
-        touching[0]=0;
-    if(near_right(B))
-        touching[1]=B.number;
-    else
-        touching[1]=0;
-    if(near_front(B))
-        touching[2]=B.number;
-    else
-        touching[2]=0;
-    if(near_back(B))
-        touching[3]=B.number;
-    else
-        touching[3]=0;
+        collided=false;
+
 }
 
 bool tangible_object::is_close(object B)
@@ -84,6 +91,7 @@ bool tangible_object::is_close(object B)
     else
         return false;
 }
+
 bool tangible_object::near_front(object B)
 {
     if(compare(distance(front,B.current),B.get_radius())<=0)
@@ -126,5 +134,6 @@ bool tangible_object::near_right(object B)
 tangible_object::tangible_object()
 {
     name="tangible object";
+    collided=false;
     std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
 }

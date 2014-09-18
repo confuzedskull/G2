@@ -118,8 +118,9 @@ void clickable_object::mouse_function()
     {
         if(cursor::right_click && !right_clicked())
         {
-            if(cursor::right_clicked_an_object)//move to right clicked object
+            if(cursor::right_clicked_an_object)
             {
+                //move to right clicked object
                 rally = &cursor::right_clicked_object->current;//set rally to reference point because current is always changing
             }
             else//move to right clicked empty space
@@ -128,8 +129,9 @@ void clickable_object::mouse_function()
             }
             rally_set=true;
         }
-        if(cursor::right_dragging && !right_clicked())//move to right drag
+        if(cursor::right_dragging && !right_clicked())
         {
+            //move to right drag
             rally = new point2f(cursor::right_drag.x,cursor::right_drag.y);
             rally_set=true;
         }

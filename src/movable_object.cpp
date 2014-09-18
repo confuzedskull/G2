@@ -271,7 +271,7 @@ void movable_object::walk_to_point(point2f destination, float rate)
 }
 
 //moves object to destination over time at specified rate
-void movable_object::move_to_point(float destination_x, float destination_y, float rate)
+bool movable_object::move_to_point(float destination_x, float destination_y, float rate)
 {
     if(rally_set)
     {
@@ -285,17 +285,17 @@ void movable_object::move_to_point(float destination_x, float destination_y, flo
     }
 }
 
-void movable_object::move_to_point(point2f destination,float rate)
+bool movable_object::move_to_point(point2f destination,float rate)
 {
     move_to_point(destination.x,destination.y,rate);
 }
 
-void movable_object::move_to_point(point2f destination)
+bool movable_object::move_to_point(point2f destination)
 {
     move_to_point(destination.x,destination.y,1.0f);
 }
 
-void movable_object::move_to_point(float destination_x,float destination_y)
+bool movable_object::move_to_point(float destination_x,float destination_y)
 {
     move_to_point(destination_x,destination_y,1.0f);
 }
@@ -309,7 +309,7 @@ void movable_object::add_action(int action_no, int times)
     actions.push(action);//add this vector to the actions queue
 }
 
-void movable_object::perform_actions()
+bool movable_object::perform_actions()
 {
     if(!actions.empty())
     {
@@ -340,7 +340,10 @@ void movable_object::perform_actions()
         }
         else
             actions.pop();
+        return true;
     }
+    else
+        return false;
 }
 
 movable_object::movable_object()
@@ -348,6 +351,6 @@ movable_object::movable_object()
     name="movable object";
     rally = &rest;
     rally_set=false;
-    step_size=0.001;
+    step_size=0.001f;
     std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
 }

@@ -29,6 +29,7 @@ class projectile: public physics_object
     bool fired;
     void fire(complex_object source);//an object fires a projectile
     void update();//updates the projectile's values
+    void reset();
     projectile();
 };
 #endif // PROJECTILE_H

@@ -69,21 +69,13 @@ void window::render_scene()
 {
     glClear(GL_COLOR_BUFFER_BIT);// Clear Color Buffers
 //render the projectiles
-    game::projectiles[0].render();
-    game::projectiles[1].render();
-    game::projectiles[2].render();
-    game::projectiles[3].render();
-    game::projectiles[4].render();
-    game::projectiles[5].render();
+    for(int i=0; i<game::max_projectiles; i++)
+    game::projectiles[i].render();
 //render the clickable_objects
 //NOTE: clickable_objects are rendered ontop of eachother according to the order in which they are rendered
 //BOTTOM
-    game::clickable_objects[5].render();
-    game::clickable_objects[4].render();
-    game::clickable_objects[3].render();
-    game::clickable_objects[2].render();
-    game::clickable_objects[1].render();
-    game::clickable_objects[0].render();
+    for(int i=0; i<game::max_objects; i++)
+    game::clickable_objects[i].render();
 //render the selection box
     cursor::selection_box();
 //TOP
@@ -98,49 +90,29 @@ void window::update_scene()
     cursor::set_boundaries();//calculate the size of the selection box
     game::time_elapsed = ((float)clock()-game::time_started)/CLOCKS_PER_SEC;//update the start time
     //calculate the physics for all clickable_objects
-    game::clickable_objects[0].physics();
-    game::clickable_objects[1].physics();
-    game::clickable_objects[2].physics();
-    game::clickable_objects[3].physics();
-    game::clickable_objects[4].physics();
-    game::clickable_objects[5].physics();
+    for(int i=0; i<game::max_objects; i++)
+    game::clickable_objects[i].physics();
     //calculate the physics for all projectiles
-    game::projectiles[0].physics();
-    game::projectiles[1].physics();
-    game::projectiles[2].physics();
-    game::projectiles[3].physics();
-    game::projectiles[4].physics();
-    game::projectiles[5].physics();
+    for(int i=0; i<game::max_projectiles; i++)
+    game::projectiles[i].physics();
     //apply collision effects
     game::collision_detection();
     //check if objects are clicked
     ui::check_clicked();
     //mouse interactivity
-    game::clickable_objects[0].mouse_function();
-    game::clickable_objects[1].mouse_function();
-    game::clickable_objects[2].mouse_function();
-    game::clickable_objects[3].mouse_function();
-    game::clickable_objects[4].mouse_function();
-    game::clickable_objects[5].mouse_function();
+    for(int i=0; i<game::max_objects; i++)
+    game::clickable_objects[i].mouse_function();
     //This function acts like timer so that events occur at the set refresh rate
     if(compare(game::time_elapsed,window::refresh_rate)==1)//time elapsed is > refresh rate
     {
         game::time_started=clock();//reset the start time
         game::time+=window::refresh_rate;//increment the game clock
         //move clickable_objects
-        game::clickable_objects[0].perform_actions();//scripted movement
-        game::clickable_objects[1].move_to_point(*game::clickable_objects[1].rally);
-        game::clickable_objects[2].move_to_point(*game::clickable_objects[2].rally);
-        game::clickable_objects[3].move_to_point(*game::clickable_objects[3].rally);
-        game::clickable_objects[4].move_to_point(*game::clickable_objects[4].rally);
-        game::clickable_objects[5].move_to_point(*game::clickable_objects[5].rally);
+        for(int i=0; i<game::max_objects; i++)
+        game::clickable_objects[i].perform_actions()||game::clickable_objects[i].move_to_point(*game::clickable_objects[i].rally);
         //move game::projectiles
-        game::projectiles[0].update();
-        game::projectiles[1].update();
-        game::projectiles[2].update();
-        game::projectiles[3].update();
-        game::projectiles[4].update();
-        game::projectiles[5].update();
+        for(int i=0; i<game::max_projectiles; i++)
+        game::projectiles[i].update();
         glutPostRedisplay();//update the scene
     }
 }

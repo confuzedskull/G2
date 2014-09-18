@@ -31,11 +31,22 @@ void game::collision_detection()
     {
         for(int b=0; b<game::max_objects; b++)
         {
-            if(a!=b && clickable_objects[a].is_close(clickable_objects[b]))
+            if(a!=b && clickable_objects[a].is_close(clickable_objects[b]))//check objects colliding with other objects
             {
                 clickable_objects[a].identify(clickable_objects[b]);
                 clickable_objects[a].repel(clickable_objects[b]);
             }
+            if(a!=b && clickable_objects[a].is_close(projectiles[b]))//check objects colliding with projectiles
+            {
+                clickable_objects[a].identify(projectiles[b]);
+            }
+            if(a!=b && projectiles[a].is_close(clickable_objects[b]))//check projectiles colliding with objects
+            {
+                projectiles[a].collided=true;
+                projectiles[a].reset();
+            }
+            else
+                projectiles[a].collided=false;
         }
     }
 }

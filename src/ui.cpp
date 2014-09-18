@@ -220,22 +220,22 @@ void ui::key_up(unsigned char key, int x, int y)
 void ui::key_operations(void)
 {
     if(key_states['w'] || key_states['W'])
-    game::clickable_objects[cursor::selected_object].move_forward(0.01);
+    game::clickable_objects[cursor::selected_object].move_forward(0.005);
 
     if(key_states['s'] || key_states['S'])
-    game::clickable_objects[cursor::selected_object].move_back(0.01);
+    game::clickable_objects[cursor::selected_object].move_back(0.005);
 
     if(key_states['a'] || key_states['A'])
-    game::clickable_objects[cursor::selected_object].move_left(0.01);
+    game::clickable_objects[cursor::selected_object].move_left(0.005);
 
     if(key_states['d'] || key_states['D'])
-    game::clickable_objects[cursor::selected_object].move_right(0.01);
+    game::clickable_objects[cursor::selected_object].move_right(0.005);
 
     if(key_states['q'] || key_states['Q'])
-    game::clickable_objects[cursor::selected_object].turn_left(0.01);
+    game::clickable_objects[cursor::selected_object].turn_left(0.005);
 
     if(key_states['e'] || key_states['E'])
-    game::clickable_objects[cursor::selected_object].turn_right(0.01);
+    game::clickable_objects[cursor::selected_object].turn_right(0.005);
 
     if(key_states['i'] || key_states['I'])
     {

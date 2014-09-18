@@ -31,7 +31,7 @@ void projectile::update()
 {
     if(fired)
     {
-        if(compare(traveled,range)==-1)//projectile is within range
+        if(compare(traveled,range)==-1 && !collided)//projectile is within range and hasn't collided
         {
             move_forward(speed);
             traveled+=speed;
@@ -39,17 +39,18 @@ void projectile::update()
         else
         {
             fired=false;
-            current.set(0.0f,0.0f);//set projectile position to somewhere outside of scene
-            traveled=0.0f;
-            visible=false;
+            reset();
         }
     }
     else
-    {
-        current.set(0.0f,0.0f);//set projectile position to somewhere outside of scene
-        traveled=0.0f;
-        visible=false;
-    }
+        reset();
+}
+
+void projectile::reset()
+{
+    current.set(0.0f,0.0f);//set projectile position to somewhere outside of scene
+    traveled=0.0f;
+    visible=false;
 }
 
 projectile::projectile()
