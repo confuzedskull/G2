@@ -16,6 +16,7 @@
 
 #include "game.h"
 #include "window.h"
+#include <iostream>
 #include <time.h>
 
 //initialize variables

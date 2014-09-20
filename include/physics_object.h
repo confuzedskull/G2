@@ -40,7 +40,6 @@ class physics_object: public tangible_object
     void calc_force();
     void calc_momentum();
     void inertia();
-    void friction();
     void physics();
     physics_object();
 };

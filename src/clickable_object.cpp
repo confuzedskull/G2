@@ -21,8 +21,15 @@
 #include <math.h>
 #include <iostream>
 #ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #include <GLUT/glut.h>
 #else
+#ifdef _WIN32
+#include <windows.h>
+#endif
+#include <GL/gl.h>
+#include <GL/glu.h>
 #include <GL/glut.h>
 #endif
 bool clickable_object::left_clicked()
@@ -112,6 +119,10 @@ void clickable_object::mouse_function()
     {
         current.set(cursor::left_drag.x,cursor::left_drag.y);
         cursor::grabbed_an_object=true;
+        moving_forward=true;
+        moving_backward=true;
+        moving_left=true;
+        moving_right=true;
     }
 
     if(selected)//you can only move an object when it is selected

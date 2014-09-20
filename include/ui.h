@@ -25,8 +25,8 @@ namespace ui
         extern char text0[30];
         extern char text1[30];
         extern char text2[20];
-        extern char text3[20];
-        extern char text4[20];
+        extern char text3[30];
+        extern char text4[30];
         extern char text5[20];
         extern char text6[10];
         extern char text7[10];

@@ -17,7 +17,7 @@
 #include "tangible_object.h"
 #include "compare.h"
 #include "distance.h"
-
+#include <iostream>
 void tangible_object::repel(object B)//object moves away from object B
 {
     if(near_front(B))

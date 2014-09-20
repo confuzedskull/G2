@@ -18,6 +18,7 @@
 #define PROJECTILE_H
 #include "physics_object.h"
 #include "point2f.h"
+
 //A projectile collides with other physics objects
 class projectile: public physics_object
 {

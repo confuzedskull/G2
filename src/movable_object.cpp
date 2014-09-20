@@ -51,7 +51,7 @@ void movable_object::reset_motion()
 
 bool movable_object::moving_vertical()
 {
-    if(moving() && compare(current.y,rest.y)!=0)
+    if(moving_forward || moving_backward)
         return true;
     else
         return false;
@@ -59,7 +59,7 @@ bool movable_object::moving_vertical()
 
 bool movable_object::moving_horizontal()
 {
-    if(moving() && compare(current.x,rest.x)!=0)
+    if(moving_left || moving_right)
         return true;
     else
         return false;
@@ -259,7 +259,7 @@ void movable_object::walk_to_point(float destination_x, float destination_y, flo
     if(rally_set)
     {
         turn_to_point(destination_x,destination_y);
-        if(compare(distance(current.x,current.y,destination_x,destination_y),1.5)==-1)
+        if(compare(distance(current.x,current.y,destination_x,destination_y),1.5f)==-1)
             rally_set=false;
         walk_forward(rate);
     }
@@ -282,22 +282,25 @@ bool movable_object::move_to_point(float destination_x, float destination_y, flo
         }
         move_forward(rate);
         moving_forward=true;
+        return true;
     }
+    else
+        return false;
 }
 
 bool movable_object::move_to_point(point2f destination,float rate)
 {
-    move_to_point(destination.x,destination.y,rate);
+    return move_to_point(destination.x,destination.y,rate);
 }
 
 bool movable_object::move_to_point(point2f destination)
 {
-    move_to_point(destination.x,destination.y,1.0f);
+    return move_to_point(destination.x,destination.y,1.0f);
 }
 
 bool movable_object::move_to_point(float destination_x,float destination_y)
 {
-    move_to_point(destination_x,destination_y,1.0f);
+    return move_to_point(destination_x,destination_y,1.0f);
 }
 
 void movable_object::add_action(int action_no, int times)

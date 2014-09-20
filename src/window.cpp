@@ -13,16 +13,25 @@
 
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
+
 #include "window.h"
 #include "game.h"
 #include "ui.h"
 #include "cursor.h"
 #include "compare.h"
 #ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #include <GLUT/glut.h>
 #else
+#ifdef _WIN32
+#include <windows.h>
+#endif
+#include <GL/gl.h>
+#include <GL/glu.h>
 #include <GL/glut.h>
 #endif
+
 //initialize the variables
 int window::width=640;
 int window::height=360;
@@ -107,6 +116,9 @@ void window::update_scene()
     {
         game::time_started=clock();//reset the start time
         game::time+=window::refresh_rate;//increment the game clock
+        //apply inertia
+        for(int i=0; i<game::max_objects; i++)
+        game::clickable_objects[i].inertia();
         //move clickable_objects
         for(int i=0; i<game::max_objects; i++)
         game::clickable_objects[i].perform_actions()||game::clickable_objects[i].move_to_point(*game::clickable_objects[i].rally);

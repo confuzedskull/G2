@@ -19,11 +19,19 @@
 #include "cursor.h"
 #include "compare.h"
 #ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #include <GLUT/glut.h>
 #else
+#ifdef _WIN32
+  #include <windows.h>
+#endif
+#include <GL/gl.h>
+#include <GL/glu.h>
 #include <GL/glut.h>
 #endif
-
+#include <cstring>
+#include <stdio.h>
 //initialize variables
 bool* ui::key_states=new bool[256];
 bool ui::temp_toggle=false;
@@ -31,8 +39,8 @@ bool ui::toggle_text=false;
 char ui::text0[30] = "";
 char ui::text1[30] = "";
 char ui::text2[20] = "";
-char ui::text3[20] = "";
-char ui::text4[20] = "";
+char ui::text3[30] = "";
+char ui::text4[30] = "";
 char ui::text5[20] = "";
 char ui::text6[10] = "";
 char ui::text7[10] = "";
@@ -43,7 +51,7 @@ char ui::text11[20] = "";
 char ui::text12[20] = "";
 
 //This prints text of rgba color at x,y on the screen
-void ui::glutPrint(float x, float y, LPVOID font, char* text, color c)
+void ui::glutPrint(float x, float y, void* font, char* text, color c)
 {
     if(!text || !strlen(text)) return;
     bool blending = false;
@@ -64,16 +72,16 @@ void ui::print_text()
     sprintf(text0,"object no.%i", game::clickable_objects[cursor::selected_object].number);
     glutPrint (window::width/40,window::height-20, GLUT_BITMAP_HELVETICA_12, text0, BLACK);
 
-    sprintf(text1,"coordinates=%.2f,%.2f", game::clickable_objects[cursor::selected_object].current.x,game::clickable_objects[cursor::selected_object].current.y);
+    sprintf(text1,"current:%.2f,%.2f", game::clickable_objects[cursor::selected_object].current.x,game::clickable_objects[cursor::selected_object].current.y);
     glutPrint (window::width/40,window::height-40, GLUT_BITMAP_HELVETICA_12, text1, BLACK);
 
     sprintf(text2,"resting: %.2f, %.2f",game::clickable_objects[cursor::selected_object].rest.x,game::clickable_objects[cursor::selected_object].rest.y);
     glutPrint (window::width/40,window::height-60, GLUT_BITMAP_HELVETICA_12, text2, BLACK);
 
-    sprintf(text3,"velocity %.2f,%.2f",game::clickable_objects[cursor::selected_object].velocity[0].x,game::clickable_objects[cursor::selected_object].velocity[0].y);
+    sprintf(text3,"initial velocity: %.2f,%.2f",game::clickable_objects[cursor::selected_object].velocity[0].x,game::clickable_objects[cursor::selected_object].velocity[0].y);
     glutPrint (window::width/40,window::height-80, GLUT_BITMAP_HELVETICA_12, text3, BLACK);
 
-    sprintf(text4,"velocity2 %.2f,%.2f",game::clickable_objects[cursor::selected_object].velocity[1].x,game::clickable_objects[cursor::selected_object].velocity[1].y);
+    sprintf(text4,"final velocity: %.2f,%.2f",game::clickable_objects[cursor::selected_object].velocity[1].x,game::clickable_objects[cursor::selected_object].velocity[1].y);
     glutPrint (window::width/40,window::height-100, GLUT_BITMAP_HELVETICA_12, text4, BLACK);
 
     sprintf(text5,"delta_time x: %.2f y:%.2f",game::clickable_objects[cursor::selected_object].delta_time[0],game::clickable_objects[cursor::selected_object].delta_time[1]);

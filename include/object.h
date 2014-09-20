@@ -17,8 +17,7 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 #include <stdlib.h>
-#include <iostream>
-#include <windows.h>
+#include <string>
 #include "color.h"
 #include "point2f.h"
 
@@ -27,7 +26,7 @@ class object
 {
     public:
     static int total_objects;
-    char* name;
+    std::string name;
     int number;
     point2f current;
     point2f rest;//resting point

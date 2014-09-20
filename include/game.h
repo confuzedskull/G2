@@ -13,11 +13,13 @@
 
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
+
 #ifndef GAME_H
 #define GAME_H
 #include <time.h>
 #include "clickable_object.h"
 #include "projectile.h"
+
 //The game namespace stores important settings and global variables for the program
 namespace game
 {

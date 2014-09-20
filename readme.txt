@@ -35,6 +35,8 @@ Known Bugs:
 -keyboard movement not regulated by the game clock
 -grabbing an object and moving it into another sometimes makes them stack ontop of eachother
 -sometimes an object stops shooting for no reason
+-clicking and dragging an object sometimes activates the selection box
+-inertia is not fully working
 
 Disclaimer:
 This program was made using the OpenGL Utility Toolkit(GLUT) created by Mark Kilgard.
