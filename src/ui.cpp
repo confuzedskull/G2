@@ -144,7 +144,7 @@ void ui::mouse_click(int button, int state, int x, int y)
 void ui::check_clicked()
 {
     bool left_clicked = true;
-    for(int a=0; a<game::max_objects; a++)
+    for(int a=0; a<game::clickable_objects.size(); a++)
     {
         if(left_clicked && game::clickable_objects[a].left_clicked())
         {
@@ -157,7 +157,7 @@ void ui::check_clicked()
     }
     cursor::left_clicked_an_object = left_clicked;
     bool right_clicked=true;
-    for(int a=0; a<game::max_objects; a++)
+    for(int a=0; a<game::clickable_objects.size(); a++)
     {
         if(right_clicked && game::clickable_objects[a].right_clicked())
             right_clicked=true;
@@ -166,7 +166,7 @@ void ui::check_clicked()
     }
     cursor::right_clicked_an_object = right_clicked;
     bool grabbed=true;
-    for(int a=0; a<game::max_objects; a++)
+    for(int a=0; a<game::clickable_objects.size(); a++)
     {
         if(grabbed && game::clickable_objects[a].grabbed())
             grabbed=true;
@@ -228,22 +228,22 @@ void ui::key_up(unsigned char key, int x, int y)
 void ui::key_operations(void)
 {
     if(key_states['w'] || key_states['W'])
-    game::clickable_objects[cursor::selected_object].move_forward(0.005);
+    game::clickable_objects[cursor::selected_object].move_forward();
 
     if(key_states['s'] || key_states['S'])
-    game::clickable_objects[cursor::selected_object].move_back(0.005);
+    game::clickable_objects[cursor::selected_object].move_back();
 
     if(key_states['a'] || key_states['A'])
-    game::clickable_objects[cursor::selected_object].move_left(0.005);
+    game::clickable_objects[cursor::selected_object].move_left();
 
     if(key_states['d'] || key_states['D'])
-    game::clickable_objects[cursor::selected_object].move_right(0.005);
+    game::clickable_objects[cursor::selected_object].move_right();
 
     if(key_states['q'] || key_states['Q'])
-    game::clickable_objects[cursor::selected_object].turn_left(0.005);
+    game::clickable_objects[cursor::selected_object].turn_left();
 
     if(key_states['e'] || key_states['E'])
-    game::clickable_objects[cursor::selected_object].turn_right(0.005);
+    game::clickable_objects[cursor::selected_object].turn_right();
 
     if(key_states['i'] || key_states['I'])
     {

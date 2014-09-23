@@ -115,7 +115,7 @@ void clickable_object::mouse_function()
         cursor::right_clicked_an_object=true;
     }
 
-    if(grabbed() && !cursor::highlighting)//object is left clicked and dragged
+    if(grabbed() && !cursor::highlighting && cursor::grabbed_an_object==false)//grabbed this object
     {
         current.set(cursor::left_drag.x,cursor::left_drag.y);
         cursor::grabbed_an_object=true;

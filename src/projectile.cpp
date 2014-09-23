@@ -48,7 +48,6 @@ void projectile::update()
 
 void projectile::reset()
 {
-    current.set(0.0f,0.0f);//set projectile position to somewhere outside of scene
     traveled=0.0f;
     visible=false;
 }
@@ -62,5 +61,6 @@ projectile::projectile()
     traveled=0.0f;
     speed=50.0f;
     fired=false;
+    visible=false;
     primary_color=RED;
 }

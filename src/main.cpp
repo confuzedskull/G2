@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     // initialize GLUT and create window
     std::clog<<"initializing GLUT...\n";
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE| GLUT_RGB);
+    glutInitDisplayMode(GLUT_SINGLE || GLUT_RGB);
     std::clog<<"creating window...\n";
     glutInitWindowPosition(window::position_x,window::position_y);
     std::clog<<"window position: "<< window::position_x<< ","<< window::position_y<<std::endl;

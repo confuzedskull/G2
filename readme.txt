@@ -32,11 +32,11 @@ Controls:
 -esc to quit
 
 Known Bugs:
--keyboard movement not regulated by the game clock
--grabbing an object and moving it into another sometimes makes them stack ontop of eachother
--sometimes an object stops shooting for no reason
+-objects following a drag point will spin continuously when they reach it
+-sometimes objects stop shooting for no reason
 -clicking and dragging an object sometimes activates the selection box
--inertia is not fully working
+-no rotational inertia
+-grey and blue objects move off screen as soon as program starts
 
 Disclaimer:
 This program was made using the OpenGL Utility Toolkit(GLUT) created by Mark Kilgard.

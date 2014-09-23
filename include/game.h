@@ -19,19 +19,19 @@
 #include <time.h>
 #include "clickable_object.h"
 #include "projectile.h"
+#include <vector>
 
-//The game namespace stores important settings and global variables for the program
-namespace game
+//stores important settings and global variables for the program
+class game
 {
-    const int max_objects = 6;//maximum number of objects to be created for collision testing. must be constant so that array can be made using this number
-    const int max_projectiles = 6;
-    extern float time;
-    extern clock_t time_started;
-    extern double time_elapsed;
-    extern clickable_object* clickable_objects;
-    extern projectile* projectiles;
-    extern int current_projectile;
-    void init_objects();
-    void collision_detection();
-}
+    public:
+    static float time;
+    static clock_t time_started;
+    static double time_elapsed;
+    static std::vector<clickable_object> clickable_objects;
+    static std::vector<projectile> projectiles;
+    static int current_projectile;
+    static void init_objects();
+    static void collision_detection();
+};
 #endif // GAME_H

@@ -17,6 +17,7 @@
 #include "tangible_object.h"
 #include "compare.h"
 #include "distance.h"
+#include "game.h"
 #include <iostream>
 void tangible_object::repel(object B)//object moves away from object B
 {

@@ -20,7 +20,7 @@
 #include "color.h"
 #include "object.h"
 #include "game.h"
-
+#include <vector>
 //The cursor class stores data from the mouse that it's interfaced with. Since there can only be one mouse, all the data is static.
 class cursor
 {
@@ -40,7 +40,7 @@ static bool right_dragging;
 static float xmin,xmax,ymin,ymax;
 static color box_color;//RGB values
 static bool highlighting;
-static bool highlighted_objects[game::max_objects];
+static std::vector<bool> highlighted_objects;
 static int selected_object;
 static object * left_clicked_object;
 static object * right_clicked_object;
