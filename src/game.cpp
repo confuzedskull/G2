@@ -65,10 +65,10 @@ void game::init_objects()
     clickable_objects[0].current.set(window::width/2-48,window::height/2+48);
     clickable_objects[0].width=32;
     clickable_objects[0].height=32;
-    clickable_objects[0].add_action(2,96);//move right 96 units
-    clickable_objects[0].add_action(4,96);//move down 96 units
-    clickable_objects[0].add_action(1,96);//move left 96 units
-    clickable_objects[0].add_action(3,96);//move up 96 units
+    clickable_objects[0].add_action(2,12);//move right 96 units
+    clickable_objects[0].add_action(4,12);//move down 96 units
+    clickable_objects[0].add_action(1,10);//move left 96 units
+    clickable_objects[0].add_action(3,10);//move up 96 units
     clickable_objects[0].add_action(5,90);//turn left 90 degrees
     clickable_objects[0].add_action(6,90);//turn right 90 degrees
     std::clog<<"object#"<<clickable_objects[0].number<<": "<<clickable_objects[0].name<<" initialized."<<std::endl;

@@ -25,28 +25,14 @@
 
 std::queue< std::vector<int> > actions;
 
-void movable_object::calc_step()
-{
-    //left step
-    step[1].x=leftward.x*step_size;
-    step[1].y=leftward.y*step_size;
-    //right step
-    step[2].x=rightward.x*step_size;
-    step[2].y=rightward.y*step_size;
-    //forward step
-    step[3].x=forward.x*step_size;
-    step[3].y=forward.y*step_size;
-    //backward step
-    step[4].x=backward.x*step_size;
-    step[4].y=backward.y*step_size;
-}
-
 void movable_object::reset_motion()
 {
     moving_forward=false;
     moving_backward=false;
     moving_left=false;
     moving_right=false;
+    turning_left=false;
+    turning_right=false;
 }
 
 bool movable_object::moving_vertical()
@@ -60,6 +46,14 @@ bool movable_object::moving_vertical()
 bool movable_object::moving_horizontal()
 {
     if(moving_left || moving_right)
+        return true;
+    else
+        return false;
+}
+
+bool movable_object::turning()
+{
+    if(turning_left || turning_right)
         return true;
     else
         return false;
@@ -83,132 +77,82 @@ bool movable_object::moving()
 
 void movable_object::turn_right()
 {
-    rotation--;
+    rotation-=speed;
+    turning_right=true;
 }
 
 void movable_object::turn_right(float degrees)
 {
-    rotation-=degrees;
+    rotation-=speed*degrees;
+    turning_right=true;
 }
 
 void movable_object::turn_left()
 {
-    rotation++;
+    rotation+=speed;
+    turning_left=true;
 }
 
 void movable_object::turn_left(float degrees)
 {
-    rotation+=degrees;
+    rotation+=speed*degrees;
+    turning_left=true;
 }
 
 void movable_object::move_left()
 {
-    current.x+=leftward.x;
-    current.y+=leftward.y;
+    current.x+=leftward.x*speed;
+    current.y+=leftward.y*speed;
     moving_left=true;
 }
 
 void movable_object::move_left(float units_left)
 {
-    current.x+=leftward.x*units_left;
-    current.y+=leftward.y*units_left;
+    current.x+=leftward.x*speed*units_left;
+    current.y+=leftward.y*speed*units_left;
     moving_left=true;
 }
 
 void movable_object::move_right()
 {
-    current.x+=rightward.x;
-    current.y+=rightward.y;
+    current.x+=rightward.x*speed;
+    current.y+=rightward.y*speed;
     moving_right=true;
 }
 
 void movable_object::move_right(float units_right)
 {
-    current.x+=rightward.x*units_right;
-    current.y+=rightward.y*units_right;
+    current.x+=rightward.x*speed*units_right;
+    current.y+=rightward.y*speed*units_right;
     moving_right=true;
 }
 
 void movable_object::move_forward()
 {
-    current.x+=forward.x;
-    current.y+=forward.y;
+    current.x+=forward.x*speed;
+    current.y+=forward.y*speed;
     moving_forward=true;
 }
 
 void movable_object::move_forward(float units_forward)
 {
-    current.x+=forward.x*units_forward;
-    current.y+=forward.y*units_forward;
+    current.x+=forward.x*speed*units_forward;
+    current.y+=forward.y*speed*units_forward;
     moving_forward=true;
 }
 
 void movable_object::move_back()
 {
-    current.x+=backward.x;
-    current.y+=backward.y;
+    current.x+=backward.x*speed;
+    current.y+=backward.y*speed;
     moving_backward=true;
 }
 
 void movable_object::move_back(float units_back)
 {
-    current.x+=backward.x*units_back;
-    current.y+=backward.y*units_back;
+    current.x+=backward.x*speed*units_back;
+    current.y+=backward.y*speed*units_back;
     moving_backward=true;
-}
-
-void movable_object::walk_left()
-{
-    current.x+=step[1].x;
-    current.y+=step[1].y;
-}
-
-void movable_object::walk_left(int steps_left)
-{
-    current.x+=step[1].x*steps_left;
-    current.y+=step[1].y*steps_left;
-}
-
-void movable_object::walk_right()
-{
-    current.x+=step[2].x;
-    current.y+=step[2].y;
-}
-
-void movable_object::walk_right(int steps_right)
-{
-    current.x+=step[2].x*steps_right;
-    current.y+=step[2].y*steps_right;
-}
-
-void movable_object::walk_forward()
-{
-    current.x+=step[3].x;
-    current.y+=step[3].y;
-}
-
-void movable_object::walk_forward(int steps_forward)
-{
-    current.x+=step[3].x*steps_forward;
-    current.y+=step[3].y*steps_forward;
-}
-
-void movable_object::walk_back()
-{
-    current.x+=step[4].x;
-    current.y+=step[4].y;
-}
-
-void movable_object::walk_back(int steps_back)
-{
-    current.x+=step[4].x*steps_back;
-    current.y+=step[4].y*steps_back;
-}
-
-void movable_object::walk(int direction,int steps)//moves object steps in direction[1,2,3,or 4]
-{
-    current.x+=step[direction].x*steps;
-    current.y+=step[direction].y*steps;
 }
 
 void movable_object::turn_to_point(float destination_x, float destination_y)//rotates object to face the given coordinates
@@ -243,33 +187,6 @@ void movable_object::turn_to_point(point2f destination)
     turn_to_point(destination.x,destination.y);
 }
 
-void movable_object::walk_to_point(point2f destination)
-{
-    walk_to_point(destination.x,destination.y,1.0f);
-}
-
-void movable_object::walk_to_point(float destination_x, float destination_y)
-{
-    walk_to_point(destination_x,destination_y,1.0f);
-}
-
-//moves object to destination over time at specified rate
-void movable_object::walk_to_point(float destination_x, float destination_y, float rate)
-{
-    if(rally_set)
-    {
-        turn_to_point(destination_x,destination_y);
-        if(compare(distance(current.x,current.y,destination_x,destination_y),1.5f)==-1)
-            rally_set=false;
-        walk_forward(rate);
-    }
-}
-
-void movable_object::walk_to_point(point2f destination, float rate)
-{
-    walk_to_point(destination.x,destination.y,rate);
-}
-
 //moves object to destination over time at specified rate
 bool movable_object::move_to_point(float destination_x, float destination_y, float rate)
 {
@@ -295,12 +212,12 @@ bool movable_object::move_to_point(point2f destination,float rate)
 
 bool movable_object::move_to_point(point2f destination)
 {
-    return move_to_point(destination.x,destination.y,1.0f);
+    return move_to_point(destination.x,destination.y,speed);
 }
 
 bool movable_object::move_to_point(float destination_x,float destination_y)
 {
-    return move_to_point(destination_x,destination_y,1.0f);
+    return move_to_point(destination_x,destination_y,speed);
 }
 
 void movable_object::add_action(int action_no, int times)
@@ -352,8 +269,8 @@ bool movable_object::perform_actions()
 movable_object::movable_object()
 {
     name="movable object";
+    speed=1.0f;
     rally = &rest;
     rally_set=false;
-    step_size=0.001f;
     std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
 }

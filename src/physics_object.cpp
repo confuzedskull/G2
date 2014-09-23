@@ -27,11 +27,14 @@ void physics_object::set_resting()
 
     if(!moving_vertical())
         rest.y=current.y;
+
+    if(!turning())
+        rest_rotation=rotation;
 }
 
 void physics_object::calc_delta_time()
 {
-    if(!moving_horizontal())//x-position is not changing
+    if(compare(current.x,rest.x)==0)//x-position is not changing
     {
         stop_time[0]=game::time;
         delta_time[0]=0.0f;
@@ -42,7 +45,7 @@ void physics_object::calc_delta_time()
         delta_time[0]=stop_time[0]-start_time[0];
     }
 
-    if(!moving_vertical())//y-position is not changing
+    if(compare(current.y,rest.y)==0)//y-position is not changing
     {
         stop_time[1]=game::time;
         delta_time[1]=0.0f;
@@ -64,7 +67,7 @@ void physics_object::calc_delta_time()
         delta_time[2]=stop_time[2]-start_time[2];
     }
 
-    if(moving_vertical())//y-velocity is not changing
+    if(!moving_vertical())//y-velocity is not changing
     {
         stop_time[3]=game::time;
         delta_time[3]=0.0f;
@@ -74,6 +77,28 @@ void physics_object::calc_delta_time()
         start_time[3]=game::time;
         delta_time[3]=stop_time[3]-start_time[3];
     }
+
+    if(compare(rotation,rest_rotation)==0)//rotation is not changing
+    {
+        stop_time[4]=game::time;
+        delta_time[4]=0.0f;
+    }
+    else
+    {
+        start_time[4]=game::time;
+        delta_time[4]=stop_time[4]-start_time[4];
+    }
+
+    if(!turning())//angular velocity is not changing
+    {
+        stop_time[5]=game::time;
+        delta_time[5]=0.0f;
+    }
+    else
+    {
+        start_time[5]=game::time;
+        delta_time[5]=stop_time[5]-start_time[5];
+    }
 }
 void physics_object::calc_velocity()
 {
@@ -82,15 +107,21 @@ void physics_object::calc_velocity()
 
     if(std::isnormal(delta_time[1]))
         velocity[0].y=(rest.y-current.y)/delta_time[1];
+
+    if(std::isnormal(delta_time[4]))
+        angular_velocity[0]=(rest_rotation-rotation)/delta_time[4];
 }
 
 void physics_object::calc_acceleration()
 {
     if(std::isnormal(delta_time[2]))
-        acceleration.x=(velocity[0].x - velocity[1].x)/delta_time[2];
+        acceleration.x=(velocity[0].x-velocity[1].x)/delta_time[2];
 
     if(std::isnormal(delta_time[3]))
-        acceleration.y=(velocity[0].y - velocity[1].y)/delta_time[3];
+        acceleration.y=(velocity[0].y-velocity[1].y)/delta_time[3];
+
+    if(std::isnormal(delta_time[5]))
+        angular_acceleration=(angular_velocity[0]-angular_velocity[1])/delta_time[5];
 }
 
 void physics_object::calc_force()
@@ -103,33 +134,45 @@ void physics_object::calc_momentum()
 {
     momentum.x=mass*velocity[0].x;
     momentum.y=mass*velocity[0].y;
-    velocity[1].x = velocity[0].x + momentum.x;
-    velocity[1].y = velocity[0].y + momentum.y;
+    angular_momentum=mass*angular_velocity[0];
+    velocity[1].x=velocity[0].x+momentum.x;
+    velocity[1].y=velocity[0].y+momentum.y;
+    angular_velocity[1]=angular_velocity[0]+angular_momentum;
 }
 
 void physics_object::inertia()
 {
     current.x+=momentum.x;
-    moving_left=true;
-    moving_right=true;
+    if(std::isnormal(momentum.x))
+    {
+        moving_left=true;
+        moving_right=true;
+    }
     current.y+=momentum.y;
-    moving_forward=true;
-    moving_backward=true;
+    if(std::isnormal(momentum.y))
+    {
+        moving_forward=true;
+        moving_backward=true;
+    }
+    rotation+=angular_momentum;
+    if(std::isnormal(angular_momentum))
+    {
+        turning_left=true;
+        turning_right=true;
+    }
 }
 
 void physics_object::physics()
 {
     set_resting();
     set_boundaries();
+    calc_direction();
+    calc_points();
     calc_delta_time();
     calc_velocity();
     calc_acceleration();
     calc_momentum();
     calc_force();
-    calc_direction();
-    calc_step();
-    calc_points();
-    calc_sides();
     reset_motion();
 }
 
@@ -139,7 +182,6 @@ physics_object::physics_object()
     mass=0.015f;//If this is too high, objects might just disappear off the screen
     velocity[0].x=0.0f;
     velocity[0].y=0.0f;
-    velocity[1].x=0.0f;
-    velocity[1].y=0.0f;
+    angular_velocity[0]=0.0f;
     std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
 }

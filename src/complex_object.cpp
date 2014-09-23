@@ -28,14 +28,6 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #endif
-void complex_object::calc_sides()
-{
-    calc_points();
-    front_side.set(front_left,front_right);
-    back_side.set(back_left,back_right);
-    left_side.set(front_left,back_left);
-    right_side.set(front_right,back_right);
-}
 
 void complex_object::calc_direction()
 {
@@ -49,7 +41,7 @@ void complex_object::rotate(float angle)
 {
     rotation+=angle;
     calc_direction();//direction is relative to rotation so it must be updated
-    calc_sides();//sides must move with rotation
+    calc_points();//points must move with rotation
 }
 
 void complex_object::calc_points()

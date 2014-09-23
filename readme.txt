@@ -35,8 +35,6 @@ Known Bugs:
 -objects following a drag point will spin continuously when they reach it
 -sometimes objects stop shooting for no reason
 -clicking and dragging an object sometimes activates the selection box
--no rotational inertia
--grey and blue objects move off screen as soon as program starts
 
 Disclaimer:
 This program was made using the OpenGL Utility Toolkit(GLUT) created by Mark Kilgard.

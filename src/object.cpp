@@ -88,6 +88,7 @@ object::object()//constructs an object
     height=64;
     primary_color.set(0.0,0.0,0.0);
     rotation=90;
+    rest_rotation=90;
     visible=true;
     rendered=false;
     std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
@@ -106,6 +107,7 @@ object::object(float x, float y, float w, float h, color c)
     height=h;
     primary_color.set(c);
     rotation=90.1;
+    rest_rotation=90.1;
     visible=true;
     rendered=false;
 }

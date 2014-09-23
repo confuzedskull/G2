@@ -31,6 +31,7 @@ class object
     point2f current;
     point2f rest;//resting point
     float rotation;
+    float rest_rotation;
     float width, height;
     color primary_color;//RGB values
     bool visible;
