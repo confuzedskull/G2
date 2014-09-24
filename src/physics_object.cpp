@@ -16,9 +16,8 @@
 
 #include "physics_object.h"
 #include "game.h"
-#include "compare.h"
 #include <iostream>
-#include <cmath>
+#include <math.h>
 
 void physics_object::set_resting()
 {
@@ -34,7 +33,7 @@ void physics_object::set_resting()
 
 void physics_object::calc_delta_time()
 {
-    if(compare(current.x,rest.x)==0)//x-position is not changing
+    if(!isless(current.x,rest.x)&&!isgreater(current.x,rest.x))//x-position is not changing
     {
         stop_time[0]=game::time;
         delta_time[0]=0.0f;
@@ -45,7 +44,7 @@ void physics_object::calc_delta_time()
         delta_time[0]=stop_time[0]-start_time[0];
     }
 
-    if(compare(current.y,rest.y)==0)//y-position is not changing
+    if(!isless(current.y,rest.y)&&!isgreater(current.y,rest.y))//y-position is not changing
     {
         stop_time[1]=game::time;
         delta_time[1]=0.0f;
@@ -78,7 +77,7 @@ void physics_object::calc_delta_time()
         delta_time[3]=stop_time[3]-start_time[3];
     }
 
-    if(compare(rotation,rest_rotation)==0)//rotation is not changing
+    if(!isless(rotation,rest_rotation) && !isgreater(rotation,rest_rotation))//rotation is not changing
     {
         stop_time[4]=game::time;
         delta_time[4]=0.0f;
@@ -102,25 +101,25 @@ void physics_object::calc_delta_time()
 }
 void physics_object::calc_velocity()
 {
-    if(std::isnormal(delta_time[0]))
+    if(isnormal(delta_time[0]))
         velocity[0].x=(rest.x-current.x)/delta_time[0];
 
-    if(std::isnormal(delta_time[1]))
+    if(isnormal(delta_time[1]))
         velocity[0].y=(rest.y-current.y)/delta_time[1];
 
-    if(std::isnormal(delta_time[4]))
+    if(isnormal(delta_time[4]))
         angular_velocity[0]=(rest_rotation-rotation)/delta_time[4];
 }
 
 void physics_object::calc_acceleration()
 {
-    if(std::isnormal(delta_time[2]))
+    if(isnormal(delta_time[2]))
         acceleration.x=(velocity[0].x-velocity[1].x)/delta_time[2];
 
-    if(std::isnormal(delta_time[3]))
+    if(isnormal(delta_time[3]))
         acceleration.y=(velocity[0].y-velocity[1].y)/delta_time[3];
 
-    if(std::isnormal(delta_time[5]))
+    if(isnormal(delta_time[5]))
         angular_acceleration=(angular_velocity[0]-angular_velocity[1])/delta_time[5];
 }
 
@@ -140,22 +139,30 @@ void physics_object::calc_momentum()
     angular_velocity[1]=angular_velocity[0]+angular_momentum;
 }
 
+void physics_object::calc_momentum(physics_object p)
+{
+    velocity[1].x=(((mass-p.mass)/(mass+p.mass))*velocity[0].x)+((p.mass/(mass+p.mass))*p.velocity[0].x);
+    velocity[1].y=(((mass-p.mass)/(mass+p.mass))*velocity[0].y)+((p.mass/(mass+p.mass))*p.velocity[0].y);
+    p.velocity[1].x=(((p.mass-mass)/(mass+p.mass))*p.velocity[0].x)+((mass/(mass+p.mass))*velocity[0].x);
+    p.velocity[1].y=(((p.mass-mass)/(mass+p.mass))*p.velocity[0].y)+((mass/(mass+p.mass))*velocity[0].y);
+}
+
 void physics_object::inertia()
 {
     current.x+=momentum.x;
-    if(std::isnormal(momentum.x))
+    if(isnormal(momentum.x))
     {
         moving_left=true;
         moving_right=true;
     }
     current.y+=momentum.y;
-    if(std::isnormal(momentum.y))
+    if(isnormal(momentum.y))
     {
         moving_forward=true;
         moving_backward=true;
     }
     rotation+=angular_momentum;
-    if(std::isnormal(angular_momentum))
+    if(isnormal(angular_momentum))
     {
         turning_left=true;
         turning_right=true;

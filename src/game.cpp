@@ -36,6 +36,7 @@ void game::collision_detection()
             if(a!=b && clickable_objects[a].is_close(clickable_objects[b]))//check objects colliding with other objects
             {
                 clickable_objects[a].identify(clickable_objects[b]);
+                clickable_objects[a].calc_momentum(clickable_objects[b]);
                 clickable_objects[a].repel(clickable_objects[b]);
             }
             if(a!=b && clickable_objects[a].is_close(projectiles[b]))//check objects colliding with projectiles
@@ -65,10 +66,11 @@ void game::init_objects()
     clickable_objects[0].current.set(window::width/2-48,window::height/2+48);
     clickable_objects[0].width=32;
     clickable_objects[0].height=32;
-    clickable_objects[0].add_action(2,12);//move right 96 units
-    clickable_objects[0].add_action(4,12);//move down 96 units
-    clickable_objects[0].add_action(1,10);//move left 96 units
-    clickable_objects[0].add_action(3,10);//move up 96 units
+    clickable_objects[0].mass=0.00375f;
+    clickable_objects[0].add_action(2,76);//move right 96 units
+    clickable_objects[0].add_action(4,76);//move down 96 units
+    clickable_objects[0].add_action(1,76);//move left 96 units
+    clickable_objects[0].add_action(3,76);//move up 96 units
     clickable_objects[0].add_action(5,90);//turn left 90 degrees
     clickable_objects[0].add_action(6,90);//turn right 90 degrees
     std::clog<<"object#"<<clickable_objects[0].number<<": "<<clickable_objects[0].name<<" initialized."<<std::endl;

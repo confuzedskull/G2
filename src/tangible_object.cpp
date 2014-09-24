@@ -15,10 +15,10 @@
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "tangible_object.h"
-#include "compare.h"
 #include "distance.h"
 #include "game.h"
 #include <iostream>
+#include <math.h>
 void tangible_object::repel(object B)//object moves away from object B
 {
     if(near_front(B))
@@ -87,7 +87,7 @@ void tangible_object::identify(object B)//variable touching[] is updated with nu
 
 bool tangible_object::is_close(object B)
 {
-    if(compare(distance(current,B.current),(get_radius()+B.get_radius()))<=0)
+    if(islessequal(distance(current,B.current),(get_radius()+B.get_radius())))
         return true;
     else
         return false;
@@ -95,7 +95,7 @@ bool tangible_object::is_close(object B)
 
 bool tangible_object::near_front(object B)
 {
-    if(compare(distance(front,B.current),B.get_radius())<=0)
+    if(islessequal(distance(front,B.current),B.get_radius()))
     {
         return true;
     }
@@ -104,7 +104,7 @@ bool tangible_object::near_front(object B)
 }
 bool tangible_object::near_back(object B)
 {
-    if(compare(distance(back,B.current),B.get_radius())<=0)
+    if(islessequal(distance(back,B.current),B.get_radius()))
     {
         return true;
     }
@@ -114,7 +114,7 @@ bool tangible_object::near_back(object B)
 
 bool tangible_object::near_left(object B)
 {
-    if(compare(distance(left,B.current),B.get_radius())<=0)
+    if(islessequal(distance(left,B.current),B.get_radius()))
     {
         return true;
     }
@@ -124,7 +124,7 @@ bool tangible_object::near_left(object B)
 
 bool tangible_object::near_right(object B)
 {
-    if(compare(distance(right,B.current),B.get_radius())<=0)
+    if(islessequal(distance(right,B.current),B.get_radius()))
     {
         return true;
     }

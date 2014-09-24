@@ -15,7 +15,7 @@
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "line2f.h"
-#include "compare.h"
+#include <math.h>
 
 line2f::line2f()
 {
@@ -38,7 +38,7 @@ float line2f::slope()
 bool line2f::hasPoint(point2f p)
 {
     float s = (p.y - A.y) / (p.x - A.x);
-    if(compare(s,slope())==0)
+    if(!isless(s,slope()) && !isgreater(s,slope()))
         return true;
     else
         return false;

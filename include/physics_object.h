@@ -41,6 +41,7 @@ class physics_object: public tangible_object
     void calc_acceleration();
     void calc_force();
     void calc_momentum();
+    void calc_momentum(physics_object p);
     void inertia();
     void physics();
     physics_object();

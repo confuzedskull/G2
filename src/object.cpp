@@ -86,6 +86,7 @@ object::object()//constructs an object
     rest.set(current.x,current.y);
     width=64;
     height=64;
+    set_boundaries();
     primary_color.set(0.0,0.0,0.0);
     rotation=90;
     rest_rotation=90;
@@ -105,6 +106,7 @@ object::object(float x, float y, float w, float h, color c)
     rest.y=y;
     width=w;
     height=h;
+    set_boundaries();
     primary_color.set(c);
     rotation=90.1;
     rest_rotation=90.1;

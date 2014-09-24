@@ -18,7 +18,6 @@
 #include "game.h"
 #include "ui.h"
 #include "cursor.h"
-#include "compare.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -31,7 +30,7 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #endif
-
+#include <math.h>
 //initialize the variables
 int window::width=640;
 int window::height=360;
@@ -112,7 +111,7 @@ void window::update_scene()
     for(unsigned i=0; i<game::clickable_objects.size(); i++)
     game::clickable_objects[i].mouse_function();
     //This function acts like timer so that events occur at the set refresh rate
-    if(compare(game::time_elapsed,window::refresh_rate)==1)//time elapsed is > refresh rate
+    if(isgreaterequal(game::time_elapsed,window::refresh_rate))//time elapsed is >= refresh rate
     {
         game::time_started=clock();//reset the start time
         game::time+=window::refresh_rate;//increment the game clock

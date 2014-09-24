@@ -16,7 +16,7 @@
 
 #include "projectile.h"
 #include "distance.h"
-#include "compare.h"
+#include <math.h>
 
 void projectile::fire(complex_object source)//an object fires a projectile
 {
@@ -31,7 +31,7 @@ void projectile::update()
 {
     if(fired)
     {
-        if(compare(traveled,range)==-1 && !collided)//projectile is within range and hasn't collided
+        if(isless(traveled,range) && !collided)//projectile is within range and hasn't collided
         {
             move_forward(speed);
             traveled+=speed;

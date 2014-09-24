@@ -16,7 +16,6 @@
 
 #include "clickable_object.h"
 #include "cursor.h"
-#include "compare.h"
 #include "distance.h"
 #include <math.h>
 #include <iostream>
@@ -35,10 +34,10 @@
 bool clickable_object::left_clicked()
 {
     if(cursor::left_click &&
-            compare(cursor::left_down.x,xmax)==-1 &&
-            compare(cursor::left_down.x,xmin)==1 &&
-            compare(cursor::left_down.y,ymax)==-1 &&
-            compare(cursor::left_down.y,ymin)==1)
+            isless(cursor::left_down.x,xmax) &&
+            isgreater(cursor::left_down.x,xmin) &&
+            isless(cursor::left_down.y,ymax) &&
+            isgreater(cursor::left_down.y,ymin))
         return true;
     else
         return false;
@@ -47,10 +46,10 @@ bool clickable_object::left_clicked()
 bool clickable_object::right_clicked()
 {
     if(cursor::right_click &&
-            compare(cursor::right_down.x,xmax)==-1 &&
-            compare(cursor::right_down.x,xmin)==1 &&
-            compare(cursor::right_down.y,ymax)==-1 &&
-            compare(cursor::right_down.y,ymin)==1)
+            isless(cursor::right_down.x,xmax) &&
+            isgreater(cursor::right_down.x,xmin) &&
+            isless(cursor::right_down.y,ymax) &&
+            isgreater(cursor::right_down.y,ymin))
         return true;
     else
         return false;
@@ -60,10 +59,10 @@ bool clickable_object::highlighted()
 {
     //if object lies within selection box boundaries, return true
     if(cursor::highlighting &&
-            compare(current.x,cursor::xmax)==-1 &&
-            compare(current.x,cursor::xmin)==1 &&
-            compare(current.y,cursor::ymax)==1 &&
-            compare(current.y,cursor::ymin)==-1)
+            isless(current.x,cursor::xmax) &&
+            isgreater(current.x,cursor::xmin) &&
+            isgreater(current.y,cursor::ymax) &&
+            isless(current.y,cursor::ymin))
         return true;
     else
         return false;
@@ -72,10 +71,10 @@ bool clickable_object::highlighted()
 bool clickable_object::grabbed()
 {
     if(cursor::left_dragging &&
-            compare(cursor::left_drag.x,xmax)==-1 &&
-            compare(cursor::left_drag.x,xmin)==1 &&
-            compare(cursor::left_drag.y,ymax)==-1 &&
-            compare(cursor::left_drag.y,ymin)==1)
+            isless(cursor::left_drag.x,xmax) &&
+            isgreater(cursor::left_drag.x,xmin) &&
+            isless(cursor::left_drag.y,ymax) &&
+            isgreater(cursor::left_drag.y,ymin))
         return true;
     else
         return false;

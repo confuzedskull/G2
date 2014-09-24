@@ -17,7 +17,6 @@
 #include "window.h"
 #include "game.h"
 #include "cursor.h"
-#include "compare.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -32,6 +31,7 @@
 #endif
 #include <cstring>
 #include <stdio.h>
+#include <math.h>
 //initialize variables
 bool* ui::key_states=new bool[256];
 bool ui::temp_toggle=false;
@@ -184,7 +184,7 @@ void ui::mouse_drag(int x, int y)
         if(!cursor::left_clicked_an_object && !cursor::grabbed_an_object)
         {
             //this condition makes it so that the user has to make a rectangle larger than 10x10. That way, highlighting is less sensitive
-            if(compare(x,cursor::left_down.x+10)==1 && compare((window::height - y),cursor::left_down.y+10)==-1)
+            if(isgreater(x,cursor::left_down.x+10) && isless((window::height - y),cursor::left_down.y+10))
                 cursor::highlighting=true;
             else
                 cursor::highlighting=false;
@@ -193,7 +193,8 @@ void ui::mouse_drag(int x, int y)
             cursor::highlighting=false;
         cursor::left_drag.set(x,(window::height-y));
         //see if drag point is different from start point
-        if(compare(x,cursor::left_down.x)!=0 && compare((window::height - y),cursor::left_down.y)!=0)
+        if((isless(x,cursor::left_down.x)||isgreater(x,cursor::left_down.x))
+           &&(isless((window::height - y),cursor::left_down.y)||isgreater((window::height - y),cursor::left_down.y)))
             cursor::left_dragging=true;
         else
             cursor::left_dragging=false;
@@ -206,7 +207,8 @@ void ui::mouse_drag(int x, int y)
         cursor::highlighting=false;
         cursor::right_drag.set(x,(window::height-y));
         //see if drag point is different from start point
-        if(compare(x,cursor::right_down.x)!=0 && compare((window::height - y),cursor::right_down.y)!=0)
+        if((isless(x,cursor::right_down.x)||isgreater(x,cursor::right_down.x))
+           &&(isless((window::height - y),cursor::right_down.y)||isgreater((window::height - y),cursor::right_down.y)))
             cursor::right_dragging=true;
         else
             cursor::right_dragging=false;
