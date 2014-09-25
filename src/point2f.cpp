@@ -32,3 +32,8 @@ void point2f::set(float a, float b)
     y = b;
 }
 
+void point2f::set(point2f p)
+{
+    x = p.x;
+    y = p.y;
+}

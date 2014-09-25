@@ -156,29 +156,32 @@ void movable_object::move_back(float units_back)
 
 void movable_object::turn_to_point(float destination_x, float destination_y)//rotates object to face the given coordinates
 {
-    if(isgreater(destination_x,current.x) && isgreater(destination_y,current.y))//destination lies in quadrant 1
-        rotation = atan((destination_y-current.y)/(destination_x-current.x))*180.0f/3.14159f;
+    if(isgreater(distance(destination_x,destination_y,current.x,current.y),radius))//prevent infinite spin
+    {
+        if(isgreater(destination_x,current.x) && isgreater(destination_y,current.y))//destination lies in quadrant 1
+            rotation = atan((destination_y-current.y)/(destination_x-current.x))*180.0f/3.14159f;
 
-    if(isless(destination_x,current.x) && isgreater(destination_y,current.y))//destination lies in quadrant 2
-        rotation = atan((destination_y-current.y)/(destination_x-current.x))*180.0f/3.14159f + 180.0f;
+        if(isless(destination_x,current.x) && isgreater(destination_y,current.y))//destination lies in quadrant 2
+            rotation = atan((destination_y-current.y)/(destination_x-current.x))*180.0f/3.14159f + 180.0f;
 
-    if(isless(destination_x,current.x) && isless(destination_y,current.y))//destination lies in quadrant 3
-        rotation = atan((destination_y-current.y)/(destination_x-current.x))*180.0f/3.14159f + 180.0f;
+        if(isless(destination_x,current.x) && isless(destination_y,current.y))//destination lies in quadrant 3
+            rotation = atan((destination_y-current.y)/(destination_x-current.x))*180.0f/3.14159f + 180.0f;
 
-    if(isgreater(destination_x,current.x) && isless(destination_y,current.y))//destination lies in quadrant 4
-        rotation = atan((destination_y-current.y)/(destination_x-current.x))*180.0f/3.14159f + 360.0f;
+        if(isgreater(destination_x,current.x) && isless(destination_y,current.y))//destination lies in quadrant 4
+            rotation = atan((destination_y-current.y)/(destination_x-current.x))*180.0f/3.14159f + 360.0f;
 
-    if((!isless(destination_x,current.x)&&!isgreater(destination_x,current.x)) && isgreater(destination_y,current.y))//destination lies at 12 O'clock
-        rotation = 90.0f;
+        if((!isless(destination_x,current.x)&&!isgreater(destination_x,current.x)) && isgreater(destination_y,current.y))//destination lies at 12 O'clock
+            rotation = 90.0f;
 
-    if((!isless(destination_x,current.x)&&!isgreater(destination_x,current.x))&& isless(destination_y,current.y))//destination lies at 6'O'clock
-        rotation = 270.0f;
+        if((!isless(destination_x,current.x)&&!isgreater(destination_x,current.x))&& isless(destination_y,current.y))//destination lies at 6'O'clock
+            rotation = 270.0f;
 
-    if(isless(destination_x,current.x) && (!isless(destination_y,current.y)&&!isgreater(destination_y,current.y)))//destination lies at 9 O'clock
-        rotation = 180.0f;
+        if(isless(destination_x,current.x) && (!isless(destination_y,current.y)&&!isgreater(destination_y,current.y)))//destination lies at 9 O'clock
+            rotation = 180.0f;
 
-    if(isgreater(destination_x,current.x) && (!isless(destination_y,current.y)&&!isgreater(destination_y,current.y)))//destination lies at 3 O'clock
-        rotation = 0.0f;
+        if(isgreater(destination_x,current.x) && (!isless(destination_y,current.y)&&!isgreater(destination_y,current.y)))//destination lies at 3 O'clock
+            rotation = 0.0f;
+    }
 }
 
 void movable_object::turn_to_point(point2f destination)
@@ -192,10 +195,8 @@ bool movable_object::move_to_point(float destination_x, float destination_y, flo
     if(rally_set)
     {
         movable_object::turn_to_point(destination_x,destination_y);
-        if(islessequal(distance(current.x,current.y,destination_x,destination_y),0.8f))//less than or same
-        {
-            rally_set=false;
-        }
+        if(isless(distance(current.x,current.y,destination_x,destination_y),radius))
+        rally_set=false;
         move_forward(speed*rate);
         moving_forward=true;
         return true;

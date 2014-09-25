@@ -138,13 +138,11 @@ void physics_object::calc_momentum()
     velocity[1].y=velocity[0].y+momentum.y;
     angular_velocity[1]=angular_velocity[0]+angular_momentum;
 }
-
+//calculate momentum after elastic collision with object p
 void physics_object::calc_momentum(physics_object p)
 {
-    velocity[1].x=(((mass-p.mass)/(mass+p.mass))*velocity[0].x)+((p.mass/(mass+p.mass))*p.velocity[0].x);
-    velocity[1].y=(((mass-p.mass)/(mass+p.mass))*velocity[0].y)+((p.mass/(mass+p.mass))*p.velocity[0].y);
-    p.velocity[1].x=(((p.mass-mass)/(mass+p.mass))*p.velocity[0].x)+((mass/(mass+p.mass))*velocity[0].x);
-    p.velocity[1].y=(((p.mass-mass)/(mass+p.mass))*p.velocity[0].y)+((mass/(mass+p.mass))*velocity[0].y);
+    momentum.x=momentum.x+p.momentum.x-(p.mass*p.velocity[1].x);
+    momentum.y=momentum.y+p.momentum.y-(p.mass*p.velocity[1].y);
 }
 
 void physics_object::inertia()

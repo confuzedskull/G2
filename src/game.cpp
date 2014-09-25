@@ -35,21 +35,16 @@ void game::collision_detection()
         {
             if(a!=b && clickable_objects[a].is_close(clickable_objects[b]))//check objects colliding with other objects
             {
-                clickable_objects[a].identify(clickable_objects[b]);
+                clickable_objects[a].identify_touched(clickable_objects[b]);
                 clickable_objects[a].calc_momentum(clickable_objects[b]);
                 clickable_objects[a].repel(clickable_objects[b]);
             }
             if(a!=b && clickable_objects[a].is_close(projectiles[b]))//check objects colliding with projectiles
             {
-                clickable_objects[a].identify(projectiles[b]);
+                clickable_objects[a].identify_touched(projectiles[b]);
             }
             if(a!=b && projectiles[a].is_close(clickable_objects[b]))//check projectiles colliding with objects
-            {
-                projectiles[a].collided=true;
-                projectiles[a].reset();
-            }
-            else
-                projectiles[a].collided=false;
+            projectiles[a].reset();
         }
     }
 }

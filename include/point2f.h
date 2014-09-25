@@ -24,6 +24,7 @@ class point2f
     float x;
     float y;
     void set(float a, float b);
+    void set(point2f p);
     point2f();
     point2f(float a, float b);
 };

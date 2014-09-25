@@ -19,7 +19,8 @@
 #include "game.h"
 #include <iostream>
 #include <math.h>
-void tangible_object::repel(object B)//object moves away from object B
+
+void tangible_object::repel(complex_object B)//object moves away from object B
 {
     if(near_front(B))
         move_back();
@@ -29,10 +30,9 @@ void tangible_object::repel(object B)//object moves away from object B
         move_right();
     if(near_right(B))
         move_left();
-
 }
 
-void tangible_object::attract(object B)//object moves toward object B
+void tangible_object::attract(complex_object B)//object moves toward object B
 {
     if(near_front(B))
         move_forward();
@@ -42,10 +42,9 @@ void tangible_object::attract(object B)//object moves toward object B
         move_left();
     if(near_right(B))
         move_right();
-
 }
 
-void tangible_object::simon_says(object B)//object changes color according to side touched
+void tangible_object::simon_says(complex_object B)//object changes color according to side touched
 {
     if(near_front(B))
         primary_color.set(RED);
@@ -55,79 +54,76 @@ void tangible_object::simon_says(object B)//object changes color according to si
         primary_color.set(BLUE);
     if(near_right(B))
         primary_color.set(YELLOW);
-
 }
 
-void tangible_object::identify(object B)//variable touching[] is updated with number of the touched object
+void tangible_object::identify_touched(complex_object B)//variable touching[] is updated with number of the touched object
 {
-    if(is_close(B))
-    {
-        if(near_left(B))
-            touching[0]=B.number;
-        else
-            touching[0]=0;
-        if(near_right(B))
-            touching[1]=B.number;
-        else
-            touching[1]=0;
-        if(near_front(B))
-            touching[2]=B.number;
-        else
-            touching[2]=0;
-        if(near_back(B))
-            touching[3]=B.number;
-        else
-            touching[3]=0;
-        collided=true;
-    }
+    if(near_left(B))
+        touching[0]=B.number;
     else
-        collided=false;
+        touching[0]=-1;
 
+    if(near_right(B))
+        touching[1]=B.number;
+    else
+        touching[1]=-1;
+
+    if(near_front(B))
+        touching[2]=B.number;
+    else
+        touching[2]=-1;
+
+    if(near_back(B))
+        touching[3]=B.number;
+    else
+        touching[3]=-1;
+
+    bool touched=false;
+    for(int i=0;i<4;i++)
+    {
+        if(touched||touching[i]!=-1)
+            touched=true;
+        else
+            touched=false;
+    }
+    collided=touched;
 }
 
-bool tangible_object::is_close(object B)
+bool tangible_object::is_close(complex_object B)
 {
-    if(islessequal(distance(current,B.current),(get_radius()+B.get_radius())))
+    if(islessequal(distance(current,B.current),(radius+B.radius)))
         return true;
     else
         return false;
 }
 
-bool tangible_object::near_front(object B)
+bool tangible_object::near_front(complex_object B)
 {
-    if(islessequal(distance(front,B.current),B.get_radius()))
-    {
+    if(isless(distance(front,B.current),B.radius))
         return true;
-    }
     else
         return false;
 }
-bool tangible_object::near_back(object B)
+bool tangible_object::near_back(complex_object B)
 {
-    if(islessequal(distance(back,B.current),B.get_radius()))
-    {
+    if(isless(distance(back,B.current),B.radius))
         return true;
-    }
     else
         return false;
 }
 
-bool tangible_object::near_left(object B)
+bool tangible_object::near_left(complex_object B)
 {
-    if(islessequal(distance(left,B.current),B.get_radius()))
-    {
+    if(isless(distance(left,B.current),B.radius))
         return true;
-    }
     else
         return false;
 }
 
-bool tangible_object::near_right(object B)
+bool tangible_object::near_right(complex_object B)
 {
-    if(islessequal(distance(right,B.current),B.get_radius()))
-    {
+    if(isless(distance(right,B.current),B.radius))
         return true;
-    }
     else
         return false;
 }

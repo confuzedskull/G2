@@ -32,7 +32,6 @@ Controls:
 -esc to quit
 
 Known Bugs:
--objects following a drag point will spin continuously when they reach it
 -sometimes objects stop shooting for no reason
 -clicking and dragging an object sometimes activates the selection box
 

@@ -33,6 +33,7 @@ class object
     float rotation;
     float rest_rotation;
     float width, height;
+    float radius;
     color primary_color;//RGB values
     bool visible;
     bool rendered;
@@ -40,7 +41,6 @@ class object
     void set_boundaries();//calculates the max's and mins
     void render();//draws the object
     void rotate(float angle);//changes the object's rotation by the given angle
-    int get_radius();//calculates a radius from the width and height
     object();
     object(float x, float y, float w, float h, color c);
 };

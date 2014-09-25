@@ -32,13 +32,16 @@
 //initialize static variable
 int object::total_objects=0;
 
-void object::set_boundaries()//calculates the max's and mins
+void object::set_boundaries()//calculates the limits of the object
 {
-    xmin= current.x-(width/2);
-    xmax= current.x+(width/2);
-    ymin= current.y-(height/2);
-    ymax= current.y+(height/2);
-
+    //these two variables store reused data in order to save calculations
+    float half_width=width/2;
+    float half_height=height/2;
+    xmin= current.x-half_width;
+    xmax= current.x+half_width;
+    ymin= current.y-half_height;
+    ymax= current.y+half_height;
+    radius=(half_width+half_height)/2;
 }
 
 void object::render()//draws the object
@@ -70,12 +73,6 @@ void object::rotate(float angle)
 {
     rotation+=angle;
 }
-
-int object::get_radius()//calculates a radius from the width and height
-{
-    return ((width/2)+(height/2))/2;
-}
-
 
 object::object()//constructs an object
 {
