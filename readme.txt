@@ -34,6 +34,9 @@ Controls:
 Known Bugs:
 -sometimes objects stop shooting for no reason
 -clicking and dragging an object sometimes activates the selection box
+-information overlay sometimes crashes
+-an object's resting point gets set even when it's moving
+-some of the object's physics values do not zero out when object is at rest
 
 Disclaimer:
 This program was made using the OpenGL Utility Toolkit(GLUT) created by Mark Kilgard.

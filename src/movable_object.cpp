@@ -15,12 +15,12 @@
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "movable_object.h"
-#include <math.h>
-#include <queue>
-#include <iostream>
 #include "distance.h"
 #include "point2f.h"
 #include "vector2f.h"
+#include <math.h>
+#include <queue>
+#include <iostream>
 
 std::queue< std::vector<int> > actions;
 
@@ -58,14 +58,6 @@ bool movable_object::turning()
         return false;
 }
 
-bool movable_object::resting()
-{
-    if(!moving_vertical() && !moving_horizontal())
-        return true;
-    else
-        return false;
-}
-
 bool movable_object::moving()
 {
     if(moving_forward||moving_backward||moving_left||moving_right)
@@ -76,8 +68,7 @@ bool movable_object::moving()
 
 void movable_object::turn_right()
 {
-    rotation-=speed;
-    turning_right=true;
+    turn_right(1.0f);
 }
 
 void movable_object::turn_right(float degrees)
@@ -88,8 +79,7 @@ void movable_object::turn_right(float degrees)
 
 void movable_object::turn_left()
 {
-    rotation+=speed;
-    turning_left=true;
+    turn_left(1.0f);
 }
 
 void movable_object::turn_left(float degrees)
@@ -100,9 +90,7 @@ void movable_object::turn_left(float degrees)
 
 void movable_object::move_left()
 {
-    current.x+=leftward.x*speed;
-    current.y+=leftward.y*speed;
-    moving_left=true;
+    move_left(1.0f);
 }
 
 void movable_object::move_left(float units_left)
@@ -114,9 +102,7 @@ void movable_object::move_left(float units_left)
 
 void movable_object::move_right()
 {
-    current.x+=rightward.x*speed;
-    current.y+=rightward.y*speed;
-    moving_right=true;
+    move_right(1.0f);
 }
 
 void movable_object::move_right(float units_right)
@@ -128,9 +114,7 @@ void movable_object::move_right(float units_right)
 
 void movable_object::move_forward()
 {
-    current.x+=forward.x*speed;
-    current.y+=forward.y*speed;
-    moving_forward=true;
+    move_forward(1.0f);
 }
 
 void movable_object::move_forward(float units_forward)
@@ -142,9 +126,7 @@ void movable_object::move_forward(float units_forward)
 
 void movable_object::move_back()
 {
-    current.x+=backward.x*speed;
-    current.y+=backward.y*speed;
-    moving_backward=true;
+    move_back(1.0f);
 }
 
 void movable_object::move_back(float units_back)
@@ -269,7 +251,7 @@ bool movable_object::perform_actions()
 movable_object::movable_object()
 {
     name="movable object";
-    speed=1.0f;
+    speed=1.01f;
     rally = &rest;
     rally_set=false;
     reset_motion();

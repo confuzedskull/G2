@@ -32,23 +32,25 @@
 #include <cstring>
 #include <stdio.h>
 #include <math.h>
+
 //initialize variables
 bool* ui::key_states=new bool[256];
 bool ui::temp_toggle=false;
 bool ui::toggle_text=false;
-char ui::text0[30] = "";
+char ui::text0[20] = "";
 char ui::text1[30] = "";
-char ui::text2[20] = "";
-char ui::text3[30] = "";
+char ui::text2[30] = "";
+char ui::text3[20] = "";
 char ui::text4[30] = "";
-char ui::text5[20] = "";
-char ui::text6[10] = "";
-char ui::text7[10] = "";
-char ui::text8[10] = "";
-char ui::text9[10] = "";
-char ui::text10[20] = "";
+char ui::text5[30] = "";
+char ui::text6[30] = "";
+char ui::text7[30] = "";
+char ui::text8[20] = "";
+char ui::text9[20] = "";
+char ui::text10[35] = "";
 char ui::text11[20] = "";
 char ui::text12[20] = "";
+char ui::text13[20] = "";
 
 //This prints text of rgba color at x,y on the screen
 void ui::glutPrint(float x, float y, void* font, char* text, color c)
@@ -69,44 +71,47 @@ void ui::glutPrint(float x, float y, void* font, char* text, color c)
 
 void ui::print_text()
 {
-    sprintf(text0,"object no.%i", game::clickable_objects[cursor::selected_object].number);
-    glutPrint (window::width/40,window::height-20, GLUT_BITMAP_HELVETICA_12, text0, BLACK);
+    sprintf(text0,"selected object: %d", game::clickable_objects[cursor::selected_object].number);
+    glutPrint(window::width/40,window::height-20, GLUT_BITMAP_HELVETICA_12, text0, BLACK);
 
-    sprintf(text1,"current:%.2f,%.2f", game::clickable_objects[cursor::selected_object].current.x,game::clickable_objects[cursor::selected_object].current.y);
-    glutPrint (window::width/40,window::height-40, GLUT_BITMAP_HELVETICA_12, text1, BLACK);
+    sprintf(text1,"current position: %.2f,%.2f", game::clickable_objects[cursor::selected_object].current.x,game::clickable_objects[cursor::selected_object].current.y);
+    glutPrint(window::width/40,window::height-40, GLUT_BITMAP_HELVETICA_12, text1, BLACK);
 
-    sprintf(text2,"resting: %.2f, %.2f",game::clickable_objects[cursor::selected_object].rest.x,game::clickable_objects[cursor::selected_object].rest.y);
-    glutPrint (window::width/40,window::height-60, GLUT_BITMAP_HELVETICA_12, text2, BLACK);
+    sprintf(text2,"resting position: %.2f, %.2f",game::clickable_objects[cursor::selected_object].rest.x,game::clickable_objects[cursor::selected_object].rest.y);
+    glutPrint(window::width/40,window::height-60, GLUT_BITMAP_HELVETICA_12, text2, BLACK);
 
-    sprintf(text3,"initial velocity: %.2f,%.2f",game::clickable_objects[cursor::selected_object].velocity[0].x,game::clickable_objects[cursor::selected_object].velocity[0].y);
-    glutPrint (window::width/40,window::height-80, GLUT_BITMAP_HELVETICA_12, text3, BLACK);
+    sprintf(text3,"time moving: %.2f,%.2f",game::clickable_objects[cursor::selected_object].delta_time[0],game::clickable_objects[cursor::selected_object].delta_time[1]);
+    glutPrint(window::width/40,window::height-80, GLUT_BITMAP_HELVETICA_12, text3, BLACK);
 
-    sprintf(text4,"final velocity: %.2f,%.2f",game::clickable_objects[cursor::selected_object].velocity[1].x,game::clickable_objects[cursor::selected_object].velocity[1].y);
+    sprintf(text4,"initial velocity: %.2f,%.2f",game::clickable_objects[cursor::selected_object].velocity[0].x,game::clickable_objects[cursor::selected_object].velocity[0].y);
     glutPrint (window::width/40,window::height-100, GLUT_BITMAP_HELVETICA_12, text4, BLACK);
 
-    sprintf(text5,"delta_time x: %.2f y:%.2f",game::clickable_objects[cursor::selected_object].delta_time[0],game::clickable_objects[cursor::selected_object].delta_time[1]);
-    glutPrint (window::width/40,window::height-120, GLUT_BITMAP_HELVETICA_12, text5, BLACK);
+    sprintf(text5,"final velocity: %.2f,%.2f",game::clickable_objects[cursor::selected_object].velocity[1].x,game::clickable_objects[cursor::selected_object].velocity[1].y);
+    glutPrint(window::width/40,window::height-120, GLUT_BITMAP_HELVETICA_12, text5, BLACK);
 
-    sprintf(text6,"momentum: %.2f %.2f",game::clickable_objects[cursor::selected_object].momentum.x,game::clickable_objects[cursor::selected_object].momentum.y);
-    glutPrint (window::width/40,window::height-140, GLUT_BITMAP_HELVETICA_12, text6, BLACK);
+    sprintf(text6,"time accelerating: %.2f %.2f",game::clickable_objects[cursor::selected_object].delta_time[2],game::clickable_objects[cursor::selected_object].delta_time[3]);
+    glutPrint(window::width/40,window::height-140, GLUT_BITMAP_HELVETICA_12, text6, BLACK);
 
-    sprintf(text7,"force: %.2f %.2f",game::clickable_objects[cursor::selected_object].force.x,game::clickable_objects[cursor::selected_object].force.y);
-    glutPrint (window::width/40,window::height-160, GLUT_BITMAP_HELVETICA_12, text7, BLACK);
+    sprintf(text7,"acceleration: %.2f %.2f",game::clickable_objects[cursor::selected_object].acceleration.x,game::clickable_objects[cursor::selected_object].acceleration.y);
+    glutPrint(window::width/40,window::height-160, GLUT_BITMAP_HELVETICA_12, text7, BLACK);
 
-    sprintf(text8,"acceleration: %.2f %.2f",game::clickable_objects[cursor::selected_object].acceleration.x,game::clickable_objects[cursor::selected_object].acceleration.y);
-    glutPrint (window::width/40,window::height-180, GLUT_BITMAP_HELVETICA_12, text8, BLACK);
+    sprintf(text8,"momentum: %.2f %.2f",game::clickable_objects[cursor::selected_object].momentum.x,game::clickable_objects[cursor::selected_object].momentum.y);
+    glutPrint(window::width/40,window::height-180, GLUT_BITMAP_HELVETICA_12, text8, BLACK);
 
-    sprintf(text9,"delta_time velocity: %.2f %.2f",game::clickable_objects[cursor::selected_object].delta_time[2],game::clickable_objects[cursor::selected_object].delta_time[3]);
-    glutPrint (window::width/40,window::height-200, GLUT_BITMAP_HELVETICA_12, text9, BLACK);
+    sprintf(text9,"force: %.2f %.2f",game::clickable_objects[cursor::selected_object].force.x,game::clickable_objects[cursor::selected_object].force.y);
+    glutPrint(window::width/40,window::height-200, GLUT_BITMAP_HELVETICA_12, text9, BLACK);
 
-    sprintf(text10,"touching object no. L:%d R:%d T:%d B:%d",game::clickable_objects[cursor::selected_object].touching[0], game::clickable_objects[cursor::selected_object].touching[1], game::clickable_objects[cursor::selected_object].touching[2],game::clickable_objects[cursor::selected_object].touching[3]);
-    glutPrint (window::width/40,window::height-220, GLUT_BITMAP_HELVETICA_12, text10, BLACK);
+    sprintf(text10,"object touching side L:%d R:%d T:%d B:%d",game::clickable_objects[cursor::selected_object].touching[0], game::clickable_objects[cursor::selected_object].touching[1], game::clickable_objects[cursor::selected_object].touching[2],game::clickable_objects[cursor::selected_object].touching[3]);
+    glutPrint(window::width/40,window::height-220, GLUT_BITMAP_HELVETICA_12, text10, BLACK);
 
-    sprintf(text11,"game time: %.2f",game::time);
-    glutPrint (window::width/40,window::height-240, GLUT_BITMAP_HELVETICA_12, text11, BLACK);
+    sprintf(text11,"game time: %.2fs",game::time);
+    glutPrint(window::width/40,window::height-240, GLUT_BITMAP_HELVETICA_12, text11, BLACK);
 
-    sprintf(text12,"click:%.2f,%.2f",cursor::left_down.x,cursor::left_down.y);
-    glutPrint (window::width/40,window::height-260, GLUT_BITMAP_HELVETICA_12, text12, BLACK);
+    sprintf(text12,"click: %.2f,%.2f",cursor::left_down.x,cursor::left_down.y);
+    glutPrint(window::width/40,window::height-260, GLUT_BITMAP_HELVETICA_12, text12, BLACK);
+
+    sprintf(text13,"drag: %.2f,%.2f",cursor::left_drag.x,cursor::left_drag.y);
+    glutPrint(window::width/40,window::height-280, GLUT_BITMAP_HELVETICA_12, text13, BLACK);
 }
 
 void ui::mouse_click(int button, int state, int x, int y)

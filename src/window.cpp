@@ -18,6 +18,7 @@
 #include "game.h"
 #include "ui.h"
 #include "cursor.h"
+#include <math.h>
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -30,13 +31,13 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #endif
-#include <math.h>
+
 //initialize the variables
 int window::width=640;
 int window::height=360;
-int window::position_x=100;
-int window::position_y=100;
-double window::refresh_rate=0.0166d;
+int window::position_x=0;
+int window::position_y=0;
+double window::refresh_rate=0.0166f;
 
 //resize the window
 void window::change_size(int w, int h)
@@ -76,15 +77,15 @@ void window::initialize()
 void window::render_scene()
 {
     glClear(GL_COLOR_BUFFER_BIT);// Clear Color Buffers
-//render the projectiles
-    for(int i=0; i<game::projectiles.size(); i++)
-    game::projectiles[i].render();
-//render the clickable_objects
 //NOTE: clickable_objects are rendered ontop of eachother according to the order in which they are rendered
 //BOTTOM
+    //render the projectiles
+    for(int i=0; i<game::projectiles.size(); i++)
+    game::projectiles[i].render();
+    //render the clickable_objects
     for(int i=0; i<game::clickable_objects.size(); i++)
     game::clickable_objects[i].render();
-//render the selection box
+    //render the selection box
     cursor::selection_box();
 //TOP
     if(ui::toggle_text)
@@ -94,7 +95,6 @@ void window::render_scene()
 
 void window::update_scene()
 {
-
     cursor::set_boundaries();//calculate the size of the selection box
     game::time_elapsed = ((float)clock()-game::time_started)/CLOCKS_PER_SEC;//update the start time
     //calculate the physics for all clickable_objects
@@ -116,15 +116,15 @@ void window::update_scene()
         game::time_started=clock();//reset the start time
         game::time+=window::refresh_rate;//increment the game clock
         ui::key_operations();//keyboard controls
-        //apply inertia
-        for(unsigned i=0; i<game::clickable_objects.size(); i++)
-        game::clickable_objects[i].inertia();
         //move clickable_objects
         for(unsigned i=0; i<game::clickable_objects.size(); i++)
         game::clickable_objects[i].perform_actions()||game::clickable_objects[i].move_to_point(*game::clickable_objects[i].rally);
         //move game::projectiles
         for(unsigned i=0; i<game::projectiles.size(); i++)
         game::projectiles[i].update();
+        //apply inertia
+        for(unsigned i=0; i<game::clickable_objects.size(); i++)
+        game::clickable_objects[i].inertia();
         glutPostRedisplay();//update the scene
     }
 }

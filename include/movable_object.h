@@ -40,7 +40,6 @@ public:
     bool moving_vertical();
     bool moving_horizontal();
     bool turning();
-    bool resting();
     bool moving();
     //turn functions make the object rotate over time
     void turn_right();

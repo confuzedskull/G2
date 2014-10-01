@@ -13,28 +13,31 @@
 
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
+
 #ifndef UI_H
 #define UI_H
 #include "color.h"
+
 namespace ui
 {
         extern bool* key_states; //stores each on/off state of a keyboard key
         extern bool temp_toggle;
         extern bool toggle_text;
         //text for information overlay
-        extern char text0[30];
+        extern char text0[20];
         extern char text1[30];
-        extern char text2[20];
-        extern char text3[30];
+        extern char text2[30];
+        extern char text3[20];
         extern char text4[30];
-        extern char text5[20];
-        extern char text6[10];
-        extern char text7[10];
-        extern char text8[10];
-        extern char text9[10];
-        extern char text10[20];
+        extern char text5[30];
+        extern char text6[30];
+        extern char text7[30];
+        extern char text8[20];
+        extern char text9[20];
+        extern char text10[35];
         extern char text11[20];
         extern char text12[20];
+        extern char text13[20];
         void glutPrint(float x, float y, void* font, char* text, color c);
         void print_text();
         void mouse_click(int button, int state, int x, int y);

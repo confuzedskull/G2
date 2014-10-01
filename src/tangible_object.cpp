@@ -132,5 +132,9 @@ tangible_object::tangible_object()
 {
     name="tangible object";
     collided=false;
+    touching[0]=-1;
+    touching[1]=-1;
+    touching[2]=-1;
+    touching[3]=-1;
     std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
 }

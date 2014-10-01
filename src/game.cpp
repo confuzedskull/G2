@@ -23,7 +23,7 @@
 
 clock_t game::time_started;
 float game::time = 0.0f;
-double game::time_elapsed = 0.0d;
+double game::time_elapsed = 0.0f;
 std::vector<clickable_object> game::clickable_objects;
 std::vector<projectile> game::projectiles;
 

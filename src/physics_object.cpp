@@ -33,93 +33,96 @@ void physics_object::set_resting()
 
 void physics_object::calc_delta_time()
 {
-    if(!isless(current.x,rest.x)&&!isgreater(current.x,rest.x))//x-position is not changing
-    {
-        stop_time[0]=game::time;
-        delta_time[0]=0.0f;
-    }
-    else
+    if(isgreaterequal(fabs(current.x-rest.x),0.01f))//at least difference of 0.01
     {
         start_time[0]=game::time;
         delta_time[0]=stop_time[0]-start_time[0];
     }
-
-    if(!isless(current.y,rest.y)&&!isgreater(current.y,rest.y))//y-position is not changing
+    else//difference of 0.01 or less is negligible
     {
-        stop_time[1]=game::time;
-        delta_time[1]=0.0f;
+        stop_time[0]=game::time;
+        delta_time[0]=0.0f;
     }
-    else
+
+    if(isgreaterequal(fabs(current.y-rest.y),0.01f))//at least difference of 0.01
     {
         start_time[1]=game::time;
         delta_time[1]=stop_time[1]-start_time[1];
     }
-
-    if(!moving_horizontal())//x-velocity is not changing
+    else//difference of 0.01 or less is negligible
     {
-        stop_time[2]=game::time;
-        delta_time[2]=0.0f;
+        stop_time[1]=game::time;
+        delta_time[1]=0.0f;
     }
-    else
+
+    if(isgreaterequal(fabs(velocity[1].x-velocity[0].x),0.01f))//at least difference of 0.01
     {
         start_time[2]=game::time;
         delta_time[2]=stop_time[2]-start_time[2];
     }
-
-    if(!moving_vertical())//y-velocity is not changing
+    else//difference of 0.01 or less is negligible
     {
-        stop_time[3]=game::time;
-        delta_time[3]=0.0f;
+        stop_time[2]=game::time;
+        delta_time[2]=0.0f;
     }
-    else
+
+    if(isgreaterequal(fabs(velocity[1].y-velocity[0].y),0.01f))//at least difference of 0.01
     {
         start_time[3]=game::time;
         delta_time[3]=stop_time[3]-start_time[3];
     }
-
-    if(!isless(rotation,rest_rotation) && !isgreater(rotation,rest_rotation))//rotation is not changing
+    else//difference of 0.01 or less is negligible
     {
-        stop_time[4]=game::time;
-        delta_time[4]=0.0f;
+        stop_time[3]=game::time;
+        delta_time[3]=0.0f;
     }
-    else
+
+    if(isgreaterequal(fabs(rotation-rest_rotation),0.01f))//at least difference of 0.01
     {
         start_time[4]=game::time;
         delta_time[4]=stop_time[4]-start_time[4];
     }
-
-    if(!turning())//angular velocity is not changing
+    else//difference of 0.01 or less is negligible
     {
-        stop_time[5]=game::time;
-        delta_time[5]=0.0f;
+        stop_time[4]=game::time;
+        delta_time[4]=0.0f;
     }
-    else
+
+    if(isgreaterequal(fabs(angular_velocity[1]-angular_velocity[0]),0.01f))//at least difference of 0.01
     {
         start_time[5]=game::time;
         delta_time[5]=stop_time[5]-start_time[5];
     }
+    else//difference of 0.01 or less is negligible
+    {
+        stop_time[5]=game::time;
+        delta_time[5]=0.0f;
+    }
 }
 void physics_object::calc_velocity()
 {
-    if(isnormal(delta_time[0]))
+    if(isnormal(delta_time[0]))//makes sure it's not zero,infinity, or NaN
         velocity[0].x=(rest.x-current.x)/delta_time[0];
+    velocity[1].x=velocity[0].x+momentum.x;//set final velocity
 
-    if(isnormal(delta_time[1]))
+    if(isnormal(delta_time[1]))//makes sure it's not zero,infinity, or NaN
         velocity[0].y=(rest.y-current.y)/delta_time[1];
+    velocity[1].y=velocity[0].y+momentum.y;//set final velocity
 
-    if(isnormal(delta_time[4]))
+    if(isnormal(delta_time[4]))//makes sure it's not zero,infinity, or NaN
         angular_velocity[0]=(rest_rotation-rotation)/delta_time[4];
+    angular_velocity[1]=angular_velocity[0]+angular_momentum;//set final velocity
 }
 
 void physics_object::calc_acceleration()
 {
-    if(isnormal(delta_time[2]))
+    if(isnormal(delta_time[2]))//makes sure it's not zero,infinity, or NaN
         acceleration.x=(velocity[0].x-velocity[1].x)/delta_time[2];
 
-    if(isnormal(delta_time[3]))
+    if(isnormal(delta_time[3]))//makes sure it's not zero,infinity, or NaN
         acceleration.y=(velocity[0].y-velocity[1].y)/delta_time[3];
 
-    if(isnormal(delta_time[5]))
+    if(isnormal(delta_time[5]))//makes sure it's not zero,infinity, or NaN
         angular_acceleration=(angular_velocity[0]-angular_velocity[1])/delta_time[5];
 }
 
@@ -128,15 +131,12 @@ void physics_object::calc_force()
     force.x=mass*acceleration.x;
     force.y=mass*acceleration.y;
 }
-
+//calculate initial momentum
 void physics_object::calc_momentum()
 {
     momentum.x=mass*velocity[0].x;
     momentum.y=mass*velocity[0].y;
     angular_momentum=mass*angular_velocity[0];
-    velocity[1].x=velocity[0].x+momentum.x;
-    velocity[1].y=velocity[0].y+momentum.y;
-    angular_velocity[1]=angular_velocity[0]+angular_momentum;
 }
 //calculate momentum after elastic collision with object p
 void physics_object::calc_momentum(physics_object p)
@@ -147,21 +147,23 @@ void physics_object::calc_momentum(physics_object p)
 
 void physics_object::inertia()
 {
-    current.x+=momentum.x;
-    if(isnormal(momentum.x))
+    if(isgreaterequal(fabs(momentum.x),0.01f))
     {
+        current.x+=momentum.x;
         moving_left=true;
         moving_right=true;
     }
-    current.y+=momentum.y;
-    if(isnormal(momentum.y))
+
+    if(isgreaterequal(fabs(momentum.y),0.01f))
     {
+        current.y+=momentum.y;
         moving_forward=true;
         moving_backward=true;
     }
-    rotation+=angular_momentum;
-    if(isnormal(angular_momentum))
+
+    if(isgreaterequal(fabs(angular_momentum),0.01f))
     {
+        rotation+=angular_momentum;
         turning_left=true;
         turning_right=true;
     }
@@ -171,13 +173,13 @@ void physics_object::physics()
 {
     set_resting();
     set_boundaries();
-    calc_direction();
     calc_points();
+    calc_direction();
     calc_delta_time();
     calc_velocity();
     calc_acceleration();
-    calc_momentum();
     calc_force();
+    calc_momentum();
     reset_motion();
 }
 
@@ -185,8 +187,8 @@ physics_object::physics_object()
 {
     name="physics object";
     mass=0.015f;//If this is too high, objects might just disappear off the screen
-    velocity[0].x=0.0f;
-    velocity[0].y=0.0f;
-    angular_velocity[0]=0.0f;
+    velocity[0].x=0.00f;
+    velocity[0].y=0.00f;
+    angular_velocity[0]=0.00f;
     std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
 }
