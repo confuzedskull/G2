@@ -17,6 +17,7 @@
 #include "projectile.h"
 #include "distance.h"
 #include <math.h>
+#include <iostream>
 
 void projectile::fire(complex_object source)//an object fires a projectile
 {
@@ -54,7 +55,7 @@ void projectile::reset()
 
 projectile::projectile()
 {
-    name="projectile";
+    type="projectile";
     width=10;
     height=10;
     range=1000.0f;
@@ -63,4 +64,5 @@ projectile::projectile()
     fired=false;
     visible=false;
     primary_color=RED;
+    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created."<<std::endl;
 }

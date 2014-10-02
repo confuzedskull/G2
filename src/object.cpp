@@ -74,9 +74,15 @@ void object::rotate(float angle)
     rotation+=angle;
 }
 
+void object::update()
+{
+    set_boundaries();
+}
+
 object::object()//constructs an object
 {
-    name="generic object";
+    name="unnamed";
+    type="object";
     number=total_objects;
     total_objects++;
     current.set(window::width/2,window::height/2);
@@ -89,12 +95,13 @@ object::object()//constructs an object
     rest_rotation=90;
     visible=true;
     rendered=false;
-    std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
+    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created."<<std::endl;
 }
 
 object::object(float x, float y, float w, float h, color c)
 {
-    name="generic object";
+    name="unnamed";
+    type="object";
     number=total_objects;
     total_objects++;
     current.x=x;
@@ -109,4 +116,5 @@ object::object(float x, float y, float w, float h, color c)
     rest_rotation=90.1;
     visible=true;
     rendered=false;
+    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created."<<std::endl;
 }

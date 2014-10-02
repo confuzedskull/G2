@@ -20,7 +20,7 @@
 #include "point2f.h"
 
 //A tangible object can move and detect collision with another object
-class tangible_object: public movable_object
+class tangible_object: virtual public movable_object
 {
     public:
     int touching[4];/*The number of the touching object is stored in each index. "0" is no object

@@ -14,28 +14,18 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#ifndef GAME_H
-#define GAME_H
-#include <time.h>
-#include "physics_object.h"
-#include "draggable_object.h"
-#include "rts_object.h"
-#include "projectile.h"
-#include <vector>
+#ifndef RTS_OBJECT_H
+#define RTS_OBJECT_H
+#include "clickable_object.h"
+#include "tangible_object.h"
 
-//stores important settings and global variables for the program
-class game
+class rts_object: public clickable_object, public tangible_object
 {
     public:
-    static float time;
-    static clock_t time_started;
-    static double time_elapsed;
-    static std::vector<draggable_object> draggable_objects;
-    static std::vector<physics_object> physics_objects;
-    static std::vector<rts_object> rts_objects;
-    static std::vector<projectile> projectiles;
-    static int current_projectile;
-    static void init_objects();
-    static void collision_detection();
+        bool highlighted();//checks if this object lies within the highlighting box
+        void mouse_function();//performs a variety of actions dependent on cursor interaction
+        void update();
+        rts_object();
 };
-#endif // GAME_H
+
+#endif // RTS_OBJECT_H

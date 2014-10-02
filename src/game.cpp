@@ -24,89 +24,111 @@
 clock_t game::time_started;
 float game::time = 0.0f;
 double game::time_elapsed = 0.0f;
-std::vector<clickable_object> game::clickable_objects;
+std::vector<draggable_object> draggable_objects;
+std::vector<physics_object> game::physics_objects;
+std::vector<rts_object> game::rts_objects;
 std::vector<projectile> game::projectiles;
 
 void game::collision_detection()
 {
-    for(unsigned a=0; a<game::clickable_objects.size(); a++)
+    for(unsigned a=0; a<game::rts_objects.size(); a++)
     {
-        for(unsigned b=0; b<game::clickable_objects.size(); b++)
+        for(unsigned b=0; b<game::rts_objects.size(); b++)
         {
-            if(a!=b && clickable_objects[a].is_close(clickable_objects[b]))//check objects colliding with other objects
+            if(a!=b && rts_objects[a].is_close(rts_objects[b]))//check objects colliding with other objects
             {
-                clickable_objects[a].identify_touched(clickable_objects[b]);
-                clickable_objects[a].calc_momentum(clickable_objects[b]);
-                clickable_objects[a].repel(clickable_objects[b]);
+                rts_objects[a].identify_touched(rts_objects[b]);
+                rts_objects[a].repel(rts_objects[b]);
             }
-            if(a!=b && clickable_objects[a].is_close(projectiles[b]))//check objects colliding with projectiles
+        }
+    }
+    for(unsigned a=0; a<game::physics_objects.size(); a++)
+    {
+        for(unsigned b=0; b<game::physics_objects.size(); b++)
+        {
+            if(a!=b && physics_objects[a].is_close(physics_objects[b]))//check objects colliding with other objects
             {
-                clickable_objects[a].identify_touched(projectiles[b]);
+                physics_objects[a].identify_touched(physics_objects[b]);
+                physics_objects[a].repel(physics_objects[b]);
             }
-            if(a!=b && projectiles[a].is_close(clickable_objects[b]))//check projectiles colliding with objects
+            if(a!=b && physics_objects[a].is_close(projectiles[b]))//check objects colliding with projectiles
+            {
+                rts_objects[a].identify_touched(projectiles[b]);
+            }
+            if(a!=b && projectiles[a].is_close(physics_objects[b]))//check projectiles colliding with objects
             projectiles[a].reset();
         }
     }
+    /*for(unsigned a=0; a<game::draggable_objects.size(); a++)
+    {
+        for(unsigned b=0; b<game::draggable_objects.size(); b++)
+        {
+            if(a!=b && draggable_objects[a].is_close(draggable_objects[b]))//check objects colliding with other objects
+            {
+                draggable_objects[a].identify_touched(draggable_objects[b]);
+                draggable_objects[a].repel(draggable_objects[b]);
+            }
+        }
+    }*/
 }
 
 void game::init_objects()
 {
     object::total_objects=0;//reset the object count
 
-    //initialize the clickable_objects
-    //first object (yes first, because the index starts at 0) from clickable_objects container
-    clickable_objects.push_back(clickable_object());
-    clickable_objects[0].name="small square";
-    clickable_objects[0].primary_color.set(0.5,0.5,0.5);
-    clickable_objects[0].current.set(window::width/2-48,window::height/2+48);
-    clickable_objects[0].width=32;
-    clickable_objects[0].height=32;
-    clickable_objects[0].mass=0.00375f;
-    clickable_objects[0].add_action(2,76);//move right 96 units
-    clickable_objects[0].add_action(4,76);//move down 96 units
-    clickable_objects[0].add_action(1,76);//move left 96 units
-    clickable_objects[0].add_action(3,76);//move up 96 units
-    clickable_objects[0].add_action(5,90);//turn left 90 degrees
-    clickable_objects[0].add_action(6,90);//turn right 90 degrees
-    std::clog<<"object#"<<clickable_objects[0].number<<": "<<clickable_objects[0].name<<" initialized."<<std::endl;
+//initialize the physics objects
+    //first object (yes first, because the index starts at 0) from physics objects container
+    physics_objects.push_back(physics_object());
+    physics_objects[0].name="small square";
+    physics_objects[0].primary_color.set(0.5,0.5,0.5);
+    physics_objects[0].current.set(window::width/2-48,window::height/2+48);
+    physics_objects[0].width=32;
+    physics_objects[0].height=32;
+    physics_objects[0].add_action(2,76);//move right 96 units
+    physics_objects[0].add_action(4,76);//move down 96 units
+    physics_objects[0].add_action(1,76);//move left 96 units
+    physics_objects[0].add_action(3,76);//move up 96 units
+    physics_objects[0].add_action(5,90);//turn left 90 degrees
+    physics_objects[0].add_action(6,90);//turn right 90 degrees
+    std::clog<<"object#"<<physics_objects[0].number<<": "<<physics_objects[0].name<<" initialized."<<std::endl;
+//initialize the draggable objects
+    //first object from draggable objects container
+/*    draggable_objects.push_back(draggable_object());
+    draggable_objects[0].name="black square";
+    draggable_objects[0].primary_color.set(BLACK);
+    std::clog<<"object#"<<draggable_objects[0].number<<": "<<draggable_objects[0].name<<" initialized."<<std::endl;*/
+//initialize the rts objects
+    //first object from rts_objects container
+    rts_objects.push_back(rts_object());
+    rts_objects[0].name="yellow square";
+    rts_objects[0].primary_color.set(YELLOW);
+    rts_objects[0].current.set(window::width/2+96,window::height/2);
+    std::clog<<"object#"<<rts_objects[0].number<<": "<<rts_objects[0].name<<" initialized."<<std::endl;
 
-    //second object from clickable objects container
-    clickable_objects.push_back(clickable_object());
-    clickable_objects[1].name="black square";
-    clickable_objects[1].primary_color.set(BLACK);
-    std::clog<<"object#"<<clickable_objects[1].number<<": "<<clickable_objects[1].name<<" initialized."<<std::endl;
+    //second object from rts_objects container
+    rts_objects.push_back(rts_object());
+    rts_objects[1].name="green square";
+    rts_objects[1].primary_color.set(GREEN);
+    rts_objects[1].current.set(window::width/2,window::height/2-96);
+    std::clog<<"object#"<<rts_objects[1].number<<": "<<rts_objects[1].name<<" initialized."<<std::endl;
 
-    //third object from clickable_objects container
-    clickable_objects.push_back(clickable_object());
-    clickable_objects[2].name="yellow square";
-    clickable_objects[2].primary_color.set(YELLOW);
-    clickable_objects[2].current.set(window::width/2+96,window::height/2);
-    std::clog<<"object#"<<clickable_objects[2].number<<": "<<clickable_objects[2].name<<" initialized."<<std::endl;
+    //third object from rts_objects container
+    rts_objects.push_back(rts_object());
+    rts_objects[2].name="red square";
+    rts_objects[2].primary_color.set(RED);
+    rts_objects[2].current.set(window::width/2,window::height/2+96);
+    std::clog<<"object#"<<rts_objects[2].number<<": "<<rts_objects[2].name<<" initialized."<<std::endl;
 
-    //fourth object from clickable_objects container
-    clickable_objects.push_back(clickable_object());
-    clickable_objects[3].name="green square";
-    clickable_objects[3].primary_color.set(GREEN);
-    clickable_objects[3].current.set(window::width/2,window::height/2-96);
-    std::clog<<"object#"<<clickable_objects[3].number<<": "<<clickable_objects[3].name<<" initialized."<<std::endl;
+    //fourth object from rts_objects container
+    rts_objects.push_back(rts_object());
+    rts_objects[3].name="blue square";
+    rts_objects[3].primary_color.set(BLUE);
+    rts_objects[3].current.set(window::width/2-96,window::height/2);
+    std::clog<<"object#"<<rts_objects[3].number<<": "<<rts_objects[3].name<<" initialized."<<std::endl;
 
-    //fifth object from clickable_objects container
-    clickable_objects.push_back(clickable_object());
-    clickable_objects[4].name="red square";
-    clickable_objects[4].primary_color.set(RED);
-    clickable_objects[4].current.set(window::width/2,window::height/2+96);
-    std::clog<<"object#"<<clickable_objects[4].number<<": "<<clickable_objects[4].name<<" initialized."<<std::endl;
-
-    //sixth object from clickable_objects container
-    clickable_objects.push_back(clickable_object());
-    clickable_objects[5].name="blue square";
-    clickable_objects[5].primary_color.set(BLUE);
-    clickable_objects[5].current.set(window::width/2-96,window::height/2);
-    std::clog<<"object#"<<clickable_objects[5].number<<": "<<clickable_objects[5].name<<" initialized."<<std::endl;
-
-    //create a projectile for each clickable object
-    projectiles.assign(6,projectile());
+    //create a projectile for each physics object
+    projectiles.assign(physics_objects.size(),projectile());
 
     //unhighlight everything
-    cursor::highlighted_objects.assign(6,false);
+    cursor::highlighted_objects.assign(rts_objects.size(),false);
 }

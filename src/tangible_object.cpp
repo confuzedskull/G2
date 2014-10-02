@@ -128,13 +128,13 @@ bool tangible_object::near_right(complex_object B)
         return false;
 }
 
-tangible_object::tangible_object()
+tangible_object::tangible_object(): movable_object()
 {
-    name="tangible object";
+    type="tangible object";
     collided=false;
     touching[0]=-1;
     touching[1]=-1;
     touching[2]=-1;
     touching[3]=-1;
-    std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
+    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created."<<std::endl;
 }

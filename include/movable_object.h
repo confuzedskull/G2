@@ -22,7 +22,7 @@
 #include <queue>
 
 //A movable object uses the sides of a complex object to calculate steps in each direction relative to the object's rotation
-class movable_object: public complex_object
+class movable_object: virtual public complex_object
 {
 public:
     point2f * rally;

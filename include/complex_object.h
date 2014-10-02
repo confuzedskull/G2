@@ -20,7 +20,7 @@
 #include "point2f.h"
 
 //A complex object consists of a number of points which are calculated based on the object's position and rotation
-class complex_object: public object
+class complex_object: virtual public object
 {
     public:
     //the mid-point of each side
@@ -42,6 +42,7 @@ class complex_object: public object
     void rotate(float angle);//performs a rotation transformation based on the given angle
     void calc_points();//calculates the midpoints and corners
     void render();//makes the object visible on screen
+    void update();
     complex_object();
 };
 #endif // COMPLEX_H

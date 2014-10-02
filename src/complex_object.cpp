@@ -61,7 +61,7 @@ void complex_object::render()
     glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
     if(!rendered)
     {
-        std::clog<<"object#"<<number<<": "<<name<<" rendered."<<std::endl;
+        std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" rendered."<<std::endl;
         rendered=true;
     }
     if(visible)
@@ -75,9 +75,16 @@ void complex_object::render()
     }
 }
 
+void complex_object::update()
+{
+    set_boundaries();
+    calc_points();
+    calc_direction();
+}
+
 complex_object::complex_object()
 {
-    name="complex object";
+    type="complex object";
     set_boundaries();
-    std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
+    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created."<<std::endl;
 }

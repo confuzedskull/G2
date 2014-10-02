@@ -41,7 +41,7 @@ float cursor::ymin = 0.0;
 object* cursor::left_clicked_object = new object;
 int cursor::selected_object = 0;
 bool cursor::left_clicked_an_object = false;
-std::vector<bool> cursor::highlighted_objects(game::clickable_objects.size(),false);
+std::vector<bool> cursor::highlighted_objects(game::rts_objects.size(),false);
 bool cursor::right_dragging = false;
 object* cursor::right_clicked_object = new object;
 bool cursor::right_clicked_an_object = false;
@@ -56,7 +56,7 @@ point2f cursor::right_drag = point2f(0.0,0.0);
 int cursor::objects_selected()
 {
     int selected = 0;
-    for(unsigned i=0; i<game::clickable_objects.size(); i++)
+    for(unsigned i=0; i<game::rts_objects.size(); i++)
     {
         if(highlighted_objects[i])
             selected++;

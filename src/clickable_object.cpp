@@ -55,31 +55,6 @@ bool clickable_object::right_clicked()
         return false;
 }
 
-bool clickable_object::highlighted()
-{
-    //if object lies within selection box boundaries, return true
-    if(cursor::highlighting &&
-            isless(current.x,cursor::xmax) &&
-            isgreater(current.x,cursor::xmin) &&
-            isgreater(current.y,cursor::ymax) &&
-            isless(current.y,cursor::ymin))
-        return true;
-    else
-        return false;
-}
-
-bool clickable_object::grabbed()
-{
-    if(cursor::left_dragging &&
-            isless(cursor::left_drag.x,xmax) &&
-            isgreater(cursor::left_drag.x,xmin) &&
-            isless(cursor::left_drag.y,ymax) &&
-            isgreater(cursor::left_drag.y,ymin))
-        return true;
-    else
-        return false;
-}
-
 void clickable_object::mouse_function()
 {
     if(left_clicked())//clicked this object
@@ -102,49 +77,10 @@ void clickable_object::mouse_function()
         selected = false;
     }
 
-    if(highlighted())//object lies within selection box
-    {
-        cursor::highlighted_objects[number]=true;
-        selected=true;
-    }
-
     if(right_clicked())//right clicked this object
     {
         cursor::right_clicked_object=this;
         cursor::right_clicked_an_object=true;
-    }
-
-    if(grabbed() && !cursor::highlighting && cursor::grabbed_an_object==false)//grabbed this object
-    {
-        current.set(cursor::left_drag.x,cursor::left_drag.y);
-        cursor::grabbed_an_object=true;
-        moving_forward=true;
-        moving_backward=true;
-        moving_left=true;
-        moving_right=true;
-    }
-
-    if(selected)//you can only move an object when it is selected
-    {
-        if(cursor::right_click && !right_clicked())
-        {
-            if(cursor::right_clicked_an_object)
-            {
-                //move to right clicked object
-                rally = &cursor::right_clicked_object->current;//set rally to reference point because current is always changing
-            }
-            else//move to right clicked empty space
-            {
-                rally = new point2f(cursor::right_down.x,cursor::right_down.y);
-            }
-            rally_set=true;
-        }
-        if(cursor::right_dragging && !right_clicked())
-        {
-            //move to right drag
-            rally = new point2f(cursor::right_drag.x,cursor::right_drag.y);
-            rally_set=true;
-        }
     }
 }
 //clickable objects need their own render method because they have a selection indicator
@@ -153,7 +89,7 @@ void clickable_object::render()
     glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
     if(!rendered)
     {
-        std::clog<<"object#"<<number<<": "<<name<<" rendered."<<std::endl;
+        std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" rendered."<<std::endl;
         rendered=true;
     }
     if(visible)
@@ -185,9 +121,17 @@ void clickable_object::render()
     }
 }
 
-clickable_object::clickable_object()
+void clickable_object::update()
 {
-    name="clickable object";
+    set_boundaries();
+    calc_points();
+    calc_direction();
+    mouse_function();
+}
+
+clickable_object::clickable_object(): complex_object()
+{
+    type="clickable object";
     selected=false;
-    std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
+    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created."<<std::endl;
 }

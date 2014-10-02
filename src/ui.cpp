@@ -71,39 +71,55 @@ void ui::glutPrint(float x, float y, void* font, char* text, color c)
 
 void ui::print_text()
 {
-    sprintf(text0,"selected object: %d", game::clickable_objects[cursor::selected_object].number);
-    glutPrint(window::width/40,window::height-20, GLUT_BITMAP_HELVETICA_12, text0, BLACK);
+    if(cursor::left_clicked_object->type=="physics")
+    {
+        sprintf(text0,"selected object: %d", game::physics_objects[cursor::selected_object].number);
+        glutPrint(window::width/40,window::height-20, GLUT_BITMAP_HELVETICA_12, text0, BLACK);
 
-    sprintf(text1,"current position: %.2f,%.2f", game::clickable_objects[cursor::selected_object].current.x,game::clickable_objects[cursor::selected_object].current.y);
-    glutPrint(window::width/40,window::height-40, GLUT_BITMAP_HELVETICA_12, text1, BLACK);
+        sprintf(text1,"current position: %.2f,%.2f", game::physics_objects[cursor::selected_object].current.x,game::physics_objects[cursor::selected_object].current.y);
+        glutPrint(window::width/40,window::height-40, GLUT_BITMAP_HELVETICA_12, text1, BLACK);
 
-    sprintf(text2,"resting position: %.2f, %.2f",game::clickable_objects[cursor::selected_object].rest.x,game::clickable_objects[cursor::selected_object].rest.y);
-    glutPrint(window::width/40,window::height-60, GLUT_BITMAP_HELVETICA_12, text2, BLACK);
+        sprintf(text2,"resting position: %.2f, %.2f",game::physics_objects[cursor::selected_object].rest.x,game::physics_objects[cursor::selected_object].rest.y);
+        glutPrint(window::width/40,window::height-60, GLUT_BITMAP_HELVETICA_12, text2, BLACK);
 
-    sprintf(text3,"time moving: %.2f,%.2f",game::clickable_objects[cursor::selected_object].delta_time[0],game::clickable_objects[cursor::selected_object].delta_time[1]);
-    glutPrint(window::width/40,window::height-80, GLUT_BITMAP_HELVETICA_12, text3, BLACK);
+        sprintf(text3,"time moving: %.2f,%.2f",game::physics_objects[cursor::selected_object].delta_time[0],game::physics_objects[cursor::selected_object].delta_time[1]);
+        glutPrint(window::width/40,window::height-80, GLUT_BITMAP_HELVETICA_12, text3, BLACK);
 
-    sprintf(text4,"initial velocity: %.2f,%.2f",game::clickable_objects[cursor::selected_object].velocity[0].x,game::clickable_objects[cursor::selected_object].velocity[0].y);
-    glutPrint (window::width/40,window::height-100, GLUT_BITMAP_HELVETICA_12, text4, BLACK);
+        sprintf(text4,"initial velocity: %.2f,%.2f",game::physics_objects[cursor::selected_object].velocity[0].x,game::physics_objects[cursor::selected_object].velocity[0].y);
+        glutPrint (window::width/40,window::height-100, GLUT_BITMAP_HELVETICA_12, text4, BLACK);
 
-    sprintf(text5,"final velocity: %.2f,%.2f",game::clickable_objects[cursor::selected_object].velocity[1].x,game::clickable_objects[cursor::selected_object].velocity[1].y);
-    glutPrint(window::width/40,window::height-120, GLUT_BITMAP_HELVETICA_12, text5, BLACK);
+        sprintf(text5,"final velocity: %.2f,%.2f",game::physics_objects[cursor::selected_object].velocity[1].x,game::physics_objects[cursor::selected_object].velocity[1].y);
+        glutPrint(window::width/40,window::height-120, GLUT_BITMAP_HELVETICA_12, text5, BLACK);
 
-    sprintf(text6,"time accelerating: %.2f %.2f",game::clickable_objects[cursor::selected_object].delta_time[2],game::clickable_objects[cursor::selected_object].delta_time[3]);
-    glutPrint(window::width/40,window::height-140, GLUT_BITMAP_HELVETICA_12, text6, BLACK);
+        sprintf(text6,"time accelerating: %.2f %.2f",game::physics_objects[cursor::selected_object].delta_time[2],game::physics_objects[cursor::selected_object].delta_time[3]);
+        glutPrint(window::width/40,window::height-140, GLUT_BITMAP_HELVETICA_12, text6, BLACK);
 
-    sprintf(text7,"acceleration: %.2f %.2f",game::clickable_objects[cursor::selected_object].acceleration.x,game::clickable_objects[cursor::selected_object].acceleration.y);
-    glutPrint(window::width/40,window::height-160, GLUT_BITMAP_HELVETICA_12, text7, BLACK);
+        sprintf(text7,"acceleration: %.2f %.2f",game::physics_objects[cursor::selected_object].acceleration.x,game::physics_objects[cursor::selected_object].acceleration.y);
+        glutPrint(window::width/40,window::height-160, GLUT_BITMAP_HELVETICA_12, text7, BLACK);
 
-    sprintf(text8,"momentum: %.2f %.2f",game::clickable_objects[cursor::selected_object].momentum.x,game::clickable_objects[cursor::selected_object].momentum.y);
-    glutPrint(window::width/40,window::height-180, GLUT_BITMAP_HELVETICA_12, text8, BLACK);
+        sprintf(text8,"momentum: %.2f %.2f",game::physics_objects[cursor::selected_object].momentum.x,game::physics_objects[cursor::selected_object].momentum.y);
+        glutPrint(window::width/40,window::height-180, GLUT_BITMAP_HELVETICA_12, text8, BLACK);
 
-    sprintf(text9,"force: %.2f %.2f",game::clickable_objects[cursor::selected_object].force.x,game::clickable_objects[cursor::selected_object].force.y);
-    glutPrint(window::width/40,window::height-200, GLUT_BITMAP_HELVETICA_12, text9, BLACK);
+        sprintf(text9,"force: %.2f %.2f",game::physics_objects[cursor::selected_object].force.x,game::physics_objects[cursor::selected_object].force.y);
+        glutPrint(window::width/40,window::height-200, GLUT_BITMAP_HELVETICA_12, text9, BLACK);
 
-    sprintf(text10,"object touching side L:%d R:%d T:%d B:%d",game::clickable_objects[cursor::selected_object].touching[0], game::clickable_objects[cursor::selected_object].touching[1], game::clickable_objects[cursor::selected_object].touching[2],game::clickable_objects[cursor::selected_object].touching[3]);
-    glutPrint(window::width/40,window::height-220, GLUT_BITMAP_HELVETICA_12, text10, BLACK);
+        sprintf(text10,"object touching side L:%d R:%d T:%d B:%d",game::physics_objects[cursor::selected_object].touching[0], game::physics_objects[cursor::selected_object].touching[1], game::physics_objects[cursor::selected_object].touching[2],game::physics_objects[cursor::selected_object].touching[3]);
+        glutPrint(window::width/40,window::height-220, GLUT_BITMAP_HELVETICA_12, text10, BLACK);
+    }
+    else
+    {
+        sprintf(text0,"selected object: %d", game::rts_objects[cursor::selected_object].number);
+        glutPrint(window::width/40,window::height-20, GLUT_BITMAP_HELVETICA_12, text0, BLACK);
 
+        sprintf(text1,"current position: %.2f,%.2f", game::rts_objects[cursor::selected_object].current.x,game::rts_objects[cursor::selected_object].current.y);
+        glutPrint(window::width/40,window::height-40, GLUT_BITMAP_HELVETICA_12, text1, BLACK);
+
+        sprintf(text2,"resting position: %.2f, %.2f",game::rts_objects[cursor::selected_object].rest.x,game::rts_objects[cursor::selected_object].rest.y);
+        glutPrint(window::width/40,window::height-60, GLUT_BITMAP_HELVETICA_12, text2, BLACK);
+
+        sprintf(text10,"object touching side L:%d R:%d T:%d B:%d",game::rts_objects[cursor::selected_object].touching[0], game::rts_objects[cursor::selected_object].touching[1], game::rts_objects[cursor::selected_object].touching[2],game::rts_objects[cursor::selected_object].touching[3]);
+        glutPrint(window::width/40,window::height-80, GLUT_BITMAP_HELVETICA_12, text10, BLACK);
+    }
     sprintf(text11,"game time: %.2fs",game::time);
     glutPrint(window::width/40,window::height-240, GLUT_BITMAP_HELVETICA_12, text11, BLACK);
 
@@ -149,9 +165,9 @@ void ui::mouse_click(int button, int state, int x, int y)
 void ui::check_clicked()
 {
     bool left_clicked = true;
-    for(int a=0; a<game::clickable_objects.size(); a++)
+    for(int a=0; a<game::rts_objects.size(); a++)
     {
-        if(left_clicked && game::clickable_objects[a].left_clicked())
+        if(left_clicked && game::rts_objects[a].left_clicked())
         {
             left_clicked=true;
         }
@@ -162,23 +178,23 @@ void ui::check_clicked()
     }
     cursor::left_clicked_an_object = left_clicked;
     bool right_clicked=true;
-    for(int a=0; a<game::clickable_objects.size(); a++)
+    for(int a=0; a<game::rts_objects.size(); a++)
     {
-        if(right_clicked && game::clickable_objects[a].right_clicked())
+        if(right_clicked && game::rts_objects[a].right_clicked())
             right_clicked=true;
         else
             right_clicked=false;
     }
     cursor::right_clicked_an_object = right_clicked;
-    bool grabbed=true;
-    for(int a=0; a<game::clickable_objects.size(); a++)
+/*    bool grabbed=true;
+    for(int a=0; a<game::draggable_objects.size(); a++)
     {
-        if(grabbed && game::clickable_objects[a].grabbed())
+        if(grabbed && game::draggable_objects[a].grabbed())
             grabbed=true;
         else
             grabbed=false;
     }
-    cursor::grabbed_an_object = grabbed;
+    cursor::grabbed_an_object = grabbed;*/
 }
 
 //This is called when user clicks and drags
@@ -235,22 +251,22 @@ void ui::key_up(unsigned char key, int x, int y)
 void ui::key_operations(void)
 {
     if(key_states['w'] || key_states['W'])
-    game::clickable_objects[cursor::selected_object].move_forward();
+    game::physics_objects[0].move_forward();
 
     if(key_states['s'] || key_states['S'])
-    game::clickable_objects[cursor::selected_object].move_back();
+    game::physics_objects[0].move_back();
 
     if(key_states['a'] || key_states['A'])
-    game::clickable_objects[cursor::selected_object].move_left();
+    game::physics_objects[0].move_left();
 
     if(key_states['d'] || key_states['D'])
-    game::clickable_objects[cursor::selected_object].move_right();
+    game::physics_objects[0].move_right();
 
     if(key_states['q'] || key_states['Q'])
-    game::clickable_objects[cursor::selected_object].turn_left();
+    game::physics_objects[0].turn_left();
 
     if(key_states['e'] || key_states['E'])
-    game::clickable_objects[cursor::selected_object].turn_right();
+    game::physics_objects[0].turn_right();
 
     if(key_states['i'] || key_states['I'])
     {
@@ -264,8 +280,8 @@ void ui::key_operations(void)
 // spacebar
     if(key_states[32])
     {
-        if(!game::projectiles[cursor::selected_object].fired)
-            game::projectiles[cursor::selected_object].fire(game::clickable_objects[cursor::selected_object]);
+        if(!game::projectiles[0].fired)
+            game::projectiles[0].fire(game::physics_objects[0]);
     }
 //escape
     if (key_states[27])

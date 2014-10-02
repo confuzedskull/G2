@@ -248,12 +248,12 @@ bool movable_object::perform_actions()
         return false;
 }
 
-movable_object::movable_object()
+movable_object::movable_object(): complex_object()
 {
-    name="movable object";
+    type="movable object";
     speed=1.01f;
     rally = &rest;
     rally_set=false;
     reset_motion();
-    std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
+    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created."<<std::endl;
 }

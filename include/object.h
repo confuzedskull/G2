@@ -27,6 +27,7 @@ class object
     public:
     static int total_objects;
     std::string name;
+    std::string type;
     int number;
     point2f current;
     point2f rest;//resting point
@@ -41,6 +42,7 @@ class object
     void set_boundaries();//calculates the max's and mins
     void render();//draws the object
     void rotate(float angle);//changes the object's rotation by the given angle
+    void update();
     object();
     object(float x, float y, float w, float h, color c);
 };

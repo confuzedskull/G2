@@ -171,10 +171,6 @@ void physics_object::inertia()
 
 void physics_object::physics()
 {
-    set_resting();
-    set_boundaries();
-    calc_points();
-    calc_direction();
     calc_delta_time();
     calc_velocity();
     calc_acceleration();
@@ -183,12 +179,21 @@ void physics_object::physics()
     reset_motion();
 }
 
+void physics_object::update()
+{
+    set_resting();
+    set_boundaries();
+    calc_points();
+    calc_direction();
+    physics();
+}
+
 physics_object::physics_object()
 {
-    name="physics object";
+    type="physics object";
     mass=0.015f;//If this is too high, objects might just disappear off the screen
     velocity[0].x=0.00f;
     velocity[0].y=0.00f;
     angular_velocity[0]=0.00f;
-    std::clog<<"object#"<<number<<": "<<name<<" created."<<std::endl;
+    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created."<<std::endl;
 }
