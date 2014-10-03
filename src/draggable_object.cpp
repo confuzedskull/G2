@@ -19,6 +19,18 @@
 #include "cursor.h"
 #include <math.h>
 #include <iostream>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <GLUT/glut.h>
+#else
+#ifdef _WIN32
+#include <windows.h>
+#endif
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
+#endif
 
 bool draggable_object::grabbed()
 {
@@ -60,11 +72,39 @@ void draggable_object::mouse_function()
         cursor::right_clicked_an_object=true;
     }
 
-    if(grabbed() && !cursor::highlighting && cursor::grabbed_an_object==false)//grabbed this object
+    if(grabbed())//grabbed this object
     {
         current.set(cursor::left_drag.x,cursor::left_drag.y);
         cursor::grabbed_an_object=true;
     }
+}
+
+//draggable objects need their own render method because they do not have a selection indicator
+void draggable_object::render()
+{
+    glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
+    if(!rendered)
+    {
+        std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" rendered."<<std::endl;
+        rendered=true;
+    }
+    if(visible)
+    {
+        glBegin(GL_POLYGON);//draws a solid shape
+        glVertex2f(back_left.x, back_left.y); // The bottom left corner
+        glVertex2f(front_left.x, front_left.y); // The top left corner
+        glVertex2f(front_right.x, front_right.y); // The top right corner
+        glVertex2f(back_right.x, back_right.y); // The bottom right corner
+        glEnd();//finish drawing
+    }
+}
+
+void draggable_object::update()
+{
+    set_boundaries();
+    calc_points();
+    calc_direction();
+    mouse_function();
 }
 
 draggable_object::draggable_object()

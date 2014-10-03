@@ -37,8 +37,7 @@ Known Bugs:
 -an object's resting point gets set even when it's moving
 -some of the object's physics values do not zero out when object is at rest
 -information overlay displays information of wrong object
--having the information overlay up while clicking the blue object makes the program crash
--black object is missing
+-having the information overlay up after clicking an object sometimes makes the program crash
 
 Disclaimer:
 This program was made using the OpenGL Utility Toolkit(GLUT) created by Mark Kilgard.

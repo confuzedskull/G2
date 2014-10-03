@@ -24,9 +24,9 @@
 clock_t game::time_started;
 float game::time = 0.0f;
 double game::time_elapsed = 0.0f;
-std::vector<draggable_object> draggable_objects;
-std::vector<physics_object> game::physics_objects;
-std::vector<rts_object> game::rts_objects;
+std::vector<draggable_object*> game::draggable_objects;
+std::vector<physics_object*> game::physics_objects;
+std::vector<rts_object*> game::rts_objects;
 std::vector<projectile> game::projectiles;
 
 void game::collision_detection()
@@ -35,10 +35,10 @@ void game::collision_detection()
     {
         for(unsigned b=0; b<game::rts_objects.size(); b++)
         {
-            if(a!=b && rts_objects[a].is_close(rts_objects[b]))//check objects colliding with other objects
+            if(a!=b && rts_objects[a]->is_close(*rts_objects[b]))//check objects colliding with other objects
             {
-                rts_objects[a].identify_touched(rts_objects[b]);
-                rts_objects[a].repel(rts_objects[b]);
+                rts_objects[a]->identify_touched(*rts_objects[b]);
+                rts_objects[a]->repel(*rts_objects[b]);
             }
         }
     }
@@ -46,30 +46,30 @@ void game::collision_detection()
     {
         for(unsigned b=0; b<game::physics_objects.size(); b++)
         {
-            if(a!=b && physics_objects[a].is_close(physics_objects[b]))//check objects colliding with other objects
+            if(a!=b && physics_objects[a]->is_close(*physics_objects[b]))//check objects colliding with other objects
             {
-                physics_objects[a].identify_touched(physics_objects[b]);
-                physics_objects[a].repel(physics_objects[b]);
+                physics_objects[a]->identify_touched(*physics_objects[b]);
+                physics_objects[a]->repel(*physics_objects[b]);
             }
-            if(a!=b && physics_objects[a].is_close(projectiles[b]))//check objects colliding with projectiles
+            if(a!=b && physics_objects[a]->is_close(projectiles[b]))//check objects colliding with projectiles
             {
-                rts_objects[a].identify_touched(projectiles[b]);
+                rts_objects[a]->identify_touched(projectiles[b]);
             }
-            if(a!=b && projectiles[a].is_close(physics_objects[b]))//check projectiles colliding with objects
+            if(a!=b && projectiles[a].is_close(*physics_objects[b]))//check projectiles colliding with objects
             projectiles[a].reset();
         }
     }
-    /*for(unsigned a=0; a<game::draggable_objects.size(); a++)
+    for(unsigned a=0; a<game::draggable_objects.size(); a++)
     {
         for(unsigned b=0; b<game::draggable_objects.size(); b++)
         {
-            if(a!=b && draggable_objects[a].is_close(draggable_objects[b]))//check objects colliding with other objects
+            if(a!=b && draggable_objects[a]->is_close(*draggable_objects[b]))//check objects colliding with other objects
             {
-                draggable_objects[a].identify_touched(draggable_objects[b]);
-                draggable_objects[a].repel(draggable_objects[b]);
+                draggable_objects[a]->identify_touched(*draggable_objects[b]);
+                draggable_objects[a]->repel(*draggable_objects[b]);
             }
         }
-    }*/
+    }
 }
 
 void game::init_objects()
@@ -77,58 +77,57 @@ void game::init_objects()
     object::total_objects=0;//reset the object count
 
 //initialize the physics objects
-    //first object (yes first, because the index starts at 0) from physics objects container
-    physics_objects.push_back(physics_object());
-    physics_objects[0].name="small square";
-    physics_objects[0].primary_color.set(0.5,0.5,0.5);
-    physics_objects[0].current.set(window::width/2-48,window::height/2+48);
-    physics_objects[0].width=32;
-    physics_objects[0].height=32;
-    physics_objects[0].add_action(2,76);//move right 96 units
-    physics_objects[0].add_action(4,76);//move down 96 units
-    physics_objects[0].add_action(1,76);//move left 96 units
-    physics_objects[0].add_action(3,76);//move up 96 units
-    physics_objects[0].add_action(5,90);//turn left 90 degrees
-    physics_objects[0].add_action(6,90);//turn right 90 degrees
-    std::clog<<"object#"<<physics_objects[0].number<<": "<<physics_objects[0].name<<" initialized."<<std::endl;
+    physics_object* po1 = new physics_object();
+    po1->name="small square";
+    po1->current.set(window::width/2-48,window::height/2+48);
+    po1->width=32;
+    po1->height=32;
+    po1->primary_color=GRAY;
+    po1->add_action(2,12);//move right 96 units(take into account momentum)
+    po1->add_action(4,12);//move down 96 units(take into account momentum)
+    po1->add_action(1,12);//move left 96 units(take into account momentum)
+    po1->add_action(3,12);//move up 96 units(take into account momentum)
+    po1->add_action(5,15);//turn left 90 degrees(take into account momentum)
+    po1->add_action(6,15);//turn right 90 degrees(take into account momentum)
+    std::clog<<"object#"<<po1->number<<": "<<po1->name<<" initialized."<<std::endl;
+    physics_objects.push_back(po1);//add the object to the object container
 //initialize the draggable objects
-    //first object from draggable objects container
-/*    draggable_objects.push_back(draggable_object());
-    draggable_objects[0].name="black square";
-    draggable_objects[0].primary_color.set(BLACK);
-    std::clog<<"object#"<<draggable_objects[0].number<<": "<<draggable_objects[0].name<<" initialized."<<std::endl;*/
+    draggable_object* do1 = new draggable_object();
+    do1->name="black square";
+    do1->current.set(window::width/2,window::height/2);
+    do1->primary_color=BLACK;
+    std::clog<<"object#"<<do1->number<<": "<<do1->name<<" initialized."<<std::endl;
+    draggable_objects.push_back(do1);
 //initialize the rts objects
-    //first object from rts_objects container
-    rts_objects.push_back(rts_object());
-    rts_objects[0].name="yellow square";
-    rts_objects[0].primary_color.set(YELLOW);
-    rts_objects[0].current.set(window::width/2+96,window::height/2);
-    std::clog<<"object#"<<rts_objects[0].number<<": "<<rts_objects[0].name<<" initialized."<<std::endl;
+    rts_object* rtso1 = new rts_object();
+    rtso1->name="yellow square";
+    rtso1->current.set(window::width/2+96,window::height/2);
+    rtso1->primary_color=YELLOW;
+    std::clog<<"object#"<<rtso1->number<<": "<<rtso1->name<<" initialized."<<std::endl;
+    rts_objects.push_back(rtso1);//add the object to the object container
 
-    //second object from rts_objects container
-    rts_objects.push_back(rts_object());
-    rts_objects[1].name="green square";
-    rts_objects[1].primary_color.set(GREEN);
-    rts_objects[1].current.set(window::width/2,window::height/2-96);
-    std::clog<<"object#"<<rts_objects[1].number<<": "<<rts_objects[1].name<<" initialized."<<std::endl;
+    rts_object* rtso2 = new rts_object();
+    rtso2->name="green square";
+    rtso2->current.set(window::width/2,window::height/2-96);
+    rtso2->primary_color=GREEN;
+    std::clog<<"object#"<<rtso2->number<<": "<<rtso2->name<<" initialized."<<std::endl;
+    rts_objects.push_back(rtso2);//add the object to the object container
 
-    //third object from rts_objects container
-    rts_objects.push_back(rts_object());
-    rts_objects[2].name="red square";
-    rts_objects[2].primary_color.set(RED);
-    rts_objects[2].current.set(window::width/2,window::height/2+96);
-    std::clog<<"object#"<<rts_objects[2].number<<": "<<rts_objects[2].name<<" initialized."<<std::endl;
+    rts_object* rtso3 = new rts_object();
+    rtso3->name="red square";
+    rtso3->current.set(window::width/2,window::height/2+96);
+    rtso3->primary_color=RED;
+    std::clog<<"object#"<<rtso3->number<<": "<<rtso3->name<<" initialized."<<std::endl;
+    rts_objects.push_back(rtso3);//add the object to the object container
 
-    //fourth object from rts_objects container
-    rts_objects.push_back(rts_object());
-    rts_objects[3].name="blue square";
-    rts_objects[3].primary_color.set(BLUE);
-    rts_objects[3].current.set(window::width/2-96,window::height/2);
-    std::clog<<"object#"<<rts_objects[3].number<<": "<<rts_objects[3].name<<" initialized."<<std::endl;
-
-    //create a projectile for each physics object
+    rts_object* rtso4 = new rts_object();
+    rtso4->name="blue square";
+    rtso4->current.set(window::width/2-96,window::height/2);
+    rtso4->primary_color=BLUE;
+    std::clog<<"object#"<<rtso4->number<<": "<<rtso4->name<<" initialized."<<std::endl;
+    rts_objects.push_back(rtso4);//add the object to the object container
+//create a projectile for each physics object
     projectiles.assign(physics_objects.size(),projectile());
-
-    //unhighlight everything
+//unhighlight everything
     cursor::highlighted_objects.assign(rts_objects.size(),false);
 }

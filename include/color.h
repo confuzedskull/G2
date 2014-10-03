@@ -50,4 +50,5 @@ const color GREEN(0.0,1.0,0.0);
 const color BLUE(0.0,0.0,1.0);
 const color BLACK(0.0,0.0,0.0);
 const color WHITE(1.0,1.0,1.0);
+const color GRAY(0.5,0.5,0.5);
 #endif // COLOR_H

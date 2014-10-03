@@ -84,15 +84,15 @@ void window::render_scene()
     game::projectiles[i].render();
     //render the rts objects
     for(unsigned i=0; i<game::rts_objects.size(); i++)
-    game::rts_objects[i].render();
+    game::rts_objects[i]->render();
     //render the selection box
     cursor::selection_box();
     //render the physics objects
     for(unsigned i=0; i<game::physics_objects.size(); i++)
-    game::physics_objects[i].render();
+    game::physics_objects[i]->render();
     //render the draggable objects
-/*    for(unsigned i=0; i<game::draggable_objects.size(); i++)
-    game::draggable_objects[i].render();*/
+    for(unsigned i=0; i<game::draggable_objects.size(); i++)
+    game::draggable_objects[i]->render();
 //TOP
     if(ui::toggle_text)
     ui::print_text();
@@ -105,13 +105,13 @@ void window::update_scene()
     game::time_elapsed = ((float)clock()-game::time_started)/CLOCKS_PER_SEC;//update the start time
     //update physics objects
     for(unsigned i=0; i<game::physics_objects.size(); i++)
-    game::physics_objects[i].update();
+    game::physics_objects[i]->update();
     //update rts objects
     for(unsigned i=0; i<game::rts_objects.size(); i++)
-    game::rts_objects[i].update();
+    game::rts_objects[i]->update();
     //update draggable objects
-/*    for(unsigned i=0; i<game::draggable_objects.size(); i++)
-    game::draggable_objects[i].update();*/
+    for(unsigned i=0; i<game::draggable_objects.size(); i++)
+    game::draggable_objects[i]->update();
     //apply collision effects
     game::collision_detection();
     //check if objects are clicked
@@ -124,16 +124,16 @@ void window::update_scene()
         ui::key_operations();//keyboard controls
         //move rts objects
         for(unsigned i=0; i<game::rts_objects.size(); i++)
-        game::rts_objects[i].perform_actions()||game::rts_objects[i].move_to_point(*game::rts_objects[i].rally,2.00f);
+        game::rts_objects[i]->perform_actions()||game::rts_objects[i]->move_to_point(*game::rts_objects[i]->rally,2.00f);
         //move physics objects
         for(unsigned i=0; i<game::physics_objects.size(); i++)
-        game::physics_objects[i].perform_actions();
+        game::physics_objects[i]->perform_actions();
         //move projectiles
         for(unsigned i=0; i<game::projectiles.size(); i++)
         game::projectiles[i].update();
         //apply inertia
         for(unsigned i=0; i<game::physics_objects.size(); i++)
-        game::physics_objects[i].inertia();
+        game::physics_objects[i]->inertia();
         glutPostRedisplay();//update the scene
     }
 }

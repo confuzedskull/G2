@@ -30,9 +30,9 @@ class game
     static float time;
     static clock_t time_started;
     static double time_elapsed;
-    static std::vector<draggable_object> draggable_objects;
-    static std::vector<physics_object> physics_objects;
-    static std::vector<rts_object> rts_objects;
+    static std::vector<draggable_object*> draggable_objects;
+    static std::vector<physics_object*> physics_objects;
+    static std::vector<rts_object*> rts_objects;
     static std::vector<projectile> projectiles;
     static int current_projectile;
     static void init_objects();
