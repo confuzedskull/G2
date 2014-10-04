@@ -16,19 +16,18 @@
 
 #ifndef PROJECTILE_H
 #define PROJECTILE_H
-#include "physics_object.h"
+#include "tangible_object.h"
 #include "point2f.h"
 
 //A projectile collides with other physics objects
-class projectile: public physics_object
+class projectile: public tangible_object
 {
     public:
     float range;//how far the projectile can go until it resets
     float traveled;//how far the projectile has gone
     int power;//how much damage the projectile will make
-    float speed;
     bool fired;
-    void fire(complex_object source);//an object fires a projectile
+    void fire(movable_object source);//an object fires a projectile
     void update();//updates the projectile's values
     void reset();
     projectile();

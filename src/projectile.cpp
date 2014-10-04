@@ -19,11 +19,13 @@
 #include <math.h>
 #include <iostream>
 
-void projectile::fire(complex_object source)//an object fires a projectile
+void projectile::fire(movable_object source)//fires the projectile from the source
 {
     current.set(source.current.x,source.current.y);//put the projectile where the source is
     rotation=source.rotation;//match the rotation of the source
-    primary_color.set(source.primary_color);//match the color of the source
+    calc_points();
+    calc_direction();
+    set_boundaries();
     fired=true;
     visible=true;
 }
@@ -34,7 +36,8 @@ void projectile::update()
     {
         if(isless(traveled,range) && !collided)//projectile is within range and hasn't collided
         {
-            move_forward(speed);
+            calc_points();
+            move_forward();
             traveled+=speed;
         }
         else
@@ -56,8 +59,8 @@ void projectile::reset()
 projectile::projectile()
 {
     type="projectile";
-    width=10;
-    height=10;
+    width=10.0f;
+    height=10.0f;
     range=1000.0f;
     traveled=0.0f;
     speed=50.0f;

@@ -24,6 +24,18 @@
 
 std::queue< std::vector<int> > actions;
 
+void movable_object::set_resting()
+{
+    if(!moving_horizontal())
+        rest.x=current.x;
+
+    if(!moving_vertical())
+        rest.y=current.y;
+
+    if(!turning())
+        rest_rotation=rotation;
+}
+
 void movable_object::reset_motion()
 {
     moving_forward=false;
@@ -246,6 +258,15 @@ bool movable_object::perform_actions()
     }
     else
         return false;
+}
+
+void movable_object::update()
+{
+    set_resting();
+    set_boundaries();
+    calc_points();
+    calc_direction();
+    reset_motion();
 }
 
 movable_object::movable_object(): complex_object()

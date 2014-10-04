@@ -16,11 +16,12 @@
 
 #ifndef PHYSICS_H
 #define PHYSICS_H
+#include "clickable_object.h"
 #include "tangible_object.h"
 #include "vector2f.h"
 
 //A physics object has physical properties and inherits the ability to detect collision from the tangible object class
-class physics_object: public tangible_object
+class physics_object: public clickable_object, public tangible_object
 {
     public:
     float mass;
@@ -35,7 +36,6 @@ class physics_object: public tangible_object
     vector2f momentum;
     float angular_momentum;
     vector2f force;
-    void set_resting();
     void calc_delta_time();
     void calc_velocity();
     void calc_acceleration();

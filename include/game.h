@@ -23,19 +23,19 @@
 #include "projectile.h"
 #include <vector>
 
-//stores important settings and global variables for the program
+//This class stores important settings and global variables for the program
 class game
 {
     public:
-    static float time;
+    static float time;//stores the current game time in seconds
     static clock_t time_started;
     static double time_elapsed;
+    //below I used pointers because the objects will be created in init_objects()
     static std::vector<draggable_object*> draggable_objects;
     static std::vector<physics_object*> physics_objects;
     static std::vector<rts_object*> rts_objects;
-    static std::vector<projectile> projectiles;
-    static int current_projectile;
-    static void init_objects();
+    static std::vector<projectile> projectiles;//projectiles don't need to be initialized so they aren't pointers
+    static void init_objects();//initialize the objects
     static void collision_detection();
 };
 #endif // GAME_H

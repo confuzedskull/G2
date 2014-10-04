@@ -79,20 +79,20 @@ void window::render_scene()
     glClear(GL_COLOR_BUFFER_BIT);// Clear Color Buffers
 //NOTE: rts_objects are rendered ontop of eachother according to the order in which they are rendered
 //BOTTOM
-    //render the projectiles
-    for(unsigned i=0; i<game::projectiles.size(); i++)
-    game::projectiles[i].render();
     //render the rts objects
     for(unsigned i=0; i<game::rts_objects.size(); i++)
     game::rts_objects[i]->render();
     //render the selection box
     cursor::selection_box();
-    //render the physics objects
-    for(unsigned i=0; i<game::physics_objects.size(); i++)
-    game::physics_objects[i]->render();
     //render the draggable objects
     for(unsigned i=0; i<game::draggable_objects.size(); i++)
     game::draggable_objects[i]->render();
+    //render the projectiles
+    for(unsigned i=0; i<game::projectiles.size(); i++)
+    game::projectiles[i].render();
+    //render the physics objects
+    for(unsigned i=0; i<game::physics_objects.size(); i++)
+    game::physics_objects[i]->render();
 //TOP
     if(ui::toggle_text)
     ui::print_text();
@@ -130,7 +130,7 @@ void window::update_scene()
         game::physics_objects[i]->perform_actions();
         //move projectiles
         for(unsigned i=0; i<game::projectiles.size(); i++)
-        game::projectiles[i].update();
+        game::projectiles[i].update();//update the position
         //apply inertia
         for(unsigned i=0; i<game::physics_objects.size(); i++)
         game::physics_objects[i]->inertia();

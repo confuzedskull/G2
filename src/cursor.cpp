@@ -38,12 +38,12 @@ float cursor::xmax = 0.0;
 float cursor::xmin = 0.0;
 float cursor::ymax = 0.0;
 float cursor::ymin = 0.0;
-object* cursor::left_clicked_object = new object;
+clickable_object* cursor::left_clicked_object = new clickable_object();
 int cursor::selected_object = 0;
 bool cursor::left_clicked_an_object = false;
 std::vector<bool> cursor::highlighted_objects(game::rts_objects.size(),false);
 bool cursor::right_dragging = false;
-object* cursor::right_clicked_object = new object;
+clickable_object* cursor::right_clicked_object = new clickable_object();
 bool cursor::right_clicked_an_object = false;
 bool cursor::left_dragging = false;
 bool cursor::grabbed_an_object=false;
@@ -80,12 +80,10 @@ void cursor::selection_box()//this is the box that is created when user clicks a
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glColor4f(box_color.r,box_color.g,box_color.b,0.5);
         glBegin(GL_QUADS);
-
         glVertex2f(xmin, ymin); // The bottom left corner
         glVertex2f(xmin, ymax); // The top left corner
         glVertex2f(xmax, ymax); // The top right corner
         glVertex2f(xmax, ymin); // The bottom right corner
-
         glEnd();
     }
 }

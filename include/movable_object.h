@@ -29,6 +29,7 @@ public:
     bool rally_set;//whether or not the object has a point to move to
     float degrees_rotated;//keeps track of the progress of a rotation animation
     float speed;
+    void set_resting();
     bool moving_forward;
     bool moving_backward;
     bool moving_left;
@@ -64,6 +65,7 @@ public:
     bool move_to_point(float destination_x, float destination_y);
     void add_action(int action_no, int times);//adds an action to be performed n times to the action cue
     bool perform_actions();//makes the object perform the cued actions
+    void update();
     movable_object();
 };
 #endif // MOVABLE_H

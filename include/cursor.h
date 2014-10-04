@@ -42,8 +42,8 @@ static color box_color;//RGB values
 static bool highlighting;
 static std::vector<bool> highlighted_objects;
 static int selected_object;
-static object * left_clicked_object;
-static object * right_clicked_object;
+static clickable_object * left_clicked_object;
+static clickable_object * right_clicked_object;
 static bool set_rally;
 static bool left_clicked_an_object;
 static bool right_clicked_an_object;

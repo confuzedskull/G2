@@ -19,18 +19,6 @@
 #include <iostream>
 #include <math.h>
 
-void physics_object::set_resting()
-{
-    if(!moving_horizontal())
-        rest.x=current.x;
-
-    if(!moving_vertical())
-        rest.y=current.y;
-
-    if(!turning())
-        rest_rotation=rotation;
-}
-
 void physics_object::calc_delta_time()
 {
     if(isgreaterequal(fabs(current.x-rest.x),0.01f))//at least difference of 0.01
@@ -186,6 +174,7 @@ void physics_object::update()
     calc_points();
     calc_direction();
     physics();
+    mouse_function();
 }
 
 physics_object::physics_object()

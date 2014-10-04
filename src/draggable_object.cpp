@@ -34,7 +34,7 @@
 
 bool draggable_object::grabbed()
 {
-    if(cursor::left_dragging &&
+    if(cursor::left_dragging && !cursor::highlighting &&
             isless(cursor::left_drag.x,xmax) &&
             isgreater(cursor::left_drag.x,xmin) &&
             isless(cursor::left_drag.y,ymax) &&
@@ -76,26 +76,6 @@ void draggable_object::mouse_function()
     {
         current.set(cursor::left_drag.x,cursor::left_drag.y);
         cursor::grabbed_an_object=true;
-    }
-}
-
-//draggable objects need their own render method because they do not have a selection indicator
-void draggable_object::render()
-{
-    glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
-    if(!rendered)
-    {
-        std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" rendered."<<std::endl;
-        rendered=true;
-    }
-    if(visible)
-    {
-        glBegin(GL_POLYGON);//draws a solid shape
-        glVertex2f(back_left.x, back_left.y); // The bottom left corner
-        glVertex2f(front_left.x, front_left.y); // The top left corner
-        glVertex2f(front_right.x, front_right.y); // The top right corner
-        glVertex2f(back_right.x, back_right.y); // The bottom right corner
-        glEnd();//finish drawing
     }
 }
 
