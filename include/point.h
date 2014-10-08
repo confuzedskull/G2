@@ -14,16 +14,29 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#include "point2i.h"
+#ifndef POINT_H
+#define POINT_H
 
-point2i::point2i(int a, int b)
+//A point2f is a 2D point that consists of two floating point values
+class point2f
 {
-    x = a;
-    y = b;
-}
+    public:
+    float x;
+    float y;
+    void set(float a, float b);
+    void set(point2f p);
+    point2f();
+    point2f(float a, float b);
+};
 
-void point2i::set(int a, int b)
+//A point2i is a 2D point that consists of two integer values
+class point2i
 {
-    x = a;
-    y = b;
-}
+    public:
+    int x;
+    int y;
+
+    void set(int a, int b);
+    point2i(int a, int b);
+};
+#endif // POINT_H

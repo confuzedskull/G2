@@ -14,21 +14,38 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#ifndef LINE2F_H
-#define LINE2F_H
-#include "point2f.h"
+#include "line.h"
+#include <math.h>
 
-//A line2f is a 2D line that consists of three point2f's
-class line2f
+line2f::line2f()
 {
-    public:
-    point2f A;
-    point2f B;
-    point2f midpoint();
-    void set(point2f a,point2f b);
-    bool hasPoint(point2f p);
-    float slope();
-    line2f();
-    line2f(point2f a, point2f b);
-};
-#endif // LINE2F_H
+
+}
+
+point2f line2f::midpoint()
+{
+    point2f m;
+    m.x = (A.x + B.x) / 2;
+    m.y = (A.y + B.y) / 2;
+    return m;
+}
+
+float line2f::slope()
+{
+    return (B.y - A.y) / (B.x - A.x);
+}
+
+bool line2f::hasPoint(point2f p)
+{
+    float s = (p.y - A.y) / (p.x - A.x);
+    if(!isless(s,slope()) && !isgreater(s,slope()))
+        return true;
+    else
+        return false;
+}
+
+void line2f::set(point2f a, point2f b)
+{
+    A.set(a.x,a.y);
+    B.set(b.x,a.y);
+}

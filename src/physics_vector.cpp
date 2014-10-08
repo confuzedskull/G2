@@ -14,38 +14,5 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#include "line2f.h"
-#include <math.h>
+#include "physics_vector.h"
 
-line2f::line2f()
-{
-
-}
-
-point2f line2f::midpoint()
-{
-    point2f m;
-    m.x = (A.x + B.x) / 2;
-    m.y = (A.y + B.y) / 2;
-    return m;
-}
-
-float line2f::slope()
-{
-    return (B.y - A.y) / (B.x - A.x);
-}
-
-bool line2f::hasPoint(point2f p)
-{
-    float s = (p.y - A.y) / (p.x - A.x);
-    if(!isless(s,slope()) && !isgreater(s,slope()))
-        return true;
-    else
-        return false;
-}
-
-void line2f::set(point2f a, point2f b)
-{
-    A.set(a.x,a.y);
-    B.set(b.x,a.y);
-}

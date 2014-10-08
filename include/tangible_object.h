@@ -17,7 +17,7 @@
 #ifndef TANGIBLE_H
 #define TANGIBLE_H
 #include "movable_object.h"
-#include "point2f.h"
+#include "point.h"
 
 //A tangible object can move and detect collision with another object
 class tangible_object: virtual public movable_object

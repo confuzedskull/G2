@@ -94,14 +94,14 @@ void window::render_scene()
     for(unsigned i=0; i<game::physics_objects.size(); i++)
     game::physics_objects[i]->render();
 //TOP
-    if(ui::toggle_text)
-    ui::print_text();
+    if(ui::toggle_overlay)
+    ui::print_overlay();
     glFlush();
 }
 
 void window::update_scene()
 {
-    cursor::set_boundaries();//calculate the size of the selection box
+    cursor::calc_boundaries();//calculate the size of the selection box
     game::time_elapsed = ((float)clock()-game::time_started)/CLOCKS_PER_SEC;//update the start time
     //update physics objects
     for(unsigned i=0; i<game::physics_objects.size(); i++)
@@ -130,10 +130,10 @@ void window::update_scene()
         game::physics_objects[i]->perform_actions();
         //move projectiles
         for(unsigned i=0; i<game::projectiles.size(); i++)
-        game::projectiles[i].update();//update the position
-        //apply inertia
-        for(unsigned i=0; i<game::physics_objects.size(); i++)
-        game::physics_objects[i]->inertia();
+        {
+            game::projectiles[i].update();//update the position
+            game::physics_objects[i]->inertia();
+        }
         glutPostRedisplay();//update the scene
     }
 }

@@ -18,7 +18,7 @@
 #define PHYSICS_H
 #include "clickable_object.h"
 #include "tangible_object.h"
-#include "vector2f.h"
+#include "physics_vector.h"
 
 //A physics object has physical properties and inherits the ability to detect collision from the tangible object class
 class physics_object: public clickable_object, public tangible_object
@@ -29,13 +29,13 @@ class physics_object: public clickable_object, public tangible_object
     0:change in x, 1:change in y, 2:change in velocity x, 3:change in velocity y, 4:change in angle, 5:change in angular velocity*/
     float start_time[6];//same as above except it stores the start times
     float stop_time[6];//same as above except it stores the stop times
-    vector2f velocity[2];// index 0:initial velocity, index 1: final velocity
+    physics_vector velocity[2];// index 0:initial velocity, index 1: final velocity
     float angular_velocity[2];
-    vector2f acceleration;
+    physics_vector acceleration;
     float angular_acceleration;
-    vector2f momentum;
+    physics_vector momentum;
     float angular_momentum;
-    vector2f force;
+    physics_vector force;
     void calc_delta_time();
     void calc_velocity();
     void calc_acceleration();

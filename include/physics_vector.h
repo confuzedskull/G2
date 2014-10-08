@@ -14,17 +14,15 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#ifndef POINT2I_H
-#define POINT2I_H
+#ifndef PHYSICSVECTOR_H
+#define PHYSICSVECTOR_H
 
-//A point2i is a 2D point that consists of two integer values
-class point2i
+//A physics vector consists of two floating point position values and one floating-point magnitude value.
+class physics_vector
 {
     public:
-    int x;
-    int y;
-
-    void set(int a, int b);
-    point2i(int a, int b);
+    float x;
+    float y;
+    float magnitude;
 };
-#endif // POINT2I_H
+#endif // PHYSICSVECTOR_H

@@ -30,105 +30,129 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #endif
-#include <cstring>
+#include <string.h>
 #include <stdio.h>
+#include <iostream>
 #include <math.h>
 
 //initialize variables
-bool* ui::key_states=new bool[256];
-bool ui::temp_toggle=false;
-bool ui::toggle_text=false;
-char ui::text0[20] = "";
-char ui::text1[30] = "";
-char ui::text2[30] = "";
-char ui::text3[20] = "";
-char ui::text4[30] = "";
-char ui::text5[30] = "";
-char ui::text6[30] = "";
-char ui::text7[30] = "";
-char ui::text8[20] = "";
-char ui::text9[20] = "";
-char ui::text10[35] = "";
-char ui::text11[20] = "";
-char ui::text12[20] = "";
-char ui::text13[20] = "";
+bool* ui::key_states = new bool[256];
+bool ui::temp_toggle = false;
+bool ui::toggle_overlay = false;
+std::vector<char*> ui::info_overlay(20,new char[30]);//create 15 lines of 30 character length
+float ui::margin = 10.0f;
+float ui::spacing = 20.0f;
 
-//This prints text of rgba color at x,y on the screen
 void ui::glutPrint(float x, float y, void* font, char* text, color c)
 {
-    if(!text || !strlen(text)) return;
+    if(!text || !strlen(text))
+        return;
     bool blending = false;
-    if(glIsEnabled(GL_BLEND)) blending = true;
+    if(glIsEnabled(GL_BLEND))
+        blending = true;
     glEnable(GL_BLEND);
     glColor4f(c.r,c.g,c.b,c.a);
     glRasterPos2f(x,y);
-    while (*text)
+    while(*text)
     {
         glutBitmapCharacter(font, *text);
         text++;
     }
-    if(!blending) glDisable(GL_BLEND);
+    if(!blending)
+        glDisable(GL_BLEND);
 }
 
-void ui::print_text()
+void ui::glutPrint(float x, float y, void* font, char* text)
 {
-    int index = cursor::selected_object;
-    sprintf(text0,"selected object: %d", cursor::left_clicked_object->number);
-    glutPrint(window::width/40,window::height-20, GLUT_BITMAP_HELVETICA_12, text0, BLACK);
+    glutPrint(x, y, font, text, BLACK);
+}
 
-    sprintf(text1,"current position: %.2f,%.2f", cursor::left_clicked_object->current.x,cursor::left_clicked_object->current.y);
-    glutPrint(window::width/40,window::height-40, GLUT_BITMAP_HELVETICA_12, text1, BLACK);
+void ui::glutPrint(float x, float y, char* text)
+{
+    glutPrint(x, y, GLUT_BITMAP_HELVETICA_12, text);
+}
 
-    sprintf(text2,"resting position: %.2f, %.2f",cursor::left_clicked_object->rest.x,cursor::left_clicked_object->rest.y);
-    glutPrint(window::width/40,window::height-60, GLUT_BITMAP_HELVETICA_12, text2, BLACK);
+void ui::print_overlay()
+{
+    unsigned index = cursor::selected_object;
+    unsigned line = 0;
 
-    if(cursor::left_clicked_object->type=="physics object")
+    sprintf(info_overlay[line],"selected object: #%d - %s", cursor::left_clicked_object->number, cursor::left_clicked_object->name);
+    glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
+
+    sprintf(info_overlay[line],"type: %s", cursor::left_clicked_object->type);
+    glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
+
+    sprintf(info_overlay[line],"dimensions: %.2fX%.2f", cursor::left_clicked_object->width,cursor::left_clicked_object->height);
+    glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
+
+    sprintf(info_overlay[line],"rotation: %.2f", cursor::left_clicked_object->rotation);
+    glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
+
+    sprintf(info_overlay[line],"current position: %.2f,%.2f", cursor::left_clicked_object->position.x,cursor::left_clicked_object->position.y);
+    glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
+
+    if(strcmp(cursor::left_clicked_object->type,"physics object")==0)
     {
-        sprintf(text3,"time moving: %.2f,%.2f",game::physics_objects[index]->delta_time[0],game::physics_objects[index]->delta_time[1]);
-        glutPrint(window::width/40,window::height-80, GLUT_BITMAP_HELVETICA_12, text3, BLACK);
+        sprintf(info_overlay[line],"resting position: %.2f, %.2f",game::physics_objects[index]->rest.x,game::physics_objects[index]->rest.y);
+        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
 
-        sprintf(text4,"initial velocity: %.2f,%.2f",game::physics_objects[index]->velocity[0].x,game::physics_objects[index]->velocity[0].y);
-        glutPrint (window::width/40,window::height-100, GLUT_BITMAP_HELVETICA_12, text4, BLACK);
+        sprintf(info_overlay[line],"mass: %.2f",game::physics_objects[index]->mass);
+        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
 
-        sprintf(text5,"final velocity: %.2f,%.2f",game::physics_objects[index]->velocity[1].x,game::physics_objects[index]->velocity[1].y);
-        glutPrint(window::width/40,window::height-120, GLUT_BITMAP_HELVETICA_12, text5, BLACK);
+        sprintf(info_overlay[line],"speed: %.2f",game::physics_objects[index]->speed);
+        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
 
-        sprintf(text6,"time accelerating: %.2f %.2f",game::physics_objects[index]->delta_time[2],game::physics_objects[index]->delta_time[3]);
-        glutPrint(window::width/40,window::height-140, GLUT_BITMAP_HELVETICA_12, text6, BLACK);
+        sprintf(info_overlay[line],"time moving: %.2f,%.2f",game::physics_objects[index]->delta_time[0],game::physics_objects[index]->delta_time[1]);
+        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
 
-        sprintf(text7,"acceleration: %.2f %.2f",game::physics_objects[index]->acceleration.x,game::physics_objects[index]->acceleration.y);
-        glutPrint(window::width/40,window::height-160, GLUT_BITMAP_HELVETICA_12, text7, BLACK);
+        sprintf(info_overlay[line],"initial velocity: %.2f,%.2f",game::physics_objects[index]->velocity[0].x,game::physics_objects[index]->velocity[0].y);
+        glutPrint (margin,window::height-(line*spacing), info_overlay[line++]);
 
-        sprintf(text8,"momentum: %.2f %.2f",game::physics_objects[index]->momentum.x,game::physics_objects[index]->momentum.y);
-        glutPrint(window::width/40,window::height-180, GLUT_BITMAP_HELVETICA_12, text8, BLACK);
+        sprintf(info_overlay[line],"final velocity: %.2f,%.2f",game::physics_objects[index]->velocity[1].x,game::physics_objects[index]->velocity[1].y);
+        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
 
-        sprintf(text9,"force: %.2f %.2f",game::physics_objects[index]->force.x,game::physics_objects[index]->force.y);
-        glutPrint(window::width/40,window::height-200, GLUT_BITMAP_HELVETICA_12, text9, BLACK);
+        sprintf(info_overlay[line],"time accelerating: %.2f %.2f",game::physics_objects[index]->delta_time[2],game::physics_objects[index]->delta_time[3]);
+        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
 
-        sprintf(text10,"object touching side L:%d R:%d T:%d B:%d",game::physics_objects[index]->touching[0], game::physics_objects[index]->touching[1], game::physics_objects[index]->touching[2],game::physics_objects[index]->touching[3]);
-        glutPrint(window::width/40,window::height-220, GLUT_BITMAP_HELVETICA_12, text10, BLACK);
+        sprintf(info_overlay[line],"acceleration: %.2f %.2f",game::physics_objects[index]->acceleration.x,game::physics_objects[index]->acceleration.y);
+        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
+
+        sprintf(info_overlay[line],"momentum: %.2f %.2f",game::physics_objects[index]->momentum.x,game::physics_objects[index]->momentum.y);
+        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
+
+        sprintf(info_overlay[line],"force: %.2f %.2f",game::physics_objects[index]->force.x,game::physics_objects[index]->force.y);
+        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
+
+        sprintf(info_overlay[line],"object touching side L:%d R:%d T:%d B:%d",game::physics_objects[index]->touching[0], game::physics_objects[index]->touching[1], game::physics_objects[index]->touching[2],game::physics_objects[index]->touching[3]);
+        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
     }
-    if(cursor::left_clicked_object->type=="draggable object")
+    if(strcmp(cursor::left_clicked_object->type,"draggable object")==0)
     {
         index = cursor::selected_object-game::physics_objects.size();
-        sprintf(text10,"object touching side L:%d R:%d T:%d B:%d",game::draggable_objects[index]->touching[0], game::draggable_objects[index]->touching[1],game::draggable_objects[index]->touching[2],game::draggable_objects[index]->touching[3]);
-        glutPrint(window::width/40,window::height-80, GLUT_BITMAP_HELVETICA_12, text10, BLACK);
+        sprintf(info_overlay[line],"object touching side L:%d R:%d T:%d B:%d",game::draggable_objects[index]->touching[0], game::draggable_objects[index]->touching[1],game::draggable_objects[index]->touching[2],game::draggable_objects[index]->touching[3]);
+        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
     }
-    if(cursor::left_clicked_object->type=="rts object")
+    if(strcmp(cursor::left_clicked_object->type,"rts object")==0)
     {
         index = cursor::selected_object-(game::physics_objects.size()+game::draggable_objects.size());
-        sprintf(text10,"object touching side L:%d R:%d T:%d B:%d",game::rts_objects[index]->touching[0], game::rts_objects[index]->touching[1],
-                 game::rts_objects[index]->touching[2],game::rts_objects[index]->touching[3]);
-        glutPrint(window::width/40,window::height-80, GLUT_BITMAP_HELVETICA_12, text10, BLACK);
+        sprintf(info_overlay[line],"speed: %.2f",game::rts_objects[index]->speed);
+        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
+
+        sprintf(info_overlay[line],"rally point: %.2f, %.2f",game::rts_objects[index]->rally->x,game::rts_objects[index]->rally->y);
+        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
+
+        sprintf(info_overlay[line],"object touching side L:%d R:%d T:%d B:%d",game::rts_objects[index]->touching[0], game::rts_objects[index]->touching[1], game::rts_objects[index]->touching[2],game::rts_objects[index]->touching[3]);
+        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
     }
-    sprintf(text11,"game time: %.2fs",game::time);
-    glutPrint(window::width/40,window::height-240, GLUT_BITMAP_HELVETICA_12, text11, BLACK);
+    sprintf(info_overlay[line],"game time: %.2fs",game::time);
+    glutPrint(window::width-(margin+120),window::height-(spacing*1), info_overlay[line++]);
 
-    sprintf(text12,"click: %.2f,%.2f",cursor::left_down.x,cursor::left_down.y);
-    glutPrint(window::width/40,window::height-260, GLUT_BITMAP_HELVETICA_12, text12, BLACK);
+    sprintf(info_overlay[line],"click: %.2f,%.2f",cursor::left_down.x,cursor::left_down.y);
+    glutPrint(window::width-(margin+120),window::height-(spacing*2), info_overlay[line++]);
 
-    sprintf(text13,"drag: %.2f,%.2f",cursor::left_drag.x,cursor::left_drag.y);
-    glutPrint(window::width/40,window::height-280, GLUT_BITMAP_HELVETICA_12, text13, BLACK);
+    sprintf(info_overlay[line],"drag: %.2f,%.2f",cursor::left_drag.x,cursor::left_drag.y);
+    glutPrint(window::width-(margin+120),window::height-(spacing*3), info_overlay[line++]);
 }
 
 void ui::mouse_click(int button, int state, int x, int y)
@@ -166,20 +190,16 @@ void ui::mouse_click(int button, int state, int x, int y)
 void ui::check_clicked()
 {
     bool left_clicked = true;
-    for(int a=0; a<game::rts_objects.size(); a++)
+    for(unsigned a=0; a<game::rts_objects.size(); a++)
     {
         if(left_clicked && game::rts_objects[a]->left_clicked())
-        {
             left_clicked=true;
-        }
         else
-        {
             left_clicked=false;
-        }
     }
     cursor::left_clicked_an_object = left_clicked;
     bool right_clicked=true;
-    for(int a=0; a<game::rts_objects.size(); a++)
+    for(unsigned a=0; a<game::rts_objects.size(); a++)
     {
         if(right_clicked && game::rts_objects[a]->right_clicked())
             right_clicked=true;
@@ -188,7 +208,7 @@ void ui::check_clicked()
     }
     cursor::right_clicked_an_object = right_clicked;
     bool grabbed=true;
-    for(int a=0; a<game::draggable_objects.size(); a++)
+    for(unsigned a=0; a<game::draggable_objects.size(); a++)
     {
         if(grabbed && game::draggable_objects[a]->grabbed())
             grabbed=true;
@@ -241,17 +261,17 @@ void ui::mouse_drag(int x, int y)
 
 void ui::key_pressed(unsigned char key, int x, int y)
 {
-    key_states[key] = true; // Set the state of the current key to pressed
+    key_states[key] = true;
 }
 
-void ui::key_up(unsigned char key, int x, int y)
+void ui::key_released(unsigned char key, int x, int y)
 {
-    key_states[key] = false; // Set the state of the current key to not pressed
+    key_states[key] = false;
 }
 
 void ui::key_operations(void)
 {
-    if(cursor::left_clicked_object->type == "physics object")
+    if(strcmp(cursor::left_clicked_object->type, "physics object")==0)
     {
         if(key_states['w'] || key_states['W'])
             game::physics_objects[cursor::selected_object]->move_forward();
@@ -279,14 +299,25 @@ void ui::key_operations(void)
     }
     if(key_states['i'] || key_states['I'])
     {
-        if(toggle_text)
+        if(toggle_overlay)
+        {
+            if(temp_toggle)
+            std::clog<<"toggled information overlay off\n";
             temp_toggle=false;
+        }
         else
+        {
+            if(!temp_toggle)
+            std::clog<<"toggled information overlay on\n";
             temp_toggle=true;
+        }
     }
     else
-        toggle_text=temp_toggle;
+        toggle_overlay=temp_toggle;
 
     if(key_states[27])//escape
+    {
+        std::clog<<"exiting...\n";
         exit(0);
+    }
 }

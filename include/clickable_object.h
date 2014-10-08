@@ -16,17 +16,15 @@
 
 #ifndef CLICKABLE_H
 #define CLICKABLE_H
-#include "complex_object.h"
+#include "object.h"
 
 //A clickable object interfaces with the cursor
-class clickable_object: virtual public complex_object
+class clickable_object: virtual public object
 {
     public:
-    bool selected;//marks this object as selected or not
     bool left_clicked();//checks if the cursor left clicked inside this object
     bool right_clicked();//checks if the cursor right clicked inside this object
     void mouse_function();//performs a variety of actions dependent on cursor interaction
-    void render();//makes the object visible
     void update();
     clickable_object();
 };

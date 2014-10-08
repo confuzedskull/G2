@@ -21,11 +21,10 @@
 
 void projectile::fire(movable_object source)//fires the projectile from the source
 {
-    current.set(source.current.x,source.current.y);//put the projectile where the source is
+    position.set(source.position.x,source.position.y);//put the projectile where the source is
     rotation=source.rotation;//match the rotation of the source
     calc_points();
     calc_direction();
-    set_boundaries();
     fired=true;
     visible=true;
 }
@@ -67,5 +66,5 @@ projectile::projectile()
     fired=false;
     visible=false;
     primary_color=RED;
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created."<<std::endl;
+    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

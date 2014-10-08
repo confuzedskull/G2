@@ -33,11 +33,7 @@
 #endif
 bool clickable_object::left_clicked()
 {
-    if(cursor::left_click &&
-            isless(cursor::left_down.x,xmax) &&
-            isgreater(cursor::left_down.x,xmin) &&
-            isless(cursor::left_down.y,ymax) &&
-            isgreater(cursor::left_down.y,ymin))
+    if(cursor::left_click && isless(distance(cursor::left_down,position),radius))
         return true;
     else
         return false;
@@ -45,11 +41,7 @@ bool clickable_object::left_clicked()
 
 bool clickable_object::right_clicked()
 {
-    if(cursor::right_click &&
-            isless(cursor::right_down.x,xmax) &&
-            isgreater(cursor::right_down.x,xmin) &&
-            isless(cursor::right_down.y,ymax) &&
-            isgreater(cursor::right_down.y,ymin))
+    if(cursor::right_click && isless(distance(cursor::right_down,position),radius))
         return true;
     else
         return false;
@@ -59,6 +51,8 @@ void clickable_object::mouse_function()
 {
     if(left_clicked())//clicked this object
     {
+        if(!cursor::left_clicked_an_object && !selected)
+        std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" selected"<<std::endl;
         cursor::left_clicked_object=this;
         cursor::left_clicked_an_object = true;
         cursor::selected_object=number;
@@ -83,55 +77,15 @@ void clickable_object::mouse_function()
         cursor::right_clicked_an_object=true;
     }
 }
-//clickable objects need their own render method because they have a selection indicator
-void clickable_object::render()
-{
-    glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
-    if(!rendered)
-    {
-        std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" rendered."<<std::endl;
-        rendered=true;
-    }
-    if(visible)
-    {
-        glBegin(GL_POLYGON);//draws a solid shape
-        glVertex2f(back_left.x, back_left.y); // The bottom left corner
-        glVertex2f(front_left.x, front_left.y); // The top left corner
-        glVertex2f(front_right.x, front_right.y); // The top right corner
-        glVertex2f(back_right.x, back_right.y); // The bottom right corner
-        glEnd();//finish drawing
-
-        if(selected)//selected objects are marked by a green ellipse
-        {
-            //we need an x and y radius so that the ellipse matches the object's dimensions
-            float x_radius = distance(front_left,back_right)/2;//measure half the diagonal
-            float y_radius = distance(back_left,front_right)/2;//measure the other diagonal
-            glPushMatrix();//modify transformation matrix
-            glTranslatef(current.x,current.y,0.0);//translate ellipse according to object coordinates
-            glColor3f(0.0,1.0,0.0);//make the lines green
-            glBegin(GL_LINE_LOOP);//draws a series of lines
-            for (int i=0; i<360; i++)
-            {
-                float deg_rad = i*3.14159/180;//calculate degrees in radians
-                glVertex2f(cos(deg_rad)*x_radius,sin(deg_rad)*y_radius);//ellipse function
-            }
-            glEnd();//finish drawing
-            glPopMatrix();//reset transformation matrix
-        }
-    }
-}
 
 void clickable_object::update()
 {
-    set_boundaries();
-    calc_points();
-    calc_direction();
     mouse_function();
 }
 
-clickable_object::clickable_object(): complex_object()
+clickable_object::clickable_object(): object()
 {
     type="clickable object";
     selected=false;
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created."<<std::endl;
+    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

@@ -23,10 +23,10 @@ bool rts_object::highlighted()
 {
     //if object lies within selection box boundaries, return true
     if(cursor::highlighting &&
-            isless(current.x,cursor::xmax) &&
-            isgreater(current.x,cursor::xmin) &&
-            isgreater(current.y,cursor::ymax) &&
-            isless(current.y,cursor::ymin))
+            isless(position.x,cursor::xmax) &&
+            isgreater(position.x,cursor::xmin) &&
+            isgreater(position.y,cursor::ymax) &&
+            isless(position.y,cursor::ymin))
         return true;
     else
         return false;
@@ -36,6 +36,8 @@ void rts_object::mouse_function()
 {
     if(left_clicked())//clicked this object
     {
+        if(!cursor::left_clicked_an_object && !selected)
+        std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" selected"<<std::endl;
         cursor::left_clicked_object=this;
         cursor::left_clicked_an_object = true;
         cursor::selected_object=number;
@@ -73,7 +75,7 @@ void rts_object::mouse_function()
             if(cursor::right_clicked_an_object)
             {
                 //move to right clicked object
-                rally = &cursor::right_clicked_object->current;//set rally to reference point because current is always changing
+                rally = &cursor::right_clicked_object->position;//set rally to reference point because position is always changing
             }
             else//move to right clicked empty space
             {
@@ -92,7 +94,6 @@ void rts_object::mouse_function()
 
 void rts_object::update()
 {
-    set_boundaries();
     calc_points();
     calc_direction();
     mouse_function();
@@ -101,5 +102,5 @@ void rts_object::update()
 rts_object::rts_object(): clickable_object(), tangible_object(), complex_object()
 {
     type="rts object";
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created."<<std::endl;
+    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

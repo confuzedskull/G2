@@ -50,15 +50,17 @@ int main(int argc, char **argv)
     std::clog<<"window position: "<< window::position_x<< ","<< window::position_y<<std::endl;
     glutInitWindowSize(window::width,window::height);
     std::clog<<"window size: "<<window::width<<"X"<< window::height<<std::endl;
-    glutCreateWindow("2D World");
+    glutCreateWindow("2DWorld");
     window::initialize();
     glutReshapeFunc(window::change_size);
-    glutIdleFunc(window::update_scene); //use this for animations
-    glutKeyboardFunc(ui::key_pressed); // Tell GLUT to use the method "keyPressed" for key presses
-    glutKeyboardUpFunc(ui::key_up); // Tell GLUT to use the method "keyUp" for key releases
+    glutIdleFunc(window::update_scene);
+    std::clog<<"initializing keyboard...\n";
+    glutKeyboardFunc(ui::key_pressed);
+    glutKeyboardUpFunc(ui::key_released);
+    std::clog<<"initializing mouse...\n";
     glutMouseFunc(ui::mouse_click);
     glutMotionFunc(ui::mouse_drag);
-    glutDisplayFunc(window::render_scene);
     std::clog<<"rendering...\n";
+    glutDisplayFunc(window::render_scene);
     glutMainLoop();
 }

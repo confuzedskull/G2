@@ -21,7 +21,7 @@
 
 void physics_object::calc_delta_time()
 {
-    if(isgreaterequal(fabs(current.x-rest.x),0.01f))//at least difference of 0.01
+    if(isgreaterequal(fabs(position.x-rest.x),0.01f))//at least difference of 0.01
     {
         start_time[0]=game::time;
         delta_time[0]=stop_time[0]-start_time[0];
@@ -32,7 +32,7 @@ void physics_object::calc_delta_time()
         delta_time[0]=0.0f;
     }
 
-    if(isgreaterequal(fabs(current.y-rest.y),0.01f))//at least difference of 0.01
+    if(isgreaterequal(fabs(position.y-rest.y),0.01f))//at least difference of 0.01
     {
         start_time[1]=game::time;
         delta_time[1]=stop_time[1]-start_time[1];
@@ -90,11 +90,11 @@ void physics_object::calc_delta_time()
 void physics_object::calc_velocity()
 {
     if(isnormal(delta_time[0]))//makes sure it's not zero,infinity, or NaN
-        velocity[0].x=(rest.x-current.x)/delta_time[0];
+        velocity[0].x=(rest.x-position.x)/delta_time[0];
     velocity[1].x=velocity[0].x+momentum.x;//set final velocity
 
     if(isnormal(delta_time[1]))//makes sure it's not zero,infinity, or NaN
-        velocity[0].y=(rest.y-current.y)/delta_time[1];
+        velocity[0].y=(rest.y-position.y)/delta_time[1];
     velocity[1].y=velocity[0].y+momentum.y;//set final velocity
 
     if(isnormal(delta_time[4]))//makes sure it's not zero,infinity, or NaN
@@ -137,14 +137,14 @@ void physics_object::inertia()
 {
     if(isgreaterequal(fabs(momentum.x),0.01f))
     {
-        current.x+=momentum.x;
+        position.x+=momentum.x;
         moving_left=true;
         moving_right=true;
     }
 
     if(isgreaterequal(fabs(momentum.y),0.01f))
     {
-        current.y+=momentum.y;
+        position.y+=momentum.y;
         moving_forward=true;
         moving_backward=true;
     }
@@ -170,7 +170,6 @@ void physics_object::physics()
 void physics_object::update()
 {
     set_resting();
-    set_boundaries();
     calc_points();
     calc_direction();
     physics();
@@ -184,5 +183,5 @@ physics_object::physics_object()
     velocity[0].x=0.00f;
     velocity[0].y=0.00f;
     angular_velocity[0]=0.00f;
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created."<<std::endl;
+    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

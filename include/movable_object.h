@@ -17,8 +17,8 @@
 #ifndef MOVABLE_H
 #define MOVABLE_H
 #include "complex_object.h"
-#include "vector2f.h"
-#include "point2f.h"
+#include "physics_vector.h"
+#include "point.h"
 #include <queue>
 
 //A movable object uses the sides of a complex object to calculate steps in each direction relative to the object's rotation
@@ -29,6 +29,8 @@ public:
     bool rally_set;//whether or not the object has a point to move to
     float degrees_rotated;//keeps track of the progress of a rotation animation
     float speed;
+    point2f rest;
+    float rest_rotation;
     void set_resting();
     bool moving_forward;
     bool moving_backward;

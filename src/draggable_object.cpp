@@ -17,6 +17,7 @@
 #include "draggable_object.h"
 #include "complex_object.h"
 #include "cursor.h"
+#include "distance.h"
 #include <math.h>
 #include <iostream>
 #ifdef __APPLE__
@@ -34,11 +35,7 @@
 
 bool draggable_object::grabbed()
 {
-    if(cursor::left_dragging && !cursor::highlighting &&
-            isless(cursor::left_drag.x,xmax) &&
-            isgreater(cursor::left_drag.x,xmin) &&
-            isless(cursor::left_drag.y,ymax) &&
-            isgreater(cursor::left_drag.y,ymin))
+    if(cursor::left_dragging && !cursor::highlighting && isless(distance(cursor::left_drag,position),radius))
         return true;
     else
         return false;
@@ -48,6 +45,8 @@ void draggable_object::mouse_function()
 {
     if(left_clicked())//clicked this object
     {
+        if(!cursor::left_clicked_an_object && !selected)
+        std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" selected"<<std::endl;
         cursor::left_clicked_object=this;
         cursor::left_clicked_an_object = true;
         cursor::selected_object=number;
@@ -74,14 +73,13 @@ void draggable_object::mouse_function()
 
     if(grabbed())//grabbed this object
     {
-        current.set(cursor::left_drag.x,cursor::left_drag.y);
+        position.set(cursor::left_drag.x,cursor::left_drag.y);
         cursor::grabbed_an_object=true;
     }
 }
 
 void draggable_object::update()
 {
-    set_boundaries();
     calc_points();
     calc_direction();
     mouse_function();
@@ -90,5 +88,5 @@ void draggable_object::update()
 draggable_object::draggable_object()
 {
     type="draggable object";
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created."<<std::endl;
+    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

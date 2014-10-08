@@ -17,34 +17,25 @@
 #ifndef UI_H
 #define UI_H
 #include "color.h"
-
+#include <vector>
+//This namespace contains functions and variables related to the user interface
 namespace ui
 {
         extern bool* key_states; //stores each on/off state of a keyboard key
-        extern bool temp_toggle;
-        extern bool toggle_text;
-        //text for information overlay
-        extern char text0[20];
-        extern char text1[30];
-        extern char text2[30];
-        extern char text3[20];
-        extern char text4[30];
-        extern char text5[30];
-        extern char text6[30];
-        extern char text7[30];
-        extern char text8[20];
-        extern char text9[20];
-        extern char text10[35];
-        extern char text11[20];
-        extern char text12[20];
-        extern char text13[20];
-        void glutPrint(float x, float y, void* font, char* text, color c);
-        void print_text();
-        void mouse_click(int button, int state, int x, int y);
-        void check_clicked();
-        void mouse_drag(int x, int y);
-        void key_pressed(unsigned char key, int x, int y);
-        void key_up(unsigned char key, int x, int y);
-        void key_operations(void);
+        extern bool temp_toggle;//stores the state of the information overlay
+        extern bool toggle_overlay;//toggles the information overlay on/off
+        extern std::vector<char*> info_overlay;//text for information overlay
+        extern float margin;//space between window edge and text
+        extern float spacing;//how far apart each line should be
+        void glutPrint(float x, float y, char* text);//print text using Helvetica 12 font
+        void glutPrint(float x, float y, void* font, char* text);//print text at x,y with a GLUT font
+        void glutPrint(float x, float y, void* font, char* text, color c);//print text at x,y with a GLUT font and specified color
+        void print_overlay();//adds text to the information overlay
+        void check_clicked();//check every clickable object to see if the cursor clicked it
+        void mouse_click(int button, int state, int x, int y);//handles mouse clicks
+        void mouse_drag(int x, int y);//handles mouse drag
+        void key_pressed(unsigned char key, int x, int y);//marks given key as pressed
+        void key_released(unsigned char key, int x, int y);//marks given key as released
+        void key_operations(void);//handles keyboard actions
 }
 #endif // UI_H

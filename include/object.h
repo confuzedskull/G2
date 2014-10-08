@@ -17,33 +17,33 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 #include <stdlib.h>
-#include <string>
 #include "color.h"
-#include "point2f.h"
+#include "point.h"
 
 //This is the base class for all other object types. It has basic properties such as name, color, and dimensions.
 class object
 {
     public:
     static int total_objects;
-    std::string name;
-    std::string type;
+    char* name;
+    char* type;
     int number;
-    point2f current;
-    point2f rest;//resting point
+    point2f position;
     float rotation;
-    float rest_rotation;
     float width, height;
     float radius;
     color primary_color;//RGB values
-    bool visible;
-    bool rendered;
+    bool visible;//whether the object should be shown or not
+    bool rendered;//whether the render method has been called or not
+    bool selected;//whether the object has been selected or not
     float xmax,xmin,ymax,ymin;//the boundaries of the object
-    void set_boundaries();//calculates the max's and mins
+    void set_dimensions(float w, float h);
+    void calc_boundaries();//calculates the max's and mins
     void render();//draws the object
     void rotate(float angle);//changes the object's rotation by the given angle
     void update();
     object();
+    object(float x, float y, float w, float h);
     object(float x, float y, float w, float h, color c);
 };
 #endif // OBJECT_H

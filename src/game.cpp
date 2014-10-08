@@ -82,9 +82,8 @@ void game::init_objects()
 //initialize the physics objects
     physics_object* po1 = new physics_object();
     po1->name="small square";
-    po1->current.set(window::width/2-48,window::height/2+48);//set position forward left of window center
-    po1->width=32;
-    po1->height=32;
+    po1->position.set(window::width/2-48,window::height/2+48);//set position forward left of window center
+    po1->set_dimensions(32,32);
     po1->primary_color=GRAY;
     po1->add_action(2,12);//move right 96 units(take into account momentum)
     po1->add_action(4,12);//move down 96 units(take into account momentum)
@@ -97,9 +96,8 @@ void game::init_objects()
 
     physics_object* po2 = new physics_object();
     po2->name="small square 2";
-    po2->current.set(window::width/2+48,window::height/2+48);//set position forward right of window center
-    po2->width=32;
-    po2->height=32;
+    po2->position.set(window::width/2+48,window::height/2+48);//set position forward right of window center
+    po2->set_dimensions(32,32);
     po2->primary_color=GRAY;
     po2->add_action(4,12);//move down 96 units(take into account momentum)
     po2->add_action(1,12);//move left 96 units(take into account momentum)
@@ -112,9 +110,8 @@ void game::init_objects()
 
     physics_object* po3 = new physics_object();
     po3->name="small square 3";
-    po3->current.set(window::width/2+48,window::height/2-48);//set position backward right of window center
-    po3->width=32;
-    po3->height=32;
+    po3->position.set(window::width/2+48,window::height/2-48);//set position backward right of window center
+    po3->set_dimensions(32,32);
     po3->primary_color=GRAY;
     po3->add_action(1,12);//move left 96 units(take into account momentum)
     po3->add_action(3,12);//move up 96 units(take into account momentum)
@@ -127,9 +124,8 @@ void game::init_objects()
 
     physics_object* po4 = new physics_object();
     po4->name="small square 4";
-    po4->current.set(window::width/2-48,window::height/2-48);//set position backward left of window center
-    po4->width=32;
-    po4->height=32;
+    po4->position.set(window::width/2-48,window::height/2-48);//set position backward left of window center
+    po4->set_dimensions(32,32);
     po4->primary_color=GRAY;
     po4->add_action(3,12);//move up 96 units(take into account momentum)
     po4->add_action(2,12);//move right 96 units(take into account momentum)
@@ -142,35 +138,35 @@ void game::init_objects()
 //initialize the draggable objects
     draggable_object* do1 = new draggable_object();
     do1->name="black square";
-    do1->current.set(window::width/2,window::height/2);//set position window center
+    do1->position.set(window::width/2,window::height/2);//set position window center
     do1->primary_color=BLACK;
     std::clog<<"object#"<<do1->number<<": "<<do1->name<<" initialized."<<std::endl;
     draggable_objects.push_back(do1);
 //initialize the rts objects
     rts_object* rtso1 = new rts_object();
     rtso1->name="yellow square";
-    rtso1->current.set(window::width/2+96,window::height/2);//set position right of window center
+    rtso1->position.set(window::width/2+96,window::height/2);//set position right of window center
     rtso1->primary_color=YELLOW;
     std::clog<<"object#"<<rtso1->number<<": "<<rtso1->name<<" initialized."<<std::endl;
     rts_objects.push_back(rtso1);//add the object to the object container
 
     rts_object* rtso2 = new rts_object();
     rtso2->name="green square";
-    rtso2->current.set(window::width/2,window::height/2-96);//set position below window center
+    rtso2->position.set(window::width/2,window::height/2-96);//set position below window center
     rtso2->primary_color=GREEN;
     std::clog<<"object#"<<rtso2->number<<": "<<rtso2->name<<" initialized."<<std::endl;
     rts_objects.push_back(rtso2);//add the object to the object container
 
     rts_object* rtso3 = new rts_object();
     rtso3->name="red square";
-    rtso3->current.set(window::width/2,window::height/2+96);//set position above window center
+    rtso3->position.set(window::width/2,window::height/2+96);//set position above window center
     rtso3->primary_color=RED;
     std::clog<<"object#"<<rtso3->number<<": "<<rtso3->name<<" initialized."<<std::endl;
     rts_objects.push_back(rtso3);//add the object to the object container
 
     rts_object* rtso4 = new rts_object();
     rtso4->name="blue square";
-    rtso4->current.set(window::width/2-96,window::height/2);//set position left of window center
+    rtso4->position.set(window::width/2-96,window::height/2);//set position left of window center
     rtso4->primary_color=BLUE;
     std::clog<<"object#"<<rtso4->number<<": "<<rtso4->name<<" initialized."<<std::endl;
     rts_objects.push_back(rtso4);//add the object to the object container

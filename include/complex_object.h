@@ -17,7 +17,7 @@
 #ifndef COMPLEX_H
 #define COMPLEX_H
 #include "object.h"
-#include "point2f.h"
+#include "point.h"
 
 //A complex object consists of a number of points which are calculated based on the object's position and rotation
 class complex_object: virtual public object

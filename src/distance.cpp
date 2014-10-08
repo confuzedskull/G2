@@ -14,9 +14,8 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
+#include "distance.h"
 #include <math.h>
-#include "point2i.h"
-#include "point2f.h"
 
 float distance(float x1, float y1, float x2, float y2)//calculates distance given x,y values
 {

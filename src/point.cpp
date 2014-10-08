@@ -14,5 +14,38 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#include "vector2i.h"
+#include "point.h"
 
+point2f::point2f()
+{
+
+}
+point2f::point2f(float a, float b)
+{
+    x = a;
+    y = b;
+}
+
+void point2f::set(float a, float b)
+{
+    x = a;
+    y = b;
+}
+
+void point2f::set(point2f p)
+{
+    x = p.x;
+    y = p.y;
+}
+
+point2i::point2i(int a, int b)
+{
+    x = a;
+    y = b;
+}
+
+void point2i::set(int a, int b)
+{
+    x = a;
+    y = b;
+}

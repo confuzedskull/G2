@@ -64,7 +64,7 @@ int cursor::objects_selected()
     return selected;
 }
 
-void cursor::set_boundaries()//boundaries of the selection box
+void cursor::calc_boundaries()//boundaries of the selection box
 {
     xmin= left_down.x;
     xmax= left_drag.x;

@@ -31,10 +31,11 @@
 
 void complex_object::calc_direction()
 {
-    leftward.set(-(sin(rotation*3.14159/180)),cos(rotation*3.14159/180));
-    rightward.set(sin(rotation*3.14159/180),-(cos(rotation*3.14159/180)));
-    forward.set(cos(rotation*3.14159/180),sin(rotation*3.14159/180));
-    backward.set(-(cos(rotation*3.14159/180)),-(sin(rotation*3.14159/180)));
+    float var = 3.14159/180;
+    leftward.set(-(sin(rotation*var)),cos(rotation*var));
+    rightward.set(sin(rotation*var),-(cos(rotation*var)));
+    forward.set(cos(rotation*var),sin(rotation*var));
+    backward.set(-(cos(rotation*var)),-(sin(rotation*var)));
 }
 
 void complex_object::rotate(float angle)
@@ -46,38 +47,53 @@ void complex_object::rotate(float angle)
 
 void complex_object::calc_points()
 {
-    front.set(current.x+(forward.x*(height/2)),current.y+(forward.y*(height/2)));
-    back.set(current.x+(backward.x*(height/2)),current.y+(backward.y*(height/2)));
-    left.set(current.x+(leftward.x*(width/2)),current.y+(leftward.y*(width/2)));
-    right.set(current.x+(rightward.x*(width/2)),current.y+(rightward.y*(width/2)));
-    front_left.set(current.x+((forward.x+leftward.x)*(height/2)),current.y+((forward.y+leftward.y)*(height/2)));
-    front_right.set(current.x+((forward.x+rightward.x)*(height/2)),current.y+((forward.y+rightward.y)*(height/2)));
-    back_left.set(current.x+((backward.x+leftward.x)*(width/2)),current.y+((backward.y+leftward.y)*(width/2)));
-    back_right.set(current.x+((backward.x+rightward.x)*(width/2)),current.y+((backward.y+rightward.y)*(width/2)));
+    float half_width=width/2;
+    float half_height=height/2;
+    front.set(position.x+(forward.x*half_height),position.y+(forward.y*half_height));
+    back.set(position.x+(backward.x*half_height),position.y+(backward.y*half_height));
+    left.set(position.x+(leftward.x*half_width),position.y+(leftward.y*half_width));
+    right.set(position.x+(rightward.x*half_width),position.y+(rightward.y*half_width));
+    front_left.set(position.x+((forward.x+leftward.x)*half_height),position.y+((forward.y+leftward.y)*half_height));
+    front_right.set(position.x+((forward.x+rightward.x)*half_height),position.y+((forward.y+rightward.y)*half_height));
+    back_left.set(position.x+((backward.x+leftward.x)*half_width),position.y+((backward.y+leftward.y)*half_width));
+    back_right.set(position.x+((backward.x+rightward.x)*half_width),position.y+((backward.y+rightward.y)*half_width));
 }
 //complex objects have their own render method because each vertex is an object whose properties are constantly changing
 void complex_object::render()
 {
-    glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
-    if(!rendered)
-    {
-        std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" rendered."<<std::endl;
-        rendered=true;
-    }
     if(visible)
     {
-        glBegin(GL_POLYGON);//draws a filled in rectangle
+        glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
+        glBegin(GL_POLYGON);//draws a filled in polygon
         glVertex2f(back_left.x, back_left.y); // The bottom left corner
         glVertex2f(front_left.x, front_left.y); // The top left corner
         glVertex2f(front_right.x, front_right.y); // The top right corner
         glVertex2f(back_right.x, back_right.y); // The bottom right corner
         glEnd();//finish drawing
+        if(selected)//selected objects are marked by a green ellipse
+        {
+            glPushMatrix();//modify transformation matrix
+            glTranslatef(position.x,position.y,0.0);//translate ellipse according to object coordinates
+            glColor3f(0.0,1.0,0.0);//make the lines green
+            glBegin(GL_LINE_LOOP);//draws a series of lines
+            for (int i=0; i<360; i++)
+            {
+                float deg_rad = i*3.14159/180;//calculate degrees in radians
+                glVertex2f(cos(deg_rad)*radius,sin(deg_rad)*radius);//ellipse function
+            }
+            glEnd();//finish drawing
+            glPopMatrix();//reset transformation matrix
+        }
+        if(!rendered)
+        {
+            std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" rendered."<<std::endl;
+            rendered=true;
+        }
     }
 }
 
 void complex_object::update()
 {
-    set_boundaries();
     calc_points();
     calc_direction();
 }
@@ -85,6 +101,5 @@ void complex_object::update()
 complex_object::complex_object()
 {
     type="complex object";
-    set_boundaries();
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created."<<std::endl;
+    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

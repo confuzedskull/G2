@@ -17,7 +17,7 @@
 #ifndef PROJECTILE_H
 #define PROJECTILE_H
 #include "tangible_object.h"
-#include "point2f.h"
+#include "point.h"
 
 //A projectile collides with other physics objects
 class projectile: public tangible_object

@@ -16,7 +16,7 @@
 
 #ifndef CURSOR_H
 #define CURSOR_H
-#include "point2f.h"
+#include "point.h"
 #include "color.h"
 #include "object.h"
 #include "game.h"
@@ -49,7 +49,7 @@ static bool left_clicked_an_object;
 static bool right_clicked_an_object;
 static bool grabbed_an_object;
 static int objects_selected();
-static void set_boundaries();
+static void calc_boundaries();
 static void selection_box();
 };
 #endif // CURSOR_H

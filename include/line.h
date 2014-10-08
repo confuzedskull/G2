@@ -14,18 +14,21 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#ifndef POINT2F_H
-#define POINT2F_H
+#ifndef LINE_H
+#define LINE_H
+#include "point.h"
 
-//A point2f is a 2D point that consists of two floating point values
-class point2f
+//A line2f is a 2D line that consists of three point2f's
+class line2f
 {
     public:
-    float x;
-    float y;
-    void set(float a, float b);
-    void set(point2f p);
-    point2f();
-    point2f(float a, float b);
+    point2f A;
+    point2f B;
+    point2f midpoint();
+    void set(point2f a,point2f b);
+    bool hasPoint(point2f p);
+    float slope();
+    line2f();
+    line2f(point2f a, point2f b);
 };
-#endif // POINT2F_H
+#endif // LINE_H

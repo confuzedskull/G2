@@ -91,7 +91,7 @@ void tangible_object::identify_touched(complex_object B)//variable touching[] is
 
 bool tangible_object::is_close(complex_object B)
 {
-    if(islessequal(distance(current,B.current),(radius+B.radius)))
+    if(islessequal(distance(position,B.position),(radius+B.radius)))
         return true;
     else
         return false;
@@ -99,14 +99,14 @@ bool tangible_object::is_close(complex_object B)
 
 bool tangible_object::near_front(complex_object B)
 {
-    if(isless(distance(front,B.current),B.radius))
+    if(isless(distance(front,B.position),B.height/2))
         return true;
     else
         return false;
 }
 bool tangible_object::near_back(complex_object B)
 {
-    if(isless(distance(back,B.current),B.radius))
+    if(isless(distance(back,B.position),B.height/2))
         return true;
     else
         return false;
@@ -114,7 +114,7 @@ bool tangible_object::near_back(complex_object B)
 
 bool tangible_object::near_left(complex_object B)
 {
-    if(isless(distance(left,B.current),B.radius))
+    if(isless(distance(left,B.position),B.width/2))
         return true;
     else
         return false;
@@ -122,7 +122,7 @@ bool tangible_object::near_left(complex_object B)
 
 bool tangible_object::near_right(complex_object B)
 {
-    if(isless(distance(right,B.current),B.radius))
+    if(isless(distance(right,B.position),B.width/2))
         return true;
     else
         return false;
@@ -136,5 +136,5 @@ tangible_object::tangible_object(): movable_object()
     touching[1]=-1;
     touching[2]=-1;
     touching[3]=-1;
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created."<<std::endl;
+    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

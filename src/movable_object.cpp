@@ -16,8 +16,8 @@
 
 #include "movable_object.h"
 #include "distance.h"
-#include "point2f.h"
-#include "vector2f.h"
+#include "point.h"
+#include "physics_vector.h"
 #include <math.h>
 #include <queue>
 #include <iostream>
@@ -27,10 +27,10 @@ std::queue< std::vector<int> > actions;
 void movable_object::set_resting()
 {
     if(!moving_horizontal())
-        rest.x=current.x;
+        rest.x=position.x;
 
     if(!moving_vertical())
-        rest.y=current.y;
+        rest.y=position.y;
 
     if(!turning())
         rest_rotation=rotation;
@@ -107,8 +107,8 @@ void movable_object::move_left()
 
 void movable_object::move_left(float units_left)
 {
-    current.x+=leftward.x*speed*units_left;
-    current.y+=leftward.y*speed*units_left;
+    position.x+=leftward.x*speed*units_left;
+    position.y+=leftward.y*speed*units_left;
     moving_left=true;
 }
 
@@ -119,8 +119,8 @@ void movable_object::move_right()
 
 void movable_object::move_right(float units_right)
 {
-    current.x+=rightward.x*speed*units_right;
-    current.y+=rightward.y*speed*units_right;
+    position.x+=rightward.x*speed*units_right;
+    position.y+=rightward.y*speed*units_right;
     moving_right=true;
 }
 
@@ -131,8 +131,8 @@ void movable_object::move_forward()
 
 void movable_object::move_forward(float units_forward)
 {
-    current.x+=forward.x*speed*units_forward;
-    current.y+=forward.y*speed*units_forward;
+    position.x+=forward.x*speed*units_forward;
+    position.y+=forward.y*speed*units_forward;
     moving_forward=true;
 }
 
@@ -143,37 +143,37 @@ void movable_object::move_back()
 
 void movable_object::move_back(float units_back)
 {
-    current.x+=backward.x*speed*units_back;
-    current.y+=backward.y*speed*units_back;
+    position.x+=backward.x*speed*units_back;
+    position.y+=backward.y*speed*units_back;
     moving_backward=true;
 }
 
 void movable_object::turn_to_point(float destination_x, float destination_y)//rotates object to face the given coordinates
 {
-    if(isgreater(distance(destination_x,destination_y,current.x,current.y),radius))//prevent infinite spin
+    if(isgreater(distance(destination_x,destination_y,position.x,position.y),radius))//prevent infinite spin
     {
-        if(isgreater(destination_x,current.x) && isgreater(destination_y,current.y))//destination lies in quadrant 1
-            rotation = atan((destination_y-current.y)/(destination_x-current.x))*180.0f/3.14159f;
+        if(isgreater(destination_x,position.x) && isgreater(destination_y,position.y))//destination lies in quadrant 1
+            rotation = atan((destination_y-position.y)/(destination_x-position.x))*180.0f/3.14159f;
 
-        if(isless(destination_x,current.x) && isgreater(destination_y,current.y))//destination lies in quadrant 2
-            rotation = atan((destination_y-current.y)/(destination_x-current.x))*180.0f/3.14159f + 180.0f;
+        if(isless(destination_x,position.x) && isgreater(destination_y,position.y))//destination lies in quadrant 2
+            rotation = atan((destination_y-position.y)/(destination_x-position.x))*180.0f/3.14159f + 180.0f;
 
-        if(isless(destination_x,current.x) && isless(destination_y,current.y))//destination lies in quadrant 3
-            rotation = atan((destination_y-current.y)/(destination_x-current.x))*180.0f/3.14159f + 180.0f;
+        if(isless(destination_x,position.x) && isless(destination_y,position.y))//destination lies in quadrant 3
+            rotation = atan((destination_y-position.y)/(destination_x-position.x))*180.0f/3.14159f + 180.0f;
 
-        if(isgreater(destination_x,current.x) && isless(destination_y,current.y))//destination lies in quadrant 4
-            rotation = atan((destination_y-current.y)/(destination_x-current.x))*180.0f/3.14159f + 360.0f;
+        if(isgreater(destination_x,position.x) && isless(destination_y,position.y))//destination lies in quadrant 4
+            rotation = atan((destination_y-position.y)/(destination_x-position.x))*180.0f/3.14159f + 360.0f;
 
-        if((!isless(destination_x,current.x)&&!isgreater(destination_x,current.x)) && isgreater(destination_y,current.y))//destination lies at 12 O'clock
+        if((!isless(destination_x,position.x)&&!isgreater(destination_x,position.x)) && isgreater(destination_y,position.y))//destination lies at 12 O'clock
             rotation = 90.0f;
 
-        if((!isless(destination_x,current.x)&&!isgreater(destination_x,current.x))&& isless(destination_y,current.y))//destination lies at 6'O'clock
+        if((!isless(destination_x,position.x)&&!isgreater(destination_x,position.x))&& isless(destination_y,position.y))//destination lies at 6'O'clock
             rotation = 270.0f;
 
-        if(isless(destination_x,current.x) && (!isless(destination_y,current.y)&&!isgreater(destination_y,current.y)))//destination lies at 9 O'clock
+        if(isless(destination_x,position.x) && (!isless(destination_y,position.y)&&!isgreater(destination_y,position.y)))//destination lies at 9 O'clock
             rotation = 180.0f;
 
-        if(isgreater(destination_x,current.x) && (!isless(destination_y,current.y)&&!isgreater(destination_y,current.y)))//destination lies at 3 O'clock
+        if(isgreater(destination_x,position.x) && (!isless(destination_y,position.y)&&!isgreater(destination_y,position.y)))//destination lies at 3 O'clock
             rotation = 0.0f;
     }
 }
@@ -189,7 +189,7 @@ bool movable_object::move_to_point(float destination_x, float destination_y, flo
     if(rally_set)
     {
         movable_object::turn_to_point(destination_x,destination_y);
-        if(isless(distance(current.x,current.y,destination_x,destination_y),radius))
+        if(isless(distance(position.x,position.y,destination_x,destination_y),radius))
         rally_set=false;
         move_forward(speed*rate);
         moving_forward=true;
@@ -263,7 +263,6 @@ bool movable_object::perform_actions()
 void movable_object::update()
 {
     set_resting();
-    set_boundaries();
     calc_points();
     calc_direction();
     reset_motion();
@@ -273,8 +272,10 @@ movable_object::movable_object(): complex_object()
 {
     type="movable object";
     speed=1.01f;
+    rest.set(position);
+    rest_rotation=rotation;
     rally = &rest;
     rally_set=false;
     reset_motion();
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created."<<std::endl;
+    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }
