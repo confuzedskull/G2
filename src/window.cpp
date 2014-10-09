@@ -16,8 +16,10 @@
 
 #include "window.h"
 #include "game.h"
+#include "controls.h"
 #include "ui.h"
 #include "cursor.h"
+#include "button.h"
 #include <math.h>
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
@@ -93,8 +95,11 @@ void window::render_scene()
     //render the physics objects
     for(unsigned i=0; i<game::physics_objects.size(); i++)
     game::physics_objects[i]->render();
+    //render buttons
+    for(unsigned i=0; i<game::buttons.size(); i++)
+    game::buttons[i]->render();
 //TOP
-    if(ui::toggle_overlay)
+    if(controls::toggle_overlay)
     ui::print_overlay();
     glFlush();
 }
@@ -112,16 +117,19 @@ void window::update_scene()
     //update draggable objects
     for(unsigned i=0; i<game::draggable_objects.size(); i++)
     game::draggable_objects[i]->update();
+    //update buttons
+    for(unsigned i=0; i<game::buttons.size(); i++)
+    game::buttons[i]->update();
     //apply collision effects
     game::collision_detection();
     //check if objects are clicked
-    ui::check_clicked();
+    controls::check_clicked();
     //This function acts like timer so that events occur at the set refresh rate
     if(isgreaterequal(game::time_elapsed,window::refresh_rate))//time elapsed is >= refresh rate
     {
         game::time_started=clock();//reset the start time
         game::time+=window::refresh_rate;//increment the game clock
-        ui::key_operations();//keyboard controls
+        controls::key_operations();//keyboard controls
         //move rts objects
         for(unsigned i=0; i<game::rts_objects.size(); i++)
         game::rts_objects[i]->perform_actions()||game::rts_objects[i]->move_to_point(*game::rts_objects[i]->rally,2.00f);

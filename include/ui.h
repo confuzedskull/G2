@@ -21,9 +21,6 @@
 //This namespace contains functions and variables related to the user interface
 namespace ui
 {
-        extern bool* key_states; //stores each on/off state of a keyboard key
-        extern bool temp_toggle;//stores the state of the information overlay
-        extern bool toggle_overlay;//toggles the information overlay on/off
         extern std::vector<char*> info_overlay;//text for information overlay
         extern float margin;//space between window edge and text
         extern float spacing;//how far apart each line should be
@@ -32,10 +29,5 @@ namespace ui
         void glutPrint(float x, float y, void* font, char* text, color c);//print text at x,y with a GLUT font and specified color
         void print_overlay();//adds text to the information overlay
         void check_clicked();//check every clickable object to see if the cursor clicked it
-        void mouse_click(int button, int state, int x, int y);//handles mouse clicks
-        void mouse_drag(int x, int y);//handles mouse drag
-        void key_pressed(unsigned char key, int x, int y);//marks given key as pressed
-        void key_released(unsigned char key, int x, int y);//marks given key as released
-        void key_operations(void);//handles keyboard actions
 }
 #endif // UI_H

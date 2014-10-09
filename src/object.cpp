@@ -54,6 +54,24 @@ void object::calc_boundaries()//calculates the limits of the object
     radius=distance(xmin,ymin,xmax,ymax)/2;
 }
 
+void object::mark_selected()
+{
+    if(selected)//selected objects are marked by a green ellipse
+    {
+        glPushMatrix();//modify transformation matrix
+        glTranslatef(position.x,position.y,0.0);//translate ellipse according to object coordinates
+        glColor3f(0.0,1.0,0.0);//make the lines green
+        glBegin(GL_LINE_LOOP);//draws a series of lines
+        for (int i=0; i<360; i++)
+        {
+            float deg_rad=i*3.14159/180;//calculate degrees in radians
+            glVertex2f(cos(deg_rad)*radius,sin(deg_rad)*radius);//ellipse function
+        }
+        glEnd();//finish drawing
+        glPopMatrix();//reset transformation matrix
+    }
+}
+
 void object::render()//draws the object
 {
     if(visible)
@@ -63,7 +81,6 @@ void object::render()//draws the object
         glRotatef(rotation,0,0,1);//rotates object with object.rotation
         glTranslatef(-position.x,-position.y,0.0);//translate object according to coordinates
         glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
-
         glBegin(GL_POLYGON);//draws a filled in rectangle
         glVertex2f(xmin, ymin); // The bottom left corner
         glVertex2f(xmin, ymax); // The top left corner
@@ -71,21 +88,8 @@ void object::render()//draws the object
         glVertex2f(xmax, ymin); // The bottom right corner
         glEnd();//finish drawing
         glPopMatrix();//reset transformation matrix
+        mark_selected();
 
-        if(selected)//selected objects are marked by a green ellipse
-        {
-            glPushMatrix();//modify transformation matrix
-            glTranslatef(position.x,position.y,0.0);//translate ellipse according to object coordinates
-            glColor3f(0.0,1.0,0.0);//make the lines green
-            glBegin(GL_LINE_LOOP);//draws a series of lines
-            for (int i=0; i<360; i++)
-            {
-                float deg_rad=i*3.14159/180;//calculate degrees in radians
-                glVertex2f(cos(deg_rad)*radius,sin(deg_rad)*radius);//ellipse function
-            }
-            glEnd();//finish drawing
-            glPopMatrix();//reset transformation matrix
-        }
         if(!rendered)
         {
             std::clog<<"object#"<<number<<": "<<name<<" rendered."<<std::endl;
@@ -108,6 +112,7 @@ object::object()
     position.set(window::width/2,window::height/2);
     set_dimensions(64,64);
     primary_color.set(BLACK);
+    primary_color.changed=false;
     rotation=90.1;
     visible=true;
     rendered=false;
@@ -124,6 +129,7 @@ object::object(float x, float y, float w, float h)
     position.set(x,y);
     set_dimensions(w,h);
     primary_color.set(BLACK);
+    primary_color.changed=false;
     rotation=90.1;
     visible=true;
     rendered=false;
@@ -140,6 +146,7 @@ object::object(float x, float y, float w, float h, color c)
     position.set(x,y);
     set_dimensions(w,h);
     primary_color.set(c);
+    primary_color.changed=false;
     rotation=90.1;
     visible=true;
     rendered=false;

@@ -18,8 +18,7 @@
 #include "window.h"
 #include "game.h"
 #include "ui.h"
-#include <math.h>
-#include <iostream>
+#include "controls.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -32,6 +31,8 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #endif
+#include <math.h>
+#include <iostream>
 
 int main(int argc, char **argv)
 {
@@ -55,11 +56,12 @@ int main(int argc, char **argv)
     glutReshapeFunc(window::change_size);
     glutIdleFunc(window::update_scene);
     std::clog<<"initializing keyboard...\n";
-    glutKeyboardFunc(ui::key_pressed);
-    glutKeyboardUpFunc(ui::key_released);
+    glutKeyboardFunc(controls::key_pressed);
+    glutKeyboardUpFunc(controls::key_released);
     std::clog<<"initializing mouse...\n";
-    glutMouseFunc(ui::mouse_click);
-    glutMotionFunc(ui::mouse_drag);
+    glutMouseFunc(controls::mouse_click);
+    glutPassiveMotionFunc(controls::mouse_move);
+    glutMotionFunc(controls::mouse_drag);
     std::clog<<"rendering...\n";
     glutDisplayFunc(window::render_scene);
     glutMainLoop();

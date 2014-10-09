@@ -30,10 +30,11 @@ class color
         float g;//green value
         float b;//blue value
         float a;//alpha value
-        void brighten();//increment the alpha of the color
-        void brighten(float alpha);//increase the alpha by given value
-        void darken();//decrement the alpha of the color
-        void darken(float alpha);//decrease the alpha by given value
+        bool changed;//whether the color values have been modified
+        void brighten();//increase the brightness of the color
+        void brighten(float brightness);//increase brightness by given value
+        void darken();//decrease brightness of the color
+        void darken(float brightness);//decrease the brightness by given value
         void set(float red, float green, float blue);//set the RGB values
         void set(float red, float green, float blue, float alpha);//set the RGBA values
         void set(color c);//set the color to match the given color
@@ -44,11 +45,11 @@ class color
 
     };//color with red, green, blue
 //below are a bunch of color presets
-const color RED(1.0,0.0,0.0);
-const color YELLOW(1.0,1.0,0.0);
-const color GREEN(0.0,1.0,0.0);
-const color BLUE(0.0,0.0,1.0);
-const color BLACK(0.0,0.0,0.0);
-const color WHITE(1.0,1.0,1.0);
-const color GRAY(0.5,0.5,0.5);
+const color RED(1.0f,0.0f,0.0f);
+const color YELLOW(1.0f,1.0f,0.0f);
+const color GREEN(0.0f,1.0f,0.0f);
+const color BLUE(0.0f,0.0f,1.0f);
+const color BLACK(0.0f,0.0f,0.0f);
+const color WHITE(1.0f,1.0f,1.0f);
+const color GRAY(0.5f,0.5f,0.5f);
 #endif // COLOR_H

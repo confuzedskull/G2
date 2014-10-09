@@ -25,31 +25,31 @@
 class cursor
 {
 public:
-static point2f passive;
-static point2f left_down;
-static point2f left_up;
-static point2f left_drag;
-static point2f right_down;
-static point2f right_up;
-static point2f right_drag;
-static point2f rally;
-static bool left_click;
-static bool left_dragging;
-static bool right_click;
-static bool right_dragging;
-static float xmin,xmax,ymin,ymax;
-static color box_color;//RGB values
-static bool highlighting;
-static std::vector<bool> highlighted_objects;
-static int selected_object;
-static clickable_object * left_clicked_object;
-static clickable_object * right_clicked_object;
-static bool set_rally;
-static bool left_clicked_an_object;
-static bool right_clicked_an_object;
-static bool grabbed_an_object;
-static int objects_selected();
-static void calc_boundaries();
-static void selection_box();
+    static point2f passive;
+    static point2f left_down;
+    static point2f left_up;
+    static point2f left_drag;
+    static point2f right_down;
+    static point2f right_up;
+    static point2f right_drag;
+    static point2f rally;
+    static bool left_click;
+    static bool left_dragging;
+    static bool right_click;
+    static bool right_dragging;
+    static float xmin,xmax,ymin,ymax;
+    static color box_color;//RGB values
+    static bool highlighting;
+    static std::vector<bool> highlighted_objects;
+    static int selected_object;
+    static clickable_object * left_clicked_object;
+    static clickable_object * right_clicked_object;
+    static bool set_rally;
+    static bool left_clicked_an_object;
+    static bool right_clicked_an_object;
+    static bool grabbed_an_object;
+    static int objects_selected();
+    static void calc_boundaries();
+    static void selection_box();
 };
 #endif // CURSOR_H

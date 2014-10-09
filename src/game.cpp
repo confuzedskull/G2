@@ -29,6 +29,7 @@ std::vector<draggable_object*> game::draggable_objects;
 std::vector<physics_object*> game::physics_objects;
 std::vector<rts_object*> game::rts_objects;
 std::vector<projectile> game::projectiles;
+std::vector<button*> game::buttons;
 
 //This checks which objects are touching and what they should do when that occurs
 void game::collision_detection()
@@ -77,6 +78,12 @@ void game::collision_detection()
 
 void game::init_objects()
 {
+//initialize the buttons
+    button* button1 = new button();
+    button1->position.set(100.0f,100.0f);
+    button1->calc_boundaries();
+    buttons.push_back(button1);
+
     object::total_objects=0;//reset the object count
 
 //initialize the physics objects

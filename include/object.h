@@ -37,10 +37,11 @@ class object
     bool rendered;//whether the render method has been called or not
     bool selected;//whether the object has been selected or not
     float xmax,xmin,ymax,ymin;//the boundaries of the object
+    void rotate(float angle);//changes the object's rotation by the given angle
     void set_dimensions(float w, float h);
     void calc_boundaries();//calculates the max's and mins
+    void mark_selected();//visually indicates whether object is selected
     void render();//draws the object
-    void rotate(float angle);//changes the object's rotation by the given angle
     void update();
     object();
     object(float x, float y, float w, float h);

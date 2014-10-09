@@ -19,18 +19,15 @@
 #include "distance.h"
 #include <math.h>
 #include <iostream>
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <GLUT/glut.h>
-#else
-#ifdef _WIN32
-#include <windows.h>
-#endif
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
-#endif
+
+bool clickable_object::hovered_over()
+{
+    if(isless(distance(cursor::passive,position),radius))
+        return true;
+    else
+        return false;
+}
+
 bool clickable_object::left_clicked()
 {
     if(cursor::left_click && isless(distance(cursor::left_down,position),radius))

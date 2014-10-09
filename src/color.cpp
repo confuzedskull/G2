@@ -15,40 +15,54 @@
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "color.h"
+#include <math.h>
+
 void color::brighten()
 {
-    prev_r=r;
-    prev_g=g;
-    prev_b=b;
-    prev_a=a;
-    a+=0.1;
+    brighten(0.1);
 }
 
-void color::brighten(float alpha)
+void color::brighten(float brightness)
 {
     prev_r=r;
     prev_g=g;
     prev_b=b;
-    prev_a=a;
-    a+=alpha;
+    if(isless(brightness,1.0f))
+    {
+        if(isless(r,1.0f) && isgreater(r,0.0f))
+            r+=brightness;
+
+        if(isless(g,1.0f) && isgreater(g,0.0f))
+            g+=brightness;
+
+        if(isless(b,1.0f) && isgreater(b,0.0f))
+            b+=brightness;
+    }
+    changed=true;
 }
 
 void color::darken()
 {
-    prev_r=r;
-    prev_g=g;
-    prev_b=b;
-    prev_a=a;
-    a-=0.1;
+    darken(0.1f);
 }
 
-void color::darken(float alpha)
+void color::darken(float brightness)
 {
     prev_r=r;
     prev_g=g;
     prev_b=b;
-    prev_a=a;
-    a-=alpha;
+    if(isless(brightness,1.0f))
+    {
+        if(isgreater(r,0.0f))
+        r-=brightness;
+
+        if(isgreater(g,0.0f))
+        g-=brightness;
+
+        if(isgreater(b,0.0f))
+        b-=brightness;
+    }
+    changed=true;
 }
 
 void color::set(float red, float green, float blue)
@@ -60,7 +74,7 @@ void color::set(float red, float green, float blue)
     r=red;
     g=green;
     b=blue;
-
+    changed=true;
 }
 
 void color::set(float red, float green, float blue, float alpha)
@@ -73,7 +87,7 @@ void color::set(float red, float green, float blue, float alpha)
     g=green;
     b=blue;
     a=alpha;
-
+    changed=true;
 }
 
 void color::set(color c)
@@ -85,18 +99,24 @@ void color::set(color c)
     r=c.r;
     g=c.g;
     b=c.b;
+    changed=true;
 }
 
 void color::undo()
 {
-    r=prev_r;
-    g=prev_g;
-    b=prev_b;
-    a=prev_a;
+    if(changed)
+    {
+        r=prev_r;
+        g=prev_g;
+        b=prev_b;
+        a=prev_a;
+        changed=false;
+    }
 }
 
 color::color()
 {
+    changed=false;
     r=0.0;
     g=0.0;
     b=0.0;
@@ -104,6 +124,7 @@ color::color()
 
 color::color(float red, float green, float blue)
 {
+    changed=false;
     r=red;
     g=green;
     b=blue;
@@ -111,6 +132,7 @@ color::color(float red, float green, float blue)
 
 color::color(float red, float green, float blue, float alpha)
 {
+    changed=false;
     r=red;
     g=green;
     b=blue;

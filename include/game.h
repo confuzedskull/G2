@@ -16,11 +16,12 @@
 
 #ifndef GAME_H
 #define GAME_H
-#include <time.h>
 #include "physics_object.h"
 #include "draggable_object.h"
 #include "rts_object.h"
 #include "projectile.h"
+#include "button.h"
+#include <time.h>
 #include <vector>
 
 //This class stores important settings and global variables for the program
@@ -34,6 +35,7 @@ class game
     static std::vector<draggable_object*> draggable_objects;
     static std::vector<physics_object*> physics_objects;
     static std::vector<rts_object*> rts_objects;
+    static std::vector<button*> buttons;
     static std::vector<projectile> projectiles;//projectiles don't need to be initialized so they aren't pointers
     static void init_objects();//initialize the objects
     static void collision_detection();

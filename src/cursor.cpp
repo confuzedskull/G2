@@ -29,6 +29,7 @@
 #endif
 
 //initialize static variables
+point2f cursor::passive = point2f(0.0,0.0);
 bool cursor::left_click = false;
 point2f cursor::left_down =  point2f(0.0,0.0);
 bool cursor::right_click = false;

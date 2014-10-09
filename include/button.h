@@ -14,19 +14,19 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#ifndef CLICKABLE_H
-#define CLICKABLE_H
-#include "object.h"
+#ifndef BUTTON_H
+#define BUTTON_H
+#include "clickable_object.h"
 
-//A clickable object interfaces with the cursor
-class clickable_object: virtual public object
+class button : public clickable_object
 {
     public:
-    bool hovered_over();//checks if the cursor lies within the this object
-    bool left_clicked();//checks if the cursor left clicked inside this object
-    bool right_clicked();//checks if the cursor right clicked inside this object
-    void mouse_function();//performs a variety of actions dependent on cursor interaction
-    void update();
-    clickable_object();
+        char* label;
+        float label_margin;
+        void mouse_function();
+        void render();
+        void update();
+        button();
 };
-#endif // CLICKABLE_H
+
+#endif // BUTTON_H
