@@ -22,6 +22,7 @@
 class draggable_object: public clickable_object, public tangible_object
 {
     public:
+        static void add_to_game();
         bool grabbed();//checks if this object was grabbed by the cursor
         void mouse_function();//performs a variety of actions dependent on cursor interaction
         void update();

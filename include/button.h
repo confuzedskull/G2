@@ -20,9 +20,15 @@
 
 class button : public clickable_object
 {
-    public:
+    protected:
         char* label;
-        float label_margin;
+    public:
+        void (*action)();//a function pointer which will be called when clicked
+        float label_margin;//space between text and button border
+        float font_size;//the height of the font in pt (not pixels)
+        float spacing;//space between each line
+        void fit_label();//adjusts the size of the button to fit the text
+        void set_label(char* l);
         void mouse_function();
         void render();
         void update();

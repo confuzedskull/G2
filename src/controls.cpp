@@ -106,7 +106,6 @@ void controls::mouse_move(int x, int y)
     cursor::passive.set(x,window::height-y);
 }
 
-//This is called when user clicks and drags
 void controls::mouse_drag(int x, int y)
 {
     if(cursor::left_click)
@@ -159,7 +158,7 @@ void controls::key_released(unsigned char key, int x, int y)
 
 void controls::key_operations(void)
 {
-    if(strcmp(cursor::left_clicked_object->type, "physics object")==0)
+    if(strcmp(cursor::left_clicked_object->get_type(), "physics object")==0)
     {
         if(key_states['w'] || key_states['W'])
             game::physics_objects[cursor::selected_object]->move_forward();

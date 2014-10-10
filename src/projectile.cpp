@@ -21,8 +21,8 @@
 
 void projectile::fire(movable_object source)//fires the projectile from the source
 {
-    position.set(source.position.x,source.position.y);//put the projectile where the source is
-    rotation=source.rotation;//match the rotation of the source
+    position.set(source.get_position());//put the projectile where the source is
+    rotation=source.get_rotation();//match the rotation of the source
     calc_points();
     calc_direction();
     fired=true;

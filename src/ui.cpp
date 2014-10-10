@@ -72,22 +72,22 @@ void ui::print_overlay()
     unsigned index = cursor::selected_object;//this value is relative to the object's corresponding container
     unsigned line = 0;//used for spacing each line
 
-    sprintf(info_overlay[line],"selected object: #%d - %s", cursor::left_clicked_object->number, cursor::left_clicked_object->name);
+    sprintf(info_overlay[line],"selected object: #%d - %s", cursor::left_clicked_object->get_number(), cursor::left_clicked_object->name);
     glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
 
-    sprintf(info_overlay[line],"type: %s", cursor::left_clicked_object->type);
+    sprintf(info_overlay[line],"type: %s", cursor::left_clicked_object->get_type());
     glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
 
-    sprintf(info_overlay[line],"dimensions: %.2fX%.2f", cursor::left_clicked_object->width,cursor::left_clicked_object->height);
+    sprintf(info_overlay[line],"dimensions: %.2fX%.2f", cursor::left_clicked_object->get_width(),cursor::left_clicked_object->get_height());
     glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
 
-    sprintf(info_overlay[line],"rotation: %.2f", cursor::left_clicked_object->rotation);
+    sprintf(info_overlay[line],"rotation: %.2f", cursor::left_clicked_object->get_rotation());
     glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
 
-    sprintf(info_overlay[line],"current position: %.2f,%.2f", cursor::left_clicked_object->position.x,cursor::left_clicked_object->position.y);
+    sprintf(info_overlay[line],"current position: %.2f,%.2f", cursor::left_clicked_object->get_position().x,cursor::left_clicked_object->get_position().y);
     glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
 
-    if(strcmp(cursor::left_clicked_object->type,"physics object")==0)//display the following if a physics object is selected
+    if(strcmp(cursor::left_clicked_object->get_type(),"physics object")==0)//display the following if a physics object is selected
     {
         sprintf(info_overlay[line],"resting position: %.2f, %.2f",game::physics_objects[index]->rest.x,game::physics_objects[index]->rest.y);
         glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
@@ -122,13 +122,13 @@ void ui::print_overlay()
         sprintf(info_overlay[line],"object touching side L:%d R:%d T:%d B:%d",game::physics_objects[index]->touching[0], game::physics_objects[index]->touching[1], game::physics_objects[index]->touching[2],game::physics_objects[index]->touching[3]);
         glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
     }
-    if(strcmp(cursor::left_clicked_object->type,"draggable object")==0)//display the following if a draggable object is selected
+    if(strcmp(cursor::left_clicked_object->get_type(),"draggable object")==0)//display the following if a draggable object is selected
     {
         index = cursor::selected_object-game::physics_objects.size();
         sprintf(info_overlay[line],"object touching side L:%d R:%d T:%d B:%d",game::draggable_objects[index]->touching[0], game::draggable_objects[index]->touching[1],game::draggable_objects[index]->touching[2],game::draggable_objects[index]->touching[3]);
         glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
     }
-    if(strcmp(cursor::left_clicked_object->type,"rts object")==0)//display the following if a RTS object is selected
+    if(strcmp(cursor::left_clicked_object->get_type(),"rts object")==0)//display the following if a RTS object is selected
     {
         index = cursor::selected_object-(game::physics_objects.size()+game::draggable_objects.size());
         sprintf(info_overlay[line],"speed: %.2f",game::rts_objects[index]->speed);

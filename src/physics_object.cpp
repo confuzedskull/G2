@@ -19,6 +19,11 @@
 #include <iostream>
 #include <math.h>
 
+void physics_object::add_to_game()
+{
+    game::physics_objects.push_back(new physics_object());
+}
+
 void physics_object::calc_delta_time()
 {
     if(isgreaterequal(fabs(position.x-rest.x),0.01f))//at least difference of 0.01

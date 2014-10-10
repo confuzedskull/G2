@@ -33,6 +33,11 @@
 #include <GL/glut.h>
 #endif
 
+void draggable_object::add_to_game()
+{
+    game::draggable_objects.push_back(new draggable_object());
+}
+
 bool draggable_object::grabbed()
 {
     if(cursor::left_dragging && !cursor::highlighting && isless(distance(cursor::left_drag,position),radius))

@@ -31,6 +31,19 @@
 #endif
 #include <iostream>
 
+void button::fit_label()
+{
+    width=(((float)strlen(label)-2)*(font_size*0.6f))+(label_margin*2.0f);
+    height=font_size+(label_margin*2.0f);
+    calc_boundaries();
+}
+
+void button::set_label(char* l)
+{
+    label=l;
+    fit_label();
+}
+
 void button::mouse_function()
 {
     /*if(hovered_over() && !primary_color.changed)
@@ -39,7 +52,10 @@ void button::mouse_function()
         primary_color.undo();*/
 
     if(left_clicked() && !primary_color.changed)//clicked this object
+    {
         primary_color.darken();
+        action();
+    }
     if(!left_clicked())
         primary_color.undo();
 }
@@ -55,7 +71,7 @@ void button::render()
     glVertex2f(xmax, ymin); // The bottom right corner
     glEnd();//finish drawing
     //render button text
-    ui::glutPrint(xmin+label_margin,ymin+label_margin,label);
+    ui::glutPrint(xmin+label_margin,ymin+label_margin+spacing,label);
 }
 
 void button::update()
@@ -67,9 +83,11 @@ button::button()
 {
     label="click me";
     type="button";
-    label_margin=5.0f;
+    label_margin=4.0f;
+    font_size=12.0f;
+    spacing=1.0f;
     position.set(0.0f,0.0f);
-    set_dimensions(60.0f,20.0f);
+    fit_label();
     primary_color.set(0.75f,0.75f,0.75f);
     primary_color.changed=false;
     std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;

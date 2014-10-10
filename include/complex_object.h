@@ -40,6 +40,9 @@ class complex_object: virtual public object
     point2f back_left;
     void calc_direction();//calculates each directional heading
     void rotate(float angle);//performs a rotation transformation based on the given angle
+    void set_position(float x, float y);
+    void set_rotation(float angle);
+    void set_dimensions(float w, float h);
     void calc_points();//calculates the midpoints and corners
     void render();//makes the object visible on screen
     void update();

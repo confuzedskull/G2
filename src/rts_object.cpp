@@ -16,8 +16,14 @@
 
 #include "rts_object.h"
 #include "cursor.h"
+#include "game.h"
 #include <math.h>
 #include <iostream>
+
+void rts_object::add_to_game()
+{
+    game::rts_objects.push_back(new rts_object());
+}
 
 bool rts_object::highlighted()
 {
@@ -75,7 +81,7 @@ void rts_object::mouse_function()
             if(cursor::right_clicked_an_object)
             {
                 //move to right clicked object
-                rally = &cursor::right_clicked_object->position;//set rally to reference point because position is always changing
+                rally = cursor::right_clicked_object->get_positionptr();//set rally to reference point because position is always changing
             }
             else//move to right clicked empty space
             {

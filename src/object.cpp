@@ -34,6 +34,58 @@
 
 //initialize static variable
 int object::total_objects=0;
+point2f object::origin = point2f(0.0,0.0);
+
+int object::get_number()
+{
+    return number;
+}
+
+char* object::get_type()
+{
+    return type;
+}
+
+point2f object::get_position()
+{
+    return position;
+}
+
+point2f* object::get_positionptr()
+{
+    return &position;
+}
+
+float object::get_rotation()
+{
+    return rotation;
+}
+
+float object::get_width()
+{
+    return width;
+}
+
+float object::get_height()
+{
+    return height;
+}
+
+float object::get_radius()
+{
+    return radius;
+}
+
+void object::set_position(float x, float y)
+{
+    position.set(x,y);
+    calc_boundaries();
+}
+
+void object::set_rotation(float angle)
+{
+    rotation=angle;
+}
 
 void object::set_dimensions(float w, float h)
 {
@@ -52,6 +104,11 @@ void object::calc_boundaries()//calculates the limits of the object
     ymin=position.y-half_height;
     ymax=position.y+half_height;
     radius=distance(xmin,ymin,xmax,ymax)/2;
+}
+
+void object::rotate(float angle)
+{
+    rotation+=angle;
 }
 
 void object::mark_selected()
@@ -98,18 +155,13 @@ void object::render()//draws the object
     }
 }
 
-void object::rotate(float angle)
-{
-    rotation+=angle;
-}
-
 object::object()
 {
     name="unnamed";
     type="object";
     number=total_objects;
     total_objects++;
-    position.set(window::width/2,window::height/2);
+    position.set(origin);
     set_dimensions(64,64);
     primary_color.set(BLACK);
     primary_color.changed=false;

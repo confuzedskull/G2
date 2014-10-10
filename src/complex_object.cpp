@@ -45,6 +45,19 @@ void complex_object::rotate(float angle)
     calc_points();//points must move with rotation
 }
 
+void complex_object::set_position(float x, float y)
+{
+    position.set(x,y);
+    calc_points();
+}
+
+void complex_object::set_rotation(float angle)
+{
+    rotation=angle;
+    calc_direction();
+    calc_points();
+}
+
 void complex_object::calc_points()
 {
     float half_width=width/2;
@@ -58,6 +71,15 @@ void complex_object::calc_points()
     back_left.set(position.x+((backward.x+leftward.x)*half_width),position.y+((backward.y+leftward.y)*half_width));
     back_right.set(position.x+((backward.x+rightward.x)*half_width),position.y+((backward.y+rightward.y)*half_width));
 }
+
+void complex_object::set_dimensions(float w, float h)
+{
+    width=w;
+    height=h;
+    calc_boundaries();
+    calc_points();
+}
+
 //complex objects have their own render method because each vertex is an object whose properties are constantly changing
 void complex_object::render()
 {
@@ -77,12 +99,6 @@ void complex_object::render()
             rendered=true;
         }
     }
-}
-
-void complex_object::update()
-{
-    calc_points();
-    calc_direction();
 }
 
 complex_object::complex_object()

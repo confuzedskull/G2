@@ -22,6 +22,7 @@
 class rts_object: public clickable_object, public tangible_object
 {
     public:
+        static void add_to_game();
         bool highlighted();//checks if this object lies within the highlighting box
         void mouse_function();//performs a variety of actions dependent on cursor interaction
         void update();

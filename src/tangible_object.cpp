@@ -59,22 +59,22 @@ void tangible_object::simon_says(complex_object B)//object changes color accordi
 void tangible_object::identify_touched(complex_object B)//variable touching[] is updated with number of the touched object
 {
     if(near_left(B))
-        touching[0]=B.number;
+        touching[0]=B.get_number();
     else
         touching[0]=-1;
 
     if(near_right(B))
-        touching[1]=B.number;
+        touching[1]=B.get_number();
     else
         touching[1]=-1;
 
     if(near_front(B))
-        touching[2]=B.number;
+        touching[2]=B.get_number();
     else
         touching[2]=-1;
 
     if(near_back(B))
-        touching[3]=B.number;
+        touching[3]=B.get_number();
     else
         touching[3]=-1;
 
@@ -91,7 +91,7 @@ void tangible_object::identify_touched(complex_object B)//variable touching[] is
 
 bool tangible_object::is_close(complex_object B)
 {
-    if(islessequal(distance(position,B.position),(radius+B.radius)))
+    if(islessequal(distance(position,B.get_position()),(radius+B.get_radius())))
         return true;
     else
         return false;
@@ -99,14 +99,14 @@ bool tangible_object::is_close(complex_object B)
 
 bool tangible_object::near_front(complex_object B)
 {
-    if(isless(distance(front,B.position),B.height/2))
+    if(isless(distance(front,B.get_position()),B.get_height()/2))
         return true;
     else
         return false;
 }
 bool tangible_object::near_back(complex_object B)
 {
-    if(isless(distance(back,B.position),B.height/2))
+    if(isless(distance(back,B.get_position()),B.get_height()/2))
         return true;
     else
         return false;
@@ -114,7 +114,7 @@ bool tangible_object::near_back(complex_object B)
 
 bool tangible_object::near_left(complex_object B)
 {
-    if(isless(distance(left,B.position),B.width/2))
+    if(isless(distance(left,B.get_position()),B.get_width()/2))
         return true;
     else
         return false;
@@ -122,7 +122,7 @@ bool tangible_object::near_left(complex_object B)
 
 bool tangible_object::near_right(complex_object B)
 {
-    if(isless(distance(right,B.position),B.width/2))
+    if(isless(distance(right,B.get_position()),B.get_width()/2))
         return true;
     else
         return false;
