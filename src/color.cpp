@@ -16,6 +16,18 @@
 
 #include "color.h"
 #include <math.h>
+#include <stdlib.h>
+#include <time.h>
+
+void color::randomize()
+{
+    srand(time(NULL));//initialize a new random seed
+    r=(rand()%10+1)/10.0f;//generate a number between 1 and 10, then divide by 10(so that it is in range 0.1 - 1.0)
+    //srand(time(NULL));//initialize a new random seed
+    g=(rand()%10+1)/10.0f;//generate a number between 1 and 10, then divide by 10(so that it is in range 0.1 - 1.0)
+    //srand(time(NULL));//initialize a new random seed
+    b=(rand()%10+1)/10.0f;//generate a number between 1 and 10, then divide by 10(so that it is in range 0.1 - 1.0)
+}
 
 void color::brighten()
 {

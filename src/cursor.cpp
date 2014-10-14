@@ -27,7 +27,7 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #endif
-
+#include <iostream>
 //initialize static variables
 point2f cursor::passive = point2f(0.0,0.0);
 bool cursor::left_click = false;
@@ -77,6 +77,9 @@ void cursor::selection_box()//this is the box that is created when user clicks a
 {
     if(highlighting)
     {
+        bool blending = false;
+        if(glIsEnabled(GL_BLEND))
+            blending = true;
         glEnable (GL_BLEND);
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glColor4f(box_color.r,box_color.g,box_color.b,0.5);
@@ -86,5 +89,15 @@ void cursor::selection_box()//this is the box that is created when user clicks a
         glVertex2f(xmax, ymax); // The top right corner
         glVertex2f(xmax, ymin); // The bottom right corner
         glEnd();
+        if(!blending)
+        glDisable(GL_BLEND);
     }
+}
+
+void cursor::delete_selected()
+{
+    game::draggable_objects.erase(selected_object);
+    game::physics_objects.erase(selected_object);
+    game::rts_objects.erase(selected_object);
+    std::clog<<"object#"<<left_clicked_object->get_number()<<": "<<left_clicked_object->name<<'('<<left_clicked_object->get_type()<<')'<<" deleted."<<std::endl;
 }

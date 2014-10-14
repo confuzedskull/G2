@@ -17,6 +17,7 @@
 #include "button.h"
 #include "ui.h"
 #include "window.h"
+#include "cursor.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -30,6 +31,27 @@
 #include <GL/glut.h>
 #endif
 #include <iostream>
+#include <math.h>
+
+bool button::hovered_over()
+{
+    if(!cursor::left_click &&
+       isless(cursor::passive.x,xmax) && isgreater(cursor::passive.x,xmin) &&
+       isless(cursor::passive.y,ymax) && isgreater(cursor::passive.y,ymin))
+        return true;
+    else
+        return false;
+}
+
+bool button::left_clicked()
+{
+    if(cursor::left_click &&
+       isless(cursor::left_down.x,xmax) && isgreater(cursor::left_down.x,xmin) &&
+       isless(cursor::left_down.y,ymax) && isgreater(cursor::left_down.y,ymin))
+        return true;
+    else
+        return false;
+}
 
 void button::fit_label()
 {
@@ -46,18 +68,18 @@ void button::set_label(char* l)
 
 void button::mouse_function()
 {
-    /*if(hovered_over() && !primary_color.changed)
+    if(hovered_over() && !primary_color.changed)
         primary_color.brighten();
     if(!hovered_over())
-        primary_color.undo();*/
-
-    if(left_clicked() && !primary_color.changed)//clicked this object
+        primary_color.undo();
+    if(left_clicked() && !performed_action)
     {
-        primary_color.darken();
         action();
+        performed_action=true;
     }
     if(!left_clicked())
-        primary_color.undo();
+        performed_action=false;
+
 }
 
 void button::render()
@@ -90,5 +112,6 @@ button::button()
     fit_label();
     primary_color.set(0.75f,0.75f,0.75f);
     primary_color.changed=false;
+    performed_action=false;
     std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

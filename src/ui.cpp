@@ -42,10 +42,6 @@ void ui::glutPrint(float x, float y, void* font, char* text, color c)
 {
     if(!text || !strlen(text))
         return;
-    bool blending = false;
-    if(glIsEnabled(GL_BLEND))
-        blending = true;
-    glEnable(GL_BLEND);
     glColor4f(c.r,c.g,c.b,c.a);
     glRasterPos2f(x,y);
     while(*text)
@@ -53,8 +49,6 @@ void ui::glutPrint(float x, float y, void* font, char* text, color c)
         glutBitmapCharacter(font, *text);
         text++;
     }
-    if(!blending)
-        glDisable(GL_BLEND);
 }
 
 void ui::glutPrint(float x, float y, void* font, char* text)
@@ -69,7 +63,7 @@ void ui::glutPrint(float x, float y, char* text)
 
 void ui::print_overlay()
 {
-    unsigned index = cursor::selected_object;//this value is relative to the object's corresponding container
+    unsigned index = cursor::selected_object;//number of the currently selected object
     unsigned line = 0;//used for spacing each line
 
     sprintf(info_overlay[line],"selected object: #%d - %s", cursor::left_clicked_object->get_number(), cursor::left_clicked_object->name);
@@ -124,13 +118,11 @@ void ui::print_overlay()
     }
     if(strcmp(cursor::left_clicked_object->get_type(),"draggable object")==0)//display the following if a draggable object is selected
     {
-        index = cursor::selected_object-game::physics_objects.size();
         sprintf(info_overlay[line],"object touching side L:%d R:%d T:%d B:%d",game::draggable_objects[index]->touching[0], game::draggable_objects[index]->touching[1],game::draggable_objects[index]->touching[2],game::draggable_objects[index]->touching[3]);
         glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
     }
     if(strcmp(cursor::left_clicked_object->get_type(),"rts object")==0)//display the following if a RTS object is selected
     {
-        index = cursor::selected_object-(game::physics_objects.size()+game::draggable_objects.size());
         sprintf(info_overlay[line],"speed: %.2f",game::rts_objects[index]->speed);
         glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
 

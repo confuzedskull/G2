@@ -23,6 +23,7 @@
 #include "button.h"
 #include <time.h>
 #include <vector>
+#include <map>
 
 //This class stores important settings and global variables for the program
 class game
@@ -31,12 +32,15 @@ class game
     static float time;//stores the current game time in seconds
     static clock_t time_started;
     static double time_elapsed;
-    //below I used pointers because the objects will be created in init_objects()
-    static std::vector<draggable_object*> draggable_objects;
-    static std::vector<physics_object*> physics_objects;
-    static std::vector<rts_object*> rts_objects;
+    //maps are used for these objects because cursor::left_clicked_object points to clickable_object exclusively
+    //object pointers are used because the objects are being created in init_objects() and we just need to reference them
+    static std::map<int,draggable_object*> draggable_objects;
+    static std::map<int,physics_object*> physics_objects;
+    static std::map<int,rts_object*> rts_objects;
+    //projectiles don't need to be individually initialized so pointers aren't used
+    //static std::vector<projectile> projectiles;//projectiles don't need to be initialized so they aren't pointers
+    //buttons are just like the other objects but they don't need to be found with a key
     static std::vector<button*> buttons;
-    static std::vector<projectile> projectiles;//projectiles don't need to be initialized so they aren't pointers
     static void init_objects();//initialize the objects
     static void collision_detection();
 };

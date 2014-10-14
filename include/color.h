@@ -31,6 +31,7 @@ class color
         float b;//blue value
         float a;//alpha value
         bool changed;//whether the color values have been modified
+        void randomize();//generate a random color
         void brighten();//increase the brightness of the color
         void brighten(float brightness);//increase brightness by given value
         void darken();//decrease brightness of the color

@@ -18,6 +18,7 @@
 #include "complex_object.h"
 #include "cursor.h"
 #include "distance.h"
+#include "window.h"
 #include <math.h>
 #include <iostream>
 #ifdef __APPLE__
@@ -33,9 +34,11 @@
 #include <GL/glut.h>
 #endif
 
+point2f draggable_object::origin = point2f(window::width*0.9,window::height*0.5);
+
 void draggable_object::add_to_game()
 {
-    game::draggable_objects.push_back(new draggable_object());
+    game::draggable_objects.insert(std::pair<int,draggable_object*>(object::total_objects,new draggable_object()));//add object to container
 }
 
 bool draggable_object::grabbed()
@@ -93,5 +96,7 @@ void draggable_object::update()
 draggable_object::draggable_object()
 {
     type="draggable object";
+    primary_color=BLACK;
+    position.set(origin);
     std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

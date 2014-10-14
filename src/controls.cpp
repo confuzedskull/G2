@@ -41,28 +41,27 @@ bool controls::toggle_overlay = false;
 void controls::check_clicked()
 {
     //The only way to check if no objects are being clicked is by checking every object
-    bool left_clicked = true;
-    for(unsigned a=0; a<game::rts_objects.size(); a++)
+    bool left_clicked=true;
+    bool right_clicked=true;
+    for(std::map<int,rts_object*>::iterator a=game::rts_objects.begin(); a!=game::rts_objects.end(); ++a)
     {
-        if(left_clicked && game::rts_objects[a]->left_clicked())
+        if(left_clicked && a->second->left_clicked())
             left_clicked=true;
         else
             left_clicked=false;
-    }
-    cursor::left_clicked_an_object = left_clicked;
-    bool right_clicked=true;
-    for(unsigned a=0; a<game::rts_objects.size(); a++)
-    {
-        if(right_clicked && game::rts_objects[a]->right_clicked())
+
+        if(right_clicked && a->second->right_clicked())
             right_clicked=true;
         else
             right_clicked=false;
     }
+    cursor::left_clicked_an_object = left_clicked;
     cursor::right_clicked_an_object = right_clicked;
+
     bool grabbed=true;
-    for(unsigned a=0; a<game::draggable_objects.size(); a++)
+    for(std::map<int,draggable_object*>::iterator a=game::draggable_objects.begin(); a!=game::draggable_objects.end(); ++a)
     {
-        if(grabbed && game::draggable_objects[a]->grabbed())
+        if(grabbed && a->second->grabbed())
             grabbed=true;
         else
             grabbed=false;
@@ -158,31 +157,32 @@ void controls::key_released(unsigned char key, int x, int y)
 
 void controls::key_operations(void)
 {
+    unsigned index = cursor::selected_object;//number of the currently selected object
     if(strcmp(cursor::left_clicked_object->get_type(), "physics object")==0)
     {
         if(key_states['w'] || key_states['W'])
-            game::physics_objects[cursor::selected_object]->move_forward();
+            game::physics_objects[index]->move_forward();
 
         if(key_states['s'] || key_states['S'])
-            game::physics_objects[cursor::selected_object]->move_back();
+            game::physics_objects[index]->move_back();
 
         if(key_states['a'] || key_states['A'])
-            game::physics_objects[cursor::selected_object]->move_left();
+            game::physics_objects[index]->move_left();
 
         if(key_states['d'] || key_states['D'])
-            game::physics_objects[cursor::selected_object]->move_right();
+            game::physics_objects[index]->move_right();
 
         if(key_states['q'] || key_states['Q'])
-            game::physics_objects[cursor::selected_object]->turn_left();
+            game::physics_objects[index]->turn_left();
 
         if(key_states['e'] || key_states['E'])
-            game::physics_objects[cursor::selected_object]->turn_right();
+            game::physics_objects[index]->turn_right();
 
-        if(key_states[32])//spacebar
+        /*if(key_states[32])//spacebar
         {
-            if(!game::projectiles[cursor::selected_object].fired)
-                game::projectiles[cursor::selected_object].fire(*game::physics_objects[cursor::selected_object]);
-        }
+            if(!game::projectiles[index].fired)
+                game::projectiles[index].fire(*game::physics_objects[index]);
+        }*/
     }
     if(key_states['i'] || key_states['I'])
     {

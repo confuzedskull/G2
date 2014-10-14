@@ -27,6 +27,9 @@ class button : public clickable_object
         float label_margin;//space between text and button border
         float font_size;//the height of the font in pt (not pixels)
         float spacing;//space between each line
+        bool hovered_over();
+        bool left_clicked();
+        bool performed_action;
         void fit_label();//adjusts the size of the button to fit the text
         void set_label(char* l);
         void mouse_function();

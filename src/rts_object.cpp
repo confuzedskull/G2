@@ -17,12 +17,15 @@
 #include "rts_object.h"
 #include "cursor.h"
 #include "game.h"
+#include "window.h"
 #include <math.h>
 #include <iostream>
 
+point2f rts_object::origin = point2f(window::width*0.9,window::height*0.3);
+
 void rts_object::add_to_game()
 {
-    game::rts_objects.push_back(new rts_object());
+    game::rts_objects.insert(std::pair<int,rts_object*>(object::total_objects,new rts_object()));//add object to container
 }
 
 bool rts_object::highlighted()
@@ -108,5 +111,6 @@ void rts_object::update()
 rts_object::rts_object(): clickable_object(), tangible_object(), complex_object()
 {
     type="rts object";
+    position.set(origin);
     std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

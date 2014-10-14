@@ -16,12 +16,16 @@
 
 #include "physics_object.h"
 #include "game.h"
+#include "window.h"
 #include <iostream>
 #include <math.h>
 
+point2f physics_object::origin = point2f(window::width*0.9,window::height*0.7);
+
 void physics_object::add_to_game()
 {
-    game::physics_objects.push_back(new physics_object());
+    game::physics_objects.insert(std::pair<int,physics_object*>(object::total_objects,new physics_object()));//add object to container
+    //game::projectiles.push_back(projectile());//create projectile for this object
 }
 
 void physics_object::calc_delta_time()
@@ -185,6 +189,9 @@ physics_object::physics_object()
 {
     type="physics object";
     mass=0.015f;//If this is too high, objects might just disappear off the screen
+    primary_color=GRAY;
+    position.set(origin);
+    set_dimensions(32.0f,32.0f);
     velocity[0].x=0.00f;
     velocity[0].y=0.00f;
     angular_velocity[0]=0.00f;

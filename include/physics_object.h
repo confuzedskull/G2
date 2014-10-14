@@ -24,6 +24,7 @@
 class physics_object: public clickable_object, public tangible_object
 {
     public:
+    static point2f origin;
     static void add_to_game();
     float mass;
     float delta_time[6];/*each element of this array represents how much time a change in a direction or velocity took

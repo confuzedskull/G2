@@ -159,11 +159,10 @@ object::object()
 {
     name="unnamed";
     type="object";
-    number=total_objects;
-    total_objects++;
+    number=++total_objects;
     position.set(origin);
     set_dimensions(64,64);
-    primary_color.set(BLACK);
+    primary_color.randomize();
     primary_color.changed=false;
     rotation=90.1;
     visible=true;
@@ -176,11 +175,10 @@ object::object(float x, float y, float w, float h)
 {
     name="unnamed";
     type="object";
-    number=total_objects;
-    total_objects++;
+    number=++total_objects;
     position.set(x,y);
     set_dimensions(w,h);
-    primary_color.set(BLACK);
+    primary_color.randomize();
     primary_color.changed=false;
     rotation=90.1;
     visible=true;
@@ -193,8 +191,7 @@ object::object(float x, float y, float w, float h, color c)
 {
     name="unnamed";
     type="object";
-    number=total_objects;
-    total_objects++;
+    number=++total_objects;
     position.set(x,y);
     set_dimensions(w,h);
     primary_color.set(c);

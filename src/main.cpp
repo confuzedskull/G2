@@ -37,8 +37,6 @@
 int main(int argc, char **argv)
 {
     std::clog<<"entering main...\n";
-    /* initialize random seed: */
-    srand (time(NULL));
     //initialize objects
     std::clog<<"initializing objects...\n";
     game::init_objects();
