@@ -14,19 +14,20 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#ifndef RTS_OBJECT_H
-#define RTS_OBJECT_H
-#include "clickable_object.h"
-#include "tangible_object.h"
+#ifndef MENU_H
+#define MENU_H
+#include "button.h"
+#include <vector>
 
-class rts_object: public clickable_object, public tangible_object
+class menu: public object
 {
-    public:
-        static point2f origin;
-        bool highlighted();//checks if this object lies within the highlighting box
-        void mouse_function();//performs a variety of actions dependent on cursor interaction
-        void update();
-        rts_object();
+public:
+    std::vector<button*> items;
+    void open();
+    void close();
+    void render();
+    void update();
+    menu();
 };
 
-#endif // RTS_OBJECT_H
+#endif // MENU_H

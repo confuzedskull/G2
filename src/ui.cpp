@@ -34,6 +34,8 @@
 #include <stdio.h>
 
 //initialize variables
+std::vector<button*> ui::buttons;
+std::vector<menu*>ui::menus;
 std::vector<char*> ui::info_overlay(20,new char[30]);//create 20 lines of 30 character length
 float ui::margin = 10.0f;
 float ui::spacing = 20.0f;
@@ -143,4 +145,63 @@ void ui::print_overlay()
 
     sprintf(info_overlay[line],"mouse drag: %.2f,%.2f",cursor::left_drag.x,cursor::left_drag.y);
     glutPrint(window::width-(margin+150),window::height-(spacing*4), info_overlay[line++]);
+}
+
+void ui::init_buttons()
+{
+//Main Menu Buttons
+    button* play_button = new button();
+    play_button->font=GLUT_BITMAP_HELVETICA_18;
+    play_button->font_size=18;
+    play_button->set_position(window::center.x,window::center.y+spacing);
+    play_button->set_label("Play");
+    play_button->action=game::play;//function is assigned without '()' at the end
+    buttons.push_back(play_button);//add button to container
+
+    button* quit_button = new button();
+    quit_button->font=GLUT_BITMAP_HELVETICA_18;
+    quit_button->font_size=18;
+    quit_button->set_position(window::center.x,window::center.y-spacing);
+    quit_button->set_label("Quit");
+    quit_button->action=game::quit;//function is assigned without '()' at the end
+    buttons.push_back(quit_button);//add button to container
+//Game Buttons
+    button* button1 = new button();
+    button1->set_position(window::width*0.9,window::height*0.8);
+    button1->set_label("new physics object");
+    button1->action=game::add_physics_object;//function is assigned without '()' at the end
+    buttons.push_back(button1);//add button to container
+
+    button* button2 = new button();
+    button2->set_position(window::width*0.9,window::height*0.6);
+    button2->set_label("new draggable object");
+    button2->action=game::add_draggable_object;//function is assigned without '()' at the end
+    buttons.push_back(button2);//add button to container
+
+    button* button3 = new button();
+    button3->set_position(window::width*0.9,window::height*0.4);
+    button3->set_label("new rts object");
+    button3->action=game::add_rts_object;//function is assigned without '()' at the end
+    buttons.push_back(button3);//add button to container
+
+    button* button4 = new button();
+    button4->set_position(window::width*0.9,window::height*0.2);
+    button4->set_label("delete object");
+    button4->action=game::delete_selected;//function is assigned without '()' at the end
+    buttons.push_back(button4);//add button to container
+
+    button* open_menu = new button();
+    open_menu->set_position(window::center.x,window::height-20);
+    open_menu->set_label("Menu");
+    open_menu->action=game::go_home;//function is assigned without '()' at the end
+    buttons.push_back(open_menu);//add button to container
+}
+
+void ui::init_menus()
+{
+    menu* main_menu = new menu();
+    main_menu->set_dimensions(100,100);
+    main_menu->items.push_back(buttons[0]);
+    main_menu->items.push_back(buttons[1]);
+    menus.push_back(main_menu);
 }

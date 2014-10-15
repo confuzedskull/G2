@@ -93,11 +93,3 @@ void cursor::selection_box()//this is the box that is created when user clicks a
         glDisable(GL_BLEND);
     }
 }
-
-void cursor::delete_selected()
-{
-    game::draggable_objects.erase(selected_object);
-    game::physics_objects.erase(selected_object);
-    game::rts_objects.erase(selected_object);
-    std::clog<<"object#"<<left_clicked_object->get_number()<<": "<<left_clicked_object->name<<'('<<left_clicked_object->get_type()<<')'<<" deleted."<<std::endl;
-}

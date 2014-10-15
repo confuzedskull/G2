@@ -22,12 +22,6 @@
 
 point2f physics_object::origin = point2f(window::width*0.9,window::height*0.7);
 
-void physics_object::add_to_game()
-{
-    game::physics_objects.insert(std::pair<int,physics_object*>(object::total_objects,new physics_object()));//add object to container
-    //game::projectiles.push_back(projectile());//create projectile for this object
-}
-
 void physics_object::calc_delta_time()
 {
     if(isgreaterequal(fabs(position.x-rest.x),0.01f))//at least difference of 0.01

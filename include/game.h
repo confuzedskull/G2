@@ -21,6 +21,7 @@
 #include "rts_object.h"
 #include "projectile.h"
 #include "button.h"
+#include "scene.h"
 #include <time.h>
 #include <vector>
 #include <map>
@@ -32,16 +33,21 @@ class game
     static float time;//stores the current game time in seconds
     static clock_t time_started;
     static double time_elapsed;
+    static std::vector<scene*> scenes;
     //maps are used for these objects because cursor::left_clicked_object points to clickable_object exclusively
     //object pointers are used because the objects are being created in init_objects() and we just need to reference them
     static std::map<int,draggable_object*> draggable_objects;
     static std::map<int,physics_object*> physics_objects;
     static std::map<int,rts_object*> rts_objects;
-    //projectiles don't need to be individually initialized so pointers aren't used
-    //static std::vector<projectile> projectiles;//projectiles don't need to be initialized so they aren't pointers
-    //buttons are just like the other objects but they don't need to be found with a key
-    static std::vector<button*> buttons;
     static void init_objects();//initialize the objects
+    static void init_scenes();
     static void collision_detection();
+    static void add_draggable_object();
+    static void add_physics_object();
+    static void add_rts_object();
+    static void delete_selected();
+    static void play();
+    static void go_home();
+    static void quit();
 };
 #endif // GAME_H

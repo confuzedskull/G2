@@ -14,19 +14,30 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#ifndef RTS_OBJECT_H
-#define RTS_OBJECT_H
-#include "clickable_object.h"
-#include "tangible_object.h"
+#ifndef SCENE_H
+#define SCENE_H
+#include "draggable_object.h"
+#include "physics_object.h"
+#include "rts_object.h"
+#include "button.h"
+#include "menu.h"
+#include <map>
+#include <vector>
 
-class rts_object: public clickable_object, public tangible_object
+class scene
 {
     public:
-        static point2f origin;
-        bool highlighted();//checks if this object lies within the highlighting box
-        void mouse_function();//performs a variety of actions dependent on cursor interaction
-        void update();
-        rts_object();
+    color background_color;
+    //maps are used for these objects because cursor::left_clicked_object points to clickable_object exclusively
+    //object pointers are used because the objects are being created in init_objects() and we just need to reference them
+    std::map<int,draggable_object*> draggable_objects;
+    std::map<int,physics_object*> physics_objects;
+    std::map<int,rts_object*> rts_objects;
+    std::vector<button*> buttons;
+    std::vector<menu*> menus;
+    void render();
+    void update();
+    scene();
 };
 
-#endif // RTS_OBJECT_H
+#endif // SCENE_H

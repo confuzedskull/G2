@@ -214,7 +214,7 @@ bool movable_object::move_to_point(float destination_x,float destination_y)
     return move_to_point(destination_x,destination_y,1.0f);
 }
 
-void movable_object::add_action(int action_no, int times)
+void movable_object::cue_action(int action_no, int times)
 {
     std::vector<int> action;
     action.push_back(action_no);//number of the action to do. this will be put at index 0

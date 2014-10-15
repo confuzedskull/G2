@@ -40,6 +40,13 @@ int main(int argc, char **argv)
     //initialize objects
     std::clog<<"initializing objects...\n";
     game::init_objects();
+    //initialize ui elements
+    std::clog<<"initializing user interface...\n";
+    ui::init_buttons();
+    ui::init_menus();
+    //initialize scenes
+    std::clog<<"initializing scenes...\n";
+    game::init_scenes();
     // initialize GLUT and create window
     std::clog<<"initializing GLUT...\n";
     glutInit(&argc, argv);
@@ -52,7 +59,7 @@ int main(int argc, char **argv)
     glutCreateWindow("2DWorld");
     window::initialize();
     glutReshapeFunc(window::change_size);
-    glutIdleFunc(window::update_scene);
+    glutIdleFunc(window::update);
     std::clog<<"initializing keyboard...\n";
     glutKeyboardFunc(controls::key_pressed);
     glutKeyboardUpFunc(controls::key_released);
@@ -61,6 +68,6 @@ int main(int argc, char **argv)
     glutPassiveMotionFunc(controls::mouse_move);
     glutMotionFunc(controls::mouse_drag);
     std::clog<<"rendering...\n";
-    glutDisplayFunc(window::render_scene);
+    glutDisplayFunc(window::render);
     glutMainLoop();
 }

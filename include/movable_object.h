@@ -65,7 +65,7 @@ public:
     bool move_to_point(point2f destination,float rate);
     bool move_to_point(point2f destination);
     bool move_to_point(float destination_x, float destination_y);
-    void add_action(int action_no, int times);//adds an action to be performed n times to the action cue
+    void cue_action(int action_no, int times);//adds an action to be performed n times to the action cue
     bool perform_actions();//makes the object perform the cued actions
     void update();
     movable_object();

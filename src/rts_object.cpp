@@ -23,11 +23,6 @@
 
 point2f rts_object::origin = point2f(window::width*0.9,window::height*0.3);
 
-void rts_object::add_to_game()
-{
-    game::rts_objects.insert(std::pair<int,rts_object*>(object::total_objects,new rts_object()));//add object to container
-}
-
 bool rts_object::highlighted()
 {
     //if object lies within selection box boundaries, return true

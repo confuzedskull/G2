@@ -15,17 +15,21 @@
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 #ifndef WINDOW_H
 #define WINDOW_H
+#include "point.h"
+
 class window
 {
     public:
+        static int current_scene;
         static int width;
         static int height;
+        static point2i center;
         static int position_x;
         static int position_y;
         static double refresh_rate;
         static void change_size(int w, int h);
         static void initialize();
-        static void render_scene();
-        static void update_scene();
+        static void render();
+        static void update();
 };
 #endif // WINDOW_H

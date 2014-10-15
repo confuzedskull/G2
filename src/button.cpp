@@ -32,6 +32,7 @@
 #endif
 #include <iostream>
 #include <math.h>
+#include <string.h>
 
 bool button::hovered_over()
 {
@@ -55,7 +56,7 @@ bool button::left_clicked()
 
 void button::fit_label()
 {
-    width=(((float)strlen(label)-2)*(font_size*0.6f))+(label_margin*2.0f);
+    width=(((float)strlen(label))*(font_size*0.6f))+(label_margin*2.0f);
     height=font_size+(label_margin*2.0f);
     calc_boundaries();
 }
@@ -85,15 +86,30 @@ void button::mouse_function()
 void button::render()
 {
     //render button
-    glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
+    glColor3f(primary_color.r,primary_color.g,primary_color.b);
     glBegin(GL_POLYGON);//draws a filled in rectangle
-    glVertex2f(xmin, ymin); // The bottom left corner
-    glVertex2f(xmin, ymax); // The top left corner
-    glVertex2f(xmax, ymax); // The top right corner
-    glVertex2f(xmax, ymin); // The bottom right corner
+    glVertex2f(xmin, ymin);//bottom left corner
+    glVertex2f(xmin, ymax);//top left corner
+    glVertex2f(xmax, ymax);//top right corner
+    glVertex2f(xmax, ymin);//bottom right corner
     glEnd();//finish drawing
+    //render border
+    if(border)
+    {
+        glColor3f(border_color.r,border_color.g,border_color.b);
+        glBegin(GL_LINES);//draws lines (in this case, a rectangle)
+        glVertex2f(xmin, ymax);//top left corner
+        glVertex2f(xmax, ymax);//top right corner
+        glVertex2f(xmax, ymax);//top right corner
+        glVertex2f(xmax, ymin);//bottom right corner
+        glVertex2f(xmax, ymin);//bottom right corner
+        glVertex2f(xmin, ymin);//bottom left corner
+        glVertex2f(xmin, ymin);//bottom left corner
+        glVertex2f(xmin, ymax);//top left corner
+        glEnd();
+    }
     //render button text
-    ui::glutPrint(xmin+label_margin,ymin+label_margin+spacing,label);
+    ui::glutPrint(xmin+label_margin,ymin+label_margin+spacing,font,label);
 }
 
 void button::update()
@@ -105,13 +121,30 @@ button::button()
 {
     label="click me";
     type="button";
-    label_margin=4.0f;
+    label_margin=6.0f;
+    font=GLUT_BITMAP_HELVETICA_12;
     font_size=12.0f;
     spacing=1.0f;
     position.set(0.0f,0.0f);
     fit_label();
     primary_color.set(0.75f,0.75f,0.75f);
     primary_color.changed=false;
+    border=true;
+    border_color=BLACK;
     performed_action=false;
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<": "<<label<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+}
+
+button::button(float x, float y, char* l, void (*a)(void))
+{
+    label="click me";
+    type="button";
+    label_margin=6.0f;
+    font=GLUT_BITMAP_HELVETICA_12;
+    font_size=12.0f;
+    spacing=1.0f;
+    position.set(x,y);
+    set_label(l);
+    action=a;
+    std::clog<<"object#"<<number<<": "<<label<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

@@ -18,6 +18,7 @@
 #include "window.h"
 #include "cursor.h"
 #include "object.h"
+#include "ui.h"
 #include <iostream>
 #include <time.h>
 
@@ -25,87 +26,60 @@
 clock_t game::time_started;
 float game::time = 0.0f;
 double game::time_elapsed = 0.0f;
+std::vector<scene*> game::scenes;
 std::map<int,draggable_object*> game::draggable_objects;
 std::map<int,physics_object*> game::physics_objects;
 std::map<int,rts_object*> game::rts_objects;
-//std::vector<projectile> game::projectiles;
-std::vector<button*> game::buttons;
 
 void game::init_objects()
 {
-//initialize the buttons
-    button* button1 = new button();
-    button1->set_position(window::width*0.9,window::height*0.8);
-    button1->set_label("new physics object");
-    button1->action=physics_object::add_to_game;//function is assigned without '()' at the end
-    buttons.push_back(button1);//add button to container
-
-    button* button2 = new button();
-    button2->set_position(window::width*0.9,window::height*0.6);
-    button2->set_label("new draggable object");
-    button2->action=draggable_object::add_to_game;//function is assigned without '()' at the end
-    buttons.push_back(button2);//add button to container
-
-    button* button3 = new button();
-    button3->set_position(window::width*0.9,window::height*0.4);
-    button3->set_label("new rts object");
-    button3->action=rts_object::add_to_game;//function is assigned without '()' at the end
-    buttons.push_back(button3);//add button to container
-
-    button* button4 = new button();
-    button4->set_position(window::width*0.9,window::height*0.2);
-    button4->set_label("delete object");
-    button4->action=cursor::delete_selected;//function is assigned without '()' at the end
-    buttons.push_back(button4);//add button to container
-
-    object::total_objects=0;//reset the object count so it doesn't include the buttons
-
+    object::total_objects=0;//reset the object count
 //initialize the physics objects
     physics_object* po1 = new physics_object();
     po1->name="small square 1";
     po1->set_position(window::width/2-48,window::height/2+48);//set position forward left of window center
-    po1->add_action(2,12);//move right 96 units(take into account momentum)
-    po1->add_action(4,12);//move down 96 units(take into account momentum)
-    po1->add_action(1,12);//move left 96 units(take into account momentum)
-    po1->add_action(3,12);//move up 96 units(take into account momentum)
-    po1->add_action(5,15);//turn left 90 degrees(take into account momentum)
-    po1->add_action(6,15);//turn right 90 degrees(take into account momentum)
+    po1->cue_action(2,12);//move right 96 units(take into account momentum)
+    po1->cue_action(4,12);//move down 96 units(take into account momentum)
+    po1->cue_action(1,12);//move left 96 units(take into account momentum)
+    po1->cue_action(3,12);//move up 96 units(take into account momentum)
+    po1->cue_action(5,15);//turn left 90 degrees(take into account momentum)
+    po1->cue_action(6,15);//turn right 90 degrees(take into account momentum)
     std::clog<<"object#"<<po1->get_number()<<": "<<po1->name<<" initialized."<<std::endl;
     physics_objects.insert(std::pair<int,physics_object*>(po1->get_number(),po1));//add object to container
 
     physics_object* po2 = new physics_object();
     po2->name="small square 2";
     po2->set_position(window::width/2+48,window::height/2+48);//set position forward right of window center
-    po2->add_action(4,12);//move down 96 units(take into account momentum)
-    po2->add_action(1,12);//move left 96 units(take into account momentum)
-    po2->add_action(3,12);//move up 96 units(take into account momentum)
-    po2->add_action(2,12);//move right 96 units(take into account momentum)
-    po2->add_action(5,15);//turn left 90 degrees(take into account momentum)
-    po2->add_action(6,15);//turn right 90 degrees(take into account momentum)
+    po2->cue_action(4,12);//move down 96 units(take into account momentum)
+    po2->cue_action(1,12);//move left 96 units(take into account momentum)
+    po2->cue_action(3,12);//move up 96 units(take into account momentum)
+    po2->cue_action(2,12);//move right 96 units(take into account momentum)
+    po2->cue_action(5,15);//turn left 90 degrees(take into account momentum)
+    po2->cue_action(6,15);//turn right 90 degrees(take into account momentum)
     std::clog<<"object#"<<po2->get_number()<<": "<<po2->name<<" initialized."<<std::endl;
     physics_objects.insert(std::pair<int,physics_object*>(po2->get_number(),po2));//add object to container
 
     physics_object* po3 = new physics_object();
     po3->name="small square 3";
     po3->set_position(window::width/2+48,window::height/2-48);//set position backward right of window center
-    po3->add_action(1,12);//move left 96 units(take into account momentum)
-    po3->add_action(3,12);//move up 96 units(take into account momentum)
-    po3->add_action(2,12);//move right 96 units(take into account momentum)
-    po3->add_action(4,12);//move down 96 units(take into account momentum)
-    po3->add_action(5,15);//turn left 90 degrees(take into account momentum)
-    po3->add_action(6,15);//turn right 90 degrees(take into account momentum)
+    po3->cue_action(1,12);//move left 96 units(take into account momentum)
+    po3->cue_action(3,12);//move up 96 units(take into account momentum)
+    po3->cue_action(2,12);//move right 96 units(take into account momentum)
+    po3->cue_action(4,12);//move down 96 units(take into account momentum)
+    po3->cue_action(5,15);//turn left 90 degrees(take into account momentum)
+    po3->cue_action(6,15);//turn right 90 degrees(take into account momentum)
     std::clog<<"object#"<<po3->get_number()<<": "<<po3->name<<" initialized."<<std::endl;
     physics_objects.insert(std::pair<int,physics_object*>(po3->get_number(),po3));//add object to container
 
     physics_object* po4 = new physics_object();
     po4->name="small square 4";
     po4->set_position(window::width/2-48,window::height/2-48);//set position backward left of window center
-    po4->add_action(3,12);//move up 96 units(take into account momentum)
-    po4->add_action(2,12);//move right 96 units(take into account momentum)
-    po4->add_action(4,12);//move down 96 units(take into account momentum)
-    po4->add_action(1,12);//move left 96 units(take into account momentum)
-    po4->add_action(5,15);//turn left 90 degrees(take into account momentum)
-    po4->add_action(6,15);//turn right 90 degrees(take into account momentum)
+    po4->cue_action(3,12);//move up 96 units(take into account momentum)
+    po4->cue_action(2,12);//move right 96 units(take into account momentum)
+    po4->cue_action(4,12);//move down 96 units(take into account momentum)
+    po4->cue_action(1,12);//move left 96 units(take into account momentum)
+    po4->cue_action(5,15);//turn left 90 degrees(take into account momentum)
+    po4->cue_action(6,15);//turn right 90 degrees(take into account momentum)
     std::clog<<"object#"<<po4->get_number()<<": "<<po4->name<<" initialized."<<std::endl;
     physics_objects.insert(std::pair<int,physics_object*>(po4->get_number(),po4));//add object to container
 //initialize the draggable objects
@@ -144,8 +118,6 @@ void game::init_objects()
     std::clog<<"object#"<<rtso4->get_number()<<": "<<rtso4->name<<" initialized."<<std::endl;
     rts_objects.insert(std::pair<int,rts_object*>(rtso4->get_number(),rtso4));//add object to container
 
-//create a projectile for each physics object
-    //projectiles.assign(physics_objects.size(),projectile());
 //unhighlight the RTS objects
     cursor::highlighted_objects.assign(rts_objects.size(),false);
 }
@@ -175,15 +147,6 @@ void game::collision_detection()
                 a->second->calc_momentum(*b->second);
             }
         }
-        /*for(int p=0; p<game::projectiles.size();p++)
-        {
-            if(a->second->is_close(projectiles[p]))//check objects colliding with projectiles
-            {
-                a->second->identify_touched(projectiles[p]);
-            }
-            if(projectiles[p].is_close(*a->second))//check projectiles colliding with objects
-            projectiles[p].reset();
-        }*/
     }
     for(std::map<int,draggable_object*>::iterator a=draggable_objects.begin(); a!=draggable_objects.end(); ++a)//iterate through draggable objects comparing
     {
@@ -196,4 +159,67 @@ void game::collision_detection()
             }
         }
     }
+}
+
+void game::init_scenes()
+{
+    scene* home = new scene();
+    home->menus.push_back(ui::menus[0]);
+    scenes.push_back(home);
+
+    scene* sandbox = new scene();
+    sandbox->background_color.set(WHITE);
+    sandbox->draggable_objects.insert(game::draggable_objects.begin(),game::draggable_objects.end());
+    sandbox->physics_objects.insert(game::physics_objects.begin(),game::physics_objects.end());
+    sandbox->rts_objects.insert(game::rts_objects.begin(),game::rts_objects.end());
+    sandbox->buttons.assign(ui::buttons.begin()+2,ui::buttons.end());//add everything except for the sandbox and quit buttons
+    scenes.push_back(sandbox);
+}
+
+void game::add_draggable_object()
+{
+    draggable_object* new_do = new draggable_object();
+    draggable_objects.insert(std::pair<int,draggable_object*>(object::total_objects,new_do));//add object to game
+    scenes[1]->draggable_objects.insert(std::pair<int,draggable_object*>(object::total_objects,new_do));//add object to scene 1
+}
+
+void game::add_physics_object()
+{
+    physics_object* new_po = new physics_object();
+    physics_objects.insert(std::pair<int,physics_object*>(object::total_objects,new_po));//add object to game
+    scenes[1]->physics_objects.insert(std::pair<int,physics_object*>(object::total_objects,new_po));//add object to scene 1
+}
+
+void game::add_rts_object()
+{
+    rts_object* new_rtso = new rts_object();
+    rts_objects.insert(std::pair<int,rts_object*>(object::total_objects,new_rtso));//add object to game
+    scenes[1]->rts_objects.insert(std::pair<int,rts_object*>(object::total_objects,new_rtso));//add object to scene 1
+}
+
+void game::delete_selected()
+{
+    draggable_objects.erase(cursor::selected_object);
+    physics_objects.erase(cursor::selected_object);
+    rts_objects.erase(cursor::selected_object);
+    scenes[1]->draggable_objects.erase(cursor::selected_object);
+    scenes[1]->physics_objects.erase(cursor::selected_object);
+    scenes[1]->rts_objects.erase(cursor::selected_object);
+    std::clog<<"object#"<<cursor::left_clicked_object->get_number()<<": "<<cursor::left_clicked_object->name<<'('<<cursor::left_clicked_object->get_type()<<')'<<" deleted."<<std::endl;
+}
+
+void game::play()
+{
+    window::current_scene=1;//load the game
+}
+
+void game::go_home()
+{
+    window::current_scene=0;//load the main menu
+}
+
+void game::quit()
+{
+    std::clog<<"exiting...\n";
+    exit(0);
 }

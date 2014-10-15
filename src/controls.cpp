@@ -32,6 +32,7 @@
 #endif
 #include <math.h>
 #include <iostream>
+#include <string.h>
 
 //initialize variables
 bool* controls::key_states = new bool[256];
@@ -157,54 +158,48 @@ void controls::key_released(unsigned char key, int x, int y)
 
 void controls::key_operations(void)
 {
-    unsigned index = cursor::selected_object;//number of the currently selected object
-    if(strcmp(cursor::left_clicked_object->get_type(), "physics object")==0)
+    if(window::current_scene==1)
     {
-        if(key_states['w'] || key_states['W'])
-            game::physics_objects[index]->move_forward();
-
-        if(key_states['s'] || key_states['S'])
-            game::physics_objects[index]->move_back();
-
-        if(key_states['a'] || key_states['A'])
-            game::physics_objects[index]->move_left();
-
-        if(key_states['d'] || key_states['D'])
-            game::physics_objects[index]->move_right();
-
-        if(key_states['q'] || key_states['Q'])
-            game::physics_objects[index]->turn_left();
-
-        if(key_states['e'] || key_states['E'])
-            game::physics_objects[index]->turn_right();
-
-        /*if(key_states[32])//spacebar
+        unsigned index = cursor::selected_object;//number of the currently selected object
+        if(strcmp(cursor::left_clicked_object->get_type(), "physics object")==0)
         {
-            if(!game::projectiles[index].fired)
-                game::projectiles[index].fire(*game::physics_objects[index]);
-        }*/
-    }
-    if(key_states['i'] || key_states['I'])
-    {
-        if(toggle_overlay)
+            if(key_states['w'] || key_states['W'])
+                game::physics_objects[index]->move_forward();
+
+            if(key_states['s'] || key_states['S'])
+                game::physics_objects[index]->move_back();
+
+            if(key_states['a'] || key_states['A'])
+                game::physics_objects[index]->move_left();
+
+            if(key_states['d'] || key_states['D'])
+                game::physics_objects[index]->move_right();
+
+            if(key_states['q'] || key_states['Q'])
+                game::physics_objects[index]->turn_left();
+
+            if(key_states['e'] || key_states['E'])
+                game::physics_objects[index]->turn_right();
+        }
+        if(key_states['i'] || key_states['I'])
         {
-            if(temp_toggle)
-            std::clog<<"toggled information overlay off\n";
-            temp_toggle=false;
+            if(toggle_overlay)
+            {
+                if(temp_toggle)
+                    std::clog<<"toggled information overlay off\n";
+                temp_toggle=false;
+            }
+            else
+            {
+                if(!temp_toggle)
+                    std::clog<<"toggled information overlay on\n";
+                temp_toggle=true;
+            }
         }
         else
-        {
-            if(!temp_toggle)
-            std::clog<<"toggled information overlay on\n";
-            temp_toggle=true;
-        }
+            toggle_overlay=temp_toggle;
     }
-    else
-        toggle_overlay=temp_toggle;
 
     if(key_states[27])//escape
-    {
-        std::clog<<"exiting...\n";
-        exit(0);
-    }
+        game::quit();
 }

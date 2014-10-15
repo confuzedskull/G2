@@ -35,8 +35,10 @@
 #endif
 
 //initialize the variables
+int window::current_scene=0;
 int window::width=1360;
 int window::height=720;
+point2i window::center=point2i(width/2,height/2);
 int window::position_x=0;
 int window::position_y=0;
 double window::refresh_rate=0.0166f;
@@ -76,50 +78,24 @@ void window::initialize()
     glFlush();
 }
 
-void window::render_scene()
+void window::render()
 {
     glClear(GL_COLOR_BUFFER_BIT);// Clear Color Buffers
 //NOTE: rts_objects are rendered ontop of eachother according to the order in which they are rendered
 //BOTTOM
-    //render the rts objects
-    for(std::map<int,rts_object*>::iterator i=game::rts_objects.begin(); i!=game::rts_objects.end(); ++i)
-    i->second->render();
-    //render the selection box
-    cursor::selection_box();
-    //render the draggable objects
-    for(std::map<int,draggable_object*>::iterator i=game::draggable_objects.begin(); i!=game::draggable_objects.end(); ++i)
-    i->second->render();
-    //render the projectiles
-    /*for(unsigned i=0; i<game::projectiles.size(); i++)
-    game::projectiles[i].render();*/
-    //render the physics objects
-    for(std::map<int,physics_object*>::iterator i=game::physics_objects.begin(); i!=game::physics_objects.end(); ++i)
-    i->second->render();
-    //render buttons
-    for(unsigned i=0; i<game::buttons.size(); i++)
-    game::buttons[i]->render();
+    game::scenes[current_scene]->render();
 //TOP
     if(controls::toggle_overlay)
     ui::print_overlay();
     glFlush();
 }
 
-void window::update_scene()
+void window::update()
 {
     cursor::calc_boundaries();//calculate the size of the selection box
     game::time_elapsed = ((float)clock()-game::time_started)/CLOCKS_PER_SEC;//update the start time
-    //update physics objects
-    for(std::map<int,physics_object*>::iterator i=game::physics_objects.begin(); i!=game::physics_objects.end(); ++i)
-    i->second->update();
-    //update rts objects
-    for(std::map<int,rts_object*>::iterator i=game::rts_objects.begin(); i!=game::rts_objects.end(); ++i)
-    i->second->update();
-    //update draggable objects
-    for(std::map<int,draggable_object*>::iterator i=game::draggable_objects.begin(); i!=game::draggable_objects.end(); ++i)
-    i->second->update();
-    //update buttons
-    for(unsigned i=0; i<game::buttons.size(); i++)
-    game::buttons[i]->update();
+    //update scene
+    game::scenes[current_scene]->update();
     //apply collision effects
     game::collision_detection();
     //check if objects are clicked
@@ -131,17 +107,14 @@ void window::update_scene()
         game::time+=window::refresh_rate;//increment the game clock
         controls::key_operations();//keyboard controls
         //move rts objects
-        for(std::map<int,rts_object*>::iterator i=game::rts_objects.begin(); i!=game::rts_objects.end(); ++i)
+        for(std::map<int,rts_object*>::iterator i=game::scenes[current_scene]->rts_objects.begin(); i!=game::scenes[current_scene]->rts_objects.end(); ++i)
         i->second->perform_actions()||i->second->move_to_point(*i->second->rally,2.00f);
         //move physics objects
-        for(std::map<int,physics_object*>::iterator i=game::physics_objects.begin(); i!=game::physics_objects.end(); ++i)
+        for(std::map<int,physics_object*>::iterator i=game::scenes[current_scene]->physics_objects.begin(); i!=game::scenes[current_scene]->physics_objects.end(); ++i)
         {
             i->second->perform_actions();
             i->second->inertia();
         }
-        //move projectiles
-       /* for(unsigned i=0; i<game::projectiles.size(); i++)
-        game::projectiles[i].update();//update the position*/
         glutPostRedisplay();//update the scene
     }
 }
