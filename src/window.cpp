@@ -94,26 +94,26 @@ void window::update()
 {
     cursor::calc_boundaries();//calculate the size of the selection box
     game::time_elapsed = ((float)clock()-game::time_started)/CLOCKS_PER_SEC;//update the start time
-    //update scene
-    game::scenes[current_scene]->update();
-    //apply collision effects
-    game::collision_detection();
-    //check if objects are clicked
-    controls::check_clicked();
+    game::scenes[current_scene]->update();//update scene
+    game::collision_detection();//apply collision effects
+    controls::check_clicked();//check if objects are clicked
     //This function acts like timer so that events occur at the set refresh rate
     if(isgreaterequal(game::time_elapsed,window::refresh_rate))//time elapsed is >= refresh rate
     {
         game::time_started=clock();//reset the start time
         game::time+=window::refresh_rate;//increment the game clock
         controls::key_operations();//keyboard controls
-        //move rts objects
-        for(std::map<int,rts_object*>::iterator i=game::scenes[current_scene]->rts_objects.begin(); i!=game::scenes[current_scene]->rts_objects.end(); ++i)
-        i->second->perform_actions()||i->second->move_to_point(*i->second->rally,2.00f);
-        //move physics objects
-        for(std::map<int,physics_object*>::iterator i=game::scenes[current_scene]->physics_objects.begin(); i!=game::scenes[current_scene]->physics_objects.end(); ++i)
+        if(!game::paused)
         {
-            i->second->perform_actions();
-            i->second->inertia();
+            //move rts objects
+            for(std::map<int,rts_object*>::iterator i=game::scenes[current_scene]->rts_objects.begin(); i!=game::scenes[current_scene]->rts_objects.end(); ++i)
+                i->second->perform_actions()||i->second->move_to_point(*i->second->rally,2.00f);
+            //move physics objects
+            for(std::map<int,physics_object*>::iterator i=game::scenes[current_scene]->physics_objects.begin(); i!=game::scenes[current_scene]->physics_objects.end(); ++i)
+            {
+                i->second->perform_actions();
+                i->second->inertia();
+            }
         }
         glutPostRedisplay();//update the scene
     }

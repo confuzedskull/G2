@@ -17,19 +17,18 @@
 #define WINDOW_H
 #include "point.h"
 
-class window
+namespace window
 {
-    public:
-        static int current_scene;
-        static int width;
-        static int height;
-        static point2i center;
-        static int position_x;
-        static int position_y;
-        static double refresh_rate;
-        static void change_size(int w, int h);
-        static void initialize();
-        static void render();
-        static void update();
+extern int current_scene;
+extern int width;
+extern int height;
+extern point2i center;
+extern int position_x;
+extern int position_y;
+extern double refresh_rate;
+void change_size(int w, int h);
+void initialize();
+void render();
+void update();
 };
 #endif // WINDOW_H

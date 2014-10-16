@@ -198,8 +198,7 @@ void controls::key_operations(void)
         }
         else
             toggle_overlay=temp_toggle;
+        if(key_states[27])//escape
+        game::pause();
     }
-
-    if(key_states[27])//escape
-        game::quit();
 }

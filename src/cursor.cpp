@@ -80,7 +80,7 @@ void cursor::selection_box()//this is the box that is created when user clicks a
         bool blending = false;
         if(glIsEnabled(GL_BLEND))
             blending = true;
-        glEnable (GL_BLEND);
+        glEnable(GL_BLEND);
         glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glColor4f(box_color.r,box_color.g,box_color.b,0.5);
         glBegin(GL_QUADS);

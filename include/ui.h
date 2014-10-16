@@ -28,7 +28,6 @@ namespace ui
         extern std::vector<char*> info_overlay;//text for information overlay
         extern float margin;//space between window edge and text
         extern float spacing;//how far apart each line should be
-        void go_home();//goes to the home screen
         void glutPrint(float x, float y, char* text);//print text using Helvetica 12 font
         void glutPrint(float x, float y, void* font, char* text);//print text at x,y with a GLUT font
         void glutPrint(float x, float y, void* font, char* text, color c);//print text at x,y with a GLUT font and specified color

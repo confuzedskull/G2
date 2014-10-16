@@ -26,28 +26,30 @@
 #include <vector>
 #include <map>
 
-//This class stores important settings and global variables for the program
-class game
+//stores important functions and variables related to the game
+namespace game
 {
-    public:
-    static float time;//stores the current game time in seconds
-    static clock_t time_started;
-    static double time_elapsed;
-    static std::vector<scene*> scenes;
+    extern float time;//stores the current game time in seconds
+    extern clock_t time_started;//start time
+    extern double time_elapsed;//time since start
+    extern bool paused;
+    extern std::vector<scene*> scenes;
     //maps are used for these objects because cursor::left_clicked_object points to clickable_object exclusively
     //object pointers are used because the objects are being created in init_objects() and we just need to reference them
-    static std::map<int,draggable_object*> draggable_objects;
-    static std::map<int,physics_object*> physics_objects;
-    static std::map<int,rts_object*> rts_objects;
-    static void init_objects();//initialize the objects
-    static void init_scenes();
-    static void collision_detection();
-    static void add_draggable_object();
-    static void add_physics_object();
-    static void add_rts_object();
-    static void delete_selected();
-    static void play();
-    static void go_home();
-    static void quit();
+    extern std::map<int,draggable_object*> draggable_objects;
+    extern std::map<int,physics_object*> physics_objects;
+    extern std::map<int,rts_object*> rts_objects;
+    void init_objects();//initialize the objects
+    void init_scenes();//initialize the objects
+    void collision_detection();//handles object collision
+    void add_draggable_object();//add a draggable object to the scene
+    void add_physics_object();//add a physics object to the scene
+    void add_rts_object();//add an rts object to the scene
+    void delete_selected();//delete the currently selected object
+    void play();//open game screen
+    void pause();//open pause screen
+    void resume();//open game screen
+    void go_home();//open main menu
+    void quit();//close the program
 };
 #endif // GAME_H

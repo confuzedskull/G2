@@ -21,13 +21,26 @@
 
 class menu: public object
 {
+protected:
+    char* title;
+    void* font;
+    int font_width;
+    int font_height;
 public:
     std::vector<button*> items;
+    int layout;
+    int spacing;
+    int margin;
     void open();
     void close();
+    void format();
+    void set_title(char* t);
+    void set_font(void* f);
     void render();
     void update();
     menu();
 };
+const int VERTICAL = 0;
+const int HORIZONTAL = 1;
 
 #endif // MENU_H

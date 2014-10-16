@@ -16,6 +16,8 @@
 
 #include "menu.h"
 #include "window.h"
+#include "cursor.h"
+#include "ui.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -28,7 +30,8 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #endif
-#include "cursor.h"
+#include <string>
+#include <math.h>
 
 void menu::open()
 {
@@ -40,11 +43,54 @@ void menu::close()
     visible=false;
 }
 
+void menu::format()
+{
+    //in this function we assume the buttons have the same height but different widths
+    int widest=strlen(title)*font_width;//start with the width of title
+    int total_width;//width of buttons and the spaces between
+    //arrange the items
+    for(unsigned i=0;i<items.size();i++)
+    {
+        total_width+=items[i]->get_width()+spacing;
+        if(isgreater(items[i]->get_width(),widest))
+            widest=items[i]->get_width();
+        if(layout==VERTICAL)
+            items[i]->set_position(position.x,position.y-((items[i]->get_height())+spacing)*i);
+        if(layout==HORIZONTAL)
+            items[i]->set_position(position.x-(((items[i]->get_width())+spacing)*i),position.y);
+    }
+    //resize the menu
+    if(layout==VERTICAL)
+        set_dimensions(widest+(margin*2),((items[0]->get_height()+spacing)*items.size())+font_height+(margin*2));
+    if(layout==HORIZONTAL)
+        set_dimensions(total_width+(margin*2),items[0]->get_height()+font_height+spacing+(margin*2));
+}
+
+void menu::set_title(char* t)
+{
+    title=t;
+}
+
+void menu::set_font(void* f)
+{
+    font=f;
+    if(f==GLUT_BITMAP_HELVETICA_12)
+    {
+        font_height=12;
+        font_width=font_height*0.6;
+    }
+
+    if(f==GLUT_BITMAP_HELVETICA_18)
+    {
+        font_height=18;
+        font_width=font_height*0.6;
+    }
+}
+
 void menu::render()
 {
     if(visible)
     {
-        glPushMatrix();//need push and pop so that entire scene isn't rotated
         glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
         glBegin(GL_POLYGON);//draws a filled in rectangle
         glVertex2f(xmin, ymin); // The bottom left corner
@@ -52,11 +98,11 @@ void menu::render()
         glVertex2f(xmax, ymax); // The top right corner
         glVertex2f(xmax, ymin); // The bottom right corner
         glEnd();//finish drawing
-        glPopMatrix();//reset transformation matrix
-    }
-    for(unsigned i=0; i<items.size(); i++)
-    {
-        items[i]->render();
+        ui::glutPrint(position.x-((strlen(title)/2)*font_width),position.y+font_height+spacing,font,title);
+        for(unsigned i=0; i<items.size(); i++)
+        {
+            items[i]->render();
+        }
     }
 }
 
@@ -64,6 +110,7 @@ void menu::update()
 {
     for(unsigned i=0; i<items.size(); i++)
     {
+        items[i]->visible=visible;
         items[i]->update();
     }
 }
@@ -71,6 +118,11 @@ void menu::update()
 menu::menu()
 {
     type="menu";
+    set_title("Options");
+    set_font(GLUT_BITMAP_HELVETICA_18);
+    layout=VERTICAL;
+    spacing=10;
+    margin=20;
     primary_color.set(0.75,0.75,0.75);
     set_position(window::center.x,window::center.y);
     set_dimensions(window::width,window::height);

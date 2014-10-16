@@ -30,7 +30,7 @@
 #endif
 void scene::render()
 {
-    glClearColor(background_color.r, background_color.g, background_color.b, 1.0);//background
+    glClearColor(background_color.r, background_color.g, background_color.b, 0.5);//background
     //render the rts objects
     for(std::map<int,rts_object*>::iterator i=rts_objects.begin(); i!=rts_objects.end(); ++i)
     i->second->render();

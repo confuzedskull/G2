@@ -54,7 +54,7 @@ bool button::left_clicked()
         return false;
 }
 
-void button::fit_label()
+void button::format()
 {
     width=(((float)strlen(label))*(font_size*0.6f))+(label_margin*2.0f);
     height=font_size+(label_margin*2.0f);
@@ -64,23 +64,34 @@ void button::fit_label()
 void button::set_label(char* l)
 {
     label=l;
-    fit_label();
+    format();
+}
+
+void button::set_font(void* f)
+{
+    font=f;
+    if(f==GLUT_BITMAP_HELVETICA_12)
+        font_size=12;
+    if(f==GLUT_BITMAP_HELVETICA_18)
+        font_size=18;
 }
 
 void button::mouse_function()
 {
-    if(hovered_over() && !primary_color.changed)
-        primary_color.brighten();
-    if(!hovered_over())
-        primary_color.undo();
-    if(left_clicked() && !performed_action)
+    if(visible)
     {
-        action();
-        performed_action=true;
+        if(hovered_over() && !primary_color.changed)
+            primary_color.brighten();
+        if(!hovered_over())
+            primary_color.undo();
+        if(left_clicked() && !performed_action)
+        {
+            action();
+            performed_action=true;
+        }
+        if(!left_clicked())
+            performed_action=false;
     }
-    if(!left_clicked())
-        performed_action=false;
-
 }
 
 void button::render()
@@ -126,7 +137,7 @@ button::button()
     font_size=12.0f;
     spacing=1.0f;
     position.set(0.0f,0.0f);
-    fit_label();
+    format();
     primary_color.set(0.75f,0.75f,0.75f);
     primary_color.changed=false;
     border=true;
@@ -140,8 +151,7 @@ button::button(float x, float y, char* l, void (*a)(void))
     label="click me";
     type="button";
     label_margin=6.0f;
-    font=GLUT_BITMAP_HELVETICA_12;
-    font_size=12.0f;
+    set_font(GLUT_BITMAP_HELVETICA_12);
     spacing=1.0f;
     position.set(x,y);
     set_label(l);

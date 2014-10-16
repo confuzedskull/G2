@@ -26,6 +26,7 @@
 clock_t game::time_started;
 float game::time = 0.0f;
 double game::time_elapsed = 0.0f;
+bool game::paused=false;
 std::vector<scene*> game::scenes;
 std::map<int,draggable_object*> game::draggable_objects;
 std::map<int,physics_object*> game::physics_objects;
@@ -163,38 +164,39 @@ void game::collision_detection()
 
 void game::init_scenes()
 {
-    scene* home = new scene();
-    home->menus.push_back(ui::menus[0]);
-    scenes.push_back(home);
+    scene* home_screen = new scene();
+    home_screen->menus.push_back(ui::menus[0]);
+    scenes.push_back(home_screen);
 
-    scene* sandbox = new scene();
-    sandbox->background_color.set(WHITE);
-    sandbox->draggable_objects.insert(game::draggable_objects.begin(),game::draggable_objects.end());
-    sandbox->physics_objects.insert(game::physics_objects.begin(),game::physics_objects.end());
-    sandbox->rts_objects.insert(game::rts_objects.begin(),game::rts_objects.end());
-    sandbox->buttons.assign(ui::buttons.begin()+2,ui::buttons.end());//add everything except for the sandbox and quit buttons
-    scenes.push_back(sandbox);
+    scene* game_screen = new scene();
+    game_screen->background_color.set(WHITE);
+    game_screen->draggable_objects.insert(game::draggable_objects.begin(),game::draggable_objects.end());
+    game_screen->physics_objects.insert(game::physics_objects.begin(),game::physics_objects.end());
+    game_screen->rts_objects.insert(game::rts_objects.begin(),game::rts_objects.end());
+    game_screen->buttons.assign(ui::buttons.begin()+4,ui::buttons.end());//add everything except for the sandbox and quit buttons
+    game_screen->menus.push_back(ui::menus[1]);
+    scenes.push_back(game_screen);
 }
 
 void game::add_draggable_object()
 {
     draggable_object* new_do = new draggable_object();
     draggable_objects.insert(std::pair<int,draggable_object*>(object::total_objects,new_do));//add object to game
-    scenes[1]->draggable_objects.insert(std::pair<int,draggable_object*>(object::total_objects,new_do));//add object to scene 1
+    scenes[window::current_scene]->draggable_objects.insert(std::pair<int,draggable_object*>(object::total_objects,new_do));//add object to current scene
 }
 
 void game::add_physics_object()
 {
     physics_object* new_po = new physics_object();
     physics_objects.insert(std::pair<int,physics_object*>(object::total_objects,new_po));//add object to game
-    scenes[1]->physics_objects.insert(std::pair<int,physics_object*>(object::total_objects,new_po));//add object to scene 1
+    scenes[window::current_scene]->physics_objects.insert(std::pair<int,physics_object*>(object::total_objects,new_po));//add object to current scene
 }
 
 void game::add_rts_object()
 {
     rts_object* new_rtso = new rts_object();
     rts_objects.insert(std::pair<int,rts_object*>(object::total_objects,new_rtso));//add object to game
-    scenes[1]->rts_objects.insert(std::pair<int,rts_object*>(object::total_objects,new_rtso));//add object to scene 1
+    scenes[window::current_scene]->rts_objects.insert(std::pair<int,rts_object*>(object::total_objects,new_rtso));//add object to current scene
 }
 
 void game::delete_selected()
@@ -202,24 +204,46 @@ void game::delete_selected()
     draggable_objects.erase(cursor::selected_object);
     physics_objects.erase(cursor::selected_object);
     rts_objects.erase(cursor::selected_object);
-    scenes[1]->draggable_objects.erase(cursor::selected_object);
-    scenes[1]->physics_objects.erase(cursor::selected_object);
-    scenes[1]->rts_objects.erase(cursor::selected_object);
+    scenes[window::current_scene]->draggable_objects.erase(cursor::selected_object);
+    scenes[window::current_scene]->physics_objects.erase(cursor::selected_object);
+    scenes[window::current_scene]->rts_objects.erase(cursor::selected_object);
     std::clog<<"object#"<<cursor::left_clicked_object->get_number()<<": "<<cursor::left_clicked_object->name<<'('<<cursor::left_clicked_object->get_type()<<')'<<" deleted."<<std::endl;
 }
 
 void game::play()
 {
-    window::current_scene=1;//load the game
+    init_objects();
+    init_scenes();
+    window::current_scene=1;//open game screen
+    std::clog<<"started game."<<std::endl;
+}
+
+void game::pause()
+{
+    paused=true;
+    scenes[window::current_scene]->menus[0]->visible=true;
+    std::clog<<"paused game."<<std::endl;
+}
+
+void game::resume()
+{
+    paused=false;
+    scenes[window::current_scene]->menus[0]->visible=false;
+    std::clog<<"resumed game."<<std::endl;
 }
 
 void game::go_home()
 {
-    window::current_scene=0;//load the main menu
+    draggable_objects.clear();
+    physics_objects.clear();
+    rts_objects.clear();
+    scenes.clear();
+    window::current_scene=0;//open home screen
+    std::clog<<"returned to menu."<<std::endl;
 }
 
 void game::quit()
 {
-    std::clog<<"exiting...\n";
+    std::clog<<"quitting...\n";
     exit(0);
 }

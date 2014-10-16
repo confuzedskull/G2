@@ -22,19 +22,20 @@ class button : public clickable_object
 {
     protected:
         char* label;
+        void* font;
+        float font_size;//the height of the font in pt (not pixels)
     public:
         bool border;
         color border_color;
         float label_margin;//space between text and button border
-        float font_size;//the height of the font in pt (not pixels)
         float spacing;//space between each line
         bool hovered_over();
         bool left_clicked();
         bool performed_action;
-        void* font;
         void (*action)();//a function pointer which will be called when clicked
-        void fit_label();//adjusts the size of the button to fit the text
+        void format();//adjusts the size of the button to fit the text
         void set_label(char* l);
+        void set_font(void* f);
         void mouse_function();
         void render();
         void update();

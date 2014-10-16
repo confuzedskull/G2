@@ -17,20 +17,18 @@
 #ifndef CONTROLS_H
 #define CONTROLS_H
 
-class controls
+namespace controls
 {
-    public:
-        static bool temp_toggle;//stores the state of the information overlay
-        static bool toggle_overlay;//toggles the information overlay on/off
-        static bool* key_states; //stores each on/off state of a keyboard key
-        static void check_clicked();//check if objects are clicked or not
-        static void mouse_click(int button, int state, int x, int y);//handles mouse clicks
-        static void mouse_move(int x, int y);//handles mouse movement
-        static void mouse_drag(int x, int y);//handles mouse drag
-        static void key_pressed(unsigned char key, int x, int y);//marks given key as pressed
-        static void key_released(unsigned char key, int x, int y);//marks given key as released
-        static void key_operations(void);//handles keyboard actions
-        controls();
+extern bool temp_toggle;//stores the state of the information overlay
+extern bool toggle_overlay;//toggles the information overlay on/off
+extern bool* key_states; //stores each on/off state of a keyboard key
+void check_clicked();//check if objects are clicked or not
+void mouse_click(int button, int state, int x, int y);//handles mouse clicks
+void mouse_move(int x, int y);//handles mouse movement
+void mouse_drag(int x, int y);//handles mouse drag
+void key_pressed(unsigned char key, int x, int y);//marks given key as pressed
+void key_released(unsigned char key, int x, int y);//marks given key as released
+void key_operations(void);//handles keyboard actions
 };
 
 #endif // CONTROLS_H

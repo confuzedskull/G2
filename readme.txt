@@ -20,29 +20,26 @@ A. Mouse
 1. Global
 a. left click an object to select it
 b. left click empty space to deselect
-2. RTS Objects
+2. RTS Objects (colored squares)
 a. left drag down and right to create a selection box
 b. right click empty space to set the rally point and make the selected object move to it
 c. right click an object to make the selected object follow it
 d. right drag to have the selected object follow the cursor
-3. Draggable Objects
+3. Draggable Objects (black squares)
 a. left click and drag an object to move it around
 
 B. Keyboard
 1. Global
 a. 'i' for information overlay
-b. esc to quit
-2. Physics Objects
+b. esc to open pause menu
+2. Physics Objects (gray squares)
 a. 'W','A','S','D' to move up,left,down,right, respectively
 b. 'Q' and 'E' to rotate
-c. spacebar to shoot
-
 
 III. Known Bugs:
 A. Physics Objects
-1. Shooting no longer works.
-2. An object's resting point gets set even when it's moving.
-3. Some of the object's physics values do not zero out when object is at rest.
+1. An object's resting point gets set even when it's moving.
+2. Some of the object's physics values do not zero out when object is at rest.
 B. RTS Objects
 1. An object's resting point doesn't get set at all.
 
