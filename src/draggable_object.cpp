@@ -38,7 +38,9 @@ point2f draggable_object::origin = point2f(window::width*0.9,window::height*0.5)
 
 bool draggable_object::grabbed()
 {
-    if(cursor::left_dragging && !cursor::highlighting && isless(distance(cursor::left_drag,position),radius))
+    if(cursor::left_dragging && !cursor::highlighting &&
+       isless(cursor::left_drag.x,xmax) && isgreater(cursor::left_drag.x,xmin) &&
+       isless(cursor::left_drag.y,ymax) && isgreater(cursor::left_drag.y,ymin))
         return true;
     else
         return false;
@@ -83,6 +85,7 @@ void draggable_object::mouse_function()
 
 void draggable_object::update()
 {
+    calc_boundaries();
     calc_points();
     calc_direction();
     mouse_function();

@@ -173,8 +173,9 @@ void game::init_scenes()
     game_screen->draggable_objects.insert(game::draggable_objects.begin(),game::draggable_objects.end());
     game_screen->physics_objects.insert(game::physics_objects.begin(),game::physics_objects.end());
     game_screen->rts_objects.insert(game::rts_objects.begin(),game::rts_objects.end());
-    game_screen->buttons.assign(ui::buttons.begin()+4,ui::buttons.end());//add everything except for the sandbox and quit buttons
+    game_screen->buttons.assign(ui::buttons.begin()+6,ui::buttons.end());//add everything except for the sandbox and quit buttons
     game_screen->menus.push_back(ui::menus[1]);
+    game_screen->menus.push_back(ui::menus[2]);
     scenes.push_back(game_screen);
 }
 
@@ -214,6 +215,7 @@ void game::play()
 {
     init_objects();
     init_scenes();
+    scenes[1]->menus[1]->visible=false;//hide the warning prompt
     window::current_scene=1;//open game screen
     std::clog<<"started game."<<std::endl;
 }
@@ -221,23 +223,32 @@ void game::play()
 void game::pause()
 {
     paused=true;
-    scenes[window::current_scene]->menus[0]->visible=true;
+    scenes[1]->menus[0]->visible=true;//show the pause menu
+    scenes[1]->menus[1]->visible=false;//hide the warning prompt
     std::clog<<"paused game."<<std::endl;
 }
 
 void game::resume()
 {
     paused=false;
-    scenes[window::current_scene]->menus[0]->visible=false;
+    scenes[1]->menus[0]->visible=false;//hide the pause menu
     std::clog<<"resumed game."<<std::endl;
 }
 
-void game::go_home()
+void game::return_warning()
+{
+    cursor::reset();
+    scenes[1]->menus[0]->visible=false;//hide the pause menu
+    scenes[1]->menus[1]->visible=true;//show the warning prompt
+}
+
+void game::return_menu()
 {
     draggable_objects.clear();
     physics_objects.clear();
     rts_objects.clear();
     scenes.clear();
+    cursor::reset();
     window::current_scene=0;//open home screen
     std::clog<<"returned to menu."<<std::endl;
 }

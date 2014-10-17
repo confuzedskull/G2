@@ -51,5 +51,6 @@ public:
     static int objects_selected();
     static void calc_boundaries();
     static void selection_box();
+    static void reset();
 };
 #endif // CURSOR_H

@@ -14,30 +14,30 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#ifndef MENU_H
-#define MENU_H
-#include "button.h"
-#include "text_object.h"
-#include <vector>
+#ifndef TEXT_OBJECT_H
+#define TEXT_OBJECT_H
+#include "object.h"
 
-class menu: public object
+//A text object stores a string which can be formatted and displayed on screen
+class text_object: public object
 {
 protected:
-    text_object title;
-    text_object subtitle;
+    char* text;
+    void* font;
+    int font_size;
+    int font_width;
+    int font_height;
+    int lines;
+    int longest_line;//the length of the longest line (excluding newline character)
 public:
-    std::vector<button*> items;
-    int layout;
-    int spacing;//space between buttons
-    int margin;
-    void set_title(char* t);
-    void set_subtitle(char* s);
-    void format();
-    void render();
-    void update();
-    menu();
+    int spacing;//the space between each line
+    float get_width();//overrides object::get_width()
+    float get_height();//overrides object::get_height()
+    void set_text(char* t);
+    void set_font(char* style, int size);
+    void calc_lines();//finds the number of lines and the length of the longest line
+    void render();//prints the text to the screen
+    text_object();
 };
-const int VERTICAL = 0;
-const int HORIZONTAL = 1;
 
-#endif // MENU_H
+#endif // TEXT_OBJECT_H

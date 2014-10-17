@@ -98,6 +98,7 @@ void rts_object::mouse_function()
 
 void rts_object::update()
 {
+    calc_boundaries();
     calc_points();
     calc_direction();
     mouse_function();

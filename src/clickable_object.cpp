@@ -22,7 +22,9 @@
 
 bool clickable_object::hovered_over()
 {
-    if(isless(distance(cursor::passive,position),radius))
+    if(!cursor::left_click &&
+       isless(cursor::passive.x,xmax) && isgreater(cursor::passive.x,xmin) &&
+       isless(cursor::passive.y,ymax) && isgreater(cursor::passive.y,ymin))
         return true;
     else
         return false;
@@ -30,7 +32,9 @@ bool clickable_object::hovered_over()
 
 bool clickable_object::left_clicked()
 {
-    if(cursor::left_click && isless(distance(cursor::left_down,position),radius))
+    if(cursor::left_click &&
+       isless(cursor::left_down.x,xmax) && isgreater(cursor::left_down.x,xmin) &&
+       isless(cursor::left_down.y,ymax) && isgreater(cursor::left_down.y,ymin))
         return true;
     else
         return false;
@@ -38,7 +42,9 @@ bool clickable_object::left_clicked()
 
 bool clickable_object::right_clicked()
 {
-    if(cursor::right_click && isless(distance(cursor::right_down,position),radius))
+    if(cursor::right_click &&
+       isless(cursor::right_down.x,xmax) && isgreater(cursor::right_down.x,xmin) &&
+       isless(cursor::right_down.y,ymax) && isgreater(cursor::right_down.y,ymin))
         return true;
     else
         return false;
@@ -48,7 +54,7 @@ void clickable_object::mouse_function()
 {
     if(left_clicked())//clicked this object
     {
-        if(!cursor::left_clicked_an_object && !selected)
+        if(!selected)
         std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" selected"<<std::endl;
         cursor::left_clicked_object=this;
         cursor::left_clicked_an_object = true;
@@ -56,7 +62,7 @@ void clickable_object::mouse_function()
         selected = true;
     }
 
-    if(cursor::left_click && cursor::selected_object !=number)//clicked another object
+    if(cursor::left_click && cursor::left_clicked_an_object && cursor::selected_object!=number)//clicked another object
     {
         cursor::highlighted_objects[number]=false;
         selected = false;

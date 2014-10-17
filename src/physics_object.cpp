@@ -172,6 +172,7 @@ void physics_object::physics()
 
 void physics_object::update()
 {
+    calc_boundaries();
     set_resting();
     calc_points();
     calc_direction();

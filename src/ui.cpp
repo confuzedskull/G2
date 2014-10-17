@@ -150,54 +150,63 @@ void ui::print_overlay()
 void ui::init_buttons()
 {
 //Main Menu Buttons
-    button* play_button = new button();
-    play_button->set_font(GLUT_BITMAP_HELVETICA_18);
+    button* play_button = new button();//create a button pointer and initialize it
     play_button->set_label("Play");
     play_button->action=game::play;//function is assigned without '()' at the end
     buttons.push_back(play_button);//add button to container
 
-    button* quit_button = new button();
-    quit_button->set_font(GLUT_BITMAP_HELVETICA_18);
+    button* quit_button = new button();//create a button pointer and initialize it
     quit_button->set_label("Quit");
     quit_button->action=game::quit;//function is assigned without '()' at the end
     buttons.push_back(quit_button);//add button to container
 //Pause Menu Buttons
-    button* resume_button = new button();
+    button* resume_button = new button();//create a button pointer and initialize it
     resume_button->set_label("Resume");
-    resume_button->action=game::resume;
-    buttons.push_back(resume_button);
+    resume_button->action=game::resume;//function is assigned without '()' at the end
+    buttons.push_back(resume_button);//add button to container
 
-    button* main_menu_button = new button();
+    button* main_menu_button = new button();//create a button pointer and initialize it
     main_menu_button->set_label("Main Menu");
-    main_menu_button->action=game::go_home;
-    buttons.push_back(main_menu_button);
+    main_menu_button->action=game::return_warning;//function is assigned without '()' at the end
+    buttons.push_back(main_menu_button);//add button to container
+//Warning Menu Buttons
+    button* confirm_return_button = new button();//create a button pointer and initialize it
+    confirm_return_button->set_label("Yes");
+    confirm_return_button->action=game::return_menu;//function is assigned without '()' at the end
+    buttons.push_back(confirm_return_button);//add button to container
+
+    button* cancel_return_button = new button();
+    cancel_return_button->set_label("No");
+    cancel_return_button->action=game::pause;
+    buttons.push_back(cancel_return_button);
+
 //Game Buttons
     button* create_po_button = new button();//"po" stands for "physics object"
-    create_po_button->set_position(window::width*0.9,window::height*0.8);
+    create_po_button->set_position(window::width*0.9,window::height*0.8);//put the button on the right side, 4/5ths of the way up
     create_po_button->set_label("new physics object");
     create_po_button->action=game::add_physics_object;//function is assigned without '()' at the end
     buttons.push_back(create_po_button);//add button to container
 
     button* create_do_button = new button();//"do" stands for "draggable object"
-    create_do_button->set_position(window::width*0.9,window::height*0.6);
+    create_do_button->set_position(window::width*0.9,window::height*0.6);//put the button on the right side, 3/5ths of the way up
     create_do_button->set_label("new draggable object");
     create_do_button->action=game::add_draggable_object;//function is assigned without '()' at the end
     buttons.push_back(create_do_button);//add button to container
 
     button* create_rtso_button = new button();//"rtso" stands for "real-time strategy object"
-    create_rtso_button->set_position(window::width*0.9,window::height*0.4);
+    create_rtso_button->set_position(window::width*0.9,window::height*0.4);//put the button on the right side, 2/5ths of the way up
     create_rtso_button->set_label("new rts object");
     create_rtso_button->action=game::add_rts_object;//function is assigned without '()' at the end
     buttons.push_back(create_rtso_button);//add button to container
 
-    button* delete_object_button = new button();
-    delete_object_button->set_position(window::width*0.9,window::height*0.2);
+    button* delete_object_button = new button();//create a button pointer and initialize it
+    delete_object_button->set_position(window::width*0.9,window::height*0.2);//put the button on the right side, 1/5th of the way up
     delete_object_button->set_label("delete object");
     delete_object_button->action=game::delete_selected;//function is assigned without '()' at the end
     buttons.push_back(delete_object_button);//add button to container
 
-    button* menu_button = new button();
-    menu_button->set_position(window::center.x,window::height-20);
+    button* menu_button = new button();//create a button pointer and initialize it
+    menu_button->set_position(window::center.x,window::height-20);//put the button at the top middle, just below the top
     menu_button->set_label("Menu");
     menu_button->action=game::pause;//function is assigned without '()' at the end
     buttons.push_back(menu_button);//add button to container
@@ -219,4 +228,15 @@ void ui::init_menus()
     pause_menu->items.push_back(buttons[3]);
     pause_menu->format();
     menus.push_back(pause_menu);
+
+    menu* warning_menu = new menu();
+    warning_menu->set_title("Warning");
+    warning_menu->set_subtitle("Are you sure you want to leave?");
+    warning_menu->visible=false;
+    warning_menu->layout=HORIZONTAL;
+    warning_menu->items.push_back(buttons[4]);
+    warning_menu->items.push_back(buttons[5]);
+    warning_menu->format();
+    menus.push_back(warning_menu);
+
 }

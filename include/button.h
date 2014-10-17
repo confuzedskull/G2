@@ -17,30 +17,26 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 #include "clickable_object.h"
+#include "text_object.h"
 
+//A button displays text and executes a function when clicked
 class button : public clickable_object
 {
-    protected:
-        char* label;
-        void* font;
-        float font_size;//the height of the font in pt (not pixels)
-    public:
-        bool border;
-        color border_color;
-        float label_margin;//space between text and button border
-        float spacing;//space between each line
-        bool hovered_over();
-        bool left_clicked();
-        bool performed_action;
-        void (*action)();//a function pointer which will be called when clicked
-        void format();//adjusts the size of the button to fit the text
-        void set_label(char* l);
-        void set_font(void* f);
-        void mouse_function();
-        void render();
-        void update();
-        button();
-        button(float x, float y, char* l, void (*a)(void));
+protected:
+    text_object label;
+public:
+    bool border;//whether or not a border should be shown
+    color border_color;//the color of the border
+    int margin;//space between text and button border
+    bool performed_action;//whether or not the button action executed
+    void (*action)();//a function pointer which will be called when clicked
+    void format();//adjusts the size of the button to fit the text
+    void set_label(char* l);
+    void mouse_function();
+    void render();
+    void update();
+    button();
+    button(float x, float y, char* l, void (*a)(void));
 };
 
 #endif // BUTTON_H

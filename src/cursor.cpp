@@ -93,3 +93,31 @@ void cursor::selection_box()//this is the box that is created when user clicks a
         glDisable(GL_BLEND);
     }
 }
+
+void cursor::reset()
+{
+    passive.set(0.0,0.0);
+    left_down.set(0.0,0.0);
+    right_down.set(0.0,0.0);
+    left_up.set(0.0,0.0);
+    right_up.set(0.0,0.0);
+    left_drag.set(0.0,0.0);
+    right_drag.set(0.0,0.0);
+    left_click = false;
+    right_click = false;
+    left_dragging = false;
+    right_dragging = false;
+    highlighting = false;
+    highlighted_objects.assign(game::rts_objects.size(),false);
+    selected_object = 0;
+    left_clicked_object = new clickable_object();
+    right_clicked_object = new clickable_object();
+    left_clicked_an_object = false;
+    right_clicked_an_object = false;
+    grabbed_an_object=false;
+    box_color = GREEN;
+    xmax = 0.0;
+    xmin = 0.0;
+    ymax = 0.0;
+    ymin = 0.0;
+}

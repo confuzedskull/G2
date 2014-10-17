@@ -49,7 +49,8 @@ namespace game
     void play();//open game screen
     void pause();//open pause screen
     void resume();//open game screen
-    void go_home();//open main menu
+    void return_warning();//warn user before returning to main menu
+    void return_menu();//open main menu
     void quit();//close the program
 };
 #endif // GAME_H

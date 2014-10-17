@@ -94,9 +94,9 @@ void window::update()
 {
     cursor::calc_boundaries();//calculate the size of the selection box
     game::time_elapsed = ((float)clock()-game::time_started)/CLOCKS_PER_SEC;//update the start time
+    controls::check_clicked();//check if objects are clicked
     game::scenes[current_scene]->update();//update scene
     game::collision_detection();//apply collision effects
-    controls::check_clicked();//check if objects are clicked
     //This function acts like timer so that events occur at the set refresh rate
     if(isgreaterequal(game::time_elapsed,window::refresh_rate))//time elapsed is >= refresh rate
     {
