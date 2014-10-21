@@ -43,7 +43,7 @@ void menu::format()
     int total_width=0;//width of buttons and the spaces between
     int total_height=0;//height of buttons and spaces between
     //arrange the items
-    for(unsigned i=0;i<items.size();i++)
+    for(unsigned i=0;i<items.size();i++)//use regular 'for' loop because 'i' is used as number
     {
         total_width+=items[i]->get_width();
         if(isgreater(items[i]->get_width(),widest))
@@ -52,7 +52,7 @@ void menu::format()
             items[i]->set_position(position.x,position.y-total_height);
         if(layout==HORIZONTAL)
         {
-            if(i%2==0)
+            if(i%2==0)//here the iterator is being used as a number
                 items[i]->set_position(position.x-(total_width/2),position.y-(items[0]->get_height()));
             else
                 items[i]->set_position(position.x+(total_width/2),position.y-(items[0]->get_height()));
@@ -105,19 +105,19 @@ void menu::render()
         glEnd();//finish drawing
         title.render();
         subtitle.render();
-        for(unsigned i=0; i<items.size(); i++)
+        for(auto i:items)
         {
-            items[i]->render();
+            i->render();
         }
     }
 }
 
 void menu::update()
 {
-    for(unsigned i=0; i<items.size(); i++)
+    for(auto i:items)
     {
-        items[i]->visible=visible;
-        items[i]->update();
+        i->visible=visible;
+        i->update();
     }
 }
 

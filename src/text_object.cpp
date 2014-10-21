@@ -70,13 +70,11 @@ void text_object::render()
     if(visible)
     {
         glColor3f(primary_color.r,primary_color.g,primary_color.b);
-        for(unsigned l=0; l<text.size(); l++)
+        for(unsigned l=0; l<text.size(); l++)//iterate through each line
         {
-            glRasterPos2f(position.x,position.y-((spacing+font_height)*l));
-            for(unsigned c=0; c<text[l].length(); c++)
-            {
-                glutBitmapCharacter(font, text[l][c]);
-            }
+            glRasterPos2f(position.x,position.y-((spacing+font_height)*l));//update the character position
+            for(unsigned c=0; c<text[l].length(); c++)//iterate through each character
+                glutBitmapCharacter(font, text[l][c]);//print the character to the screen
         }
     }
 }

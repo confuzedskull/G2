@@ -57,7 +57,7 @@ point2f cursor::right_drag = point2f(0.0,0.0);
 int cursor::objects_selected()
 {
     int selected = 0;
-    for(unsigned i=0; i<game::rts_objects.size(); i++)
+    for(unsigned i=0; i<game::rts_objects.size(); i++)//regular "for" loop used  because iterator is used as integer
     {
         if(highlighted_objects[i])
             selected++;

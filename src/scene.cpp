@@ -28,51 +28,54 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #endif
+
+//NOTE: This function uses C++11 "for" loops
 void scene::render()
 {
     glClearColor(background_color.r, background_color.g, background_color.b, 0.5);//background
     //render the rts objects
-    for(std::map<int,rts_object*>::iterator i=rts_objects.begin(); i!=rts_objects.end(); ++i)
-    i->second->render();
+    for(auto r:rts_objects)
+    r.second->render();
     //render the selection box
     cursor::selection_box();
     //render the draggable objects
-    for(std::map<int,draggable_object*>::iterator i=draggable_objects.begin(); i!=draggable_objects.end(); ++i)
-    i->second->render();
+    for(auto d:draggable_objects)
+    d.second->render();
     //render the physics objects
-    for(std::map<int,physics_object*>::iterator i=physics_objects.begin(); i!=physics_objects.end(); ++i)
-    i->second->render();
+    for(auto p:physics_objects)
+    p.second->render();
     //render text
-    for(unsigned i=0; i<text_objects.size(); i++)
-    text_objects[i]->render();
+    for(auto t:text_objects)
+    t->render();
     //render menus
-    for(unsigned i=0; i<menus.size(); i++)
-    menus[i]->render();
+    for(auto m:menus)
+    m->render();
     //render buttons
-    for(unsigned i=0; i<buttons.size(); i++)
-    buttons[i]->render();
+    for(auto b:buttons)
+    b->render();
 }
 
+//NOTE: This function uses C++11 "for" loops
 void scene::update()
 {
     //update physics objects
-    for(std::map<int,physics_object*>::iterator i=physics_objects.begin(); i!=physics_objects.end(); ++i)
-    i->second->update();
+    for(auto p:physics_objects)
+    p.second->update();
     //update rts objects
-    for(std::map<int,rts_object*>::iterator i=rts_objects.begin(); i!=rts_objects.end(); ++i)
-    i->second->update();
+    for(auto r:rts_objects)
+    r.second->update();
     //update draggable objects
-    for(std::map<int,draggable_object*>::iterator i=draggable_objects.begin(); i!=draggable_objects.end(); ++i)
-    i->second->update();
+    for(auto d:draggable_objects)
+    d.second->update();
     //update menus
-    for(unsigned i=0; i<menus.size(); i++)
-    menus[i]->update();
+    for(auto m:menus)
+    m->update();
     //update buttons
-    for(unsigned i=0; i<buttons.size(); i++)
-    buttons[i]->update();
+    for(auto b:buttons)
+    b->update();
 }
 
 scene::scene()
 {
-    background_color.set(0.25,0.25,0.25);
+    background_color.set(0.25,0.25,0.25);//set the color to dark gray
 }

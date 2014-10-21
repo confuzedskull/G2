@@ -105,13 +105,13 @@ void window::update()
         if(!game::paused)
         {
             //move rts objects
-            for(std::map<int,rts_object*>::iterator i=game::scenes[current_scene]->rts_objects.begin(); i!=game::scenes[current_scene]->rts_objects.end(); ++i)
-                i->second->perform_actions()||i->second->move_to_point(*i->second->rally,2.00f);
+            for(auto r:game::scenes[current_scene]->rts_objects)//C++11 "for" loop
+                r.second->perform_actions()||r.second->move_to_point(*r.second->rally,2.00f);
             //move physics objects
-            for(std::map<int,physics_object*>::iterator i=game::scenes[current_scene]->physics_objects.begin(); i!=game::scenes[current_scene]->physics_objects.end(); ++i)
+            for(auto p:game::scenes[current_scene]->physics_objects)//C++11 "for" loop
             {
-                i->second->perform_actions();
-                i->second->inertia();
+                p.second->perform_actions();
+                p.second->inertia();
             }
         }
         glutPostRedisplay();//update the scene

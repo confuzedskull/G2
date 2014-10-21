@@ -40,20 +40,21 @@ bool controls::temp_toggle[2] = {false,false};
 bool controls::toggle_overlay = false;
 bool controls::toggle_pause = false;
 
+//NOTE: This function uses C++11 "for" loops
 void controls::check_clicked()
 {
     //The only way to check if no objects are being clicked is by checking every object
     bool left_clicked=false;
     while(!left_clicked)
     {
-        for(std::map<int,rts_object*>::iterator a=game::rts_objects.begin(); a!=game::rts_objects.end(); ++a)
-            left_clicked=a->second->left_clicked();
-        for(std::map<int,draggable_object*>::iterator a=game::draggable_objects.begin(); a!=game::draggable_objects.end(); ++a)
-            left_clicked=a->second->left_clicked();
-        for(std::map<int,physics_object*>::iterator a=game::physics_objects.begin(); a!=game::physics_objects.end(); ++a)
-            left_clicked=a->second->left_clicked();
-        for(unsigned i=0;i<ui::buttons.size();i++)
-            left_clicked=ui::buttons[i]->left_clicked();
+        for(auto r:game::rts_objects)
+            left_clicked=r.second->left_clicked();
+        for(auto d:game::draggable_objects)
+            left_clicked=d.second->left_clicked();
+        for(auto p:game::physics_objects)
+            left_clicked=p.second->left_clicked();
+        for(auto b:ui::buttons)
+            left_clicked=b->left_clicked();
         if(!left_clicked)//at this point, no objects have been left clicked so leave the loop
             break;
     }
@@ -62,21 +63,21 @@ void controls::check_clicked()
     bool right_clicked=false;
     while(!right_clicked)
     {
-        for(std::map<int,rts_object*>::iterator a=game::rts_objects.begin(); a!=game::rts_objects.end(); ++a)
-            right_clicked=a->second->right_clicked();
-        for(std::map<int,draggable_object*>::iterator a=game::draggable_objects.begin(); a!=game::draggable_objects.end(); ++a)
-            right_clicked=a->second->right_clicked();
-        for(std::map<int,physics_object*>::iterator a=game::physics_objects.begin(); a!=game::physics_objects.end(); ++a)
-            right_clicked=a->second->right_clicked();
+        for(auto r:game::rts_objects)
+            right_clicked=r.second->right_clicked();
+        for(auto d:game::draggable_objects)
+            right_clicked=d.second->right_clicked();
+        for(auto p:game::physics_objects)
+            right_clicked=p.second->right_clicked();
         if(!right_clicked)//at this point, no objects have been right clicked so leave the loop
             break;
     }
     cursor::right_clicked_an_object = right_clicked;
 
     bool grabbed=true;
-    for(std::map<int,draggable_object*>::iterator a=game::draggable_objects.begin(); a!=game::draggable_objects.end(); ++a)
+    for(auto d:game::draggable_objects)
     {
-        if(a->second->grabbed())
+        if(d.second->grabbed())
         {
             grabbed=true;
             break;

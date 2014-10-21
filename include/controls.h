@@ -17,9 +17,10 @@
 #ifndef CONTROLS_H
 #define CONTROLS_H
 
+//stores all variables and functions related to peripheral input
 namespace controls
 {
-extern bool temp_toggle[2];//stores the state of the information overlay
+extern bool temp_toggle[2];//stores the toggle state before it is set
 extern bool toggle_overlay;//toggles the information overlay on/off
 extern bool toggle_pause;//toggles the pause menu on/off
 extern bool* key_states; //stores each on/off state of a keyboard key

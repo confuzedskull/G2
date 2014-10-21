@@ -125,39 +125,40 @@ void game::init_objects()
 }
 
 //This checks which objects are touching and what they should do when that occurs
+//NOTE: This function uses C++11 "for" loops
 void game::collision_detection()
 {
-    for(std::map<int,rts_object*>::iterator a=rts_objects.begin(); a!=rts_objects.end(); ++a)//iterate through rts objects comparing
+    for(auto a:rts_objects)//iterate through rts objects comparing
     {
-        for(std::map<int,rts_object*>::iterator b=rts_objects.begin(); b!=rts_objects.end(); ++b)//iterate through rts objects being compared
+        for(auto b:rts_objects)//iterate through rts objects being compared
         {
-            if(a->first!=b->first && a->second->is_close(*b->second))//check objects colliding with other objects
+            if(a.first!=b.first && a.second->is_close(*b.second))//check objects colliding with other objects
             {
-                a->second->identify_touched(*b->second);
-                a->second->repel(*b->second);
+                a.second->identify_touched(*b.second);
+                a.second->repel(*b.second);
             }
         }
     }
-    for(std::map<int,physics_object*>::iterator a=physics_objects.begin(); a!=physics_objects.end(); ++a)//iterate through physics objects comparing
+    for(auto a:physics_objects)//iterate through physics objects comparing
     {
-        for(std::map<int,physics_object*>::iterator b=physics_objects.begin(); b!=physics_objects.end(); ++b)//iterate through physics objects being compared
+        for(auto b:physics_objects)//iterate through physics objects being compared
         {
-            if(a->first!=b->first && a->second->is_close(*b->second))//check objects colliding with other objects
+            if(a.first!=b.first && a.second->is_close(*b.second))//check objects colliding with other objects
             {
-                a->second->identify_touched(*b->second);
-                a->second->repel(*b->second);
-                a->second->calc_momentum(*b->second);
+                a.second->identify_touched(*b.second);
+                a.second->repel(*b.second);
+                a.second->calc_momentum(*b.second);
             }
         }
     }
-    for(std::map<int,draggable_object*>::iterator a=draggable_objects.begin(); a!=draggable_objects.end(); ++a)//iterate through draggable objects comparing
+    for(auto a:draggable_objects)//iterate through draggable objects comparing
     {
-        for(std::map<int,draggable_object*>::iterator b=draggable_objects.begin(); b!=draggable_objects.end(); ++b)//iterate through draggable objects being compared
+        for(auto b:draggable_objects)//iterate through draggable objects being compared
         {
-            if(a->first!=b->first && a->second->is_close(*b->second))//check objects colliding with other objects
+            if(a.first!=b.first && a.second->is_close(*b.second))//check objects colliding with other objects
             {
-                a->second->identify_touched(*b->second);
-                a->second->repel(*b->second);
+                a.second->identify_touched(*b.second);
+                a.second->repel(*b.second);
             }
         }
     }
