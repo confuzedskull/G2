@@ -42,6 +42,9 @@ void scene::render()
     //render the physics objects
     for(std::map<int,physics_object*>::iterator i=physics_objects.begin(); i!=physics_objects.end(); ++i)
     i->second->render();
+    //render text
+    for(unsigned i=0; i<text_objects.size(); i++)
+    text_objects[i]->render();
     //render menus
     for(unsigned i=0; i<menus.size(); i++)
     menus[i]->render();

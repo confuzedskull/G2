@@ -17,25 +17,24 @@
 #ifndef TEXT_OBJECT_H
 #define TEXT_OBJECT_H
 #include "object.h"
+#include <vector>
+#include <string>
 
 //A text object stores a string which can be formatted and displayed on screen
 class text_object: public object
 {
 protected:
-    char* text;
+    std::vector<std::string> text;
     void* font;
     int font_size;
     int font_width;
     int font_height;
-    int lines;
-    int longest_line;//the length of the longest line (excluding newline character)
 public:
     int spacing;//the space between each line
-    float get_width();//overrides object::get_width()
-    float get_height();//overrides object::get_height()
-    void set_text(char* t);
-    void set_font(char* style, int size);
-    void calc_lines();//finds the number of lines and the length of the longest line
+    void change_line(unsigned i, std::string l);
+    void add_line(std::string l);
+    void set_font(std::string style, int size);
+    void clear();
     void render();//prints the text to the screen
     text_object();
 };

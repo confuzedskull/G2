@@ -41,7 +41,7 @@ int object::get_number()
     return number;
 }
 
-char* object::get_type()
+std::string object::get_type()
 {
     return type;
 }
@@ -158,8 +158,8 @@ void object::render()//draws the object
 object::object()
 {
     name="unnamed";
-    type="object";
     number=++total_objects;
+    type="object";
     position.set(origin);
     set_dimensions(64,64);
     primary_color.randomize();
@@ -174,8 +174,8 @@ object::object()
 object::object(float x, float y, float w, float h)
 {
     name="unnamed";
-    type="object";
     number=++total_objects;
+    type="object";
     position.set(x,y);
     set_dimensions(w,h);
     primary_color.randomize();
@@ -190,8 +190,8 @@ object::object(float x, float y, float w, float h)
 object::object(float x, float y, float w, float h, color c)
 {
     name="unnamed";
-    type="object";
     number=++total_objects;
+    type="object";
     position.set(x,y);
     set_dimensions(w,h);
     primary_color.set(c);

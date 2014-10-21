@@ -85,13 +85,12 @@ void window::render()
 //BOTTOM
     game::scenes[current_scene]->render();
 //TOP
-    if(controls::toggle_overlay)
-    ui::print_overlay();
     glFlush();
 }
 
 void window::update()
 {
+    ui::update_text();
     cursor::calc_boundaries();//calculate the size of the selection box
     game::time_elapsed = ((float)clock()-game::time_started)/CLOCKS_PER_SEC;//update the start time
     controls::check_clicked();//check if objects are clicked

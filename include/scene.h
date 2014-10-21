@@ -21,6 +21,7 @@
 #include "rts_object.h"
 #include "button.h"
 #include "menu.h"
+#include "text_object.h"
 #include <map>
 #include <vector>
 
@@ -33,6 +34,7 @@ class scene
     std::map<int,draggable_object*> draggable_objects;
     std::map<int,physics_object*> physics_objects;
     std::map<int,rts_object*> rts_objects;
+    std::vector<text_object*> text_objects;
     std::vector<button*> buttons;
     std::vector<menu*> menus;
     void render();

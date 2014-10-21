@@ -16,16 +16,16 @@
 
 #ifndef OBJECT_H
 #define OBJECT_H
-#include <stdlib.h>
 #include "color.h"
 #include "point.h"
+#include <string>
 
 //This is the base class for all other object types. It has basic properties such as name, color, and dimensions.
 class object
 {
 protected:
     int number;
-    char* type;
+    std::string type;
     point2f position;
     float rotation;
     float width;
@@ -36,9 +36,9 @@ protected:
 public:
     static int total_objects;
     static point2f origin;
-    char* name;
+    std::string name;
     int get_number();
-    char* get_type();
+    std::string get_type();
     point2f get_position();
     point2f* get_positionptr();
     float get_rotation();

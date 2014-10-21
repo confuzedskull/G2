@@ -19,8 +19,9 @@
 
 namespace controls
 {
-extern bool temp_toggle;//stores the state of the information overlay
+extern bool temp_toggle[2];//stores the state of the information overlay
 extern bool toggle_overlay;//toggles the information overlay on/off
+extern bool toggle_pause;//toggles the pause menu on/off
 extern bool* key_states; //stores each on/off state of a keyboard key
 void check_clicked();//check if objects are clicked or not
 void mouse_click(int button, int state, int x, int y);//handles mouse clicks

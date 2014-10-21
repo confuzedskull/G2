@@ -31,30 +31,23 @@
 #include <string>
 #include <iostream>
 
-float text_object::get_width()
+void text_object::change_line(unsigned i, std::string l)
 {
-    width=font_width*longest_line;
-    return width;
+    text[i]=l;
 }
 
-float text_object::get_height()
+void text_object::add_line(std::string l)
 {
-    height=(font_height*lines)+((lines-1)*spacing);
-    return height;
+    text.push_back(l);
+    set_dimensions(font_width*text.back().length(),font_height);
 }
 
-void text_object::set_text(char* t)
-{
-    text=t;
-    calc_lines();
-}
-
-void text_object::set_font(char* style, int size)
+void text_object::set_font(std::string style, int size)
 {
     font_size=size;
     font_width=font_size*0.6;
     font_height=font_size;
-    if(strcmp(style,"helvetica")==0)
+    if(style=="helvetica")
     {
         if(size==10)
             font=GLUT_BITMAP_HELVETICA_10;
@@ -63,7 +56,7 @@ void text_object::set_font(char* style, int size)
         if(size==18)
             font=GLUT_BITMAP_HELVETICA_18;
     }
-    if(strcmp(style,"times new roman")==0)
+    if(style=="times new roman")
     {
         if(size==10)
             font=GLUT_BITMAP_TIMES_ROMAN_10;
@@ -72,56 +65,31 @@ void text_object::set_font(char* style, int size)
     }
 }
 
-void text_object::calc_lines()
-{
-    int current_line;
-    int previous_line=0;
-    lines=1;
-    longest_line=0;
-    if(strchr(text,'\n')!=NULL)//newline is detected
-    {
-        for(unsigned i=0; i<strlen(text);i++)
-        {
-            if(text[i]=='\n')
-            {
-                current_line=i-previous_line;
-                previous_line=i;
-                lines++;
-                if(current_line>longest_line)
-                    longest_line=current_line;
-            }
-        }
-    }
-    else
-        longest_line=strlen(text);
-}
-
 void text_object::render()
 {
-    if(strchr(text,'\n')!=NULL)//newline is detected
+    if(visible)
     {
-        char* current_line="";
-        int new_y=position.y;
-        for(unsigned i=0; i<strlen(text);i++)
+        glColor3f(primary_color.r,primary_color.g,primary_color.b);
+        for(unsigned l=0; l<text.size(); l++)
         {
-            if(text[i]=='\n')
+            glRasterPos2f(position.x,position.y-((spacing+font_height)*l));
+            for(unsigned c=0; c<text[l].length(); c++)
             {
-                ui::glutPrint(position.x,new_y,font,current_line);
-                current_line="";
-                new_y-=spacing+font_height;
+                glutBitmapCharacter(font, text[l][c]);
             }
-            else
-                current_line+=text[i];
         }
     }
-    else
-        ui::glutPrint(position.x,position.y,font,text);
+}
+
+void text_object::clear()
+{
+    text.clear();
 }
 
 text_object::text_object()
 {
     type="text object";
-    text="";
+    primary_color=BLACK;
     set_font("helvetica",12);
     spacing=1;
     std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;

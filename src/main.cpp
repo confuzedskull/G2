@@ -44,6 +44,7 @@ int main(int argc, char **argv)
     std::clog<<"initializing user interface...\n";
     ui::init_buttons();
     ui::init_menus();
+    ui::init_text();
     //initialize scenes
     std::clog<<"initializing scenes...\n";
     game::init_scenes();

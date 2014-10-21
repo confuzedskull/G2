@@ -17,134 +17,31 @@
 #include "ui.h"
 #include "window.h"
 #include "game.h"
+#include "controls.h"
 #include "cursor.h"
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <GLUT/glut.h>
-#else
-#ifdef _WIN32
-  #include <windows.h>
-#endif
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
-#endif
-#include <string.h>
+#include <string>
 #include <stdio.h>
+#include <stdlib.h>
 
 //initialize variables
 std::vector<button*> ui::buttons;
 std::vector<menu*>ui::menus;
-std::vector<char*> ui::info_overlay(20,new char[30]);//create 20 lines of 30 character length
-float ui::margin = 10.0f;
-float ui::spacing = 20.0f;
+std::vector<text_object*> ui::text_objects;
+int ui::margin = 10;
 
-void ui::glutPrint(float x, float y, void* font, char* text, color c)
+void ui::init_text()
 {
-    if(!text || !strlen(text))
-        return;
-    glColor4f(c.r,c.g,c.b,c.a);
-    glRasterPos2f(x,y);
-    while(*text)
-    {
-        glutBitmapCharacter(font, *text);
-        text++;
-    }
-}
+    text_object* object_info = new text_object();
+    object_info->visible=false;
+    object_info->spacing=20;
+    object_info->set_position(margin,window::height-20);
+    text_objects.push_back(object_info);
 
-void ui::glutPrint(float x, float y, void* font, char* text)
-{
-    glutPrint(x, y, font, text, BLACK);
-}
-
-void ui::glutPrint(float x, float y, char* text)
-{
-    glutPrint(x, y, GLUT_BITMAP_HELVETICA_12, text);
-}
-
-void ui::print_overlay()
-{
-    unsigned index = cursor::selected_object;//number of the currently selected object
-    unsigned line = 0;//used for spacing each line
-
-    sprintf(info_overlay[line],"selected object: #%d - %s", cursor::left_clicked_object->get_number(), cursor::left_clicked_object->name);
-    glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-
-    sprintf(info_overlay[line],"type: %s", cursor::left_clicked_object->get_type());
-    glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-
-    sprintf(info_overlay[line],"dimensions: %.2fX%.2f", cursor::left_clicked_object->get_width(),cursor::left_clicked_object->get_height());
-    glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-
-    sprintf(info_overlay[line],"rotation: %.2f", cursor::left_clicked_object->get_rotation());
-    glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-
-    sprintf(info_overlay[line],"current position: %.2f,%.2f", cursor::left_clicked_object->get_position().x,cursor::left_clicked_object->get_position().y);
-    glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-
-    if(strcmp(cursor::left_clicked_object->get_type(),"physics object")==0)//display the following if a physics object is selected
-    {
-        sprintf(info_overlay[line],"resting position: %.2f, %.2f",game::physics_objects[index]->rest.x,game::physics_objects[index]->rest.y);
-        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-
-        sprintf(info_overlay[line],"mass: %.2f",game::physics_objects[index]->mass);
-        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-
-        sprintf(info_overlay[line],"speed: %.2f",game::physics_objects[index]->speed);
-        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-
-        sprintf(info_overlay[line],"time moving: %.2f,%.2f",game::physics_objects[index]->delta_time[0],game::physics_objects[index]->delta_time[1]);
-        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-
-        sprintf(info_overlay[line],"initial velocity: %.2f,%.2f",game::physics_objects[index]->velocity[0].x,game::physics_objects[index]->velocity[0].y);
-        glutPrint (margin,window::height-(line*spacing), info_overlay[line++]);
-
-        sprintf(info_overlay[line],"final velocity: %.2f,%.2f",game::physics_objects[index]->velocity[1].x,game::physics_objects[index]->velocity[1].y);
-        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-
-        sprintf(info_overlay[line],"time accelerating: %.2f %.2f",game::physics_objects[index]->delta_time[2],game::physics_objects[index]->delta_time[3]);
-        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-
-        sprintf(info_overlay[line],"acceleration: %.2f %.2f",game::physics_objects[index]->acceleration.x,game::physics_objects[index]->acceleration.y);
-        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-
-        sprintf(info_overlay[line],"momentum: %.2f %.2f",game::physics_objects[index]->momentum.x,game::physics_objects[index]->momentum.y);
-        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-
-        sprintf(info_overlay[line],"force: %.2f %.2f",game::physics_objects[index]->force.x,game::physics_objects[index]->force.y);
-        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-
-        sprintf(info_overlay[line],"object touching side L:%d R:%d T:%d B:%d",game::physics_objects[index]->touching[0], game::physics_objects[index]->touching[1], game::physics_objects[index]->touching[2],game::physics_objects[index]->touching[3]);
-        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-    }
-    if(strcmp(cursor::left_clicked_object->get_type(),"draggable object")==0)//display the following if a draggable object is selected
-    {
-        sprintf(info_overlay[line],"object touching side L:%d R:%d T:%d B:%d",game::draggable_objects[index]->touching[0], game::draggable_objects[index]->touching[1],game::draggable_objects[index]->touching[2],game::draggable_objects[index]->touching[3]);
-        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-    }
-    if(strcmp(cursor::left_clicked_object->get_type(),"rts object")==0)//display the following if a RTS object is selected
-    {
-        sprintf(info_overlay[line],"speed: %.2f",game::rts_objects[index]->speed);
-        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-
-        sprintf(info_overlay[line],"rally point: %.2f, %.2f",game::rts_objects[index]->rally->x,game::rts_objects[index]->rally->y);
-        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-
-        sprintf(info_overlay[line],"object touching side L:%d R:%d T:%d B:%d",game::rts_objects[index]->touching[0], game::rts_objects[index]->touching[1], game::rts_objects[index]->touching[2],game::rts_objects[index]->touching[3]);
-        glutPrint(margin,window::height-(line*spacing), info_overlay[line++]);
-    }
-    sprintf(info_overlay[line],"game time: %.2fs",game::time);
-    glutPrint(window::width-(margin+150),window::height-(spacing*1), info_overlay[line++]);
-
-    sprintf(info_overlay[line],"mouse move: %.2f,%.2f",cursor::passive.x,cursor::passive.y);
-    glutPrint(window::width-(margin+150),window::height-(spacing*2), info_overlay[line++]);
-
-    sprintf(info_overlay[line],"mouse click: %.2f,%.2f",cursor::left_down.x,cursor::left_down.y);
-    glutPrint(window::width-(margin+150),window::height-(spacing*3), info_overlay[line++]);
-
-    sprintf(info_overlay[line],"mouse drag: %.2f,%.2f",cursor::left_drag.x,cursor::left_drag.y);
-    glutPrint(window::width-(margin+150),window::height-(spacing*4), info_overlay[line++]);
+    text_object* game_info = new text_object();
+    game_info->visible=false;
+    game_info->spacing=20;
+    game_info->set_position(window::width-(margin+150),window::height-20);
+    text_objects.push_back(game_info);
 }
 
 void ui::init_buttons()
@@ -239,4 +136,54 @@ void ui::init_menus()
     warning_menu->format();
     menus.push_back(warning_menu);
 
+}
+
+void ui::update_text()
+{
+    if(controls::toggle_overlay)
+    {
+        text_object* object_info = game::scenes[1]->text_objects[0];
+        unsigned index = cursor::selected_object;
+        using namespace std;
+        object_info->clear();
+        object_info->add_line("selected object: #"+to_string(cursor::left_clicked_object->get_number())+", "+cursor::left_clicked_object->name);
+        object_info->add_line("type: "+cursor::left_clicked_object->get_type());
+        object_info->add_line("dimensions: "+to_string(cursor::left_clicked_object->get_width())+'X'+to_string(cursor::left_clicked_object->get_height()));
+        object_info->add_line("rotation: "+to_string(cursor::left_clicked_object->get_rotation()));
+        object_info->add_line("current position: "+to_string(cursor::left_clicked_object->get_position().x)+", "+to_string(cursor::left_clicked_object->get_position().y));
+        if(cursor::left_clicked_object->get_type()=="physics object")//display the following if a physics object is selected
+        {
+            object_info->add_line("resting position: "+to_string(game::physics_objects[index]->rest.x)+", "+to_string(game::physics_objects[index]->rest.y));
+            object_info->add_line("mass: "+to_string(game::physics_objects[index]->mass));
+            object_info->add_line("speed: "+to_string(game::physics_objects[index]->speed));
+            object_info->add_line("time moving: "+to_string(game::physics_objects[index]->delta_time[0])+", "+to_string(game::physics_objects[index]->delta_time[1]));
+            object_info->add_line("initial velocity: "+to_string(game::physics_objects[index]->velocity[0].x)+", "+to_string(game::physics_objects[index]->velocity[0].y));
+            object_info->add_line("final velocity: "+to_string(game::physics_objects[index]->velocity[1].x)+", "+to_string(game::physics_objects[index]->velocity[1].y));
+            object_info->add_line("time accelerating: "+to_string(game::physics_objects[index]->delta_time[2])+", "+to_string(game::physics_objects[index]->delta_time[3]));
+            object_info->add_line("acceleration: "+to_string(game::physics_objects[index]->acceleration.x)+", "+to_string(game::physics_objects[index]->acceleration.y));
+            object_info->add_line("momentum: "+to_string(game::physics_objects[index]->momentum.x)+", "+to_string(game::physics_objects[index]->momentum.y));
+            object_info->add_line("force: "+to_string(game::physics_objects[index]->force.x)+", "+to_string(game::physics_objects[index]->force.y));
+            object_info->add_line("object touching side L:"+to_string(game::physics_objects[index]->touching[0])+"R:"+to_string(game::physics_objects[index]->touching[1])
+                                                        +"T:"+to_string(game::physics_objects[index]->touching[2])+"B:"+to_string(game::physics_objects[index]->touching[3]));
+        }
+        if(cursor::left_clicked_object->get_type()=="draggable object")//display the following if a draggable object is selected
+        {
+            object_info->add_line("object touching side"+to_string(game::draggable_objects[index]->touching[0])+to_string(game::draggable_objects[index]->touching[1])
+                                   +to_string(game::draggable_objects[index]->touching[2])+to_string(game::draggable_objects[index]->touching[3]));
+        }
+        if(cursor::left_clicked_object->get_type()=="rts object")//display the following if a RTS object is selected
+        {
+            object_info->add_line("speed: "+to_string(game::rts_objects[index]->speed));
+            object_info->add_line("rally point: "+to_string(game::rts_objects[index]->rally->x)+", "+to_string(game::rts_objects[index]->rally->y));
+            object_info->add_line("object touching side L:"+to_string(game::rts_objects[index]->touching[0])+"R:"+to_string(game::rts_objects[index]->touching[1])
+                                                         +"T:"+to_string(game::rts_objects[index]->touching[2])+"B:"+to_string(game::rts_objects[index]->touching[3]));
+        }
+
+        text_object* game_info = game::scenes[1]->text_objects[1];
+        game_info->clear();
+        game_info->add_line("game time: "+to_string(game::time));
+        game_info->add_line("mouse move: "+to_string(cursor::passive.x)+", "+to_string(cursor::passive.y));
+        game_info->add_line("mouse click: "+to_string(cursor::left_down.x)+", "+to_string(cursor::left_down.y));
+        game_info->add_line("mouse drag: "+to_string(cursor::left_drag.x)+", "+to_string(cursor::left_drag.y));
+    }
 }

@@ -79,16 +79,16 @@ void menu::format()
     subtitle.set_position(position.x-(subtitle.get_width()/2),ymax-margin-title.get_height()-subtitle.get_height());
 }
 
-void menu::set_title(char* t)
+void menu::set_title(std::string t)
 {
-    title.set_text(t);
+    title.add_line(t);
     format();
 }
 
-void menu::set_subtitle(char* s)
+void menu::set_subtitle(std::string s)
 {
     subtitle.visible=true;
-    subtitle.set_text(s);
+    subtitle.add_line(s);
     format();
 }
 
@@ -126,7 +126,6 @@ menu::menu()
     type="menu";
     set_position(window::center.x,window::center.y);
     primary_color.set(0.75,0.75,0.75);
-    title.set_text("Title");
     title.set_font("helvetica",18);
     subtitle.set_font("helvetica",12);
     subtitle.visible=false;

@@ -36,8 +36,9 @@
 
 //initialize variables
 bool* controls::key_states = new bool[256];
-bool controls::temp_toggle = false;
+bool controls::temp_toggle[2] = {false,false};
 bool controls::toggle_overlay = false;
+bool controls::toggle_pause = false;
 
 void controls::check_clicked()
 {
@@ -176,45 +177,75 @@ void controls::key_operations(void)
 {
     if(window::current_scene==1)
     {
-        unsigned index = cursor::selected_object;//number of the currently selected object
-        if(strcmp(cursor::left_clicked_object->get_type(), "physics object")==0)
+        if(!game::paused)
         {
-            if(key_states['w'] || key_states['W'])
-                game::physics_objects[index]->move_forward();
-
-            if(key_states['s'] || key_states['S'])
-                game::physics_objects[index]->move_back();
-
-            if(key_states['a'] || key_states['A'])
-                game::physics_objects[index]->move_left();
-
-            if(key_states['d'] || key_states['D'])
-                game::physics_objects[index]->move_right();
-
-            if(key_states['q'] || key_states['Q'])
-                game::physics_objects[index]->turn_left();
-
-            if(key_states['e'] || key_states['E'])
-                game::physics_objects[index]->turn_right();
-        }
-        if(key_states['i'] || key_states['I'])
-        {
-            if(toggle_overlay)
+            unsigned index = cursor::selected_object;//number of the currently selected object
+            if(cursor::left_clicked_object->get_type()== "physics object")
             {
-                if(temp_toggle)
-                    std::clog<<"toggled information overlay off\n";
-                temp_toggle=false;
+                if(key_states['w'] || key_states['W'])
+                    game::physics_objects[index]->move_forward();
+
+                if(key_states['s'] || key_states['S'])
+                    game::physics_objects[index]->move_back();
+
+                if(key_states['a'] || key_states['A'])
+                    game::physics_objects[index]->move_left();
+
+                if(key_states['d'] || key_states['D'])
+                    game::physics_objects[index]->move_right();
+
+                if(key_states['q'] || key_states['Q'])
+                    game::physics_objects[index]->turn_left();
+
+                if(key_states['e'] || key_states['E'])
+                    game::physics_objects[index]->turn_right();
+            }
+            if(key_states['i'] || key_states['I'])
+            {
+                if(toggle_overlay)
+                {
+                    if(temp_toggle[0])
+                    {
+                        game::scenes[1]->text_objects[0]->visible=false;
+                        game::scenes[1]->text_objects[1]->visible=false;
+                        std::clog<<"toggled information overlay off\n";
+                    }
+                    temp_toggle[0]=false;
+                }
+                else
+                {
+                    if(!temp_toggle[0])
+                    {
+                        game::scenes[1]->text_objects[0]->visible=true;
+                        game::scenes[1]->text_objects[1]->visible=true;
+                        std::clog<<"toggled information overlay on\n";
+                    }
+                    temp_toggle[0]=true;
+                }
+            }
+            else
+                toggle_overlay=temp_toggle[0];
+        }
+        if(key_states[27])//escape
+        {
+            if(toggle_pause)
+            {
+                if(temp_toggle[1])
+                {
+                    game::pause();
+                }
+                temp_toggle[1]=false;
             }
             else
             {
-                if(!temp_toggle)
-                    std::clog<<"toggled information overlay on\n";
-                temp_toggle=true;
+                if(!temp_toggle[1])
+                {
+                    game::resume();
+                }
+                temp_toggle[1]=true;
             }
         }
         else
-            toggle_overlay=temp_toggle;
-        if(key_states[27])//escape
-        game::pause();
+            toggle_pause=temp_toggle[1];
     }
 }

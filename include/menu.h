@@ -19,6 +19,7 @@
 #include "button.h"
 #include "text_object.h"
 #include <vector>
+#include <string>
 
 class menu: public object
 {
@@ -30,8 +31,8 @@ public:
     int layout;
     int spacing;//space between buttons
     int margin;
-    void set_title(char* t);
-    void set_subtitle(char* s);
+    void set_title(std::string t);
+    void set_subtitle(std::string s);
     void format();
     void render();
     void update();

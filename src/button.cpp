@@ -32,7 +32,6 @@
 #endif
 #include <iostream>
 #include <math.h>
-#include <string.h>
 
 void button::format()
 {
@@ -41,9 +40,9 @@ void button::format()
     calc_boundaries();
 }
 
-void button::set_label(char* l)
+void button::set_label(std::string l)
 {
-    label.set_text(l);
+    label.add_line(l);
     format();
 }
 
@@ -106,7 +105,6 @@ void button::update()
 button::button()
 {
     type="button";
-    set_label("click me");
     margin=5;
     position.set(0.0f,0.0f);
     primary_color.set(0.75f,0.75f,0.75f);
@@ -120,7 +118,6 @@ button::button()
 button::button(float x, float y, char* l, void (*a)(void))
 {
     type="button";
-    set_label("click me");
     margin=5;
     position.set(x,y);
     primary_color.set(0.75f,0.75f,0.75f);

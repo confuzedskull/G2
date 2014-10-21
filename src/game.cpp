@@ -19,6 +19,7 @@
 #include "cursor.h"
 #include "object.h"
 #include "ui.h"
+#include <stdlib.h>
 #include <iostream>
 #include <time.h>
 
@@ -176,6 +177,8 @@ void game::init_scenes()
     game_screen->buttons.assign(ui::buttons.begin()+6,ui::buttons.end());//add everything except for the sandbox and quit buttons
     game_screen->menus.push_back(ui::menus[1]);
     game_screen->menus.push_back(ui::menus[2]);
+    game_screen->text_objects.push_back(ui::text_objects[0]);
+    game_screen->text_objects.push_back(ui::text_objects[1]);
     scenes.push_back(game_screen);
 }
 
@@ -225,6 +228,12 @@ void game::pause()
     paused=true;
     scenes[1]->menus[0]->visible=true;//show the pause menu
     scenes[1]->menus[1]->visible=false;//hide the warning prompt
+    //hide the buttons
+    scenes[1]->buttons[0]->visible=false;
+    scenes[1]->buttons[1]->visible=false;
+    scenes[1]->buttons[2]->visible=false;
+    scenes[1]->buttons[3]->visible=false;
+    scenes[1]->buttons[4]->visible=false;
     std::clog<<"paused game."<<std::endl;
 }
 
@@ -232,6 +241,12 @@ void game::resume()
 {
     paused=false;
     scenes[1]->menus[0]->visible=false;//hide the pause menu
+    //show the buttons
+    scenes[1]->buttons[0]->visible=true;
+    scenes[1]->buttons[1]->visible=true;
+    scenes[1]->buttons[2]->visible=true;
+    scenes[1]->buttons[3]->visible=true;
+    scenes[1]->buttons[4]->visible=true;
     std::clog<<"resumed game."<<std::endl;
 }
 

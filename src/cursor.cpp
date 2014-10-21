@@ -40,7 +40,7 @@ float cursor::xmin = 0.0;
 float cursor::ymax = 0.0;
 float cursor::ymin = 0.0;
 clickable_object* cursor::left_clicked_object = new clickable_object();
-int cursor::selected_object = 0;
+int cursor::selected_object = 1;
 bool cursor::left_clicked_an_object = false;
 std::vector<bool> cursor::highlighted_objects(game::rts_objects.size(),false);
 bool cursor::right_dragging = false;
