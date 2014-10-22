@@ -27,8 +27,8 @@ protected:
     std::vector<std::string> text;
     void* font;
     int font_size;
-    int font_width;
-    int font_height;
+    float font_width;
+    float font_height;
 public:
     int spacing;//the space between each line
     void change_line(unsigned i, std::string l);

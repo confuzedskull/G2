@@ -16,6 +16,7 @@
 
 #ifndef COLOR_H
 #define COLOR_H
+#include <string>
 
 //A color has red, green, blue, and alpha values.
 class color
@@ -25,6 +26,7 @@ class color
         float prev_g;//previous green value
         float prev_b;//previous blue value
         float prev_a;//previous alpha value
+        bool values_set;
         public:
         float r;//red value
         float g;//green value
@@ -38,19 +40,23 @@ class color
         void darken(float brightness);//decrease the brightness by given value
         void set(float red, float green, float blue);//set the RGB values
         void set(float red, float green, float blue, float alpha);//set the RGBA values
+        void set(std::string c);//set the color according to name
         void set(color c);//set the color to match the given color
         void undo();//changes the color back to its previous setting
         color();
         color(float red, float green, float blue);
         color(float red, float green, float blue, float alpha);
 
-    };//color with red, green, blue
+    };
 //below are a bunch of color presets
 const color RED(1.0f,0.0f,0.0f);
+const color ORANGE(1.0f,0.5f,0.0f);
 const color YELLOW(1.0f,1.0f,0.0f);
 const color GREEN(0.0f,1.0f,0.0f);
 const color BLUE(0.0f,0.0f,1.0f);
+const color PURPLE(1.0f,0.0f,1.0f);
 const color BLACK(0.0f,0.0f,0.0f);
 const color WHITE(1.0f,1.0f,1.0f);
 const color GRAY(0.5f,0.5f,0.5f);
+
 #endif // COLOR_H

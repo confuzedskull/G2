@@ -19,7 +19,6 @@
 
 namespace window
 {
-extern int current_scene;
 extern int width;
 extern int height;
 extern point2i center;

@@ -35,7 +35,6 @@
 #endif
 
 //initialize the variables
-int window::current_scene=0;
 int window::width=1360;
 int window::height=720;
 point2i window::center=point2i(width/2,height/2);
@@ -81,7 +80,7 @@ void window::initialize()
 void window::render()
 {
     glClear(GL_COLOR_BUFFER_BIT);// Clear Color Buffers
-    game::scenes[current_scene]->render();
+    game::current_scene->render();
     cursor::selection_box();
     glFlush();
 }
@@ -92,7 +91,7 @@ void window::update()
     cursor::calc_boundaries();//calculate the size of the selection box
     game::time_elapsed = ((float)clock()-game::time_started)/CLOCKS_PER_SEC;//update the start time
     controls::check_clicked();//check if objects are clicked
-    game::scenes[current_scene]->update();//update scene
+    game::current_scene->update();//update scene
     game::collision_detection();//apply collision effects
     //This function acts like timer so that events occur at the set refresh rate
     if(isgreaterequal(game::time_elapsed,window::refresh_rate))//time elapsed is >= refresh rate
@@ -103,10 +102,10 @@ void window::update()
         if(!game::paused)
         {
             //move rts objects
-            for(auto r:game::scenes[current_scene]->rts_objects)//C++11 "for" loop
+            for(auto r:game::current_scene->rts_objects)//C++11 "for" loop
                 r.second->perform_actions()||r.second->move_to_point(*r.second->rally,2.00f);
             //move physics objects
-            for(auto p:game::scenes[current_scene]->physics_objects)//C++11 "for" loop
+            for(auto p:game::current_scene->physics_objects)//C++11 "for" loop
             {
                 p.second->perform_actions();
                 p.second->inertia();

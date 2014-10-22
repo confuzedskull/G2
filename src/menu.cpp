@@ -48,26 +48,26 @@ void menu::format()
         total_width+=items[i]->get_width();
         if(isgreater(items[i]->get_width(),widest))
             widest=items[i]->get_width();
-        if(layout==VERTICAL)
+        if(layout=="vertical")
             items[i]->set_position(position.x,position.y-total_height);
-        if(layout==HORIZONTAL)
+        if(layout=="horizontal")
         {
-            if(i%2==0)//here the iterator is being used as a number
-                items[i]->set_position(position.x-(total_width/2),position.y-(items[0]->get_height()));
+            if(i%2==0)//divide the items among either side of the center of the menu
+                items[i]->set_position(position.x-(total_width/2),position.y-(items[0]->get_height()));//even numbers go to the left side
             else
-                items[i]->set_position(position.x+(total_width/2),position.y-(items[0]->get_height()));
+                items[i]->set_position(position.x+(total_width/2),position.y-(items[0]->get_height()));//odd numbers go to the right side
         }
         total_height+=(items[i]->get_height()+spacing);
     }
     //resize the menu
-    if(layout==VERTICAL)
+    if(layout=="vertical")
     {
         if(subtitle.visible)
             set_dimensions(widest+(margin*2),total_height+title.get_height()+subtitle.get_height()+spacing+(margin*2));
         else
             set_dimensions(widest+(margin*2),total_height+title.get_height()+spacing+(margin*2));
     }
-    if(layout==HORIZONTAL)
+    if(layout=="horizontal")
     {
         if(subtitle.visible)
             set_dimensions(widest+(margin*2),items[0]->get_height()+title.get_height()+subtitle.get_height()+spacing+(margin*2));
@@ -90,6 +90,19 @@ void menu::set_subtitle(std::string s)
     subtitle.visible=true;
     subtitle.add_line(s);
     format();
+}
+
+void menu::set_layout(std::string l)
+{
+    if(l=="vertical" || l=="horizontal")
+    {
+        layout=l;
+    }
+}
+
+void menu::add_button(button* b)
+{
+    items.push_back(b);
 }
 
 void menu::render()
@@ -129,7 +142,7 @@ menu::menu()
     title.set_font("helvetica",18);
     subtitle.set_font("helvetica",12);
     subtitle.visible=false;
-    layout=VERTICAL;
+    layout="vertical";
     spacing=10;
     margin=20;
 }

@@ -79,39 +79,82 @@ void color::darken(float brightness)
 
 void color::set(float red, float green, float blue)
 {
-    prev_r=r;
-    prev_g=g;
-    prev_b=b;
-    prev_a=a;
+    if(values_set)
+    {
+        prev_r=r;
+        prev_g=g;
+        prev_b=b;
+        prev_a=a;
+        changed=true;
+    }
     r=red;
     g=green;
     b=blue;
-    changed=true;
+    values_set=true;
 }
 
 void color::set(float red, float green, float blue, float alpha)
 {
-    prev_r=r;
-    prev_g=g;
-    prev_b=b;
-    prev_a=a;
+    if(values_set)
+    {
+        prev_r=r;
+        prev_g=g;
+        prev_b=b;
+        prev_a=a;
+        changed=true;
+    }
     r=red;
     g=green;
     b=blue;
     a=alpha;
-    changed=true;
+    values_set=true;
+}
+
+void color::set(std::string c)
+{
+    if(values_set)
+    {
+        prev_r=r;
+        prev_g=g;
+        prev_b=b;
+        prev_a=a;
+        changed=true;
+    }
+    if(c=="red")
+        set(RED);
+    if(c=="orange")
+        set(ORANGE);
+    if(c=="yellow")
+        set(YELLOW);
+    if(c=="green")
+        set(GREEN);
+    if(c=="blue")
+        set(BLUE);
+    if(c=="purple")
+        set(PURPLE);
+    if(c=="white")
+        set(WHITE);
+    if(c=="gray")
+        set(GRAY);
+    if(c=="black")
+        set(BLACK);
+    values_set=true;
 }
 
 void color::set(color c)
 {
-    prev_r=r;
-    prev_g=g;
-    prev_b=b;
-    prev_a=a;
+    if(values_set)
+    {
+        prev_r=r;
+        prev_g=g;
+        prev_b=b;
+        prev_a=a;
+        changed=true;
+    }
     r=c.r;
     g=c.g;
     b=c.b;
-    changed=true;
+    values_set=true;
 }
 
 void color::undo()
@@ -128,25 +171,28 @@ void color::undo()
 
 color::color()
 {
-    changed=false;
     r=0.0;
     g=0.0;
     b=0.0;
+    values_set=false;
+    changed=false;
 }
 
 color::color(float red, float green, float blue)
 {
-    changed=false;
     r=red;
     g=green;
     b=blue;
+    values_set=false;
+    changed=false;
 }
 
 color::color(float red, float green, float blue, float alpha)
 {
-    changed=false;
     r=red;
     g=green;
     b=blue;
     a=alpha;
+    values_set=false;
+    changed=false;
 }

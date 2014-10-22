@@ -45,6 +45,21 @@ void scene::add_rts_object(rts_object* new_rtso)
     rts_objects.insert(std::pair<int,rts_object*>(new_rtso->get_number(),new_rtso));//add object to scene
 }
 
+void scene::add_text(text_object* t)
+{
+    text_objects.push_back(t);
+}
+
+void scene::add_button(button* b)
+{
+    buttons.push_back(b);
+}
+
+void scene::add_menu(menu* m)
+{
+    menus.push_back(m);
+}
+
 void scene::bind_key(unsigned char key, void (*action)())
 {
     key_bindings.insert(std::pair<unsigned char, void (*)()>(key,action));

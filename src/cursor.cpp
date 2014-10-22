@@ -58,7 +58,7 @@ point2f cursor::right_drag = point2f(0.0,0.0);
 int cursor::objects_selected()
 {
     int selected = 0;
-    for(unsigned i=0; i<game::scenes[window::current_scene]->rts_objects.size(); i++)//regular "for" loop used  because iterator is used as integer
+    for(unsigned i=0; i<game::current_scene->rts_objects.size(); i++)//regular "for" loop used  because iterator is used as integer
     {
         if(highlighted_objects[i])
             selected++;
@@ -68,10 +68,10 @@ int cursor::objects_selected()
 
 void cursor::calc_boundaries()//boundaries of the selection box
 {
-    xmin= left_down.x;
-    xmax= left_drag.x;
-    ymin= left_down.y;
-    ymax= left_drag.y;
+    xmin = left_down.x;
+    xmax = left_drag.x;
+    ymin = left_down.y;
+    ymax = left_drag.y;
 }
 
 void cursor::selection_box()//this is the box that is created when user clicks and drags
@@ -109,7 +109,7 @@ void cursor::reset()
     left_dragging = false;
     right_dragging = false;
     highlighting = false;
-    highlighted_objects.assign(game::scenes[window::current_scene]->rts_objects.size(),false);
+    highlighted_objects.assign(game::current_scene->rts_objects.size(),false);
     selected_object = 0;
     left_clicked_object = new clickable_object();
     right_clicked_object = new clickable_object();

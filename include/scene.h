@@ -42,13 +42,16 @@ class scene
     void add_draggable_object(draggable_object*);//add a draggable object to the scene
     void add_physics_object(physics_object*);//add a physics object to the scene
     void add_rts_object(rts_object*);//add an rts object to the scene
-    void bind_key(unsigned char, void (*)());
-    void show_text();
-    void hide_text();
-    void show_buttons();
-    void hide_buttons();
-    void show_menus();
-    void hide_menus();
+    void add_text(text_object*);//add text object to the scene
+    void add_button(button*);//add button to the scene
+    void add_menu(menu*);//add menu to the scene
+    void bind_key(unsigned char, void (*)());//associate a key with an action
+    void show_text();//show the text
+    void hide_text();//hide the text
+    void show_buttons();//show all buttons
+    void hide_buttons();//hide all buttons
+    void show_menus();//show all menus
+    void hide_menus();//hide all menus
     void render();
     void update();
     void clear();

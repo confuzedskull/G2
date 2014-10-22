@@ -29,15 +29,16 @@ clock_t game::time_started;
 float game::time = 0.0f;
 double game::time_elapsed = 0.0f;
 bool game::paused=false;
+scene* game::current_scene = new scene();
 std::vector<scene*> game::scenes;
 
 //This checks which objects are touching and what they should do when that occurs
 //NOTE: This function uses C++11 "for" loops
 void game::collision_detection()
 {
-    for(auto a:scenes[window::current_scene]->rts_objects)//iterate through rts objects comparing
+    for(auto a:current_scene->rts_objects)//iterate through rts objects comparing
     {
-        for(auto b:scenes[window::current_scene]->rts_objects)//iterate through rts objects being compared
+        for(auto b:current_scene->rts_objects)//iterate through rts objects being compared
         {
             if(a.first!=b.first && a.second->is_close(*b.second))//check objects colliding with other objects
             {
@@ -46,9 +47,9 @@ void game::collision_detection()
             }
         }
     }
-    for(auto a:scenes[window::current_scene]->physics_objects)//iterate through physics objects comparing
+    for(auto a:current_scene->physics_objects)//iterate through physics objects comparing
     {
-        for(auto b:scenes[window::current_scene]->physics_objects)//iterate through physics objects being compared
+        for(auto b:current_scene->physics_objects)//iterate through physics objects being compared
         {
             if(a.first!=b.first && a.second->is_close(*b.second))//check objects colliding with other objects
             {
@@ -58,9 +59,9 @@ void game::collision_detection()
             }
         }
     }
-    for(auto a:scenes[window::current_scene]->draggable_objects)//iterate through draggable objects comparing
+    for(auto a:current_scene->draggable_objects)//iterate through draggable objects comparing
     {
-        for(auto b:scenes[window::current_scene]->draggable_objects)//iterate through draggable objects being compared
+        for(auto b:current_scene->draggable_objects)//iterate through draggable objects being compared
         {
             if(a.first!=b.first && a.second->is_close(*b.second))//check objects colliding with other objects
             {
@@ -120,40 +121,42 @@ void game::initialize()
     //initialize the draggable objects
     draggable_object* do1 = new draggable_object();
     do1->name="black square";
-    do1->set_position(window::width/2,window::height/2);//set position window center
-    do1->primary_color=BLACK;//set the color like this so that it isn't marked as changed
+    do1->set_position(window::center.x,window::center.y);//set position window center
+    do1->primary_color.set("black");
     std::clog<<"initialized draggable objects\n";
     //initialize the rts objects
     rts_object* rtso1 = new rts_object();
     rtso1->name="yellow square";
-    rtso1->set_position(window::width/2+96,window::height/2);//set position right of window center
-    rtso1->primary_color=YELLOW;//set the color like this so that it isn't marked as changed
+    rtso1->set_position(window::center.x+96,window::center.y);//set position right of window center
+    rtso1->primary_color.set("yellow");
 
     rts_object* rtso2 = new rts_object();
     rtso2->name="green square";
-    rtso2->set_position(window::width/2,window::height/2-96);//set position below window center
-    rtso2->primary_color=GREEN;//set the color like this so that it isn't marked as changed
+    rtso2->set_position(window::center.x,window::center.y-96);//set position below window center
+    rtso2->primary_color.set("green");
 
     rts_object* rtso3 = new rts_object();
     rtso3->name="red square";
-    rtso3->set_position(window::width/2,window::height/2+96);//set position above window center
-    rtso3->primary_color=RED;//set the color like this so that it isn't marked as changed
+    rtso3->set_position(window::center.x,window::center.y+96);//set position above window center
+    rtso3->primary_color.set("red");
 
     rts_object* rtso4 = new rts_object();
     rtso4->name="blue square";
-    rtso4->set_position(window::width/2-96,window::height/2);//set position left of window center
-    rtso4->primary_color=BLUE;//set the color like this so that it isn't marked as changed
+    rtso4->set_position(window::center.x-96,window::center.y);//set position left of window center
+    rtso4->primary_color.set("blue");
     std::clog<<"initialized rts objects\n";
 //Initialize Text
-    text_object* object_info = new text_object();
-    object_info->hide();
+    //Information Overlay Text
+    text_object* object_info = new text_object();//create a pointer and initialize it
     object_info->spacing=20;
     object_info->set_position(ui::margin,window::height-20);
+    object_info->hide();//we don't want to see this right away
 
-    text_object* game_info = new text_object();
-    game_info->hide();
+    text_object* game_info = new text_object();//create a pointer and initialize it
     game_info->spacing=20;
     game_info->set_position(window::width-(ui::margin+150),window::height-20);
+    game_info->hide();//we don't want to see this right away
+
     std::clog<<"initialized text\n";
 //Initialize Buttons
     std::clog<<"initializing user interface...\n";
@@ -164,7 +167,15 @@ void game::initialize()
 
     button* quit_button = new button();//create a button pointer and initialize it
     quit_button->set_label("Quit");
-    quit_button->action=quit;//function is assigned without '()' at the end
+    quit_button->action=warn_quit;//function is assigned without '()' at the end
+    //Quit Menu Buttons
+    button* confirm_quit = new button();
+    confirm_quit->set_label("Yes");
+    confirm_quit->action=game::quit;
+
+    button* cancel_quit = new button();
+    cancel_quit->set_label("No");
+    cancel_quit->action=game::return_menu;
     //Pause Menu Buttons
     button* resume_button = new button();//create a button pointer and initialize it
     resume_button->set_label("Resume");
@@ -172,15 +183,15 @@ void game::initialize()
 
     button* main_menu_button = new button();//create a button pointer and initialize it
     main_menu_button->set_label("Main Menu");
-    main_menu_button->action=return_warning;//function is assigned without '()' at the end
+    main_menu_button->action=warn_return;//function is assigned without '()' at the end
     //Warning Menu Buttons
     button* confirm_return_button = new button();//create a button pointer and initialize it
     confirm_return_button->set_label("Yes");
     confirm_return_button->action=return_menu;//function is assigned without '()' at the end
 
-    button* cancel_return_button = new button();
+    button* cancel_return_button = new button();//create a button pointer and initialize it
     cancel_return_button->set_label("No");
-    cancel_return_button->action=pause;
+    cancel_return_button->action=pause;//function is assigned without '()' at the end
     //Game Buttons
     button* create_po_button = new button();//"po" stands for "physics object"
     create_po_button->set_position(window::width*0.9,window::height*0.8);//put the button on the right side, 4/5ths of the way up
@@ -208,37 +219,48 @@ void game::initialize()
     menu_button->action=pause;//function is assigned without '()' at the end
     std::clog<<"initialized buttons\n";
 //Initialize Menus
-    menu* main_menu = new menu();
+    menu* main_menu = new menu();//create a pointer and initialize it
     main_menu->set_title("Main Menu");
-    main_menu->items.push_back(play_button);
-    main_menu->items.push_back(quit_button);
-    main_menu->format();
+    main_menu->add_button(play_button);
+    main_menu->add_button(quit_button);
+    main_menu->format();//make sure everything is neat and tidy
 
-    menu* pause_menu = new menu();
+    menu* quit_menu = new menu();//create a pointer and initialize it
+    quit_menu->set_title("Warning");
+    quit_menu->set_subtitle("Are you sure you want to quit?");
+    quit_menu->add_button(confirm_quit);
+    quit_menu->add_button(cancel_quit);
+    quit_menu->set_layout("horizontal");
+    quit_menu->format();
+    quit_menu->hide();//we don't want to see this right away
+
+    menu* pause_menu = new menu();//create a pointer and initialize it
     pause_menu->set_title("Pause Menu");
-    pause_menu->hide();
-    pause_menu->items.push_back(resume_button);
-    pause_menu->items.push_back(main_menu_button);
-    pause_menu->format();
+    pause_menu->add_button(resume_button);
+    pause_menu->add_button(main_menu_button);
+    pause_menu->format();//make sure everything is neat and tidy
+    pause_menu->hide();//we don't want to see this right away
 
-    menu* warning_menu = new menu();
-    warning_menu->set_title("Warning");
-    warning_menu->set_subtitle("Are you sure you want to leave?");
-    warning_menu->hide();
-    warning_menu->layout=HORIZONTAL;
-    warning_menu->items.push_back(confirm_return_button);
-    warning_menu->items.push_back(cancel_return_button);
-    warning_menu->format();
+    menu* leave_menu = new menu();//create a pointer and initialize it
+    leave_menu->set_title("Warning");
+    leave_menu->set_subtitle("If you leave, your progress will be lost.");
+    leave_menu->set_layout("horizontal");
+    leave_menu->add_button(confirm_return_button);
+    leave_menu->add_button(cancel_return_button);
+    leave_menu->format();//make sure everything is neat and tidy
+    leave_menu->hide();//we don't want to see this right away
     std::clog<<"initialized menus\n";
 //Initialize Scenes
     std::clog<<"initializing scenes...\n";
-    scene* home_screen = new scene();
-    home_screen->menus.push_back(main_menu);
-    home_screen->bind_key(27,quit);
-    scenes.push_back(home_screen);
+    scene* home_screen = new scene();//create a pointer and initialize it
+    home_screen->add_menu(main_menu);
+    home_screen->add_menu(quit_menu);
+    home_screen->bind_key(27,warn_quit);//open warning when esc is pressed
+    scenes.push_back(home_screen);//add to scenes
+    current_scene=home_screen;//start the game with this screen
 
-    scene* game_screen = new scene();
-    game_screen->background_color.set(WHITE);
+    scene* game_screen = new scene();//create a pointer and initialize it
+    game_screen->background_color.set("white");
     game_screen->add_draggable_object(do1);
     game_screen->add_physics_object(po1);
     game_screen->add_physics_object(po2);
@@ -248,53 +270,53 @@ void game::initialize()
     game_screen->add_rts_object(rtso2);
     game_screen->add_rts_object(rtso3);
     game_screen->add_rts_object(rtso4);
-    game_screen->buttons.push_back(create_po_button);
-    game_screen->buttons.push_back(create_do_button);
-    game_screen->buttons.push_back(create_rtso_button);
-    game_screen->buttons.push_back(delete_object_button);
-    game_screen->buttons.push_back(menu_button);
-    game_screen->menus.push_back(pause_menu);
-    game_screen->menus.push_back(warning_menu);
-    game_screen->text_objects.push_back(object_info);
-    game_screen->text_objects.push_back(game_info);
+    game_screen->add_text(object_info);
+    game_screen->add_text(game_info);
+    game_screen->add_button(create_po_button);
+    game_screen->add_button(create_do_button);
+    game_screen->add_button(create_rtso_button);
+    game_screen->add_button(delete_object_button);
+    game_screen->add_button(menu_button);
+    game_screen->add_menu(pause_menu);
+    game_screen->add_menu(leave_menu);
     game_screen->bind_key('w',controls::move_forward);
     game_screen->bind_key('a',controls::move_left);
     game_screen->bind_key('s',controls::move_back);
     game_screen->bind_key('d',controls::move_right);
     game_screen->bind_key('q',controls::turn_left);
     game_screen->bind_key('e',controls::turn_right);
-    scenes.push_back(game_screen);
+    scenes.push_back(game_screen);//add to scenes
 }
 
 void game::add_draggable_object()
 {
     draggable_object* new_do = new draggable_object();
-    scenes[window::current_scene]->draggable_objects.insert(std::pair<int,draggable_object*>(object::total_objects,new_do));//add object to current scene
+    current_scene->draggable_objects.insert(std::pair<int,draggable_object*>(object::total_objects,new_do));//add object to current scene
 }
 
 void game::add_physics_object()
 {
     physics_object* new_po = new physics_object();
-    scenes[window::current_scene]->physics_objects.insert(std::pair<int,physics_object*>(object::total_objects,new_po));//add object to current scene
+    current_scene->physics_objects.insert(std::pair<int,physics_object*>(object::total_objects,new_po));//add object to current scene
 }
 
 void game::add_rts_object()
 {
     rts_object* new_rtso = new rts_object();
-    scenes[window::current_scene]->rts_objects.insert(std::pair<int,rts_object*>(object::total_objects,new_rtso));//add object to current scene
+    current_scene->rts_objects.insert(std::pair<int,rts_object*>(object::total_objects,new_rtso));//add object to current scene
 }
 
 void game::delete_selected()
 {
-    scenes[window::current_scene]->draggable_objects.erase(cursor::selected_object);
-    scenes[window::current_scene]->physics_objects.erase(cursor::selected_object);
-    scenes[window::current_scene]->rts_objects.erase(cursor::selected_object);
+    current_scene->draggable_objects.erase(cursor::selected_object);
+    current_scene->physics_objects.erase(cursor::selected_object);
+    current_scene->rts_objects.erase(cursor::selected_object);
     std::clog<<"object#"<<cursor::left_clicked_object->get_number()<<": "<<cursor::left_clicked_object->name<<'('<<cursor::left_clicked_object->get_type()<<')'<<" deleted."<<std::endl;
 }
 
 void game::play()
 {
-    window::current_scene=1;//open game screen
+    current_scene=scenes[1];//open game screen
     std::clog<<"started game."<<std::endl;
 }
 
@@ -315,7 +337,13 @@ void game::resume()
     std::clog<<"resumed game."<<std::endl;
 }
 
-void game::return_warning()
+void game::warn_quit()
+{
+    cursor::reset();
+    scenes[0]->menus[1]->show();//show the warning prompt
+}
+
+void game::warn_return()
 {
     cursor::reset();
     scenes[1]->menus[0]->hide();//hide the pause menu
@@ -325,7 +353,8 @@ void game::return_warning()
 void game::return_menu()
 {
     cursor::reset();
-    window::current_scene=0;//open home screen
+    scenes[0]->menus[1]->hide();//hide the quit menu
+    current_scene=scenes[0];//open home screen
     std::clog<<"returned to menu."<<std::endl;
 }
 

@@ -33,6 +33,7 @@ namespace game
     extern clock_t time_started;//start time
     extern double time_elapsed;//time since start
     extern bool paused;
+    extern scene* current_scene;
     extern std::vector<scene*> scenes;
     void initialize();//initialize the objects
     void collision_detection();//handles object collision
@@ -43,7 +44,8 @@ namespace game
     void play();//open game screen
     void pause();//open pause screen
     void resume();//unpause the game
-    void return_warning();//warn user before returning to main menu
+    void warn_quit();//warn user before quitting
+    void warn_return();//warn user before returning to main menu
     void return_menu();//open main menu
     void quit();//close the program
 };

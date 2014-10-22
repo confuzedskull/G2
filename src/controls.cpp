@@ -42,37 +42,37 @@ bool* controls::toggle_states = new bool[256];
 void controls::move_forward()
 {
     if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
-    game::scenes[window::current_scene]->physics_objects[cursor::selected_object]->move_forward();
+    game::current_scene->physics_objects[cursor::selected_object]->move_forward();
 }
 
 void controls::move_back()
 {
     if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
-    game::scenes[window::current_scene]->physics_objects[cursor::selected_object]->move_back();
+    game::current_scene->physics_objects[cursor::selected_object]->move_back();
 }
 
 void controls::move_left()
 {
     if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
-    game::scenes[window::current_scene]->physics_objects[cursor::selected_object]->move_left();
+    game::current_scene->physics_objects[cursor::selected_object]->move_left();
 }
 
 void controls::move_right()
 {
     if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
-    game::scenes[window::current_scene]->physics_objects[cursor::selected_object]->move_right();
+    game::current_scene->physics_objects[cursor::selected_object]->move_right();
 }
 
 void controls::turn_left()
 {
     if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
-    game::scenes[window::current_scene]->physics_objects[cursor::selected_object]->turn_left();
+    game::current_scene->physics_objects[cursor::selected_object]->turn_left();
 }
 
 void controls::turn_right()
 {
     if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
-    game::scenes[window::current_scene]->physics_objects[cursor::selected_object]->turn_right();
+    game::current_scene->physics_objects[cursor::selected_object]->turn_right();
 }
 
 void controls::perform_action(unsigned char key, void (*action)())
@@ -109,13 +109,13 @@ void controls::check_clicked()
     bool left_clicked=false;
     while(!left_clicked)
     {
-        for(auto r:game::scenes[window::current_scene]->rts_objects)
+        for(auto r:game::current_scene->rts_objects)
             left_clicked=r.second->left_clicked();
-        for(auto d:game::scenes[window::current_scene]->draggable_objects)
+        for(auto d:game::current_scene->draggable_objects)
             left_clicked=d.second->left_clicked();
-        for(auto p:game::scenes[window::current_scene]->physics_objects)
+        for(auto p:game::current_scene->physics_objects)
             left_clicked=p.second->left_clicked();
-        for(auto b:game::scenes[window::current_scene]->buttons)
+        for(auto b:game::current_scene->buttons)
             left_clicked=b->left_clicked();
         if(!left_clicked)//at this point, no objects have been left clicked so leave the loop
             break;
@@ -125,11 +125,11 @@ void controls::check_clicked()
     bool right_clicked=false;
     while(!right_clicked)
     {
-        for(auto r:game::scenes[window::current_scene]->rts_objects)
+        for(auto r:game::current_scene->rts_objects)
             right_clicked=r.second->right_clicked();
-        for(auto d:game::scenes[window::current_scene]->draggable_objects)
+        for(auto d:game::current_scene->draggable_objects)
             right_clicked=d.second->right_clicked();
-        for(auto p:game::scenes[window::current_scene]->physics_objects)
+        for(auto p:game::current_scene->physics_objects)
             right_clicked=p.second->right_clicked();
         if(!right_clicked)//at this point, no objects have been right clicked so leave the loop
             break;
@@ -137,7 +137,7 @@ void controls::check_clicked()
     cursor::right_clicked_an_object = right_clicked;
 
     bool grabbed=true;
-    for(auto d:game::scenes[window::current_scene]->draggable_objects)
+    for(auto d:game::current_scene->draggable_objects)
     {
         if(d.second->grabbed())
         {
@@ -238,7 +238,7 @@ void controls::key_released(unsigned char key, int x, int y)
 
 void controls::key_operations(void)
 {
-    for(auto k:game::scenes[window::current_scene]->key_bindings)//iterate through the current scene's keybindings
+    for(auto k:game::current_scene->key_bindings)//iterate through the current scene's keybindings
         perform_action(k.first,k.second);
     toggle_action('i',ui::show_text,ui::hide_text);
     toggle_action('I',ui::show_text,ui::hide_text);

@@ -26,19 +26,19 @@ class menu: public object
 protected:
     text_object title;
     text_object subtitle;
+    std::string layout;
 public:
     std::vector<button*> items;
-    int layout;
     int spacing;//space between buttons
     int margin;
     void set_title(std::string t);
     void set_subtitle(std::string s);
+    void set_layout(std::string l);
+    void add_button(button* b);
     void format();
     void render();
     void update();
     menu();
 };
-const int VERTICAL = 0;
-const int HORIZONTAL = 1;
 
 #endif // MENU_H

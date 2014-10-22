@@ -39,7 +39,7 @@ void text_object::change_line(unsigned i, std::string l)
 void text_object::add_line(std::string l)
 {
     text.push_back(l);
-    set_dimensions(font_width*text.back().length(),font_height);
+    set_dimensions(font_width*l.length(),font_height);
 }
 
 void text_object::set_font(std::string style, int size)
