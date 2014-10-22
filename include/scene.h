@@ -29,16 +29,29 @@ class scene
 {
     public:
     color background_color;
-    //maps are used for these objects because cursor::left_clicked_object points to clickable_object exclusively
-    //object pointers are used because the objects are being created in init_objects() and we just need to reference them
+    //maps are used because we need to access the objects by referencing a common identifier (object.number)
+    //object pointers are used because the objects are being created in game::init_objects() and we just need to reference them
     std::map<int,draggable_object*> draggable_objects;
     std::map<int,physics_object*> physics_objects;
     std::map<int,rts_object*> rts_objects;
+    std::map<unsigned char, void (*)()> key_bindings;
     std::vector<text_object*> text_objects;
+    //button pointers are used because the buttons are being created in init_buttons() and we just need to reference them
     std::vector<button*> buttons;
     std::vector<menu*> menus;
+    void add_draggable_object(draggable_object*);//add a draggable object to the scene
+    void add_physics_object(physics_object*);//add a physics object to the scene
+    void add_rts_object(rts_object*);//add an rts object to the scene
+    void bind_key(unsigned char, void (*)());
+    void show_text();
+    void hide_text();
+    void show_buttons();
+    void hide_buttons();
+    void show_menus();
+    void hide_menus();
     void render();
     void update();
+    void clear();
     scene();
 };
 

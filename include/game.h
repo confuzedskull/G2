@@ -34,21 +34,15 @@ namespace game
     extern double time_elapsed;//time since start
     extern bool paused;
     extern std::vector<scene*> scenes;
-    //maps are used for these objects because cursor::left_clicked_object points to clickable_object exclusively
-    //object pointers are used because the objects are being created in init_objects() and we just need to reference them
-    extern std::map<int,draggable_object*> draggable_objects;
-    extern std::map<int,physics_object*> physics_objects;
-    extern std::map<int,rts_object*> rts_objects;
-    void init_objects();//initialize the objects
-    void init_scenes();//initialize the objects
+    void initialize();//initialize the objects
     void collision_detection();//handles object collision
-    void add_draggable_object();//add a draggable object to the scene
-    void add_physics_object();//add a physics object to the scene
-    void add_rts_object();//add an rts object to the scene
-    void delete_selected();//delete the currently selected object
+    void add_draggable_object();//add a draggable object to the current scene
+    void add_physics_object();//add a physics object to the current scene
+    void add_rts_object();//add an rts object to the current scene
+    void delete_selected();//remove the selected object from the game
     void play();//open game screen
     void pause();//open pause screen
-    void resume();//open game screen
+    void resume();//unpause the game
     void return_warning();//warn user before returning to main menu
     void return_menu();//open main menu
     void quit();//close the program

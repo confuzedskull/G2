@@ -54,6 +54,8 @@ public:
     void set_dimensions(float w, float h);
     void calc_boundaries();//calculates the max's and mins
     void mark_selected();//visually indicates whether object is selected
+    void show();//make the object visible
+    void hide();//make the object invisible
     void render();//draws the object
     void update();
     object();

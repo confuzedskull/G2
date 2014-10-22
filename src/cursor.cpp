@@ -15,6 +15,7 @@
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "cursor.h"
+#include "window.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -42,7 +43,7 @@ float cursor::ymin = 0.0;
 clickable_object* cursor::left_clicked_object = new clickable_object();
 int cursor::selected_object = 1;
 bool cursor::left_clicked_an_object = false;
-std::vector<bool> cursor::highlighted_objects(game::rts_objects.size(),false);
+std::vector<bool> cursor::highlighted_objects(false);
 bool cursor::right_dragging = false;
 clickable_object* cursor::right_clicked_object = new clickable_object();
 bool cursor::right_clicked_an_object = false;
@@ -57,7 +58,7 @@ point2f cursor::right_drag = point2f(0.0,0.0);
 int cursor::objects_selected()
 {
     int selected = 0;
-    for(unsigned i=0; i<game::rts_objects.size(); i++)//regular "for" loop used  because iterator is used as integer
+    for(unsigned i=0; i<game::scenes[window::current_scene]->rts_objects.size(); i++)//regular "for" loop used  because iterator is used as integer
     {
         if(highlighted_objects[i])
             selected++;
@@ -108,7 +109,7 @@ void cursor::reset()
     left_dragging = false;
     right_dragging = false;
     highlighting = false;
-    highlighted_objects.assign(game::rts_objects.size(),false);
+    highlighted_objects.assign(game::scenes[window::current_scene]->rts_objects.size(),false);
     selected_object = 0;
     left_clicked_object = new clickable_object();
     right_clicked_object = new clickable_object();

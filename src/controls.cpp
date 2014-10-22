@@ -35,10 +35,72 @@
 #include <string.h>
 
 //initialize variables
+bool* controls::toggles = new bool[256];
 bool* controls::key_states = new bool[256];
-bool controls::temp_toggle[2] = {false,false};
-bool controls::toggle_overlay = false;
-bool controls::toggle_pause = false;
+bool* controls::toggle_states = new bool[256];
+
+void controls::move_forward()
+{
+    if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
+    game::scenes[window::current_scene]->physics_objects[cursor::selected_object]->move_forward();
+}
+
+void controls::move_back()
+{
+    if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
+    game::scenes[window::current_scene]->physics_objects[cursor::selected_object]->move_back();
+}
+
+void controls::move_left()
+{
+    if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
+    game::scenes[window::current_scene]->physics_objects[cursor::selected_object]->move_left();
+}
+
+void controls::move_right()
+{
+    if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
+    game::scenes[window::current_scene]->physics_objects[cursor::selected_object]->move_right();
+}
+
+void controls::turn_left()
+{
+    if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
+    game::scenes[window::current_scene]->physics_objects[cursor::selected_object]->turn_left();
+}
+
+void controls::turn_right()
+{
+    if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
+    game::scenes[window::current_scene]->physics_objects[cursor::selected_object]->turn_right();
+}
+
+void controls::perform_action(unsigned char key, void (*action)())
+{
+    if(key_states[key])//given key is pressed
+        action();//perform the given action
+}
+
+void controls::toggle_action(unsigned char key, void (*actionA)(), void (*actionB)())
+{
+    if(key_states[key])
+    {
+        if(toggles[key])
+        {
+            if(toggle_states[key])
+                actionA();
+            toggle_states[key]=false;
+        }
+        else
+        {
+            if(!toggle_states[key])
+                actionB();
+            toggle_states[key]=true;
+        }
+    }
+    else
+        toggles[key]=toggle_states[key];
+}
 
 //NOTE: This function uses C++11 "for" loops
 void controls::check_clicked()
@@ -47,13 +109,13 @@ void controls::check_clicked()
     bool left_clicked=false;
     while(!left_clicked)
     {
-        for(auto r:game::rts_objects)
+        for(auto r:game::scenes[window::current_scene]->rts_objects)
             left_clicked=r.second->left_clicked();
-        for(auto d:game::draggable_objects)
+        for(auto d:game::scenes[window::current_scene]->draggable_objects)
             left_clicked=d.second->left_clicked();
-        for(auto p:game::physics_objects)
+        for(auto p:game::scenes[window::current_scene]->physics_objects)
             left_clicked=p.second->left_clicked();
-        for(auto b:ui::buttons)
+        for(auto b:game::scenes[window::current_scene]->buttons)
             left_clicked=b->left_clicked();
         if(!left_clicked)//at this point, no objects have been left clicked so leave the loop
             break;
@@ -63,11 +125,11 @@ void controls::check_clicked()
     bool right_clicked=false;
     while(!right_clicked)
     {
-        for(auto r:game::rts_objects)
+        for(auto r:game::scenes[window::current_scene]->rts_objects)
             right_clicked=r.second->right_clicked();
-        for(auto d:game::draggable_objects)
+        for(auto d:game::scenes[window::current_scene]->draggable_objects)
             right_clicked=d.second->right_clicked();
-        for(auto p:game::physics_objects)
+        for(auto p:game::scenes[window::current_scene]->physics_objects)
             right_clicked=p.second->right_clicked();
         if(!right_clicked)//at this point, no objects have been right clicked so leave the loop
             break;
@@ -75,7 +137,7 @@ void controls::check_clicked()
     cursor::right_clicked_an_object = right_clicked;
 
     bool grabbed=true;
-    for(auto d:game::draggable_objects)
+    for(auto d:game::scenes[window::current_scene]->draggable_objects)
     {
         if(d.second->grabbed())
         {
@@ -176,77 +238,9 @@ void controls::key_released(unsigned char key, int x, int y)
 
 void controls::key_operations(void)
 {
-    if(window::current_scene==1)
-    {
-        if(!game::paused)
-        {
-            unsigned index = cursor::selected_object;//number of the currently selected object
-            if(cursor::left_clicked_object->get_type()== "physics object")
-            {
-                if(key_states['w'] || key_states['W'])
-                    game::physics_objects[index]->move_forward();
-
-                if(key_states['s'] || key_states['S'])
-                    game::physics_objects[index]->move_back();
-
-                if(key_states['a'] || key_states['A'])
-                    game::physics_objects[index]->move_left();
-
-                if(key_states['d'] || key_states['D'])
-                    game::physics_objects[index]->move_right();
-
-                if(key_states['q'] || key_states['Q'])
-                    game::physics_objects[index]->turn_left();
-
-                if(key_states['e'] || key_states['E'])
-                    game::physics_objects[index]->turn_right();
-            }
-            if(key_states['i'] || key_states['I'])
-            {
-                if(toggle_overlay)
-                {
-                    if(temp_toggle[0])
-                    {
-                        game::scenes[1]->text_objects[0]->visible=false;
-                        game::scenes[1]->text_objects[1]->visible=false;
-                        std::clog<<"toggled information overlay off\n";
-                    }
-                    temp_toggle[0]=false;
-                }
-                else
-                {
-                    if(!temp_toggle[0])
-                    {
-                        game::scenes[1]->text_objects[0]->visible=true;
-                        game::scenes[1]->text_objects[1]->visible=true;
-                        std::clog<<"toggled information overlay on\n";
-                    }
-                    temp_toggle[0]=true;
-                }
-            }
-            else
-                toggle_overlay=temp_toggle[0];
-        }
-        if(key_states[27])//escape
-        {
-            if(toggle_pause)
-            {
-                if(temp_toggle[1])
-                {
-                    game::pause();
-                }
-                temp_toggle[1]=false;
-            }
-            else
-            {
-                if(!temp_toggle[1])
-                {
-                    game::resume();
-                }
-                temp_toggle[1]=true;
-            }
-        }
-        else
-            toggle_pause=temp_toggle[1];
-    }
+    for(auto k:game::scenes[window::current_scene]->key_bindings)//iterate through the current scene's keybindings
+        perform_action(k.first,k.second);
+    toggle_action('i',ui::show_text,ui::hide_text);
+    toggle_action('I',ui::show_text,ui::hide_text);
+    toggle_action(27,game::pause,game::resume);
 }

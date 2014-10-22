@@ -36,18 +36,8 @@
 
 int main(int argc, char **argv)
 {
-    std::clog<<"entering main...\n";
-    //initialize objects
-    std::clog<<"initializing objects...\n";
-    game::init_objects();
-    //initialize ui elements
-    std::clog<<"initializing user interface...\n";
-    ui::init_buttons();
-    ui::init_menus();
-    ui::init_text();
-    //initialize scenes
-    std::clog<<"initializing scenes...\n";
-    game::init_scenes();
+    std::clog<<"initializing...\n";
+    game::initialize();
     // initialize GLUT and create window
     std::clog<<"initializing GLUT...\n";
     glutInit(&argc, argv);

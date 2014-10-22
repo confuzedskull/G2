@@ -81,10 +81,8 @@ void window::initialize()
 void window::render()
 {
     glClear(GL_COLOR_BUFFER_BIT);// Clear Color Buffers
-//NOTE: rts_objects are rendered ontop of eachother according to the order in which they are rendered
-//BOTTOM
     game::scenes[current_scene]->render();
-//TOP
+    cursor::selection_box();
     glFlush();
 }
 

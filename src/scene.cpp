@@ -29,6 +29,63 @@
 #include <GL/glut.h>
 #endif
 
+
+void scene::add_draggable_object(draggable_object* new_do)
+{
+    draggable_objects.insert(std::pair<int,draggable_object*>(new_do->get_number(),new_do));//add object to scene
+}
+
+void scene::add_physics_object(physics_object* new_po)
+{
+    physics_objects.insert(std::pair<int,physics_object*>(new_po->get_number(),new_po));//add object to scene
+}
+
+void scene::add_rts_object(rts_object* new_rtso)
+{
+    rts_objects.insert(std::pair<int,rts_object*>(new_rtso->get_number(),new_rtso));//add object to scene
+}
+
+void scene::bind_key(unsigned char key, void (*action)())
+{
+    key_bindings.insert(std::pair<unsigned char, void (*)()>(key,action));
+}
+
+void scene::show_text()
+{
+    for(auto t:text_objects)
+        t->show();
+}
+
+void scene::hide_text()
+{
+    for(auto t:text_objects)
+        t->hide();
+}
+
+void scene::show_buttons()
+{
+    for(auto b:buttons)
+        b->show();
+}
+
+void scene::hide_buttons()
+{
+    for(auto b:buttons)
+        b->hide();
+}
+
+void scene::show_menus()
+{
+    for(auto m:menus)
+        m->show();
+}
+
+void scene::hide_menus()
+{
+    for(auto m:menus)
+        m->hide();
+}
+
 //NOTE: This function uses C++11 "for" loops
 void scene::render()
 {
@@ -36,8 +93,6 @@ void scene::render()
     //render the rts objects
     for(auto r:rts_objects)
     r.second->render();
-    //render the selection box
-    cursor::selection_box();
     //render the draggable objects
     for(auto d:draggable_objects)
     d.second->render();
@@ -73,6 +128,17 @@ void scene::update()
     //update buttons
     for(auto b:buttons)
     b->update();
+}
+
+void scene::clear()
+{
+    physics_objects.clear();
+    draggable_objects.clear();
+    rts_objects.clear();
+    text_objects.clear();
+    buttons.clear();
+    menus.clear();
+    key_bindings.clear();
 }
 
 scene::scene()

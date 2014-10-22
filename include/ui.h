@@ -24,15 +24,10 @@
 //This namespace contains functions and variables related to the user interface
 namespace ui
 {
-        //button pointers are used because the buttons are being created in init_buttons() and we just need to reference them
-        extern std::vector<button*> buttons;
-        extern std::vector<menu*> menus;
-        extern std::vector<text_object*> text_objects;
         extern int margin;//space between window edge and text
         void check_clicked();//check every clickable object to see if the cursor clicked it
-        void init_buttons();//initialize the buttons
-        void init_menus();//initialize the menus
-        void init_text();//initialize text
+        void show_text();
+        void hide_text();
         void update_text();
 }
 #endif // UI_H

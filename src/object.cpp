@@ -155,6 +155,16 @@ void object::render()//draws the object
     }
 }
 
+void object::hide()
+{
+    visible=false;
+}
+
+void object::show()
+{
+    visible=true;
+}
+
 object::object()
 {
     name="unnamed";
@@ -165,7 +175,7 @@ object::object()
     primary_color.randomize();
     primary_color.changed=false;
     rotation=90.1;
-    visible=true;
+    show();
     rendered=false;
     selected=false;
     std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
@@ -181,7 +191,7 @@ object::object(float x, float y, float w, float h)
     primary_color.randomize();
     primary_color.changed=false;
     rotation=90.1;
-    visible=true;
+    show();
     rendered=false;
     selected=false;
     std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
@@ -197,7 +207,7 @@ object::object(float x, float y, float w, float h, color c)
     primary_color.set(c);
     primary_color.changed=false;
     rotation=90.1;
-    visible=true;
+    show();
     rendered=false;
     selected=false;
     std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
