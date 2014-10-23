@@ -54,6 +54,7 @@ int main(int argc, char **argv)
     std::clog<<"initializing keyboard...\n";
     glutKeyboardFunc(controls::key_pressed);
     glutKeyboardUpFunc(controls::key_released);
+    glutSpecialFunc(controls::special_input);
     std::clog<<"initializing mouse...\n";
     glutMouseFunc(controls::mouse_click);
     glutPassiveMotionFunc(controls::mouse_move);

@@ -44,6 +44,7 @@ class complex_object: virtual public object
     void set_rotation(float angle);
     void set_dimensions(float w, float h);
     void calc_points();//calculates the midpoints and corners
+    void mark_selected();
     void render();//makes the object visible on screen
     void update();
     complex_object();

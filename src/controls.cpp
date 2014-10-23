@@ -75,31 +75,63 @@ void controls::turn_right()
     game::current_scene->physics_objects[cursor::selected_object]->turn_right();
 }
 
-void controls::perform_action(unsigned char key, void (*action)())
+void controls::next_item()
 {
-    if(key_states[key])//given key is pressed
-        action();//perform the given action
-}
-
-void controls::toggle_action(unsigned char key, void (*actionA)(), void (*actionB)())
-{
-    if(key_states[key])
+    bool selected_item=false;
+    menu* current_menu = game::current_scene->current_menu;
+    for(int i=0; i<current_menu->items.size();i++)
     {
-        if(toggles[key])
+        if(current_menu->items[i]->selected)
         {
-            if(toggle_states[key])
-                actionA();
-            toggle_states[key]=false;
-        }
-        else
-        {
-            if(!toggle_states[key])
-                actionB();
-            toggle_states[key]=true;
+            selected_item=true;
+            current_menu->items[i]->selected=false;
+            if((i+1)<current_menu->items.size())//close to end
+            {
+                current_menu->items[i+1]->selected=true;
+                current_menu->current_item=current_menu->items[i+1];
+            }
+            else
+            {
+                current_menu->items[0]->selected=true;
+                current_menu->current_item=current_menu->items[0];
+            }
+            break;
         }
     }
-    else
-        toggles[key]=toggle_states[key];
+    if(!selected_item)
+        current_menu->items[0]->selected=true;
+}
+
+void controls::previous_item()
+{
+    bool selected_item=false;
+    menu* current_menu = game::current_scene->current_menu;
+    for(int i=0; i<current_menu->items.size();i++)
+    {
+        if(current_menu->items[i]->selected)
+        {
+            selected_item=true;
+            current_menu->items[i]->selected=false;
+            if((i-1)>=0)
+            {
+                current_menu->items[i-1]->selected=true;
+                current_menu->current_item=current_menu->items[i-1];
+            }
+            else
+            {
+                current_menu->items.back()->selected=true;
+                current_menu->current_item=current_menu->items.back();
+            }
+            break;
+        }
+    }
+    if(!selected_item)
+        current_menu->items[0]->selected=true;
+}
+
+void controls::choose_item()
+{
+    game::current_scene->current_menu->current_item->action();
 }
 
 //NOTE: This function uses C++11 "for" loops
@@ -238,9 +270,60 @@ void controls::key_released(unsigned char key, int x, int y)
 
 void controls::key_operations(void)
 {
-    for(auto k:game::current_scene->key_bindings)//iterate through the current scene's keybindings
-        perform_action(k.first,k.second);
-    toggle_action('i',ui::show_text,ui::hide_text);
-    toggle_action('I',ui::show_text,ui::hide_text);
-    toggle_action(27,game::pause,game::resume);
+    for(auto key:game::current_scene->key_bindings)
+    {
+        unsigned modifier;
+        if(key.first>64 && key.first<91)//key is uppercase letter
+            modifier=32;
+        if(key.first>96 && key.first<123)//key is lowercase letter
+            modifier=-32;
+        if(game::current_scene->key_bindings.find(key.first+modifier)!=game::current_scene->key_bindings.end())//key has upper/lowercase counterpart
+        {
+            if(key_states[key.first])
+            {
+                if(toggles[key.first])
+                {
+                    if(toggle_states[key.first])
+                        key.second();//perform key action
+                    toggle_states[key.first]=false;
+                }
+                else
+                {
+                    if(!toggle_states[key.first])
+                        game::current_scene->key_bindings.at(key.first+modifier)();//perform key counter action
+                    toggle_states[key.first]=true;
+                }
+            }
+            else
+                toggles[key.first]=toggle_states[key.first];
+        }
+        else if(key_states[key.first])//binded key is pressed
+            key.second();//just perform the associated action
+    }
+}
+
+void controls::special_input(int key,int x,int y)
+{
+    std::string special;
+    switch(key)
+    {
+    case GLUT_KEY_UP:
+        special="up";
+        break;
+    case GLUT_KEY_DOWN:
+        special="down";
+        break;
+    case GLUT_KEY_LEFT:
+        special="left";
+        break;
+    case GLUT_KEY_RIGHT:
+        special="right";
+        break;
+    }
+
+    for(auto sb:game::current_scene->special_bindings)
+    {
+        if(special==sb.first)
+            sb.second();
+    }
 }

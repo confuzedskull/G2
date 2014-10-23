@@ -30,8 +30,9 @@ void move_left();//moves the currently selected object left
 void move_right();//moves the currently selected object right
 void turn_left();//turns the currently selected object left
 void turn_right();//turns the currently selected object right
-void perform_action(unsigned char, void (*)());//performs the specified action
-void toggle_action(unsigned char key, void (*)(), void (*)());
+void next_item();//selects the next item
+void previous_item();//selects the previous item
+void choose_item();
 void check_clicked();//check if objects are clicked or not
 void mouse_click(int button, int state, int x, int y);//handles mouse clicks
 void mouse_move(int x, int y);//handles mouse movement
@@ -39,6 +40,7 @@ void mouse_drag(int x, int y);//handles mouse drag
 void key_pressed(unsigned char key, int x, int y);//marks given key as pressed
 void key_released(unsigned char key, int x, int y);//marks given key as released
 void key_operations(void);//handles keyboard actions
+void special_input(int,int,int);
 };
 
 #endif // CONTROLS_H

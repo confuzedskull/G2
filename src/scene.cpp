@@ -29,7 +29,6 @@
 #include <GL/glut.h>
 #endif
 
-
 void scene::add_draggable_object(draggable_object* new_do)
 {
     draggable_objects.insert(std::pair<int,draggable_object*>(new_do->get_number(),new_do));//add object to scene
@@ -58,11 +57,23 @@ void scene::add_button(button* b)
 void scene::add_menu(menu* m)
 {
     menus.push_back(m);
+    current_menu=m;
 }
 
 void scene::bind_key(unsigned char key, void (*action)())
 {
     key_bindings.insert(std::pair<unsigned char, void (*)()>(key,action));
+}
+
+void scene::bind_key(unsigned char key, void (*actionA)(), void (*actionB)())
+{
+    key_bindings.insert(std::pair<unsigned char, void (*)()>(key,actionA));
+    key_bindings.insert(std::pair<unsigned char, void (*)()>(key-32,actionB));//bind actionB to the shift form of the key
+}
+
+void scene::bind_special(std::string special, void (*action)())
+{
+    special_bindings.insert(std::pair<std::string, void (*)()>(special,action));
 }
 
 void scene::show_text()
@@ -139,7 +150,7 @@ void scene::update()
     d.second->update();
     //update menus
     for(auto m:menus)
-    m->update();
+        m->update();
     //update buttons
     for(auto b:buttons)
     b->update();

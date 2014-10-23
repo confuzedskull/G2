@@ -30,6 +30,8 @@ protected:
     float rotation;
     float width;
     float height;
+    int marker_width;
+    int marker_height;
     float radius;
     bool rendered;//whether the render method has been called or not
     float xmax,xmin,ymax,ymin;//the boundaries of the object
@@ -45,7 +47,8 @@ public:
     float get_width();
     float get_height();
     float get_radius();
-    color primary_color;//RGB values
+    color primary_color;//
+    color marker_color;//color of marker when object is selected
     bool visible;//whether the object should be shown or not
     bool selected;//whether the object has been selected or not
     void rotate(float angle);//changes the object's rotation by the given angle
@@ -53,7 +56,7 @@ public:
     void set_rotation(float angle);
     void set_dimensions(float w, float h);
     void calc_boundaries();//calculates the max's and mins
-    void mark_selected();//visually indicates whether object is selected
+    void mark_selected();//visually indicate that the object is selected
     void show();//make the object visible
     void hide();//make the object invisible
     void render();//draws the object

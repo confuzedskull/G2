@@ -92,6 +92,8 @@ void button::render()
         glVertex2f(xmin, ymax);//top left corner
         glEnd();
     }
+
+    mark_selected();
     //render button text
     label.set_position(position.x-(label.get_width()/2),position.y-(label.get_height()/2));
     label.render();
@@ -102,6 +104,11 @@ void button::update()
     mouse_function();
 }
 
+void button::action_placeholder()
+{
+
+}
+
 button::button()
 {
     type="button";
@@ -109,6 +116,7 @@ button::button()
     position.set(0.0f,0.0f);
     primary_color.set(0.75f,0.75f,0.75f);
     primary_color.changed=false;
+    action=button::action_placeholder;
     border=true;
     border_color=BLACK;
     performed_action=false;

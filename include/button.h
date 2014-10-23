@@ -36,6 +36,7 @@ public:
     void mouse_function();
     void render();
     void update();
+    static void action_placeholder();
     button();
     button(float x, float y, char* l, void (*a)(void));
 };

@@ -113,20 +113,30 @@ void object::rotate(float angle)
 
 void object::mark_selected()
 {
-    if(selected)//selected objects are marked by a green ellipse
+    if(selected)
     {
-        glPushMatrix();//modify transformation matrix
-        glTranslatef(position.x,position.y,0.0);//translate ellipse according to object coordinates
-        glColor3f(0.0,1.0,0.0);//make the lines green
-        glBegin(GL_LINE_LOOP);//draws a series of lines
-        for (int i=0; i<360; i++)
-        {
-            float deg_rad=i*3.14159/180;//calculate degrees in radians
-            glVertex2f(cos(deg_rad)*radius,sin(deg_rad)*radius);//ellipse function
-        }
-        glEnd();//finish drawing
-        glPopMatrix();//reset transformation matrix
+        glColor3f(marker_color.r,marker_color.g,marker_color.b);
+        glBegin(GL_LINES);//draws lines (in this case, a rectangle)
+        glVertex2f(xmin-marker_width, ymax+marker_height);//top left corner
+        glVertex2f(xmax+marker_width, ymax+marker_height);//top right corner
+        glVertex2f(xmax+marker_width, ymax+marker_height);//top right corner
+        glVertex2f(xmax+marker_width, ymin-marker_height);//bottom right corner
+        glVertex2f(xmax+marker_width, ymin-marker_height);//bottom right corner
+        glVertex2f(xmin-marker_width, ymin-marker_height);//bottom left corner
+        glVertex2f(xmin-marker_width, ymin-marker_height);//bottom left corner
+        glVertex2f(xmin-marker_width, ymax+marker_height);//top left corner
+        glEnd();
     }
+}
+
+void object::hide()
+{
+    visible=false;
+}
+
+void object::show()
+{
+    visible=true;
 }
 
 void object::render()//draws the object
@@ -146,23 +156,12 @@ void object::render()//draws the object
         glEnd();//finish drawing
         glPopMatrix();//reset transformation matrix
         mark_selected();
-
         if(!rendered)
         {
             std::clog<<"object#"<<number<<": "<<name<<" rendered."<<std::endl;
             rendered=true;
         }
     }
-}
-
-void object::hide()
-{
-    visible=false;
-}
-
-void object::show()
-{
-    visible=true;
 }
 
 object::object()
@@ -172,8 +171,11 @@ object::object()
     type="object";
     position.set(origin);
     set_dimensions(64,64);
+    marker_width=5;
+    marker_height=5;
     primary_color.randomize();
     primary_color.changed=false;
+    marker_color=BLACK;
     rotation=90.1;
     show();
     rendered=false;
@@ -188,6 +190,9 @@ object::object(float x, float y, float w, float h)
     type="object";
     position.set(x,y);
     set_dimensions(w,h);
+    marker_width=5;
+    marker_height=5;
+    marker_color=BLACK;
     primary_color.randomize();
     primary_color.changed=false;
     rotation=90.1;
@@ -204,6 +209,9 @@ object::object(float x, float y, float w, float h, color c)
     type="object";
     position.set(x,y);
     set_dimensions(w,h);
+    marker_width=5;
+    marker_height=5;
+    marker_color=BLACK;
     primary_color.set(c);
     primary_color.changed=false;
     rotation=90.1;

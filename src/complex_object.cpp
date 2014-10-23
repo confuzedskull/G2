@@ -80,6 +80,24 @@ void complex_object::set_dimensions(float w, float h)
     calc_points();
 }
 
+void complex_object::mark_selected()
+{
+    if(selected)//selected objects are marked by a green ellipse
+    {
+        glPushMatrix();//modify transformation matrix
+        glTranslatef(position.x,position.y,0.0);//translate ellipse according to object coordinates
+        glColor3f(marker_color.r,marker_color.g,marker_color.b);
+        glBegin(GL_LINE_LOOP);//draws a series of lines
+        for(int i=0; i<360; i++)
+        {
+            float deg_rad=i*3.14159/180;//calculate degrees in radians
+            glVertex2f(cos(deg_rad)*radius,sin(deg_rad)*radius);//ellipse function
+        }
+        glEnd();//finish drawing
+        glPopMatrix();//reset transformation matrix
+    }
+}
+
 //complex objects have their own render method because each vertex is an object whose properties are constantly changing
 void complex_object::render()
 {
@@ -93,6 +111,7 @@ void complex_object::render()
         glVertex2f(back_right.x, back_right.y); // The bottom right corner
         glEnd();//finish drawing
         mark_selected();
+
         if(!rendered)
         {
             std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" rendered."<<std::endl;
@@ -104,5 +123,6 @@ void complex_object::render()
 complex_object::complex_object()
 {
     type="complex object";
+    marker_color=GREEN;
     std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

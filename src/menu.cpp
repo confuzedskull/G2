@@ -100,9 +100,10 @@ void menu::set_layout(std::string l)
     }
 }
 
-void menu::add_button(button* b)
+void menu::add_item(button* b)
 {
     items.push_back(b);
+    current_item=b;
 }
 
 void menu::render()
@@ -129,7 +130,7 @@ void menu::update()
 {
     for(auto i:items)
     {
-        i->visible=visible;
+        i->visible=visible;//if menu is visible, items are visible
         i->update();
     }
 }

@@ -221,23 +221,23 @@ void game::initialize()
 //Initialize Menus
     menu* main_menu = new menu();//create a pointer and initialize it
     main_menu->set_title("Main Menu");
-    main_menu->add_button(play_button);
-    main_menu->add_button(quit_button);
+    main_menu->add_item(play_button);
+    main_menu->add_item(quit_button);
     main_menu->format();//make sure everything is neat and tidy
 
     menu* quit_menu = new menu();//create a pointer and initialize it
     quit_menu->set_title("Warning");
     quit_menu->set_subtitle("Are you sure you want to quit?");
-    quit_menu->add_button(confirm_quit);
-    quit_menu->add_button(cancel_quit);
+    quit_menu->add_item(confirm_quit);
+    quit_menu->add_item(cancel_quit);
     quit_menu->set_layout("horizontal");
     quit_menu->format();
     quit_menu->hide();//we don't want to see this right away
 
     menu* pause_menu = new menu();//create a pointer and initialize it
     pause_menu->set_title("Pause Menu");
-    pause_menu->add_button(resume_button);
-    pause_menu->add_button(main_menu_button);
+    pause_menu->add_item(resume_button);
+    pause_menu->add_item(main_menu_button);
     pause_menu->format();//make sure everything is neat and tidy
     pause_menu->hide();//we don't want to see this right away
 
@@ -245,8 +245,8 @@ void game::initialize()
     leave_menu->set_title("Warning");
     leave_menu->set_subtitle("If you leave, your progress will be lost.");
     leave_menu->set_layout("horizontal");
-    leave_menu->add_button(confirm_return_button);
-    leave_menu->add_button(cancel_return_button);
+    leave_menu->add_item(confirm_return_button);
+    leave_menu->add_item(cancel_return_button);
     leave_menu->format();//make sure everything is neat and tidy
     leave_menu->hide();//we don't want to see this right away
     std::clog<<"initialized menus\n";
@@ -255,6 +255,12 @@ void game::initialize()
     scene* home_screen = new scene();//create a pointer and initialize it
     home_screen->add_menu(main_menu);
     home_screen->add_menu(quit_menu);
+    home_screen->current_menu=main_menu;
+    home_screen->bind_special("up",controls::previous_item);//bind the "up" arrow key
+    home_screen->bind_special("down",controls::next_item);//bind the "down" arrow key
+    home_screen->bind_special("left",controls::previous_item);//bind the "left" arrow key
+    home_screen->bind_special("right",controls::next_item);//bind the "right" arrow key
+    home_screen->bind_key('\r',controls::choose_item);//bind the "return" key
     home_screen->bind_key(27,warn_quit);//open warning when esc is pressed
     scenes.push_back(home_screen);//add to scenes
     current_scene=home_screen;//start the game with this screen
@@ -285,6 +291,14 @@ void game::initialize()
     game_screen->bind_key('d',controls::move_right);
     game_screen->bind_key('q',controls::turn_left);
     game_screen->bind_key('e',controls::turn_right);
+    game_screen->bind_key('i',ui::show_text,ui::hide_text);
+    game_screen->bind_key('\r',controls::choose_item);//bind the "return" key
+    game_screen->bind_special("up",controls::previous_item);//bind the "up" arrow key
+    game_screen->bind_special("down",controls::next_item);//bind the "down" arrow key
+    game_screen->bind_special("left",controls::previous_item);//bind the "left" arrow key
+    game_screen->bind_special("right",controls::next_item);//bind the "right" arrow key
+    game_screen->bind_key(127,delete_selected);//bind the "delete" key
+    game_screen->bind_key(27,pause);//bind the "esc" key
     scenes.push_back(game_screen);//add to scenes
 }
 
@@ -324,6 +338,7 @@ void game::pause()
 {
     paused=true;
     scenes[1]->menus[0]->show();//show the pause menu
+    scenes[1]->current_menu=scenes[1]->menus[0];
     scenes[1]->menus[1]->hide();//hide the warning prompt
     scenes[1]->hide_buttons();//disable the buttons
     std::clog<<"paused game."<<std::endl;
@@ -341,6 +356,7 @@ void game::warn_quit()
 {
     cursor::reset();
     scenes[0]->menus[1]->show();//show the warning prompt
+    scenes[0]->current_menu=scenes[0]->menus[1];
 }
 
 void game::warn_return()
@@ -348,12 +364,14 @@ void game::warn_return()
     cursor::reset();
     scenes[1]->menus[0]->hide();//hide the pause menu
     scenes[1]->menus[1]->show();//show the warning prompt
+    scenes[1]->current_menu=scenes[1]->menus[1];
 }
 
 void game::return_menu()
 {
     cursor::reset();
     scenes[0]->menus[1]->hide();//hide the quit menu
+    scenes[0]->current_menu=scenes[0]->menus[0];
     current_scene=scenes[0];//open home screen
     std::clog<<"returned to menu."<<std::endl;
 }

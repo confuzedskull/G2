@@ -31,10 +31,11 @@ public:
     std::vector<button*> items;
     int spacing;//space between buttons
     int margin;
+    button* current_item;
     void set_title(std::string t);
     void set_subtitle(std::string s);
     void set_layout(std::string l);
-    void add_button(button* b);
+    void add_item(button* b);
     void format();
     void render();
     void update();
