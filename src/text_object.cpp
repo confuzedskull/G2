@@ -28,18 +28,12 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #endif
-#include <string>
 #include <iostream>
 
-void text_object::change_line(unsigned i, std::string l)
+void text_object::add_line(std::string str)
 {
-    text[i]=l;
-}
-
-void text_object::add_line(std::string l)
-{
-    text.push_back(l);
-    set_dimensions(font_width*l.length(),font_height);
+    text.push_back(str);
+    set_dimensions(font_width*str.length(),font_height);
 }
 
 void text_object::set_font(std::string style, int size)
@@ -90,5 +84,5 @@ text_object::text_object()
     primary_color=BLACK;
     set_font("helvetica",12);
     spacing=1;
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

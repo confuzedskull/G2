@@ -42,8 +42,14 @@ void button::format()
 
 void button::set_label(std::string l)
 {
+    label.clear();
     label.add_line(l);
     format();
+}
+
+void button::allign_label(std::string allignment)
+{
+    label_allignment=allignment;
 }
 
 void button::mouse_function()
@@ -60,6 +66,7 @@ void button::mouse_function()
             {
                 action();
                 performed_action=true;
+                std::clog<<"object#"<<number<<'('<<type<<')'<<"clicked.\n";
             }
         }
         else
@@ -69,45 +76,51 @@ void button::mouse_function()
 
 void button::render()
 {
-    //render button
-    glColor3f(primary_color.r,primary_color.g,primary_color.b);
-    glBegin(GL_POLYGON);//draws a filled in rectangle
-    glVertex2f(xmin, ymin);//bottom left corner
-    glVertex2f(xmin, ymax);//top left corner
-    glVertex2f(xmax, ymax);//top right corner
-    glVertex2f(xmax, ymin);//bottom right corner
-    glEnd();//finish drawing
-    //render border
-    if(border)
+    if(visible)
     {
-        glColor3f(border_color.r,border_color.g,border_color.b);
-        glBegin(GL_LINES);//draws lines (in this case, a rectangle)
-        glVertex2f(xmin, ymax);//top left corner
-        glVertex2f(xmax, ymax);//top right corner
-        glVertex2f(xmax, ymax);//top right corner
-        glVertex2f(xmax, ymin);//bottom right corner
-        glVertex2f(xmax, ymin);//bottom right corner
-        glVertex2f(xmin, ymin);//bottom left corner
+        //render button
+        glColor3f(primary_color.r,primary_color.g,primary_color.b);
+        glBegin(GL_POLYGON);//draws a filled in rectangle
         glVertex2f(xmin, ymin);//bottom left corner
         glVertex2f(xmin, ymax);//top left corner
-        glEnd();
-    }
+        glVertex2f(xmax, ymax);//top right corner
+        glVertex2f(xmax, ymin);//bottom right corner
+        glEnd();//finish drawing
+        //render border
+        if(border)
+        {
+            glColor3f(border_color.r,border_color.g,border_color.b);
+            glBegin(GL_LINES);//draws lines (in this case, a rectangle)
+            glVertex2f(xmin, ymax);//top left corner
+            glVertex2f(xmax, ymax);//top right corner
+            glVertex2f(xmax, ymax);//top right corner
+            glVertex2f(xmax, ymin);//bottom right corner
+            glVertex2f(xmax, ymin);//bottom right corner
+            glVertex2f(xmin, ymin);//bottom left corner
+            glVertex2f(xmin, ymin);//bottom left corner
+            glVertex2f(xmin, ymax);//top left corner
+            glEnd();
+        }
 
-    mark_selected();
-    //render button text
-    label.set_position(position.x-(label.get_width()/2),position.y-(label.get_height()/2));
-    label.render();
+        mark_selected();
+        //render button text
+        label.render();
+    }
 }
 
 void button::update()
 {
+    label.visible=visible;
+    if(label_allignment=="left")
+        label.set_position(xmin+margin,position.y-(label.get_height()/2));
+    if(label_allignment=="center")
+        label.set_position(position.x-(label.get_width()/2),position.y-(label.get_height()/2));
+    if(label_allignment=="right")
+        label.set_position(xmax-margin-label.get_width(),position.y-(label.get_height()/2));
     mouse_function();
 }
 
-void button::action_placeholder()
-{
-
-}
+void button::action_placeholder(){}
 
 button::button()
 {
@@ -116,11 +129,12 @@ button::button()
     position.set(0.0f,0.0f);
     primary_color.set(0.75f,0.75f,0.75f);
     primary_color.changed=false;
+    set_label("click me");
+    allign_label("center");
     action=button::action_placeholder;
     border=true;
-    border_color=BLACK;
     performed_action=false;
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }
 
 button::button(float x, float y, char* l, void (*a)(void))
@@ -130,9 +144,10 @@ button::button(float x, float y, char* l, void (*a)(void))
     position.set(x,y);
     primary_color.set(0.75f,0.75f,0.75f);
     primary_color.changed=false;
+    set_label("click me");
+    allign_label("center");
     action=a;
     border=true;
-    border_color=BLACK;
     performed_action=false;
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

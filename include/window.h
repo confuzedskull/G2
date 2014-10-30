@@ -17,17 +17,17 @@
 #define WINDOW_H
 #include "point.h"
 
+//This namespace contains variables and functions related to function
 namespace window
 {
-extern int width;
-extern int height;
-extern point2i center;
-extern int position_x;
-extern int position_y;
-extern double refresh_rate;
-void change_size(int w, int h);
-void initialize();
-void render();
-void update();
+    extern int width;
+    extern int height;
+    extern point2i center;
+    extern point2i position;//this refers to the upper left corner of the window
+    extern double refresh_rate;
+    void change_size(int w, int h);
+    void initialize();
+    void render();
+    void update();
 };
 #endif // WINDOW_H

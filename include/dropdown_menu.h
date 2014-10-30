@@ -14,31 +14,25 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#ifndef BUTTON_H
-#define BUTTON_H
+#ifndef DROPDOWN_MENU_H
+#define DROPDOWN_MENU_H
+#include "menu.h"
+#include "button.h"
 #include "clickable_object.h"
-#include "text_object.h"
 #include <string>
 
-//A button displays text and executes a function when clicked
-class button : public clickable_object
+class dropdown_menu: public menu, public clickable_object
 {
-protected:
-    text_object label;
-    std::string label_allignment;
+private:
+    bool expanded;
+    bool state_toggle;
 public:
-    int margin;//space between text and button border
-    bool performed_action;//whether or not the button action executed
-    void (*action)();//a function pointer which will be called when clicked
-    void format();//adjusts the size of the button to fit the text
-    void set_label(std::string);
-    void allign_label(std::string);
+    void add_item(button*);
     void mouse_function();
-    void render();
+    void expand();
+    void collapse();
     void update();
-    static void action_placeholder();
-    button();
-    button(float x, float y, char* l, void (*a)(void));
+    dropdown_menu();
 };
 
-#endif // BUTTON_H
+#endif // DROPDOWN_MENU_H

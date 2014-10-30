@@ -17,7 +17,6 @@
 
 #include "window.h"
 #include "game.h"
-#include "ui.h"
 #include "controls.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
@@ -31,7 +30,6 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #endif
-#include <math.h>
 #include <iostream>
 
 int main(int argc, char **argv)
@@ -43,8 +41,8 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE || GLUT_RGB);
     std::clog<<"creating window...\n";
-    glutInitWindowPosition(window::position_x,window::position_y);
-    std::clog<<"window position: "<< window::position_x<< ","<< window::position_y<<std::endl;
+    glutInitWindowPosition(window::position.x,window::position.y);
+    std::clog<<"window position: "<< window::position.x<< ","<< window::position.y<<std::endl;
     glutInitWindowSize(window::width,window::height);
     std::clog<<"window size: "<<window::width<<"X"<< window::height<<std::endl;
     glutCreateWindow("2DWorld");
@@ -54,7 +52,7 @@ int main(int argc, char **argv)
     std::clog<<"initializing keyboard...\n";
     glutKeyboardFunc(controls::key_pressed);
     glutKeyboardUpFunc(controls::key_released);
-    glutSpecialFunc(controls::special_input);
+    glutSpecialFunc(controls::special_keys);
     std::clog<<"initializing mouse...\n";
     glutMouseFunc(controls::mouse_click);
     glutPassiveMotionFunc(controls::mouse_move);

@@ -55,7 +55,7 @@ void clickable_object::mouse_function()
     if(left_clicked())//clicked this object
     {
         if(!selected)
-        std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" selected"<<std::endl;
+        std::clog<<"object#"<<number<<'('<<type<<')'<<" selected"<<std::endl;
         cursor::left_clicked_object=this;
         cursor::left_clicked_an_object = true;
         cursor::selected_object=number;
@@ -90,5 +90,5 @@ clickable_object::clickable_object(): object()
 {
     type="clickable object";
     selected=false;
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

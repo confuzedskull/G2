@@ -114,7 +114,7 @@ void complex_object::render()
 
         if(!rendered)
         {
-            std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" rendered."<<std::endl;
+            std::clog<<"object#"<<number<<'('<<type<<')'<<" rendered."<<std::endl;
             rendered=true;
         }
     }
@@ -124,5 +124,5 @@ complex_object::complex_object()
 {
     type="complex object";
     marker_color=GREEN;
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

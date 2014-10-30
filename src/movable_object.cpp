@@ -277,5 +277,5 @@ movable_object::movable_object(): complex_object()
     rally = &rest;
     rally_set=false;
     reset_motion();
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

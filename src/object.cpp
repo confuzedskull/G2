@@ -155,10 +155,25 @@ void object::render()//draws the object
         glVertex2f(xmax, ymin); // The bottom right corner
         glEnd();//finish drawing
         glPopMatrix();//reset transformation matrix
+        //render border
+        if(border)
+        {
+            glColor3f(border_color.r,border_color.g,border_color.b);
+            glBegin(GL_LINES);//draws lines (in this case, a rectangle)
+            glVertex2f(xmin, ymax);//top left corner
+            glVertex2f(xmax, ymax);//top right corner
+            glVertex2f(xmax, ymax);//top right corner
+            glVertex2f(xmax, ymin);//bottom right corner
+            glVertex2f(xmax, ymin);//bottom right corner
+            glVertex2f(xmin, ymin);//bottom left corner
+            glVertex2f(xmin, ymin);//bottom left corner
+            glVertex2f(xmin, ymax);//top left corner
+            glEnd();
+        }
         mark_selected();
         if(!rendered)
         {
-            std::clog<<"object#"<<number<<": "<<name<<" rendered."<<std::endl;
+            std::clog<<"object#"<<number<<" rendered."<<std::endl;
             rendered=true;
         }
     }
@@ -166,7 +181,6 @@ void object::render()//draws the object
 
 object::object()
 {
-    name="unnamed";
     number=++total_objects;
     type="object";
     position.set(origin);
@@ -176,16 +190,17 @@ object::object()
     primary_color.randomize();
     primary_color.changed=false;
     marker_color=BLACK;
+    border_color=BLACK;
+    border=false;
     rotation=90.1;
     show();
     rendered=false;
     selected=false;
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<'('<<type<<')'<<" created "<<sizeof(*this)<<" bytes"<<std::endl;
 }
 
 object::object(float x, float y, float w, float h)
 {
-    name="unnamed";
     number=++total_objects;
     type="object";
     position.set(x,y);
@@ -195,16 +210,17 @@ object::object(float x, float y, float w, float h)
     marker_color=BLACK;
     primary_color.randomize();
     primary_color.changed=false;
+    border_color=BLACK;
+    border=false;
     rotation=90.1;
     show();
     rendered=false;
     selected=false;
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<'('<<type<<')'<<" created "<<sizeof(*this)<<" bytes"<<std::endl;
 }
 
 object::object(float x, float y, float w, float h, color c)
 {
-    name="unnamed";
     number=++total_objects;
     type="object";
     position.set(x,y);
@@ -214,9 +230,11 @@ object::object(float x, float y, float w, float h, color c)
     marker_color=BLACK;
     primary_color.set(c);
     primary_color.changed=false;
+    border_color=BLACK;
+    border=false;
     rotation=90.1;
     show();
     rendered=false;
     selected=false;
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<'('<<type<<')'<<" created "<<sizeof(*this)<<" bytes"<<std::endl;
 }

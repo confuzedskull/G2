@@ -18,7 +18,6 @@
 #include "window.h"
 #include "controls.h"
 #include "cursor.h"
-#include "object.h"
 #include "ui.h"
 #include <stdlib.h>
 #include <iostream>
@@ -79,7 +78,6 @@ void game::initialize()
     object::total_objects=0;//reset the object count
     //initialize the physics objects
     physics_object* po1 = new physics_object();
-    po1->name="small square 1";
     po1->set_position(window::width/2-48,window::height/2+48);//set position forward left of window center
     po1->cue_action(2,12);//move right 96 units(take into account momentum)
     po1->cue_action(4,12);//move down 96 units(take into account momentum)
@@ -89,7 +87,6 @@ void game::initialize()
     po1->cue_action(6,15);//turn right 90 degrees(take into account momentum)
 
     physics_object* po2 = new physics_object();
-    po2->name="small square 2";
     po2->set_position(window::width/2+48,window::height/2+48);//set position forward right of window center
     po2->cue_action(4,12);//move down 96 units(take into account momentum)
     po2->cue_action(1,12);//move left 96 units(take into account momentum)
@@ -99,7 +96,6 @@ void game::initialize()
     po2->cue_action(6,15);//turn right 90 degrees(take into account momentum)
 
     physics_object* po3 = new physics_object();
-    po3->name="small square 3";
     po3->set_position(window::width/2+48,window::height/2-48);//set position backward right of window center
     po3->cue_action(1,12);//move left 96 units(take into account momentum)
     po3->cue_action(3,12);//move up 96 units(take into account momentum)
@@ -109,7 +105,6 @@ void game::initialize()
     po3->cue_action(6,15);//turn right 90 degrees(take into account momentum)
 
     physics_object* po4 = new physics_object();
-    po4->name="small square 4";
     po4->set_position(window::width/2-48,window::height/2-48);//set position backward left of window center
     po4->cue_action(3,12);//move up 96 units(take into account momentum)
     po4->cue_action(2,12);//move right 96 units(take into account momentum)
@@ -120,28 +115,23 @@ void game::initialize()
     std::clog<<"initialized physics objects\n";
     //initialize the draggable objects
     draggable_object* do1 = new draggable_object();
-    do1->name="black square";
     do1->set_position(window::center.x,window::center.y);//set position window center
     do1->primary_color.set("black");
     std::clog<<"initialized draggable objects\n";
     //initialize the rts objects
     rts_object* rtso1 = new rts_object();
-    rtso1->name="yellow square";
     rtso1->set_position(window::center.x+96,window::center.y);//set position right of window center
     rtso1->primary_color.set("yellow");
 
     rts_object* rtso2 = new rts_object();
-    rtso2->name="green square";
     rtso2->set_position(window::center.x,window::center.y-96);//set position below window center
     rtso2->primary_color.set("green");
 
     rts_object* rtso3 = new rts_object();
-    rtso3->name="red square";
     rtso3->set_position(window::center.x,window::center.y+96);//set position above window center
     rtso3->primary_color.set("red");
 
     rts_object* rtso4 = new rts_object();
-    rtso4->name="blue square";
     rtso4->set_position(window::center.x-96,window::center.y);//set position left of window center
     rtso4->primary_color.set("blue");
     std::clog<<"initialized rts objects\n";
@@ -154,7 +144,7 @@ void game::initialize()
 
     text_object* game_info = new text_object();//create a pointer and initialize it
     game_info->spacing=20;
-    game_info->set_position(window::width-(ui::margin+150),window::height-20);
+    game_info->set_position(window::width-(ui::margin+200),window::height-20);
     game_info->hide();//we don't want to see this right away
 
     std::clog<<"initialized text\n";
@@ -194,22 +184,19 @@ void game::initialize()
     cancel_return_button->action=pause;//function is assigned without '()' at the end
     //Game Buttons
     button* create_po_button = new button();//"po" stands for "physics object"
-    create_po_button->set_position(window::width*0.9,window::height*0.8);//put the button on the right side, 4/5ths of the way up
-    create_po_button->set_label("new physics object");
+    create_po_button->set_label("physics object");
     create_po_button->action=add_physics_object;//function is assigned without '()' at the end
 
     button* create_do_button = new button();//"do" stands for "draggable object"
-    create_do_button->set_position(window::width*0.9,window::height*0.6);//put the button on the right side, 3/5ths of the way up
-    create_do_button->set_label("new draggable object");
+    create_do_button->set_label("draggable object");
     create_do_button->action=add_draggable_object;//function is assigned without '()' at the end
 
     button* create_rtso_button = new button();//"rtso" stands for "real-time strategy object"
-    create_rtso_button->set_position(window::width*0.9,window::height*0.4);//put the button on the right side, 2/5ths of the way up
-    create_rtso_button->set_label("new rts object");
+    create_rtso_button->set_label("rts object");
     create_rtso_button->action=add_rts_object;//function is assigned without '()' at the end
 
     button* delete_object_button = new button();//create a button pointer and initialize it
-    delete_object_button->set_position(window::width*0.9,window::height*0.2);//put the button on the right side, 1/5th of the way up
+    delete_object_button->set_position(window::width*0.9,window::height*0.1);//put the button on the right side, 1/5th of the way up
     delete_object_button->set_label("delete object");
     delete_object_button->action=delete_selected;//function is assigned without '()' at the end
 
@@ -243,12 +230,19 @@ void game::initialize()
 
     menu* leave_menu = new menu();//create a pointer and initialize it
     leave_menu->set_title("Warning");
-    leave_menu->set_subtitle("If you leave, your progress will be lost.");
+    leave_menu->set_subtitle("Are you sure you want to leave?");
     leave_menu->set_layout("horizontal");
     leave_menu->add_item(confirm_return_button);
     leave_menu->add_item(cancel_return_button);
     leave_menu->format();//make sure everything is neat and tidy
     leave_menu->hide();//we don't want to see this right away
+
+    dropdown_menu* creation_menu = new dropdown_menu();
+    creation_menu->set_title("create new...");
+    creation_menu->set_position(window::width*0.9,window::height*0.25);
+    creation_menu->add_item(create_po_button);
+    creation_menu->add_item(create_do_button);
+    creation_menu->add_item(create_rtso_button);
     std::clog<<"initialized menus\n";
 //Initialize Scenes
     std::clog<<"initializing scenes...\n";
@@ -256,12 +250,12 @@ void game::initialize()
     home_screen->add_menu(main_menu);
     home_screen->add_menu(quit_menu);
     home_screen->current_menu=main_menu;
-    home_screen->bind_special("up",controls::previous_item);//bind the "up" arrow key
-    home_screen->bind_special("down",controls::next_item);//bind the "down" arrow key
-    home_screen->bind_special("left",controls::previous_item);//bind the "left" arrow key
-    home_screen->bind_special("right",controls::next_item);//bind the "right" arrow key
-    home_screen->bind_key('\r',controls::choose_item);//bind the "return" key
-    home_screen->bind_key(27,warn_quit);//open warning when esc is pressed
+    home_screen->bind_key("up","hold",controls::previous_item);//select previous item when up arrow is pressed
+    home_screen->bind_key("down","hold",controls::next_item);//select next item when down arrow is pressed
+    home_screen->bind_key("left","hold",controls::previous_item);//select previous item when left arrow is pressed
+    home_screen->bind_key("right","hold",controls::next_item);//select next item when right arrow is pressed
+    home_screen->bind_key('\r',"press",controls::choose_item);//choose current item when return key is pressed
+    home_screen->bind_key(27,"press",warn_quit);//open warning when escape key is pressed
     scenes.push_back(home_screen);//add to scenes
     current_scene=home_screen;//start the game with this screen
 
@@ -278,27 +272,26 @@ void game::initialize()
     game_screen->add_rts_object(rtso4);
     game_screen->add_text(object_info);
     game_screen->add_text(game_info);
-    game_screen->add_button(create_po_button);
-    game_screen->add_button(create_do_button);
-    game_screen->add_button(create_rtso_button);
     game_screen->add_button(delete_object_button);
     game_screen->add_button(menu_button);
     game_screen->add_menu(pause_menu);
     game_screen->add_menu(leave_menu);
-    game_screen->bind_key('w',controls::move_forward);
-    game_screen->bind_key('a',controls::move_left);
-    game_screen->bind_key('s',controls::move_back);
-    game_screen->bind_key('d',controls::move_right);
-    game_screen->bind_key('q',controls::turn_left);
-    game_screen->bind_key('e',controls::turn_right);
-    game_screen->bind_key('i',ui::show_text,ui::hide_text);
-    game_screen->bind_key('\r',controls::choose_item);//bind the "return" key
-    game_screen->bind_special("up",controls::previous_item);//bind the "up" arrow key
-    game_screen->bind_special("down",controls::next_item);//bind the "down" arrow key
-    game_screen->bind_special("left",controls::previous_item);//bind the "left" arrow key
-    game_screen->bind_special("right",controls::next_item);//bind the "right" arrow key
-    game_screen->bind_key(127,delete_selected);//bind the "delete" key
-    game_screen->bind_key(27,pause);//bind the "esc" key
+    game_screen->add_menu(creation_menu);
+    game_screen->bind_key('w',"hold",controls::move_forward);//move selected object forward when 'w' key is held
+    game_screen->bind_key('a',"hold",controls::move_left);//move selected object left when 'a' key is held
+    game_screen->bind_key('s',"hold",controls::move_back);//move selected object back when 's' key is held
+    game_screen->bind_key('d',"hold",controls::move_right);//move selected object right when 'd' key is held
+    game_screen->bind_key('q',"hold",controls::turn_left);//turn selected object left when 'q' key is held
+    game_screen->bind_key('e',"hold",controls::turn_right);//turn selected object right when 'e' key is held
+    game_screen->bind_key('i',ui::show_text,ui::hide_text);//toggles between two actions
+    game_screen->bind_key('\r',"press",controls::choose_item);//choose current item when return key is pressed
+    game_screen->bind_key("up","hold",controls::previous_item);//select previous item when up arrow is held
+    game_screen->bind_key("down","hold",controls::next_item);//select next item when down arrow is held
+    game_screen->bind_key("left","hold",controls::previous_item);//select previous item when left arrow is held
+    game_screen->bind_key("right","hold",controls::next_item);//select next item when right arrow is held
+    game_screen->bind_key("insert","press",game::create_object);//creates an object when insert key is pressed
+    game_screen->bind_key(127,"press",delete_selected);//delete selected object when DEL key is pressed
+    game_screen->bind_key(27,pause,resume);//open/close pause menu when escape key is pressed
     scenes.push_back(game_screen);//add to scenes
 }
 
@@ -320,16 +313,22 @@ void game::add_rts_object()
     current_scene->rts_objects.insert(std::pair<int,rts_object*>(object::total_objects,new_rtso));//add object to current scene
 }
 
+void game::create_object()
+{
+    scenes[1]->dropdown_menus[0]->current_item->action();
+}
+
 void game::delete_selected()
 {
-    current_scene->draggable_objects.erase(cursor::selected_object);
-    current_scene->physics_objects.erase(cursor::selected_object);
-    current_scene->rts_objects.erase(cursor::selected_object);
-    std::clog<<"object#"<<cursor::left_clicked_object->get_number()<<": "<<cursor::left_clicked_object->name<<'('<<cursor::left_clicked_object->get_type()<<')'<<" deleted."<<std::endl;
+    current_scene->draggable_objects.erase(cursor::selected_object);//removes the selected object, if found
+    current_scene->physics_objects.erase(cursor::selected_object);//removes the selected object, if found
+    current_scene->rts_objects.erase(cursor::selected_object);//removes the selected object, if found
+    std::clog<<"object#"<<cursor::left_clicked_object->get_number()<<'('<<cursor::left_clicked_object->get_type()<<')'<<" deleted."<<std::endl;
 }
 
 void game::play()
 {
+    cursor::reset();
     current_scene=scenes[1];//open game screen
     std::clog<<"started game."<<std::endl;
 }
@@ -340,7 +339,6 @@ void game::pause()
     scenes[1]->menus[0]->show();//show the pause menu
     scenes[1]->current_menu=scenes[1]->menus[0];
     scenes[1]->menus[1]->hide();//hide the warning prompt
-    scenes[1]->hide_buttons();//disable the buttons
     std::clog<<"paused game."<<std::endl;
 }
 
@@ -348,7 +346,7 @@ void game::resume()
 {
     paused=false;
     scenes[1]->menus[0]->hide();//hide the pause menu
-    scenes[1]->show_buttons();//enable the buttons
+    scenes[1]->current_menu=scenes[1]->dropdown_menus[0];
     std::clog<<"resumed game."<<std::endl;
 }
 
@@ -380,4 +378,18 @@ void game::quit()
 {
     std::clog<<"quitting...\n";
     exit(0);
+}
+
+void game::update()
+{
+    time_elapsed = ((float)clock()-time_started)/CLOCKS_PER_SEC;//update the start time
+    current_scene->update();//update scene
+    collision_detection();//apply collision effects
+}
+
+void game::sync()
+{
+    time_started=clock();//reset the start time
+    time+=window::refresh_rate;//increment the game clock
+    current_scene->sync();//update clock-based events
 }

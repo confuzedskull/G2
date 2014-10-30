@@ -30,16 +30,17 @@ a. left click and drag an object to move it around
 
 B. Keyboard
 1. Global
-a. down or right arrow key to select next item in menu
-b. up or left arrow key to select previous item in menu
-c. "enter" or "return" key to choose selected item in menu
+a. hold down or right arrow key to select next item in menu
+b. hold up or left arrow key to select previous item in menu
+c. press "enter" or "return" key to choose selected item in menu
 2. In-Game
-a. 'i' to toggle information overlay
-b. 'esc' to open pause menu
-c. "delete" to delete selected object
+a. press 'i' to toggle information overlay
+b. press 'esc' to open pause menu
+c. press "delete" to delete selected object
+d. press "insert" to create object of previous selection
 3. Physics Objects (gray squares)
-a. 'W','A','S','D' to move up,left,down,right, respectively
-b. 'Q' and 'E' to rotate
+a. hold 'W','A','S','D' to move up,left,down,right, respectively
+b. hold 'Q' and 'E' to rotate
 
 III. Known Bugs:
 A. Physics Objects

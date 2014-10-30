@@ -44,7 +44,7 @@ void ui::update_text()
         unsigned index = cursor::selected_object;
         using namespace std;
         object_info->clear();
-        object_info->add_line("selected object: #"+to_string(cursor::left_clicked_object->get_number())+", "+cursor::left_clicked_object->name);
+        object_info->add_line("object #:"+to_string(cursor::left_clicked_object->get_number()));
         object_info->add_line("type: "+cursor::left_clicked_object->get_type());
         object_info->add_line("dimensions: "+to_string(cursor::left_clicked_object->get_width())+'X'+to_string(cursor::left_clicked_object->get_height()));
         object_info->add_line("rotation: "+to_string(cursor::left_clicked_object->get_rotation()));

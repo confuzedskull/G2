@@ -31,7 +31,6 @@
 #include <GL/glut.h>
 #endif
 #include <math.h>
-#include <iostream>
 #include <string.h>
 
 //initialize variables
@@ -41,37 +40,37 @@ bool* controls::toggle_states = new bool[256];
 
 void controls::move_forward()
 {
-    if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
+    if(cursor::left_clicked_object->get_type()=="physics object" && !game::paused)
     game::current_scene->physics_objects[cursor::selected_object]->move_forward();
 }
 
 void controls::move_back()
 {
-    if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
+    if(cursor::left_clicked_object->get_type()=="physics object" && !game::paused)
     game::current_scene->physics_objects[cursor::selected_object]->move_back();
 }
 
 void controls::move_left()
 {
-    if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
+    if(cursor::left_clicked_object->get_type()=="physics object" && !game::paused)
     game::current_scene->physics_objects[cursor::selected_object]->move_left();
 }
 
 void controls::move_right()
 {
-    if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
+    if(cursor::left_clicked_object->get_type()=="physics object" && !game::paused)
     game::current_scene->physics_objects[cursor::selected_object]->move_right();
 }
 
 void controls::turn_left()
 {
-    if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
+    if(cursor::left_clicked_object->get_type()=="physics object" && !game::paused)
     game::current_scene->physics_objects[cursor::selected_object]->turn_left();
 }
 
 void controls::turn_right()
 {
-    if(cursor::left_clicked_object->get_type()== "physics object" && !game::paused)
+    if(cursor::left_clicked_object->get_type()=="physics object" && !game::paused)
     game::current_scene->physics_objects[cursor::selected_object]->turn_right();
 }
 
@@ -126,7 +125,10 @@ void controls::previous_item()
         }
     }
     if(!selected_item)
+    {
         current_menu->items[0]->selected=true;
+        current_menu->current_item=current_menu->items[0];
+    }
 }
 
 void controls::choose_item()
@@ -149,6 +151,8 @@ void controls::check_clicked()
             left_clicked=p.second->left_clicked();
         for(auto b:game::current_scene->buttons)
             left_clicked=b->left_clicked();
+        for(auto m:game::current_scene->menus)
+            left_clicked=m->item_clicked();
         if(!left_clicked)//at this point, no objects have been left clicked so leave the loop
             break;
     }
@@ -270,14 +274,9 @@ void controls::key_released(unsigned char key, int x, int y)
 
 void controls::key_operations(void)
 {
-    for(auto key:game::current_scene->key_bindings)
+    for(auto key:game::current_scene->key_bindings)//C+11 "for" loop
     {
-        unsigned modifier;
-        if(key.first>64 && key.first<91)//key is uppercase letter
-            modifier=32;
-        if(key.first>96 && key.first<123)//key is lowercase letter
-            modifier=-32;
-        if(game::current_scene->key_bindings.find(key.first+modifier)!=game::current_scene->key_bindings.end())//key has upper/lowercase counterpart
+        if(game::current_scene->key_toggles.find(key.first)!=game::current_scene->key_toggles.end())//key has a toggle
         {
             if(key_states[key.first])
             {
@@ -290,7 +289,7 @@ void controls::key_operations(void)
                 else
                 {
                     if(!toggle_states[key.first])
-                        game::current_scene->key_bindings.at(key.first+modifier)();//perform key counter action
+                        game::current_scene->key_toggles.at(key.first)();//perform key counter action
                     toggle_states[key.first]=true;
                 }
             }
@@ -302,7 +301,7 @@ void controls::key_operations(void)
     }
 }
 
-void controls::special_input(int key,int x,int y)
+void controls::special_keys(int key,int x,int y)
 {
     std::string special;
     switch(key)
@@ -319,9 +318,12 @@ void controls::special_input(int key,int x,int y)
     case GLUT_KEY_RIGHT:
         special="right";
         break;
+    case GLUT_KEY_INSERT:
+        special="insert";
+        break;
     }
 
-    for(auto sb:game::current_scene->special_bindings)
+    for(auto sb:game::current_scene->special_bindings)//C++11 "for" loop
     {
         if(special==sb.first)
             sb.second();

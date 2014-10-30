@@ -21,7 +21,7 @@
 #include <math.h>
 #include <iostream>
 
-point2f rts_object::origin = point2f(window::width*0.9,window::height*0.3);
+point2f rts_object::origin = point2f(window::width*0.9,window::height*0.5);
 
 bool rts_object::highlighted()
 {
@@ -41,7 +41,7 @@ void rts_object::mouse_function()
     if(left_clicked())//clicked this object
     {
         if(!cursor::left_clicked_an_object && !selected)
-        std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" selected"<<std::endl;
+        std::clog<<"object#"<<number<<'('<<type<<')'<<" selected"<<std::endl;
         cursor::left_clicked_object=this;
         cursor::left_clicked_an_object = true;
         cursor::selected_object=number;
@@ -108,5 +108,6 @@ rts_object::rts_object(): clickable_object(), tangible_object(), complex_object(
 {
     type="rts object";
     position.set(origin);
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    speed=2.0f;
+    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

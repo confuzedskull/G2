@@ -15,6 +15,7 @@
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "scene.h"
+#include "game.h"
 #include "cursor.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
@@ -60,56 +61,161 @@ void scene::add_menu(menu* m)
     current_menu=m;
 }
 
-void scene::bind_key(unsigned char key, void (*action)())
+void scene::add_menu(dropdown_menu* dm)
 {
-    key_bindings.insert(std::pair<unsigned char, void (*)()>(key,action));
+    dropdown_menus.push_back(dm);
+}
+
+void scene::bind_key(unsigned char key, std::string condition, void (*action)())
+{
+    if(condition=="hold")
+        key_bindings.insert(std::pair<unsigned char, void (*)()>(key,action));
+    if(condition=="press")
+    {
+        key_bindings.insert(std::pair<unsigned char, void (*)()>(key,action));
+        key_toggles.insert(std::pair<unsigned char, void (*)()>(key,action));
+    }
 }
 
 void scene::bind_key(unsigned char key, void (*actionA)(), void (*actionB)())
 {
     key_bindings.insert(std::pair<unsigned char, void (*)()>(key,actionA));
-    key_bindings.insert(std::pair<unsigned char, void (*)()>(key-32,actionB));//bind actionB to the shift form of the key
+    key_toggles.insert(std::pair<unsigned char, void (*)()>(key,actionB));//bind actionB to the shift form of the key
 }
 
-void scene::bind_special(std::string special, void (*action)())
+void scene::bind_key(std::string special_key, std::string condition, void (*action)())
 {
-    special_bindings.insert(std::pair<std::string, void (*)()>(special,action));
+    if(condition=="hold")
+        special_bindings.insert(std::pair<std::string, void (*)()>(special_key,action));
+    if(condition=="press")
+    {
+        special_bindings.insert(std::pair<std::string, void (*)()>(special_key,action));
+        special_toggles.insert(std::pair<std::string, void (*)()>(special_key,action));
+    }
+}
+
+void scene::show_draggable_objects()
+{
+    for(auto d:draggable_objects)
+        d.second->show();
+}
+
+void scene::hide_draggable_objects()
+{
+    for(auto d:draggable_objects)
+        d.second->hide();
+}
+
+void scene::show_physics_objects()
+{
+    for(auto p:physics_objects)
+        p.second->show();
+}
+
+void scene::hide_physics_objects()
+{
+    for(auto p:physics_objects)
+        p.second->hide();
+}
+
+void scene::show_rts_objects()
+{
+    for(auto r:rts_objects)
+        r.second->show();
+}
+
+void scene::hide_rts_objects()
+{
+    for(auto r:rts_objects)
+        r.second->hide();
 }
 
 void scene::show_text()
 {
-    for(auto t:text_objects)
+    for(auto t:text_objects)//C++11 "for" loop
         t->show();
 }
 
 void scene::hide_text()
 {
-    for(auto t:text_objects)
+    for(auto t:text_objects)//C++11 "for" loop
         t->hide();
 }
 
 void scene::show_buttons()
 {
-    for(auto b:buttons)
+    for(auto b:buttons)//C++11 "for" loop
         b->show();
 }
 
 void scene::hide_buttons()
 {
-    for(auto b:buttons)
+    for(auto b:buttons)//C++11 "for" loop
         b->hide();
 }
 
 void scene::show_menus()
 {
-    for(auto m:menus)
+    for(auto m:menus)//C++11 "for" loop
         m->show();
+    for(auto dm:dropdown_menus)//C++11 "for" loop
+        dm->show();
 }
 
 void scene::hide_menus()
 {
+    for(auto m:menus)//C++11 "for" loop
+        m->hide();
+    for(auto dm:dropdown_menus)//C++11 "for" loop
+        dm->hide();
+}
+
+void scene::show_all()
+{
+    //show physics objects
+    for(auto p:physics_objects)
+        p.second->show();
+    //show rts objects
+    for(auto r:rts_objects)
+        r.second->show();
+    //show draggable objects
+    for(auto d:draggable_objects)
+        d.second->show();
+    //show text
+    for(auto t:text_objects)
+        t->show();
+    //show menus
+    for(auto m:menus)
+        m->show();
+    for(auto dm:dropdown_menus)
+        dm->show();
+    //show buttons
+    for(auto b:buttons)
+        b->show();
+}
+
+void scene::hide_all()
+{
+    //hide physics objects
+    for(auto p:physics_objects)
+        p.second->hide();
+    //hide rts objects
+    for(auto r:rts_objects)
+        r.second->hide();
+    //hide draggable objects
+    for(auto d:draggable_objects)
+        d.second->hide();
+    //hide text
+    for(auto t:text_objects)
+        t->hide();
+    //hide menus
     for(auto m:menus)
         m->hide();
+    for(auto dm:dropdown_menus)
+        dm->hide();
+    //hide buttons
+    for(auto b:buttons)
+        b->hide();
 }
 
 //NOTE: This function uses C++11 "for" loops
@@ -118,22 +224,24 @@ void scene::render()
     glClearColor(background_color.r, background_color.g, background_color.b, 0.5);//background
     //render the rts objects
     for(auto r:rts_objects)
-    r.second->render();
+        r.second->render();
     //render the draggable objects
     for(auto d:draggable_objects)
-    d.second->render();
+        d.second->render();
     //render the physics objects
     for(auto p:physics_objects)
-    p.second->render();
+        p.second->render();
     //render text
     for(auto t:text_objects)
-    t->render();
+        t->render();
     //render menus
     for(auto m:menus)
-    m->render();
+        m->render();
+    for(auto dm:dropdown_menus)
+        dm->render();
     //render buttons
     for(auto b:buttons)
-    b->render();
+        b->render();
 }
 
 //NOTE: This function uses C++11 "for" loops
@@ -141,19 +249,37 @@ void scene::update()
 {
     //update physics objects
     for(auto p:physics_objects)
-    p.second->update();
+        p.second->update();
     //update rts objects
     for(auto r:rts_objects)
-    r.second->update();
+        r.second->update();
     //update draggable objects
     for(auto d:draggable_objects)
-    d.second->update();
+        d.second->update();
     //update menus
     for(auto m:menus)
         m->update();
+    for(auto dm:dropdown_menus)
+        dm->update();
     //update buttons
     for(auto b:buttons)
-    b->update();
+        b->update();
+}
+
+void scene::sync()
+{
+    if(!game::paused)
+    {
+        //move rts objects
+        for(auto r:rts_objects)//C++11 "for" loop
+            r.second->perform_actions()||r.second->move_to_point(*r.second->rally);
+        //move physics objects
+        for(auto p:physics_objects)//C++11 "for" loop
+        {
+            p.second->perform_actions();
+            p.second->inertia();
+        }
+    }
 }
 
 void scene::clear()
@@ -164,6 +290,7 @@ void scene::clear()
     text_objects.clear();
     buttons.clear();
     menus.clear();
+    dropdown_menus.clear();
     key_bindings.clear();
 }
 

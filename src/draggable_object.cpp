@@ -34,7 +34,7 @@
 #include <GL/glut.h>
 #endif
 
-point2f draggable_object::origin = point2f(window::width*0.9,window::height*0.5);
+point2f draggable_object::origin = point2f(window::width*0.9,window::height*0.6);
 
 bool draggable_object::grabbed()
 {
@@ -51,7 +51,7 @@ void draggable_object::mouse_function()
     if(left_clicked())//clicked this object
     {
         if(!cursor::left_clicked_an_object && !selected)
-        std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" selected"<<std::endl;
+        std::clog<<"object#"<<number<<'('<<type<<')'<<" selected"<<std::endl;
         cursor::left_clicked_object=this;
         cursor::left_clicked_an_object = true;
         cursor::selected_object=number;
@@ -96,5 +96,5 @@ draggable_object::draggable_object()
     type="draggable object";
     primary_color=BLACK;
     position.set(origin);
-    std::clog<<"object#"<<number<<": "<<name<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

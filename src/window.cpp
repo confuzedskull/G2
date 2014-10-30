@@ -38,9 +38,8 @@
 int window::width=1360;
 int window::height=720;
 point2i window::center=point2i(width/2,height/2);
-int window::position_x=0;
-int window::position_y=0;
-double window::refresh_rate=0.0166f;
+point2i window::position=point2i(0,0);
+double window::refresh_rate=0.0166f;//refresh window at 1/60th of a second (for 60FPS)
 
 //resize the window
 void window::change_size(int w, int h)
@@ -88,29 +87,14 @@ void window::render()
 void window::update()
 {
     ui::update_text();
+    game::update();//update game
     cursor::calc_boundaries();//calculate the size of the selection box
-    game::time_elapsed = ((float)clock()-game::time_started)/CLOCKS_PER_SEC;//update the start time
     controls::check_clicked();//check if objects are clicked
-    game::current_scene->update();//update scene
-    game::collision_detection();//apply collision effects
-    //This function acts like timer so that events occur at the set refresh rate
+    //This condition makes sure events occur at the set refresh rate
     if(isgreaterequal(game::time_elapsed,window::refresh_rate))//time elapsed is >= refresh rate
     {
-        game::time_started=clock();//reset the start time
-        game::time+=window::refresh_rate;//increment the game clock
         controls::key_operations();//keyboard controls
-        if(!game::paused)
-        {
-            //move rts objects
-            for(auto r:game::current_scene->rts_objects)//C++11 "for" loop
-                r.second->perform_actions()||r.second->move_to_point(*r.second->rally,2.00f);
-            //move physics objects
-            for(auto p:game::current_scene->physics_objects)//C++11 "for" loop
-            {
-                p.second->perform_actions();
-                p.second->inertia();
-            }
-        }
+        game::sync();//update clock-based events in game
         glutPostRedisplay();//update the scene
     }
 }

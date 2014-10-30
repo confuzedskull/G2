@@ -26,8 +26,8 @@ namespace ui
 {
         extern int margin;//space between window edge and text
         void check_clicked();//check every clickable object to see if the cursor clicked it
-        void show_text();
-        void hide_text();
-        void update_text();
+        void show_text();//makes the text of the current scene visible
+        void hide_text();//makes the text of the current scene invisible
+        void update_text();//updates the text
 }
 #endif // UI_H

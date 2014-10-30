@@ -19,6 +19,7 @@
 #include "object.h"
 #include <vector>
 #include <string>
+#include <sstream>
 
 //A text object stores a string which can be formatted and displayed on screen
 class text_object: public object
@@ -31,8 +32,7 @@ protected:
     float font_height;
 public:
     int spacing;//the space between each line
-    void change_line(unsigned i, std::string l);
-    void add_line(std::string l);
+    void add_line(std::string str);
     void set_font(std::string style, int size);
     void clear();
     void render();//prints the text to the screen

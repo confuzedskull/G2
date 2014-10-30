@@ -21,20 +21,23 @@
 #include <vector>
 #include <string>
 
-class menu: public object
+class menu: virtual public object
 {
 protected:
     text_object title;
     text_object subtitle;
     std::string layout;
+    std::string title_allignment;
 public:
     std::vector<button*> items;
     int spacing;//space between buttons
     int margin;
     button* current_item;
+    bool item_clicked();
     void set_title(std::string t);
     void set_subtitle(std::string s);
     void set_layout(std::string l);
+    void allign_title(std::string a);
     void add_item(button* b);
     void format();
     void render();

@@ -16,15 +16,9 @@
 
 #ifndef GAME_H
 #define GAME_H
-#include "physics_object.h"
-#include "draggable_object.h"
-#include "rts_object.h"
-#include "projectile.h"
-#include "button.h"
 #include "scene.h"
 #include <time.h>
 #include <vector>
-#include <map>
 
 //stores important functions and variables related to the game
 namespace game
@@ -32,7 +26,7 @@ namespace game
     extern float time;//stores the current game time in seconds
     extern clock_t time_started;//start time
     extern double time_elapsed;//time since start
-    extern bool paused;
+    extern bool paused;//whether the game is active or not
     extern scene* current_scene;
     extern std::vector<scene*> scenes;
     void initialize();//initialize the objects
@@ -40,6 +34,7 @@ namespace game
     void add_draggable_object();//add a draggable object to the current scene
     void add_physics_object();//add a physics object to the current scene
     void add_rts_object();//add an rts object to the current scene
+    void create_object();//creates an object of the previously created type
     void delete_selected();//remove the selected object from the game
     void play();//open game screen
     void pause();//open pause screen
@@ -48,5 +43,7 @@ namespace game
     void warn_return();//warn user before returning to main menu
     void return_menu();//open main menu
     void quit();//close the program
+    void update();//update variables
+    void sync();//update clock-based events
 };
 #endif // GAME_H
