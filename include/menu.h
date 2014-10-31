@@ -33,7 +33,8 @@ public:
     int spacing;//space between buttons
     int margin;
     button* current_item;
-    bool item_clicked();
+    int item_selected();//returns index of selected item
+    int item_clicked();//returns index of clicked item
     void set_title(std::string t);
     void set_subtitle(std::string s);
     void set_layout(std::string l);

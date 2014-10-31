@@ -16,14 +16,19 @@
 
 #ifndef CONTROLS_H
 #define CONTROLS_H
+#include <map>
+#include <string>
 
 //stores all variables and functions related to peripheral input
 namespace controls
 {
     //variables
-    extern bool* toggles;//stores the toggle states
-    extern bool* toggle_states;//stores the toggle state before it is set
-    extern bool* key_states; //stores each on/off state of a keyboard key
+    extern bool toggles[256];//stores the toggle states of regular keys
+    extern bool toggle_states[256];//stores the toggle state before it is set
+    extern bool key_states[256];//stores each on/off state of regular key
+    extern std::map<std::string,bool> special_toggles;//stores the toggle states of special keys
+    extern std::map<std::string,bool> special_toggle_states;//stores the toggle state before it is set
+    extern std::map<std::string,bool> special_states;//stores each on/off state of a special key
     //gameplay functions
     void move_forward();//moves the currently selected object forward
     void move_back();//moves the currently selected object back

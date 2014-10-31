@@ -30,18 +30,21 @@
 #include <GL/glut.h>
 #endif
 
-void scene::add_draggable_object(draggable_object* new_do)
+void scene::add_object(draggable_object* new_do)
 {
+    last_object=new_do;
     draggable_objects.insert(std::pair<int,draggable_object*>(new_do->get_number(),new_do));//add object to scene
 }
 
-void scene::add_physics_object(physics_object* new_po)
+void scene::add_object(physics_object* new_po)
 {
+    last_object=new_po;
     physics_objects.insert(std::pair<int,physics_object*>(new_po->get_number(),new_po));//add object to scene
 }
 
-void scene::add_rts_object(rts_object* new_rtso)
+void scene::add_object(rts_object* new_rtso)
 {
+    last_object=new_rtso;
     rts_objects.insert(std::pair<int,rts_object*>(new_rtso->get_number(),new_rtso));//add object to scene
 }
 
@@ -58,7 +61,6 @@ void scene::add_button(button* b)
 void scene::add_menu(menu* m)
 {
     menus.push_back(m);
-    current_menu=m;
 }
 
 void scene::add_menu(dropdown_menu* dm)

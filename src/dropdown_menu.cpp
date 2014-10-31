@@ -36,7 +36,7 @@ void dropdown_menu::mouse_function()
         primary_color.brighten();
     if(!hovered_over())
         primary_color.undo();
-    if(left_clicked()||item_clicked())
+    if(left_clicked()||item_clicked()!=-1)
     {
         if(expanded)
         {
@@ -89,6 +89,7 @@ dropdown_menu::dropdown_menu()
     layout = "vertical";
     spacing=0;
     margin=0;
+    state_toggle=false;
     expanded=false;
 	std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

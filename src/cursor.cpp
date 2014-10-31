@@ -30,30 +30,30 @@
 #endif
 #include <iostream>
 //initialize static variables
+color cursor::box_color = GREEN;
+point2f cursor::left_up = point2f(0.0,0.0);
+point2f cursor::right_up = point2f(0.0,0.0);
+point2f cursor::left_drag = point2f(0.0,0.0);
+point2f cursor::right_drag = point2f(0.0,0.0);
 point2f cursor::passive = point2f(0.0,0.0);
-bool cursor::left_click = false;
-point2f cursor::left_down =  point2f(0.0,0.0);
-bool cursor::right_click = false;
+point2f cursor::left_down = point2f(0.0,0.0);
 point2f cursor::right_down = point2f(0.0,0.0);
+clickable_object* cursor::left_clicked_object = new clickable_object();
+clickable_object* cursor::right_clicked_object = new clickable_object();
+bool cursor::left_click = false;
+bool cursor::right_click = false;
 bool cursor::highlighting = false;
+bool cursor::left_clicked_an_object = false;
+bool cursor::right_clicked_an_object = false;
+bool cursor::left_dragging = false;
+bool cursor::right_dragging = false;
+bool cursor::grabbed_an_object = false;
+std::map<int,bool> cursor::highlighted_objects;
 float cursor::xmax = 0.0;
 float cursor::xmin = 0.0;
 float cursor::ymax = 0.0;
 float cursor::ymin = 0.0;
-clickable_object* cursor::left_clicked_object = new clickable_object();
 int cursor::selected_object = 1;
-bool cursor::left_clicked_an_object = false;
-std::vector<bool> cursor::highlighted_objects(false);
-bool cursor::right_dragging = false;
-clickable_object* cursor::right_clicked_object = new clickable_object();
-bool cursor::right_clicked_an_object = false;
-bool cursor::left_dragging = false;
-bool cursor::grabbed_an_object=false;
-point2f cursor::left_drag = point2f(0.0,0.0);
-color cursor::box_color = GREEN;
-point2f cursor::left_up = point2f(0.0,0.0);
-point2f cursor::right_up = point2f(0.0,0.0);
-point2f cursor::right_drag = point2f(0.0,0.0);
 
 int cursor::objects_selected()
 {
@@ -97,6 +97,7 @@ void cursor::selection_box()//this is the box that is created when user clicks a
 
 void cursor::reset()
 {
+    box_color = GREEN;
     passive.set(0.0,0.0);
     left_down.set(0.0,0.0);
     right_down.set(0.0,0.0);
@@ -104,19 +105,18 @@ void cursor::reset()
     right_up.set(0.0,0.0);
     left_drag.set(0.0,0.0);
     right_drag.set(0.0,0.0);
+    left_clicked_object = new clickable_object();
+    right_clicked_object = new clickable_object();
     left_click = false;
     right_click = false;
     left_dragging = false;
     right_dragging = false;
     highlighting = false;
-    highlighted_objects.assign(game::current_scene->rts_objects.size(),false);
-    selected_object = 0;
-    left_clicked_object = new clickable_object();
-    right_clicked_object = new clickable_object();
     left_clicked_an_object = false;
     right_clicked_an_object = false;
     grabbed_an_object=false;
-    box_color = GREEN;
+    highlighted_objects.clear();
+    selected_object = 1;
     xmax = 0.0;
     xmin = 0.0;
     ymax = 0.0;

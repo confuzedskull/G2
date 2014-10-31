@@ -75,63 +75,62 @@ void game::initialize()
 {
 //Initialize Objects
     std::clog<<"initializing objects...\n";
-    object::total_objects=0;//reset the object count
     //initialize the physics objects
-    physics_object* po1 = new physics_object();
+    physics_object* po1 = new physics_object();//create a pointer and initialize it
     po1->set_position(window::width/2-48,window::height/2+48);//set position forward left of window center
-    po1->cue_action(2,12);//move right 96 units(take into account momentum)
-    po1->cue_action(4,12);//move down 96 units(take into account momentum)
-    po1->cue_action(1,12);//move left 96 units(take into account momentum)
-    po1->cue_action(3,12);//move up 96 units(take into account momentum)
-    po1->cue_action(5,15);//turn left 90 degrees(take into account momentum)
-    po1->cue_action(6,15);//turn right 90 degrees(take into account momentum)
+    po1->cue_action(2,12);//move right 12 units (remember there's momentum so a little goes a long way)
+    po1->cue_action(4,12);//move down 12 units (remember there's momentum so a little goes a long way)
+    po1->cue_action(1,12);//move left 12 units (remember there's momentum so a little goes a long way)
+    po1->cue_action(3,12);//move up 12 units (remember there's momentum so a little goes a long way)
+    po1->cue_action(5,15);//turn left 15 degrees (remember there's momentum so a little goes a long way)
+    po1->cue_action(6,15);//turn right 15 degrees (remember there's momentum so a little goes a long way)
 
-    physics_object* po2 = new physics_object();
+    physics_object* po2 = new physics_object();//create a pointer and initialize it
     po2->set_position(window::width/2+48,window::height/2+48);//set position forward right of window center
-    po2->cue_action(4,12);//move down 96 units(take into account momentum)
-    po2->cue_action(1,12);//move left 96 units(take into account momentum)
-    po2->cue_action(3,12);//move up 96 units(take into account momentum)
-    po2->cue_action(2,12);//move right 96 units(take into account momentum)
-    po2->cue_action(5,15);//turn left 90 degrees(take into account momentum)
-    po2->cue_action(6,15);//turn right 90 degrees(take into account momentum)
+    po2->cue_action(4,12);//move down 12 units (remember there's momentum so a little goes a long way)
+    po2->cue_action(1,12);//move left 12 units (remember there's momentum so a little goes a long way)
+    po2->cue_action(3,12);//move up 12 units (remember there's momentum so a little goes a long way)
+    po2->cue_action(2,12);//move right 12 units (remember there's momentum so a little goes a long way)
+    po2->cue_action(5,15);//turn left 15 degrees (remember there's momentum so a little goes a long way)
+    po2->cue_action(6,15);//turn right 15 degrees (remember there's momentum so a little goes a long way)
 
-    physics_object* po3 = new physics_object();
+    physics_object* po3 = new physics_object();//create a pointer and initialize it
     po3->set_position(window::width/2+48,window::height/2-48);//set position backward right of window center
-    po3->cue_action(1,12);//move left 96 units(take into account momentum)
-    po3->cue_action(3,12);//move up 96 units(take into account momentum)
-    po3->cue_action(2,12);//move right 96 units(take into account momentum)
-    po3->cue_action(4,12);//move down 96 units(take into account momentum)
-    po3->cue_action(5,15);//turn left 90 degrees(take into account momentum)
-    po3->cue_action(6,15);//turn right 90 degrees(take into account momentum)
+    po3->cue_action(1,12);//move left 12 units (remember there's momentum so a little goes a long way)
+    po3->cue_action(3,12);//move up 12 units (remember there's momentum so a little goes a long way)
+    po3->cue_action(2,12);//move right 12 units (remember there's momentum so a little goes a long way)
+    po3->cue_action(4,12);//move down 12 units (remember there's momentum so a little goes a long way)
+    po3->cue_action(5,15);//turn left 15 degrees (remember there's momentum so a little goes a long way)
+    po3->cue_action(6,15);//turn right 15 degrees (remember there's momentum so a little goes a long way)
 
-    physics_object* po4 = new physics_object();
+    physics_object* po4 = new physics_object();//create a pointer and initialize it
     po4->set_position(window::width/2-48,window::height/2-48);//set position backward left of window center
-    po4->cue_action(3,12);//move up 96 units(take into account momentum)
-    po4->cue_action(2,12);//move right 96 units(take into account momentum)
-    po4->cue_action(4,12);//move down 96 units(take into account momentum)
-    po4->cue_action(1,12);//move left 96 units(take into account momentum)
-    po4->cue_action(5,15);//turn left 90 degrees(take into account momentum)
-    po4->cue_action(6,15);//turn right 90 degrees(take into account momentum)
+    po4->cue_action(3,12);//move up 12 units (remember there's momentum so a little goes a long way)
+    po4->cue_action(2,12);//move right 12 units (remember there's momentum so a little goes a long way)
+    po4->cue_action(4,12);//move down 12 units (remember there's momentum so a little goes a long way)
+    po4->cue_action(1,12);//move left 12 units (remember there's momentum so a little goes a long way)
+    po4->cue_action(5,15);//turn left 15 degrees (remember there's momentum so a little goes a long way)
+    po4->cue_action(6,15);//turn right 15 degrees (remember there's momentum so a little goes a long way)
     std::clog<<"initialized physics objects\n";
     //initialize the draggable objects
-    draggable_object* do1 = new draggable_object();
+    draggable_object* do1 = new draggable_object();//create a pointer and initialize it
     do1->set_position(window::center.x,window::center.y);//set position window center
     do1->primary_color.set("black");
     std::clog<<"initialized draggable objects\n";
     //initialize the rts objects
-    rts_object* rtso1 = new rts_object();
+    rts_object* rtso1 = new rts_object();//create a pointer and initialize it
     rtso1->set_position(window::center.x+96,window::center.y);//set position right of window center
     rtso1->primary_color.set("yellow");
 
-    rts_object* rtso2 = new rts_object();
+    rts_object* rtso2 = new rts_object();//create a pointer and initialize it
     rtso2->set_position(window::center.x,window::center.y-96);//set position below window center
     rtso2->primary_color.set("green");
 
-    rts_object* rtso3 = new rts_object();
+    rts_object* rtso3 = new rts_object();//create a pointer and initialize it
     rtso3->set_position(window::center.x,window::center.y+96);//set position above window center
     rtso3->primary_color.set("red");
 
-    rts_object* rtso4 = new rts_object();
+    rts_object* rtso4 = new rts_object();//create a pointer and initialize it
     rtso4->set_position(window::center.x-96,window::center.y);//set position left of window center
     rtso4->primary_color.set("blue");
     std::clog<<"initialized rts objects\n";
@@ -159,11 +158,11 @@ void game::initialize()
     quit_button->set_label("Quit");
     quit_button->action=warn_quit;//function is assigned without '()' at the end
     //Quit Menu Buttons
-    button* confirm_quit = new button();
+    button* confirm_quit = new button();//create a pointer and initialize it
     confirm_quit->set_label("Yes");
     confirm_quit->action=game::quit;
 
-    button* cancel_quit = new button();
+    button* cancel_quit = new button();//create a pointer and initialize it
     cancel_quit->set_label("No");
     cancel_quit->action=game::return_menu;
     //Pause Menu Buttons
@@ -237,7 +236,7 @@ void game::initialize()
     leave_menu->format();//make sure everything is neat and tidy
     leave_menu->hide();//we don't want to see this right away
 
-    dropdown_menu* creation_menu = new dropdown_menu();
+    dropdown_menu* creation_menu = new dropdown_menu();//create a pointer and initialize it
     creation_menu->set_title("create new...");
     creation_menu->set_position(window::width*0.9,window::height*0.25);
     creation_menu->add_item(create_po_button);
@@ -261,15 +260,15 @@ void game::initialize()
 
     scene* game_screen = new scene();//create a pointer and initialize it
     game_screen->background_color.set("white");
-    game_screen->add_draggable_object(do1);
-    game_screen->add_physics_object(po1);
-    game_screen->add_physics_object(po2);
-    game_screen->add_physics_object(po3);
-    game_screen->add_physics_object(po4);
-    game_screen->add_rts_object(rtso1);
-    game_screen->add_rts_object(rtso2);
-    game_screen->add_rts_object(rtso3);
-    game_screen->add_rts_object(rtso4);
+    game_screen->add_object(do1);
+    game_screen->add_object(po1);
+    game_screen->add_object(po2);
+    game_screen->add_object(po3);
+    game_screen->add_object(po4);
+    game_screen->add_object(rtso1);
+    game_screen->add_object(rtso2);
+    game_screen->add_object(rtso3);
+    game_screen->add_object(rtso4);
     game_screen->add_text(object_info);
     game_screen->add_text(game_info);
     game_screen->add_button(delete_object_button);
@@ -297,25 +296,30 @@ void game::initialize()
 
 void game::add_draggable_object()
 {
-    draggable_object* new_do = new draggable_object();
-    current_scene->draggable_objects.insert(std::pair<int,draggable_object*>(object::total_objects,new_do));//add object to current scene
+    draggable_object* new_do = new draggable_object();//create a pointer and initialize it
+    current_scene->add_object(new_do);//add object to current scene
 }
 
 void game::add_physics_object()
 {
-    physics_object* new_po = new physics_object();
-    current_scene->physics_objects.insert(std::pair<int,physics_object*>(object::total_objects,new_po));//add object to current scene
+    physics_object* new_po = new physics_object();//create a pointer and initialize it
+    current_scene->add_object(new_po);//add object to current scene
 }
 
 void game::add_rts_object()
 {
-    rts_object* new_rtso = new rts_object();
-    current_scene->rts_objects.insert(std::pair<int,rts_object*>(object::total_objects,new_rtso));//add object to current scene
+    rts_object* new_rtso = new rts_object();//create a pointer and initialize it
+    current_scene->add_object(new_rtso);//add object to current scene
 }
 
 void game::create_object()
 {
-    scenes[1]->dropdown_menus[0]->current_item->action();
+    if(current_scene->last_object->get_type()=="draggable object")
+        current_scene->add_object(new draggable_object());
+    if(current_scene->last_object->get_type()=="physics object")
+        current_scene->add_object(new physics_object());
+    if(current_scene->last_object->get_type()=="rts object")
+        current_scene->add_object(new rts_object());
 }
 
 void game::delete_selected()
@@ -329,6 +333,10 @@ void game::delete_selected()
 void game::play()
 {
     cursor::reset();
+    paused=false;
+    scenes[1]->menus[0]->hide();//hide the pause menu
+    scenes[1]->menus[1]->hide();//hide the warning prompt
+    scenes[1]->current_menu=scenes[1]->dropdown_menus[0];//set the creation menu as current
     current_scene=scenes[1];//open game screen
     std::clog<<"started game."<<std::endl;
 }
@@ -337,8 +345,8 @@ void game::pause()
 {
     paused=true;
     scenes[1]->menus[0]->show();//show the pause menu
-    scenes[1]->current_menu=scenes[1]->menus[0];
     scenes[1]->menus[1]->hide();//hide the warning prompt
+    scenes[1]->current_menu=scenes[1]->menus[0];//set the pause menu as current
     std::clog<<"paused game."<<std::endl;
 }
 
@@ -346,7 +354,7 @@ void game::resume()
 {
     paused=false;
     scenes[1]->menus[0]->hide();//hide the pause menu
-    scenes[1]->current_menu=scenes[1]->dropdown_menus[0];
+    scenes[1]->menus[1]->hide();//hide the warning prompt
     std::clog<<"resumed game."<<std::endl;
 }
 
@@ -354,7 +362,7 @@ void game::warn_quit()
 {
     cursor::reset();
     scenes[0]->menus[1]->show();//show the warning prompt
-    scenes[0]->current_menu=scenes[0]->menus[1];
+    scenes[0]->current_menu=scenes[0]->menus[1];//set the warning menu as current
 }
 
 void game::warn_return()
@@ -362,14 +370,14 @@ void game::warn_return()
     cursor::reset();
     scenes[1]->menus[0]->hide();//hide the pause menu
     scenes[1]->menus[1]->show();//show the warning prompt
-    scenes[1]->current_menu=scenes[1]->menus[1];
+    scenes[1]->current_menu=scenes[1]->menus[1];//set the warning menu as current
 }
 
 void game::return_menu()
 {
     cursor::reset();
     scenes[0]->menus[1]->hide();//hide the quit menu
-    scenes[0]->current_menu=scenes[0]->menus[0];
+    scenes[0]->current_menu=scenes[0]->menus[0];//set main menu as current
     current_scene=scenes[0];//open home screen
     std::clog<<"returned to menu."<<std::endl;
 }

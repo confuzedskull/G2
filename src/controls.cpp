@@ -34,9 +34,12 @@
 #include <string.h>
 
 //initialize variables
-bool* controls::toggles = new bool[256];
-bool* controls::key_states = new bool[256];
-bool* controls::toggle_states = new bool[256];
+bool controls::toggles[256] = {false};
+bool controls::key_states[256] = {false};
+bool controls::toggle_states[256] = {false};
+std::map<std::string,bool> controls::special_toggles;
+std::map<std::string,bool> controls::special_toggle_states;
+std::map<std::string,bool> controls::special_states;
 
 void controls::move_forward()
 {
@@ -76,64 +79,40 @@ void controls::turn_right()
 
 void controls::next_item()
 {
-    bool selected_item=false;
     menu* current_menu = game::current_scene->current_menu;
-    for(int i=0; i<current_menu->items.size();i++)
+    int i = current_menu->item_selected();
+    if(i==-1)
+        current_menu->items.front()->selected=true;
+    else
     {
-        if(current_menu->items[i]->selected)
-        {
-            selected_item=true;
-            current_menu->items[i]->selected=false;
-            if((i+1)<current_menu->items.size())//close to end
-            {
-                current_menu->items[i+1]->selected=true;
-                current_menu->current_item=current_menu->items[i+1];
-            }
-            else
-            {
-                current_menu->items[0]->selected=true;
-                current_menu->current_item=current_menu->items[0];
-            }
-            break;
-        }
+        current_menu->items[i]->selected=false;
+        if((i+1)<current_menu->items.size())//close to end
+            current_menu->items[i+1]->selected=true;
+        else
+            current_menu->items.front()->selected=true;
     }
-    if(!selected_item)
-        current_menu->items[0]->selected=true;
 }
 
 void controls::previous_item()
 {
-    bool selected_item=false;
     menu* current_menu = game::current_scene->current_menu;
-    for(int i=0; i<current_menu->items.size();i++)
+    int i = current_menu->item_selected();
+    if(i==-1)
+        current_menu->items.front()->selected=true;
+    else
     {
-        if(current_menu->items[i]->selected)
-        {
-            selected_item=true;
-            current_menu->items[i]->selected=false;
-            if((i-1)>=0)
-            {
-                current_menu->items[i-1]->selected=true;
-                current_menu->current_item=current_menu->items[i-1];
-            }
-            else
-            {
-                current_menu->items.back()->selected=true;
-                current_menu->current_item=current_menu->items.back();
-            }
-            break;
-        }
-    }
-    if(!selected_item)
-    {
-        current_menu->items[0]->selected=true;
-        current_menu->current_item=current_menu->items[0];
+        current_menu->items[i]->selected=false;
+        if((i-1)>=0)
+            current_menu->items[i-1]->selected=true;
+        else
+            current_menu->items.back()->selected=true;
     }
 }
 
 void controls::choose_item()
 {
-    game::current_scene->current_menu->current_item->action();
+    if(game::current_scene->current_menu->item_selected()!=-1)
+        game::current_scene->current_menu->current_item->action();
 }
 
 //NOTE: This function uses C++11 "for" loops
@@ -153,6 +132,8 @@ void controls::check_clicked()
             left_clicked=b->left_clicked();
         for(auto m:game::current_scene->menus)
             left_clicked=m->item_clicked();
+        for(auto dm:game::current_scene->dropdown_menus)
+            left_clicked=dm->item_clicked();
         if(!left_clicked)//at this point, no objects have been left clicked so leave the loop
             break;
     }
@@ -303,29 +284,52 @@ void controls::key_operations(void)
 
 void controls::special_keys(int key,int x,int y)
 {
-    std::string special;
+    //first we need to reset all the key values
+    for(auto s:special_states)
+        s.second=false;
+    //then we will check them again
     switch(key)
     {
     case GLUT_KEY_UP:
-        special="up";
+        special_states["up"]=true;
         break;
     case GLUT_KEY_DOWN:
-        special="down";
+        special_states["down"]=true;
         break;
     case GLUT_KEY_LEFT:
-        special="left";
+        special_states["left"]=true;
         break;
     case GLUT_KEY_RIGHT:
-        special="right";
+        special_states["right"]=true;
         break;
     case GLUT_KEY_INSERT:
-        special="insert";
+        special_states["insert"]=true;
         break;
     }
 
-    for(auto sb:game::current_scene->special_bindings)//C++11 "for" loop
+    for(auto key:game::current_scene->special_bindings)//C+11 "for" loop
     {
-        if(special==sb.first)
-            sb.second();
+        if(game::current_scene->special_toggles.find(key.first)!=game::current_scene->special_toggles.end())//key has a toggle
+        {
+            if(special_states[key.first])
+            {
+                if(special_toggles[key.first])
+                {
+                    if(special_toggle_states[key.first])
+                        key.second();//perform key action
+                    special_toggle_states[key.first]=false;
+                }
+                else
+                {
+                    if(!special_toggle_states[key.first])
+                        game::current_scene->special_toggles.at(key.first)();//perform key counter action
+                    special_toggle_states[key.first]=true;
+                }
+            }
+            else
+                special_toggles[key.first]=special_toggle_states[key.first];
+        }
+        else if(special_states[key.first])//binded key is pressed
+            key.second();//just perform the associated action
     }
 }

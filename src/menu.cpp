@@ -33,17 +33,24 @@
 #include <string>
 #include <math.h>
 
-bool menu::item_clicked()
+int menu::item_selected()
 {
-    for(auto i:items)
+    for(int i=0;i<items.size();i++)
     {
-        if(i->left_clicked())
-        {
-            current_item=i;
-            return true;
-        }
+        if(items[i]->selected)
+            return i;
     }
-    return false;
+    return -1;
+}
+
+int menu::item_clicked()
+{
+    for(int i=0;i<items.size();i++)
+    {
+        if(items[i]->left_clicked())
+            return i;
+    }
+    return -1;
 }
 
 void menu::format()
@@ -134,9 +141,7 @@ void menu::set_subtitle(std::string s)
 void menu::set_layout(std::string l)
 {
     if(l=="vertical" || l=="horizontal")
-    {
         layout=l;
-    }
 }
 
 void menu::allign_title(std::string a)
@@ -147,7 +152,6 @@ void menu::allign_title(std::string a)
 void menu::add_item(button* b)
 {
     items.push_back(b);
-    current_item=b;
 }
 
 void menu::render()
@@ -187,6 +191,8 @@ void menu::update()
 {
     for(auto i:items)
     {
+        if(i->selected)
+            current_item=i;
         i->visible=visible;//if menu is visible, items are visible
         i->update();
     }

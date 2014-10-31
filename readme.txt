@@ -43,10 +43,13 @@ a. hold 'W','A','S','D' to move up,left,down,right, respectively
 b. hold 'Q' and 'E' to rotate
 
 III. Known Bugs:
-A. Physics Objects
+A. Global
+1. The "insert" key doesn't work on Macs.
+2. When navigating menus with the arrow keys, the selector sometimes gets stuck.
+B. Physics Objects
 1. An object's resting point gets set even when it's moving.
 2. Some of the object's physics values do not zero out when object is at rest.
-B. RTS Objects
+C. RTS Objects
 1. An object's resting point doesn't get set at all.
 
 Disclaimer:

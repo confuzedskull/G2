@@ -30,6 +30,7 @@ class scene
 {
 public:
     color background_color;
+    object* last_object;
     menu* current_menu;
     //maps are used because we need to access the objects by referencing a common identifier (object.number)
     //pointers are used because everything is created in game::initialize() and we just need to reference them
@@ -44,9 +45,9 @@ public:
     std::vector<button*> buttons;
     std::vector<menu*> menus;
     std::vector<dropdown_menu*> dropdown_menus;
-    void add_draggable_object(draggable_object*);//add a draggable object to the scene
-    void add_physics_object(physics_object*);//add a physics object to the scene
-    void add_rts_object(rts_object*);//add an rts object to the scene
+    void add_object(draggable_object*);//add a draggable object to the scene
+    void add_object(physics_object*);//add a physics object to the scene
+    void add_object(rts_object*);//add an rts object to the scene
     void add_text(text_object*);//add text object to the scene
     void add_button(button*);//add button to the scene
     void add_menu(menu*);//add menu to the scene
