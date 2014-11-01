@@ -19,7 +19,8 @@
 #include "draggable_object.h"
 #include "physics_object.h"
 #include "rts_object.h"
-#include "text_object.h"
+#include "label.h"
+#include "checkbox.h"
 #include "button.h"
 #include "menu.h"
 #include "dropdown_menu.h"
@@ -41,14 +42,16 @@ public:
     std::map<unsigned char, void (*)()> key_toggles;
     std::map<std::string, void (*)()> special_bindings;
     std::map<std::string, void (*)()> special_toggles;
-    std::vector<text_object*> text_objects;
+    std::vector<label*> labels;
+    std::vector<checkbox*> checkboxes;
     std::vector<button*> buttons;
     std::vector<menu*> menus;
     std::vector<dropdown_menu*> dropdown_menus;
     void add_object(draggable_object*);//add a draggable object to the scene
     void add_object(physics_object*);//add a physics object to the scene
     void add_object(rts_object*);//add an rts object to the scene
-    void add_text(text_object*);//add text object to the scene
+    void add_text(label*);//add text object to the scene
+    void add_checkbox(checkbox*);//add checkbox to the scene
     void add_button(button*);//add button to the scene
     void add_menu(menu*);//add menu to the scene
     void add_menu(dropdown_menu*);//add dropdown menu to the scene
@@ -64,6 +67,8 @@ public:
     void hide_rts_objects();//hide all rts objects
     void show_text();//show the text
     void hide_text();//hide the text
+    void show_checkboxes();//show all checkboxes
+    void hide_checkboxes();//hide all checkboxes
     void show_buttons();//show all buttons
     void hide_buttons();//hide all buttons
     void show_menus();//show all menus

@@ -30,6 +30,7 @@ double game::time_elapsed = 0.0f;
 bool game::paused=false;
 scene* game::current_scene = new scene();
 std::vector<scene*> game::scenes;
+std::vector<int*> game::options;
 
 //This checks which objects are touching and what they should do when that occurs
 //NOTE: This function uses C++11 "for" loops
@@ -73,6 +74,16 @@ void game::collision_detection()
 
 void game::initialize()
 {
+//Initialize Options
+    int* show_draggable_objects=new int{1};
+    add_option(show_draggable_objects);
+
+    int* show_physics_objects=new int{1};
+    add_option(show_physics_objects);
+
+    int* show_rts_objects=new int{1};
+    add_option(show_rts_objects);
+
 //Initialize Objects
     std::clog<<"initializing objects...\n";
     //initialize the physics objects
@@ -115,40 +126,56 @@ void game::initialize()
     //initialize the draggable objects
     draggable_object* do1 = new draggable_object();//create a pointer and initialize it
     do1->set_position(window::center.x,window::center.y);//set position window center
-    do1->primary_color.set("black");
+    do1->fill_color.set("black");
     std::clog<<"initialized draggable objects\n";
     //initialize the rts objects
     rts_object* rtso1 = new rts_object();//create a pointer and initialize it
     rtso1->set_position(window::center.x+96,window::center.y);//set position right of window center
-    rtso1->primary_color.set("yellow");
+    rtso1->fill_color.set("yellow");
 
     rts_object* rtso2 = new rts_object();//create a pointer and initialize it
     rtso2->set_position(window::center.x,window::center.y-96);//set position below window center
-    rtso2->primary_color.set("green");
+    rtso2->fill_color.set("green");
 
     rts_object* rtso3 = new rts_object();//create a pointer and initialize it
     rtso3->set_position(window::center.x,window::center.y+96);//set position above window center
-    rtso3->primary_color.set("red");
+    rtso3->fill_color.set("red");
 
     rts_object* rtso4 = new rts_object();//create a pointer and initialize it
     rtso4->set_position(window::center.x-96,window::center.y);//set position left of window center
-    rtso4->primary_color.set("blue");
+    rtso4->fill_color.set("blue");
     std::clog<<"initialized rts objects\n";
 //Initialize Text
     //Information Overlay Text
-    text_object* object_info = new text_object();//create a pointer and initialize it
+    label* object_info = new label();//create a pointer and initialize it
     object_info->spacing=20;
     object_info->set_position(ui::margin,window::height-20);
     object_info->hide();//we don't want to see this right away
 
-    text_object* game_info = new text_object();//create a pointer and initialize it
+    label* game_info = new label();//create a pointer and initialize it
     game_info->spacing=20;
     game_info->set_position(window::width-(ui::margin+200),window::height-20);
     game_info->hide();//we don't want to see this right away
 
     std::clog<<"initialized text\n";
-//Initialize Buttons
     std::clog<<"initializing user interface...\n";
+//Initialize Checkboxes
+    checkbox* show_dos = new checkbox();
+    show_dos->set_position(window::width*0.9,window::height*0.4);
+    show_dos->set_label("show draggable objects");
+    show_dos->bind_option(show_draggable_objects);
+
+    checkbox* show_pos = new checkbox();
+    show_pos->set_position(window::width*0.9,window::height*0.35);
+    show_pos->set_label("show physics objects");
+    show_pos->bind_option(show_physics_objects);
+
+    checkbox* show_rtsos = new checkbox();
+    show_rtsos->set_position(window::width*0.9,window::height*0.3);
+    show_rtsos->set_label("show rts objects");
+    show_rtsos->bind_option(show_rts_objects);
+    std::clog<<"initialized checkboxes\n";
+//Initialize Buttons
     //Main Menu Buttons
     button* play_button = new button();//create a button pointer and initialize it
     play_button->set_label("Play");
@@ -239,8 +266,8 @@ void game::initialize()
     dropdown_menu* creation_menu = new dropdown_menu();//create a pointer and initialize it
     creation_menu->set_title("create new...");
     creation_menu->set_position(window::width*0.9,window::height*0.25);
-    creation_menu->add_item(create_po_button);
     creation_menu->add_item(create_do_button);
+    creation_menu->add_item(create_po_button);
     creation_menu->add_item(create_rtso_button);
     std::clog<<"initialized menus\n";
 //Initialize Scenes
@@ -271,6 +298,9 @@ void game::initialize()
     game_screen->add_object(rtso4);
     game_screen->add_text(object_info);
     game_screen->add_text(game_info);
+    game_screen->add_checkbox(show_dos);
+    game_screen->add_checkbox(show_pos);
+    game_screen->add_checkbox(show_rtsos);
     game_screen->add_button(delete_object_button);
     game_screen->add_button(menu_button);
     game_screen->add_menu(pause_menu);
@@ -292,6 +322,11 @@ void game::initialize()
     game_screen->bind_key(127,"press",delete_selected);//delete selected object when DEL key is pressed
     game_screen->bind_key(27,pause,resume);//open/close pause menu when escape key is pressed
     scenes.push_back(game_screen);//add to scenes
+}
+
+void game::add_option(int* o)
+{
+    options.push_back(o);
 }
 
 void game::add_draggable_object()
@@ -390,14 +425,33 @@ void game::quit()
 
 void game::update()
 {
-    time_elapsed = ((float)clock()-time_started)/CLOCKS_PER_SEC;//update the start time
+    if(!paused)
+    {
+        time_elapsed = ((float)clock()-time_started)/CLOCKS_PER_SEC;//update the start time
+        collision_detection();//apply collision effects
+    }
     current_scene->update();//update scene
-    collision_detection();//apply collision effects
+    //process options
+    if(*options[0]==1)
+        scenes[1]->show_draggable_objects();
+    else
+        scenes[1]->hide_draggable_objects();
+    if(*options[1]==1)
+        scenes[1]->show_physics_objects();
+    else
+        scenes[1]->hide_physics_objects();
+    if(*options[2]==1)
+        scenes[1]->show_rts_objects();
+    else
+        scenes[1]->hide_rts_objects();
 }
 
 void game::sync()
 {
-    time_started=clock();//reset the start time
-    time+=window::refresh_rate;//increment the game clock
-    current_scene->sync();//update clock-based events
+    if(!paused)
+    {
+        time_started=clock();//reset the start time
+        time+=window::refresh_rate;//increment the game clock
+        current_scene->sync();//update clock-based events
+    }
 }

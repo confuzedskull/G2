@@ -158,32 +158,12 @@ void menu::render()
 {
     if(visible)
     {
-        glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
-        glBegin(GL_POLYGON);//draws a filled in rectangle
-        glVertex2f(xmin, ymin); // The bottom left corner
-        glVertex2f(xmin, ymax); // The top left corner
-        glVertex2f(xmax, ymax); // The top right corner
-        glVertex2f(xmax, ymin); // The bottom right corner
-        glEnd();//finish drawing
+        render_shape();
         title.render();
         subtitle.render();
         for(auto i:items)
             i->render();
-        //render border
-        if(border)
-        {
-            glColor3f(border_color.r,border_color.g,border_color.b);
-            glBegin(GL_LINES);//draws lines (in this case, a rectangle)
-            glVertex2f(xmin, ymax);//top left corner
-            glVertex2f(xmax, ymax);//top right corner
-            glVertex2f(xmax, ymax);//top right corner
-            glVertex2f(xmax, ymin);//bottom right corner
-            glVertex2f(xmax, ymin);//bottom right corner
-            glVertex2f(xmin, ymin);//bottom left corner
-            glVertex2f(xmin, ymin);//bottom left corner
-            glVertex2f(xmin, ymax);//top left corner
-            glEnd();
-        }
+        render_border();
     }
 }
 
@@ -202,7 +182,7 @@ menu::menu()
 {
     type="menu";
     set_position(window::center.x,window::center.y);
-    primary_color.set(0.75,0.75,0.75);//make the background dark gray
+    fill_color.set(0.75,0.75,0.75);//make the background dark gray
     set_title("menu");
     title.set_font("helvetica",18);
     allign_title("top");
@@ -211,5 +191,5 @@ menu::menu()
     layout="vertical";
     spacing=10;
     margin=20;
-    border=true;
+    bordered=true;
 }

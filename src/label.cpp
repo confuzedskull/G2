@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#include "text_object.h"
+#include "label.h"
 #include "ui.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
@@ -30,13 +30,13 @@
 #endif
 #include <iostream>
 
-void text_object::add_line(std::string str)
+void label::add_line(std::string str)
 {
     text.push_back(str);
     set_dimensions(font_width*str.length(),font_height);
 }
 
-void text_object::set_font(std::string style, int size)
+void label::set_font(std::string style, int size)
 {
     font_size=size;
     font_width=font_size*0.6;
@@ -59,11 +59,11 @@ void text_object::set_font(std::string style, int size)
     }
 }
 
-void text_object::render()
+void label::render()
 {
     if(visible)
     {
-        glColor3f(primary_color.r,primary_color.g,primary_color.b);
+        glColor3f(fill_color.r,fill_color.g,fill_color.b);
         for(unsigned l=0; l<text.size(); l++)//iterate through each line
         {
             glRasterPos2f(position.x,position.y-((spacing+font_height)*l));//update the character position
@@ -73,15 +73,15 @@ void text_object::render()
     }
 }
 
-void text_object::clear()
+void label::clear()
 {
     text.clear();
 }
 
-text_object::text_object()
+label::label()
 {
     type="text object";
-    primary_color=BLACK;
+    fill_color=BLACK;
     set_font("helvetica",12);
     spacing=1;
     std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;

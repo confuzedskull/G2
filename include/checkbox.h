@@ -14,29 +14,28 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#ifndef TEXT_OBJECT_H
-#define TEXT_OBJECT_H
-#include "object.h"
-#include <vector>
-#include <string>
-#include <sstream>
+#ifndef CHECKBOX_H
+#define CHECKBOX_H
+#include "clickable_object.h"
+#include "label.h"
 
-//A text object stores a string which can be formatted and displayed on screen
-class text_object: public object
+class checkbox: public clickable_object
 {
 protected:
-    std::vector<std::string> text;
-    void* font;
-    int font_size;
-    float font_width;
-    float font_height;
+    int checked;
+    label text;
 public:
-    int spacing;//the space between each line
-    void add_line(std::string str);
-    void set_font(std::string style, int size);
-    void clear();
-    void render();//prints the text to the screen
-    text_object();
+    int* option;
+    int margin;
+    color check_color;
+    void set_label(std::string);
+    void set_label(std::string,std::string);
+    void put_label(std::string);
+    void bind_option(int*);
+    void mouse_function();
+    void render();
+    void update();
+    checkbox();
 };
 
-#endif // TEXT_OBJECT_H
+#endif // CHECKBOX_H

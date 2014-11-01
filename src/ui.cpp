@@ -38,7 +38,7 @@ void ui::hide_text()
 
 void ui::update_text()
 {
-    text_object* object_info = game::scenes[1]->text_objects[0];
+    label* object_info = game::scenes[1]->labels[0];
     if(object_info->visible)
     {
         unsigned index = cursor::selected_object;
@@ -78,7 +78,7 @@ void ui::update_text()
             object_info->add_line("object touching side L:"+to_string(rtso->touching[0])+"R:"+to_string(rtso->touching[1])+"T:"+to_string(rtso->touching[2])+"B:"+to_string(rtso->touching[3]));
         }
 
-        text_object* game_info = game::scenes[1]->text_objects[1];
+        label* game_info = game::scenes[1]->labels[1];
         game_info->clear();
         game_info->add_line("game time: "+to_string(game::time));
         game_info->add_line("mouse move: "+to_string(cursor::passive.x)+", "+to_string(cursor::passive.y));

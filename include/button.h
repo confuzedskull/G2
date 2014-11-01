@@ -17,20 +17,20 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 #include "clickable_object.h"
-#include "text_object.h"
+#include "label.h"
 #include <string>
 
 //A button displays text and executes a function when clicked
-class button : public clickable_object
+class button: public clickable_object
 {
 protected:
-    text_object label;
-    std::string label_allignment;
+    label text;
+    std::string text_allignment;
 public:
-    int margin;//space between text and button border
+    int margin;//space between label and button border
     bool performed_action;//whether or not the button action executed
     void (*action)();//a function pointer which will be called when clicked
-    void format();//adjusts the size of the button to fit the text
+    void format();//adjusts the size of the button to fit the label
     void set_label(std::string);
     void allign_label(std::string);
     void mouse_function();

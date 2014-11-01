@@ -103,20 +103,15 @@ void complex_object::render()
 {
     if(visible)
     {
-        glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
+        glColor3f(fill_color.r,fill_color.g,fill_color.b);//color the square with object.fill_color
         glBegin(GL_POLYGON);//draws a filled in polygon
         glVertex2f(back_left.x, back_left.y); // The bottom left corner
         glVertex2f(front_left.x, front_left.y); // The top left corner
         glVertex2f(front_right.x, front_right.y); // The top right corner
         glVertex2f(back_right.x, back_right.y); // The bottom right corner
         glEnd();//finish drawing
+        render_border();
         mark_selected();
-
-        if(!rendered)
-        {
-            std::clog<<"object#"<<number<<'('<<type<<')'<<" rendered."<<std::endl;
-            rendered=true;
-        }
     }
 }
 

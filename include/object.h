@@ -33,10 +33,9 @@ protected:
     int marker_width;
     int marker_height;
     float radius;
-    bool rendered;//whether the render method has been called or not
     float xmax,xmin,ymax,ymin;//the boundaries of the object
 public:
-    static int total_objects;
+    static int total_objects;//total number of objects. This is used to assign the object number
     static point2f origin;
     int get_number();
     std::string get_type();
@@ -46,10 +45,11 @@ public:
     float get_width();
     float get_height();
     float get_radius();
-    color primary_color;
+    color fill_color;
     color marker_color;//color of marker when object is selected
     color border_color;//the color of the border
-    bool border;//whether or not a border should be shown
+    bool filled;
+    bool bordered;//whether or not a border should be shown
     bool visible;//whether the object should be shown or not
     bool selected;//whether the object has been selected or not
     void rotate(float angle);//changes the object's rotation by the given angle
@@ -60,6 +60,8 @@ public:
     void mark_selected();//visually indicate that the object is selected
     void show();//make the object visible
     void hide();//make the object invisible
+    void render_shape();//draw the object's shape
+    void render_border();//draw the border
     void render();//draws the object
     void update();
     object();

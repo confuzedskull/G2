@@ -14,36 +14,29 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#ifndef MENU_H
-#define MENU_H
-#include "button.h"
-#include "label.h"
+#ifndef LABEL_H
+#define LABEL_H
+#include "object.h"
 #include <vector>
 #include <string>
+#include <sstream>
 
-class menu: virtual public object
+//A label stores a string which can be formatted and displayed on screen
+class label: public object
 {
 protected:
-    label title;
-    label subtitle;
-    std::string layout;
-    std::string title_allignment;
+    std::vector<std::string> text;
+    void* font;
+    int font_size;
+    float font_width;
+    float font_height;
 public:
-    std::vector<button*> items;
-    int spacing;//space between buttons
-    int margin;
-    button* current_item;
-    int item_selected();//returns index of selected item
-    int item_clicked();//returns index of clicked item
-    void set_title(std::string t);
-    void set_subtitle(std::string s);
-    void set_layout(std::string l);
-    void allign_title(std::string a);
-    void add_item(button* b);
-    void format();
-    void render();
-    void update();
-    menu();
+    int spacing;//the space between each line
+    void add_line(std::string str);
+    void set_font(std::string style, int size);
+    void clear();
+    void render();//prints the text to the screen
+    label();
 };
 
-#endif // MENU_H
+#endif // LABEL_H

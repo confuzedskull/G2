@@ -20,7 +20,7 @@
 
 void dropdown_menu::add_item(button* b)
 {
-    b->border=false;
+    b->bordered=false;
     b->allign_label("left");
 	items.push_back(b);
     format();//match menu width to the width of the widest item
@@ -32,27 +32,30 @@ void dropdown_menu::add_item(button* b)
 
 void dropdown_menu::mouse_function()
 {
-    if(hovered_over() && !primary_color.changed)
-        primary_color.brighten();
-    if(!hovered_over())
-        primary_color.undo();
-    if(left_clicked()||item_clicked()!=-1)
+    if(visible)
     {
-        if(expanded)
+        if(hovered_over() && !fill_color.changed)
+            fill_color.brighten();
+        if(!hovered_over())
+            fill_color.undo();
+        if(left_clicked()||item_clicked()!=-1)
         {
-            if(state_toggle)
-            expand();
-            state_toggle=false;
+            if(expanded)
+            {
+                if(state_toggle)
+                    expand();
+                state_toggle=false;
+            }
+            else
+            {
+                if(!state_toggle)
+                    collapse();
+                state_toggle=true;
+            }
         }
         else
-        {
-            if(!state_toggle)
-                collapse();
-            state_toggle=true;
-        }
+            expanded=state_toggle;
     }
-    else
-        expanded=state_toggle;
 }
 
 void dropdown_menu::expand()

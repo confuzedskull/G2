@@ -34,7 +34,7 @@
 #include <GL/glut.h>
 #endif
 
-point2f draggable_object::origin = point2f(window::width*0.9,window::height*0.6);
+point2f draggable_object::origin = point2f(window::width*0.9,window::height*0.7);
 
 bool draggable_object::grabbed()
 {
@@ -48,38 +48,41 @@ bool draggable_object::grabbed()
 
 void draggable_object::mouse_function()
 {
-    if(left_clicked())//clicked this object
+    if(visible)
     {
-        if(!cursor::left_clicked_an_object && !selected)
-        std::clog<<"object#"<<number<<'('<<type<<')'<<" selected"<<std::endl;
-        cursor::left_clicked_object=this;
-        cursor::left_clicked_an_object = true;
-        cursor::selected_object=number;
-        selected = true;
-    }
+        if(left_clicked())//clicked this object
+        {
+            if(!cursor::left_clicked_an_object && !selected)
+                std::clog<<"object#"<<number<<'('<<type<<')'<<" selected"<<std::endl;
+            cursor::left_clicked_object=this;
+            cursor::left_clicked_an_object = true;
+            cursor::selected_object=number;
+            selected = true;
+        }
 
-    if(cursor::left_click && cursor::selected_object !=number)//clicked another object
-    {
-        cursor::highlighted_objects[number]=false;
-        selected = false;
-    }
+        if(cursor::left_click && cursor::selected_object !=number)//clicked another object
+        {
+            cursor::highlighted_objects[number]=false;
+            selected = false;
+        }
 
-    if(cursor::left_click && !cursor::left_clicked_an_object)//clicked nothing
-    {
-        cursor::highlighted_objects[number]=false;
-        selected = false;
-    }
+        if(cursor::left_click && !cursor::left_clicked_an_object)//clicked nothing
+        {
+            cursor::highlighted_objects[number]=false;
+            selected = false;
+        }
 
-    if(right_clicked())//right clicked this object
-    {
-        cursor::right_clicked_object=this;
-        cursor::right_clicked_an_object=true;
-    }
+        if(right_clicked())//right clicked this object
+        {
+            cursor::right_clicked_object=this;
+            cursor::right_clicked_an_object=true;
+        }
 
-    if(grabbed())//grabbed this object
-    {
-        position.set(cursor::left_drag.x,cursor::left_drag.y);
-        cursor::grabbed_an_object=true;
+        if(grabbed())//grabbed this object
+        {
+            position.set(cursor::left_drag.x,cursor::left_drag.y);
+            cursor::grabbed_an_object=true;
+        }
     }
 }
 
@@ -94,7 +97,7 @@ void draggable_object::update()
 draggable_object::draggable_object()
 {
     type="draggable object";
-    primary_color=BLACK;
+    fill_color=BLACK;
     position.set(origin);
     std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

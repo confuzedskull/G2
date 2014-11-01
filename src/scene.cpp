@@ -48,9 +48,14 @@ void scene::add_object(rts_object* new_rtso)
     rts_objects.insert(std::pair<int,rts_object*>(new_rtso->get_number(),new_rtso));//add object to scene
 }
 
-void scene::add_text(text_object* t)
+void scene::add_text(label* t)
 {
-    text_objects.push_back(t);
+    labels.push_back(t);
+}
+
+void scene::add_checkbox(checkbox* c)
+{
+    checkboxes.push_back(c);
 }
 
 void scene::add_button(button* b)
@@ -134,14 +139,26 @@ void scene::hide_rts_objects()
 
 void scene::show_text()
 {
-    for(auto t:text_objects)//C++11 "for" loop
+    for(auto t:labels)//C++11 "for" loop
         t->show();
 }
 
 void scene::hide_text()
 {
-    for(auto t:text_objects)//C++11 "for" loop
+    for(auto t:labels)//C++11 "for" loop
         t->hide();
+}
+
+void scene::show_checkboxes()
+{
+    for(auto c:checkboxes)
+        c->show();
+}
+
+void scene::hide_checkboxes()
+{
+    for(auto c:checkboxes)
+        c->hide();
 }
 
 void scene::show_buttons()
@@ -174,50 +191,24 @@ void scene::hide_menus()
 
 void scene::show_all()
 {
-    //show physics objects
-    for(auto p:physics_objects)
-        p.second->show();
-    //show rts objects
-    for(auto r:rts_objects)
-        r.second->show();
-    //show draggable objects
-    for(auto d:draggable_objects)
-        d.second->show();
-    //show text
-    for(auto t:text_objects)
-        t->show();
-    //show menus
-    for(auto m:menus)
-        m->show();
-    for(auto dm:dropdown_menus)
-        dm->show();
-    //show buttons
-    for(auto b:buttons)
-        b->show();
+    show_draggable_objects();
+    show_physics_objects();
+    show_rts_objects();
+    show_text();
+    show_buttons();
+    show_checkboxes();
+    show_menus();
 }
 
 void scene::hide_all()
 {
-    //hide physics objects
-    for(auto p:physics_objects)
-        p.second->hide();
-    //hide rts objects
-    for(auto r:rts_objects)
-        r.second->hide();
-    //hide draggable objects
-    for(auto d:draggable_objects)
-        d.second->hide();
-    //hide text
-    for(auto t:text_objects)
-        t->hide();
-    //hide menus
-    for(auto m:menus)
-        m->hide();
-    for(auto dm:dropdown_menus)
-        dm->hide();
-    //hide buttons
-    for(auto b:buttons)
-        b->hide();
+    hide_draggable_objects();
+    hide_physics_objects();
+    hide_rts_objects();
+    hide_text();
+    hide_buttons();
+    hide_checkboxes();
+    hide_menus();
 }
 
 //NOTE: This function uses C++11 "for" loops
@@ -233,22 +224,26 @@ void scene::render()
     //render the physics objects
     for(auto p:physics_objects)
         p.second->render();
-    //render text
-    for(auto t:text_objects)
-        t->render();
+    //render checkboxes
+    for(auto c:checkboxes)
+        c->render();
+    //render buttons
+    for(auto b:buttons)
+        b->render();
     //render menus
     for(auto m:menus)
         m->render();
     for(auto dm:dropdown_menus)
         dm->render();
-    //render buttons
-    for(auto b:buttons)
-        b->render();
+    //render text
+    for(auto t:labels)
+        t->render();
 }
 
 //NOTE: This function uses C++11 "for" loops
 void scene::update()
 {
+    if(!game::paused)
     //update physics objects
     for(auto p:physics_objects)
         p.second->update();
@@ -263,6 +258,9 @@ void scene::update()
         m->update();
     for(auto dm:dropdown_menus)
         dm->update();
+    //update checkboxes
+    for(auto c:checkboxes)
+        c->update();
     //update buttons
     for(auto b:buttons)
         b->update();
@@ -270,17 +268,14 @@ void scene::update()
 
 void scene::sync()
 {
-    if(!game::paused)
+    //move rts objects
+    for(auto r:rts_objects)//C++11 "for" loop
+        r.second->perform_actions()||r.second->move_to_point(*r.second->rally);
+    //move physics objects
+    for(auto p:physics_objects)//C++11 "for" loop
     {
-        //move rts objects
-        for(auto r:rts_objects)//C++11 "for" loop
-            r.second->perform_actions()||r.second->move_to_point(*r.second->rally);
-        //move physics objects
-        for(auto p:physics_objects)//C++11 "for" loop
-        {
-            p.second->perform_actions();
-            p.second->inertia();
-        }
+        p.second->perform_actions();
+        p.second->inertia();
     }
 }
 
@@ -289,7 +284,7 @@ void scene::clear()
     physics_objects.clear();
     draggable_objects.clear();
     rts_objects.clear();
-    text_objects.clear();
+    labels.clear();
     buttons.clear();
     menus.clear();
     dropdown_menus.clear();

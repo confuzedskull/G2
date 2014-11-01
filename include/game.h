@@ -19,6 +19,7 @@
 #include "scene.h"
 #include <time.h>
 #include <vector>
+#include <map>
 
 //stores important functions and variables related to the game
 namespace game
@@ -29,8 +30,11 @@ namespace game
     extern bool paused;//whether the game is active or not
     extern scene* current_scene;
     extern std::vector<scene*> scenes;
+    extern std::vector<int*> options;
     void initialize();//initialize the objects
     void collision_detection();//handles object collision
+    void add_option(bool*);
+    void add_option(int*);
     void add_draggable_object();//add a draggable object to the current scene
     void add_physics_object();//add a physics object to the current scene
     void add_rts_object();//add an rts object to the current scene

@@ -18,7 +18,7 @@
 #define UI_H
 #include "color.h"
 #include "menu.h"
-#include "text_object.h"
+#include "label.h"
 #include <vector>
 
 //This namespace contains functions and variables related to the user interface

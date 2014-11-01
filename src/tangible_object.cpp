@@ -86,13 +86,13 @@ void tangible_object::attract(complex_object B)//object moves toward object B
 void tangible_object::simon_says(complex_object B)//object changes color according to side touched
 {
     if(near_front(B))
-        primary_color.set(RED);
+        fill_color.set(RED);
     if(near_back(B))
-        primary_color.set(GREEN);
+        fill_color.set(GREEN);
     if(near_left(B))
-        primary_color.set(BLUE);
+        fill_color.set(BLUE);
     if(near_right(B))
-        primary_color.set(YELLOW);
+        fill_color.set(YELLOW);
 }
 
 void tangible_object::identify_touched(complex_object B)//variable touching[] is updated with number of the touched object

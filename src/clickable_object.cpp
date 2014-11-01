@@ -52,32 +52,35 @@ bool clickable_object::right_clicked()
 
 void clickable_object::mouse_function()
 {
-    if(left_clicked())//clicked this object
+    if(visible)
     {
-        if(!selected)
-        std::clog<<"object#"<<number<<'('<<type<<')'<<" selected"<<std::endl;
-        cursor::left_clicked_object=this;
-        cursor::left_clicked_an_object = true;
-        cursor::selected_object=number;
-        selected = true;
-    }
+        if(left_clicked())//clicked this object
+        {
+            if(!selected)
+                std::clog<<"object#"<<number<<'('<<type<<')'<<" selected"<<std::endl;
+            cursor::left_clicked_object=this;
+            cursor::left_clicked_an_object = true;
+            cursor::selected_object=number;
+            selected = true;
+        }
 
-    if(cursor::left_click && cursor::left_clicked_an_object && cursor::selected_object!=number)//clicked another object
-    {
-        cursor::highlighted_objects[number]=false;
-        selected = false;
-    }
+        if(cursor::left_click && cursor::left_clicked_an_object && cursor::selected_object!=number)//clicked another object
+        {
+            cursor::highlighted_objects[number]=false;
+            selected = false;
+        }
 
-    if(cursor::left_click && !cursor::left_clicked_an_object)//clicked nothing
-    {
-        cursor::highlighted_objects[number]=false;
-        selected = false;
-    }
+        if(cursor::left_click && !cursor::left_clicked_an_object)//clicked nothing
+        {
+            cursor::highlighted_objects[number]=false;
+            selected = false;
+        }
 
-    if(right_clicked())//right clicked this object
-    {
-        cursor::right_clicked_object=this;
-        cursor::right_clicked_an_object=true;
+        if(right_clicked())//right clicked this object
+        {
+            cursor::right_clicked_object=this;
+            cursor::right_clicked_an_object=true;
+        }
     }
 }
 

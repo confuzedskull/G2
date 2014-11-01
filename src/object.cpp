@@ -139,43 +139,50 @@ void object::show()
     visible=true;
 }
 
-void object::render()//draws the object
+void object::render_shape()
 {
-    if(visible)
+    if(filled)
     {
         glPushMatrix();//need push and pop so that entire scene isn't rotated
         glTranslatef(position.x,position.y,0.0);//translate object according to coordinates
         glRotatef(rotation,0,0,1);//rotates object with object.rotation
         glTranslatef(-position.x,-position.y,0.0);//translate object according to coordinates
-        glColor3f(primary_color.r,primary_color.g,primary_color.b);//color the square with object.primary_color
+        glPopMatrix();//reset transformation matrix
+        glColor3f(fill_color.r,fill_color.g,fill_color.b);//color the square with object.fill_color
         glBegin(GL_POLYGON);//draws a filled in rectangle
         glVertex2f(xmin, ymin); // The bottom left corner
         glVertex2f(xmin, ymax); // The top left corner
         glVertex2f(xmax, ymax); // The top right corner
         glVertex2f(xmax, ymin); // The bottom right corner
         glEnd();//finish drawing
-        glPopMatrix();//reset transformation matrix
-        //render border
-        if(border)
-        {
-            glColor3f(border_color.r,border_color.g,border_color.b);
-            glBegin(GL_LINES);//draws lines (in this case, a rectangle)
-            glVertex2f(xmin, ymax);//top left corner
-            glVertex2f(xmax, ymax);//top right corner
-            glVertex2f(xmax, ymax);//top right corner
-            glVertex2f(xmax, ymin);//bottom right corner
-            glVertex2f(xmax, ymin);//bottom right corner
-            glVertex2f(xmin, ymin);//bottom left corner
-            glVertex2f(xmin, ymin);//bottom left corner
-            glVertex2f(xmin, ymax);//top left corner
-            glEnd();
-        }
+    }
+}
+
+void object::render_border()
+{
+    if(bordered)
+    {
+        glColor3f(border_color.r,border_color.g,border_color.b);
+        glBegin(GL_LINES);//draws lines (in this case, a rectangle)
+        glVertex2f(xmin, ymax);//top left corner
+        glVertex2f(xmax, ymax);//top right corner
+        glVertex2f(xmax, ymax);//top right corner
+        glVertex2f(xmax, ymin);//bottom right corner
+        glVertex2f(xmax, ymin);//bottom right corner
+        glVertex2f(xmin, ymin);//bottom left corner
+        glVertex2f(xmin, ymin);//bottom left corner
+        glVertex2f(xmin, ymax);//top left corner
+        glEnd();
+    }
+}
+
+void object::render()//draws the object
+{
+    if(visible)
+    {
+        render_shape();
+        render_border();
         mark_selected();
-        if(!rendered)
-        {
-            std::clog<<"object#"<<number<<" rendered."<<std::endl;
-            rendered=true;
-        }
     }
 }
 
@@ -187,14 +194,14 @@ object::object()
     set_dimensions(64,64);
     marker_width=5;
     marker_height=5;
-    primary_color.randomize();
-    primary_color.changed=false;
+    fill_color.randomize();
+    fill_color.changed=false;
+    filled=true;
     marker_color=BLACK;
     border_color=BLACK;
-    border=false;
+    bordered=false;
     rotation=90.1;
     show();
-    rendered=false;
     selected=false;
     std::clog<<"object#"<<number<<'('<<type<<')'<<" created "<<sizeof(*this)<<" bytes"<<std::endl;
 }
@@ -208,13 +215,13 @@ object::object(float x, float y, float w, float h)
     marker_width=5;
     marker_height=5;
     marker_color=BLACK;
-    primary_color.randomize();
-    primary_color.changed=false;
+    fill_color.randomize();
+    fill_color.changed=false;
+    filled=true;
     border_color=BLACK;
-    border=false;
+    bordered=false;
     rotation=90.1;
     show();
-    rendered=false;
     selected=false;
     std::clog<<"object#"<<number<<'('<<type<<')'<<" created "<<sizeof(*this)<<" bytes"<<std::endl;
 }
@@ -228,13 +235,13 @@ object::object(float x, float y, float w, float h, color c)
     marker_width=5;
     marker_height=5;
     marker_color=BLACK;
-    primary_color.set(c);
-    primary_color.changed=false;
+    fill_color.set(c);
+    fill_color.changed=false;
+    filled=true;
     border_color=BLACK;
-    border=false;
+    bordered=false;
     rotation=90.1;
     show();
-    rendered=false;
     selected=false;
     std::clog<<"object#"<<number<<'('<<type<<')'<<" created "<<sizeof(*this)<<" bytes"<<std::endl;
 }

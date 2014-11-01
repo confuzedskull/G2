@@ -65,6 +65,6 @@ projectile::projectile()
     speed=50.0f;
     fired=false;
     visible=false;
-    primary_color=RED;
+    fill_color=RED;
     std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

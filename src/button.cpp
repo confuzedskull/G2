@@ -35,31 +35,31 @@
 
 void button::format()
 {
-    width=label.get_width()+(margin*2);
-    height=label.get_height()+(margin*2);
+    width=text.get_width()+(margin*2);
+    height=text.get_height()+(margin*2);
     calc_boundaries();
 }
 
 void button::set_label(std::string l)
 {
-    label.clear();
-    label.add_line(l);
+    text.clear();
+    text.add_line(l);
     format();
 }
 
 void button::allign_label(std::string allignment)
 {
-    label_allignment=allignment;
+    text_allignment=allignment;
 }
 
 void button::mouse_function()
 {
     if(visible)
     {
-        if(hovered_over() && !primary_color.changed)
-            primary_color.brighten();
+        if(hovered_over() && !fill_color.changed)
+            fill_color.brighten();
         if(!hovered_over())
-            primary_color.undo();
+            fill_color.undo();
         if(left_clicked())
         {
             if(!performed_action)
@@ -78,45 +78,22 @@ void button::render()
 {
     if(visible)
     {
-        //render button
-        glColor3f(primary_color.r,primary_color.g,primary_color.b);
-        glBegin(GL_POLYGON);//draws a filled in rectangle
-        glVertex2f(xmin, ymin);//bottom left corner
-        glVertex2f(xmin, ymax);//top left corner
-        glVertex2f(xmax, ymax);//top right corner
-        glVertex2f(xmax, ymin);//bottom right corner
-        glEnd();//finish drawing
-        //render border
-        if(border)
-        {
-            glColor3f(border_color.r,border_color.g,border_color.b);
-            glBegin(GL_LINES);//draws lines (in this case, a rectangle)
-            glVertex2f(xmin, ymax);//top left corner
-            glVertex2f(xmax, ymax);//top right corner
-            glVertex2f(xmax, ymax);//top right corner
-            glVertex2f(xmax, ymin);//bottom right corner
-            glVertex2f(xmax, ymin);//bottom right corner
-            glVertex2f(xmin, ymin);//bottom left corner
-            glVertex2f(xmin, ymin);//bottom left corner
-            glVertex2f(xmin, ymax);//top left corner
-            glEnd();
-        }
-
+        render_shape();
+        render_border();
+        text.render();
         mark_selected();
-        //render button text
-        label.render();
     }
 }
 
 void button::update()
 {
-    label.visible=visible;
-    if(label_allignment=="left")
-        label.set_position(xmin+margin,position.y-(label.get_height()/2));
-    if(label_allignment=="center")
-        label.set_position(position.x-(label.get_width()/2),position.y-(label.get_height()/2));
-    if(label_allignment=="right")
-        label.set_position(xmax-margin-label.get_width(),position.y-(label.get_height()/2));
+    text.visible=visible;
+    if(text_allignment=="left")
+        text.set_position(xmin+margin,position.y-(text.get_height()/2));
+    if(text_allignment=="center")
+        text.set_position(position.x-(text.get_width()/2),position.y-(text.get_height()/2));
+    if(text_allignment=="right")
+        text.set_position(xmax-margin-text.get_width(),position.y-(text.get_height()/2));
     mouse_function();
 }
 
@@ -127,12 +104,12 @@ button::button()
     type="button";
     margin=5;
     position.set(0.0f,0.0f);
-    primary_color.set(0.75f,0.75f,0.75f);
-    primary_color.changed=false;
+    fill_color.set(0.75f,0.75f,0.75f);
+    fill_color.changed=false;
     set_label("click me");
     allign_label("center");
     action=button::action_placeholder;
-    border=true;
+    bordered=true;
     performed_action=false;
     std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }
@@ -142,12 +119,12 @@ button::button(float x, float y, char* l, void (*a)(void))
     type="button";
     margin=5;
     position.set(x,y);
-    primary_color.set(0.75f,0.75f,0.75f);
-    primary_color.changed=false;
+    fill_color.set(0.75f,0.75f,0.75f);
+    fill_color.changed=false;
     set_label("click me");
     allign_label("center");
     action=a;
-    border=true;
+    bordered=true;
     performed_action=false;
     std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }
