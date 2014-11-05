@@ -32,14 +32,12 @@ void dropdown_menu::add_item(button* b)
 
 void dropdown_menu::mouse_function()
 {
-    if(visible)
+    if(visible && enabled)
     {
-        if(hovered_over() && !fill_color.changed)
-            fill_color.brighten();
-        if(!hovered_over())
-            fill_color.undo();
+        hover_function();
         if(left_clicked()||item_clicked()!=-1)
         {
+            cursor::left_clicked_ui = true;
             if(expanded)
             {
                 if(state_toggle)
@@ -61,22 +59,30 @@ void dropdown_menu::mouse_function()
 void dropdown_menu::expand()
 {
     for(auto i:items)
+    {
         i->show();//show the buttons
+        i->enable();
+    }
 }
 
 void dropdown_menu::collapse()
 {
     set_dimensions(width,items.front()->get_height());//shrink to button size
+    for(auto i:items)
+    {
+        i->hide();//hide the buttons
+        i->disable();
+    }
 }
 
 void dropdown_menu::update()
 {
     for(auto i:items)
     {
-		if(state_toggle && visible)
-        	i->show();
-		else
-			i->hide();
+        if(!expanded && visible)
+            i->visible=true;
+        else
+            i->visible=false;
         i->update();
     }
     mouse_function();

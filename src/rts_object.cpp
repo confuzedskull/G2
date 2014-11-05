@@ -23,70 +23,21 @@
 
 point2f rts_object::origin = point2f(window::width*0.9,window::height*0.5);
 
-bool rts_object::highlighted()
-{
-    //if object lies within selection box boundaries, return true
-    if(cursor::highlighting &&
-            isless(position.x,cursor::xmax) &&
-            isgreater(position.x,cursor::xmin) &&
-            isgreater(position.y,cursor::ymax) &&
-            isless(position.y,cursor::ymin))
-        return true;
-    else
-        return false;
-}
-
 void rts_object::mouse_function()
 {
-    if(visible)
+    if(visible && enabled)
     {
-        if(left_clicked())//clicked this object
-        {
-            if(!cursor::left_clicked_an_object && !selected)
-            std::clog<<"object#"<<number<<'('<<type<<')'<<" selected"<<std::endl;
-            cursor::left_clicked_object=this;
-            cursor::left_clicked_an_object = true;
-            cursor::selected_object=number;
-            selected = true;
-        }
-
-        if(cursor::left_click && cursor::selected_object !=number)//clicked another object
-        {
-            cursor::highlighted_objects[number]=false;
-            selected = false;
-        }
-
-        if(cursor::left_click && !cursor::left_clicked_an_object)//clicked nothing
-        {
-            cursor::highlighted_objects[number]=false;
-            selected = false;
-        }
-
-        if(highlighted())//object lies within selection box
-        {
-            cursor::highlighted_objects[number]=true;
-            selected=true;
-        }
-
-        if(right_clicked())//right clicked this object
-        {
-            cursor::right_clicked_object=this;
-            cursor::right_clicked_an_object=true;
-        }
-
+        highlight_function();
+        left_click_function();
+        right_click_function();
         if(selected)//you can only move an object when it is selected
         {
             if(cursor::right_click && !right_clicked())
             {
                 if(cursor::right_clicked_an_object)
-                {
-                    //move to right clicked object
                     rally = cursor::right_clicked_object->get_positionptr();//set rally to reference point because position is always changing
-                }
                 else//move to right clicked empty space
-                {
                     rally = new point2f(cursor::right_down.x,cursor::right_down.y);
-                }
                 rally_set=true;
             }
             if(cursor::right_dragging && !right_clicked())

@@ -43,12 +43,14 @@ clickable_object* cursor::right_clicked_object = new clickable_object();
 bool cursor::left_click = false;
 bool cursor::right_click = false;
 bool cursor::highlighting = false;
+bool cursor::highlighting_enabled = false;
 bool cursor::left_clicked_an_object = false;
 bool cursor::right_clicked_an_object = false;
+bool cursor::left_clicked_ui = false;
 bool cursor::left_dragging = false;
 bool cursor::right_dragging = false;
 bool cursor::grabbed_an_object = false;
-std::map<int,bool> cursor::highlighted_objects;
+std::map<int,clickable_object*> cursor::selected_objects;
 float cursor::xmax = 0.0;
 float cursor::xmin = 0.0;
 float cursor::ymax = 0.0;
@@ -57,13 +59,7 @@ int cursor::selected_object = 1;
 
 int cursor::objects_selected()
 {
-    int selected = 0;
-    for(unsigned i=0; i<game::current_scene->rts_objects.size(); i++)//regular "for" loop used  because iterator is used as integer
-    {
-        if(highlighted_objects[i])
-            selected++;
-    }
-    return selected;
+    return selected_objects.size();
 }
 
 void cursor::calc_boundaries()//boundaries of the selection box
@@ -76,7 +72,7 @@ void cursor::calc_boundaries()//boundaries of the selection box
 
 void cursor::selection_box()//this is the box that is created when user clicks and drags
 {
-    if(highlighting)
+    if(highlighting_enabled && highlighting)
     {
         bool blending = false;
         if(glIsEnabled(GL_BLEND))
@@ -112,10 +108,12 @@ void cursor::reset()
     left_dragging = false;
     right_dragging = false;
     highlighting = false;
+    highlighting_enabled = false;
     left_clicked_an_object = false;
+    left_clicked_ui = false;
     right_clicked_an_object = false;
     grabbed_an_object=false;
-    highlighted_objects.clear();
+    selected_objects.clear();
     selected_object = 1;
     xmax = 0.0;
     xmin = 0.0;

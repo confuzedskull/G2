@@ -52,6 +52,7 @@ public:
     bool bordered;//whether or not a border should be shown
     bool visible;//whether the object should be shown or not
     bool selected;//whether the object has been selected or not
+    bool enabled;//whether the object should be updated or not
     void rotate(float angle);//changes the object's rotation by the given angle
     void set_position(float x, float y);
     void set_rotation(float angle);

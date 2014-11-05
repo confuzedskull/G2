@@ -67,14 +67,24 @@ public:
     void hide_rts_objects();//hide all rts objects
     void show_text();//show the text
     void hide_text();//hide the text
+    void enable_objects();//enable object mouse interaction
+    void disable_objects();//disable object mouse interaction
     void show_checkboxes();//show all checkboxes
     void hide_checkboxes();//hide all checkboxes
+    void enable_checkboxes();
+    void disable_checkboxes();
     void show_buttons();//show all buttons
     void hide_buttons();//hide all buttons
+    void enable_buttons();
+    void disable_buttons();
     void show_menus();//show all menus
     void hide_menus();//hide all menus
+    void enable_menus();
+    void disable_menus();
     void show_all();//show all objects and ui elements
     void hide_all();//hide all objects and ui elements
+    void enable_all();//enable all ui elements
+    void disable_all();//disable all ui elements
     void render();//render all objects and ui elements
     void update();//update all objects and ui elements
     void sync();//update clock-based items

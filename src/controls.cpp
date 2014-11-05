@@ -128,16 +128,27 @@ void controls::check_clicked()
             left_clicked=d.second->left_clicked();
         for(auto p:game::current_scene->physics_objects)
             left_clicked=p.second->left_clicked();
-        for(auto b:game::current_scene->buttons)
-            left_clicked=b->left_clicked();
-        for(auto m:game::current_scene->menus)
-            left_clicked=m->item_clicked();
-        for(auto dm:game::current_scene->dropdown_menus)
-            left_clicked=dm->item_clicked();
         if(!left_clicked)//at this point, no objects have been left clicked so leave the loop
             break;
     }
     cursor::left_clicked_an_object = left_clicked;
+
+    left_clicked=false;
+    while(!left_clicked)
+    {
+        for(auto b:game::current_scene->buttons)
+            left_clicked=b->left_clicked();
+        for(auto cb:game::current_scene->checkboxes)
+            left_clicked=cb->left_clicked();
+        for(auto dm:game::current_scene->dropdown_menus)
+        {
+            left_clicked=dm->left_clicked();
+            left_clicked=dm->item_clicked()!=-1;
+        }
+        if(!left_clicked)//at this point, no objects have been left clicked so leave the loop
+            break;
+    }
+    cursor::left_clicked_ui = left_clicked;
 
     bool right_clicked=false;
     while(!right_clicked)
@@ -153,7 +164,7 @@ void controls::check_clicked()
     }
     cursor::right_clicked_an_object = right_clicked;
 
-    bool grabbed=true;
+    bool grabbed=false;
     for(auto d:game::current_scene->draggable_objects)
     {
         if(d.second->grabbed())
@@ -205,9 +216,9 @@ void controls::mouse_move(int x, int y)
 
 void controls::mouse_drag(int x, int y)
 {
-    if(cursor::left_click)
+    if(cursor::left_click)//mouse left button is down
     {
-        if(!cursor::left_clicked_an_object && !cursor::grabbed_an_object)
+        if(cursor::highlighting_enabled && !cursor::left_clicked_an_object && !cursor::grabbed_an_object)
         {
             //this condition makes it so that the user has to make a rectangle larger than 10x10. That way, highlighting is less sensitive
             if(isgreater(x,cursor::left_down.x+10) && isless((window::height - y),cursor::left_down.y+10))

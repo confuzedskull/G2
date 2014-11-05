@@ -20,9 +20,22 @@
 #include <math.h>
 #include <iostream>
 
+bool clickable_object::highlighted()
+{
+    //if object lies within selection box boundaries, return true
+    if(cursor::highlighting && enabled &&
+            isless(position.x,cursor::xmax) &&
+            isgreater(position.x,cursor::xmin) &&
+            isgreater(position.y,cursor::ymax) &&
+            isless(position.y,cursor::ymin))
+        return true;
+    else
+        return false;
+}
+
 bool clickable_object::hovered_over()
 {
-    if(!cursor::left_click &&
+    if(!cursor::left_click && enabled &&
        isless(cursor::passive.x,xmax) && isgreater(cursor::passive.x,xmin) &&
        isless(cursor::passive.y,ymax) && isgreater(cursor::passive.y,ymin))
         return true;
@@ -32,7 +45,7 @@ bool clickable_object::hovered_over()
 
 bool clickable_object::left_clicked()
 {
-    if(cursor::left_click &&
+    if(cursor::left_click && enabled &&
        isless(cursor::left_down.x,xmax) && isgreater(cursor::left_down.x,xmin) &&
        isless(cursor::left_down.y,ymax) && isgreater(cursor::left_down.y,ymin))
         return true;
@@ -42,7 +55,7 @@ bool clickable_object::left_clicked()
 
 bool clickable_object::right_clicked()
 {
-    if(cursor::right_click &&
+    if(cursor::right_click && enabled &&
        isless(cursor::right_down.x,xmax) && isgreater(cursor::right_down.x,xmin) &&
        isless(cursor::right_down.y,ymax) && isgreater(cursor::right_down.y,ymin))
         return true;
@@ -50,38 +63,77 @@ bool clickable_object::right_clicked()
         return false;
 }
 
-void clickable_object::mouse_function()
+void clickable_object::highlight_function()
 {
-    if(visible)
+    if(highlighted())//object lies within selection box
     {
-        if(left_clicked())//clicked this object
-        {
-            if(!selected)
-                std::clog<<"object#"<<number<<'('<<type<<')'<<" selected"<<std::endl;
-            cursor::left_clicked_object=this;
-            cursor::left_clicked_an_object = true;
-            cursor::selected_object=number;
-            selected = true;
-        }
+        cursor::selected_objects[number]=this;
+        selected=true;
+    }
+}
 
-        if(cursor::left_click && cursor::left_clicked_an_object && cursor::selected_object!=number)//clicked another object
-        {
-            cursor::highlighted_objects[number]=false;
-            selected = false;
-        }
+void clickable_object::hover_function()
+{
+    if(hovered_over() && !fill_color.changed)
+        fill_color.brighten();
+    if(!hovered_over())
+        fill_color.undo();
+}
 
-        if(cursor::left_click && !cursor::left_clicked_an_object)//clicked nothing
+void clickable_object::left_click_function()
+{
+    if(left_clicked())//clicked this object
+    {
+        if(!selected)
+            std::clog<<"object#"<<number<<'('<<type<<')'<<" selected"<<std::endl;
+        cursor::left_clicked_object=this;
+        cursor::left_clicked_an_object = true;
+        cursor::selected_object=number;
+        cursor::selected_objects[number]=this;
+        selected = true;
+    }
+    else if(selected)
+    {
+        if(cursor::left_click && !cursor::highlighting)
         {
-            cursor::highlighted_objects[number]=false;
-            selected = false;
-        }
-
-        if(right_clicked())//right clicked this object
-        {
-            cursor::right_clicked_object=this;
-            cursor::right_clicked_an_object=true;
+            if(cursor::left_clicked_an_object && cursor::selected_object !=number)//clicked another object
+            {
+                cursor::selected_objects.erase(number);
+                selected = false;
+            }
+            if(!cursor::left_clicked_ui)//clicked nothing
+                selected = false;
         }
     }
+}
+
+void clickable_object::right_click_function()
+{
+    if(right_clicked())//right clicked this object
+    {
+        cursor::right_clicked_object=this;
+        cursor::right_clicked_an_object=true;
+    }
+}
+
+void clickable_object::mouse_function()
+{
+    if(visible && enabled)
+    {
+        highlight_function();
+        left_click_function();
+        right_click_function();
+    }
+}
+
+void clickable_object::enable()
+{
+    enabled=true;
+}
+
+void clickable_object::disable()
+{
+    enabled=false;
 }
 
 void clickable_object::update()
@@ -92,6 +144,6 @@ void clickable_object::update()
 clickable_object::clickable_object(): object()
 {
     type="clickable object";
-    selected=false;
+    enable();
     std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

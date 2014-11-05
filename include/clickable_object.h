@@ -22,9 +22,16 @@
 class clickable_object: virtual public object
 {
     public:
+    bool highlighted();//checks if the object lies within the cursor selection box
     bool hovered_over();//checks if the cursor lies within the this object
     bool left_clicked();//checks if the cursor left clicked inside this object
     bool right_clicked();//checks if the cursor right clicked inside this object
+    void enable();//allow the mouse function to work
+    void disable();//stop running mouse function
+    void highlight_function();//function to perform when object is highlighted
+    void hover_function();//function to perform when object is hovered over
+    void left_click_function();//function to perform when object is left clicked
+    void right_click_function();//function to perform when object is right clicked
     void mouse_function();//performs a variety of actions dependent on cursor interaction
     void update();
     clickable_object();

@@ -33,19 +33,19 @@
 void scene::add_object(draggable_object* new_do)
 {
     last_object=new_do;
-    draggable_objects.insert(std::pair<int,draggable_object*>(new_do->get_number(),new_do));//add object to scene
+    draggable_objects[new_do->get_number()]=new_do;//add object to scene
 }
 
 void scene::add_object(physics_object* new_po)
 {
     last_object=new_po;
-    physics_objects.insert(std::pair<int,physics_object*>(new_po->get_number(),new_po));//add object to scene
+    physics_objects[new_po->get_number()]=new_po;//add object to scene
 }
 
 void scene::add_object(rts_object* new_rtso)
 {
     last_object=new_rtso;
-    rts_objects.insert(std::pair<int,rts_object*>(new_rtso->get_number(),new_rtso));//add object to scene
+    rts_objects[new_rtso->get_number()]=new_rtso;//add object to scene
 }
 
 void scene::add_text(label* t)
@@ -137,6 +137,26 @@ void scene::hide_rts_objects()
         r.second->hide();
 }
 
+void scene::enable_objects()
+{
+    for(auto p:physics_objects)
+        p.second->enable();
+    for(auto d:draggable_objects)
+        d.second->enable();
+    for(auto r:rts_objects)
+        r.second->enable();
+}
+
+void scene::disable_objects()
+{
+    for(auto p:physics_objects)
+        p.second->disable();
+    for(auto d:draggable_objects)
+        d.second->disable();
+    for(auto r:rts_objects)
+        r.second->disable();
+}
+
 void scene::show_text()
 {
     for(auto t:labels)//C++11 "for" loop
@@ -161,6 +181,18 @@ void scene::hide_checkboxes()
         c->hide();
 }
 
+void scene::enable_checkboxes()
+{
+    for(auto c:checkboxes)
+        c->enable();
+}
+
+void scene::disable_checkboxes()
+{
+    for(auto c:checkboxes)
+        c->disable();
+}
+
 void scene::show_buttons()
 {
     for(auto b:buttons)//C++11 "for" loop
@@ -171,6 +203,18 @@ void scene::hide_buttons()
 {
     for(auto b:buttons)//C++11 "for" loop
         b->hide();
+}
+
+void scene::enable_buttons()
+{
+    for(auto b:buttons)//C++11 "for" loop
+        b->enable();
+}
+
+void scene::disable_buttons()
+{
+    for(auto b:buttons)//C++11 "for" loop
+        b->disable();
 }
 
 void scene::show_menus()
@@ -187,6 +231,18 @@ void scene::hide_menus()
         m->hide();
     for(auto dm:dropdown_menus)//C++11 "for" loop
         dm->hide();
+}
+
+void scene::enable_menus()
+{
+    for(auto dm:dropdown_menus)//C++11 "for" loop
+        dm->enable();
+}
+
+void scene::disable_menus()
+{
+    for(auto dm:dropdown_menus)//C++11 "for" loop
+        dm->disable();
 }
 
 void scene::show_all()
@@ -209,6 +265,22 @@ void scene::hide_all()
     hide_buttons();
     hide_checkboxes();
     hide_menus();
+}
+
+void scene::enable_all()
+{
+    enable_objects();
+    enable_checkboxes();
+    enable_buttons();
+    enable_menus();
+}
+
+void scene::disable_all()
+{
+    disable_objects();
+    disable_checkboxes();
+    disable_buttons();
+    disable_menus();
 }
 
 //NOTE: This function uses C++11 "for" loops
@@ -243,7 +315,6 @@ void scene::render()
 //NOTE: This function uses C++11 "for" loops
 void scene::update()
 {
-    if(!game::paused)
     //update physics objects
     for(auto p:physics_objects)
         p.second->update();

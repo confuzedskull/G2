@@ -47,7 +47,7 @@ int menu::item_clicked()
 {
     for(int i=0;i<items.size();i++)
     {
-        if(items[i]->left_clicked())
+        if(items[i]->enabled && items[i]->left_clicked())
             return i;
     }
     return -1;

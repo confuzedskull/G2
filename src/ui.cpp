@@ -38,11 +38,11 @@ void ui::hide_text()
 
 void ui::update_text()
 {
+    using namespace std;
     label* object_info = game::scenes[1]->labels[0];
-    if(object_info->visible)
+    if(object_info->visible && !cursor::selected_objects.empty())
     {
         unsigned index = cursor::selected_object;
-        using namespace std;
         object_info->clear();
         object_info->add_line("object #:"+to_string(cursor::left_clicked_object->get_number()));
         object_info->add_line("type: "+cursor::left_clicked_object->get_type());
@@ -77,8 +77,10 @@ void ui::update_text()
             object_info->add_line("rally point: "+to_string(rtso->rally->x)+", "+to_string(rtso->rally->y));
             object_info->add_line("object touching side L:"+to_string(rtso->touching[0])+"R:"+to_string(rtso->touching[1])+"T:"+to_string(rtso->touching[2])+"B:"+to_string(rtso->touching[3]));
         }
-
-        label* game_info = game::scenes[1]->labels[1];
+    }
+    label* game_info = game::scenes[1]->labels[1];
+    if(game_info->visible)
+    {
         game_info->clear();
         game_info->add_line("game time: "+to_string(game::time));
         game_info->add_line("mouse move: "+to_string(cursor::passive.x)+", "+to_string(cursor::passive.y));

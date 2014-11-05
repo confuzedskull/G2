@@ -23,7 +23,6 @@ class rts_object: public clickable_object, public tangible_object
 {
     public:
         static point2f origin;
-        bool highlighted();//checks if this object lies within the highlighting box
         void mouse_function();//performs a variety of actions dependent on cursor interaction
         void update();
         rts_object();

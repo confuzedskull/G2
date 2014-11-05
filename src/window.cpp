@@ -95,6 +95,6 @@ void window::update()
     {
         controls::key_operations();//keyboard controls
         game::sync();//update clock-based events in game
-        glutPostRedisplay();//update the scene
     }
+    glutPostRedisplay();//update the scene
 }

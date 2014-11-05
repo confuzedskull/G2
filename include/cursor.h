@@ -42,10 +42,12 @@ public:
     static bool right_click;
     static bool right_dragging;
     static bool left_clicked_an_object;
+    static bool left_clicked_ui;
     static bool right_clicked_an_object;
     static bool grabbed_an_object;
     static bool highlighting;
-    static std::map<int,bool> highlighted_objects;
+    static bool highlighting_enabled;
+    static std::map<int,clickable_object*> selected_objects;
     static float xmin,xmax,ymin,ymax;
     static int selected_object;
     static int objects_selected();

@@ -48,36 +48,10 @@ bool draggable_object::grabbed()
 
 void draggable_object::mouse_function()
 {
-    if(visible)
+    if(visible && enabled)
     {
-        if(left_clicked())//clicked this object
-        {
-            if(!cursor::left_clicked_an_object && !selected)
-                std::clog<<"object#"<<number<<'('<<type<<')'<<" selected"<<std::endl;
-            cursor::left_clicked_object=this;
-            cursor::left_clicked_an_object = true;
-            cursor::selected_object=number;
-            selected = true;
-        }
-
-        if(cursor::left_click && cursor::selected_object !=number)//clicked another object
-        {
-            cursor::highlighted_objects[number]=false;
-            selected = false;
-        }
-
-        if(cursor::left_click && !cursor::left_clicked_an_object)//clicked nothing
-        {
-            cursor::highlighted_objects[number]=false;
-            selected = false;
-        }
-
-        if(right_clicked())//right clicked this object
-        {
-            cursor::right_clicked_object=this;
-            cursor::right_clicked_an_object=true;
-        }
-
+        highlight_function();
+        left_click_function();
         if(grabbed())//grabbed this object
         {
             position.set(cursor::left_drag.x,cursor::left_drag.y);

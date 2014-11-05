@@ -1,13 +1,13 @@
 2DWorld
 =======
-by James Nakano AKA confuzedskull
+by James Nakano A.K.A. "Confuzed Skull"
 
 I. Troubleshooting
 A. Windows
 1. If the program doesn't run, then you must right click it and select "Run as Administrator"
 
 B. Mac
-1. If the message " "2dworld" was blocked from opening because it is not from an identified developer" do the following:
+1. If the message " "2dworld" was blocked from opening because it is not from an identified developer" pops up, do the following:
 a. Go to System Preferences and click on Security & Privacy.
 b. Somewhere near the bottom you'll see a message and then a button "Open Anyway". Click it.
 c. A prompt will come up saying ""2dworld is a Unix applicaiton downloaded from the internet. Are you sure you want to open it?" Click open.
@@ -55,6 +55,6 @@ C. RTS Objects
 Disclaimer:
 This program uses the OpenGL Utility Toolkit(A.K.A."GLUT") created by Mark Kilgard.
 Thanks to his work, creating cross-platform OpenGL applications is much easier.
-Since glut is not open source, I have not touched any of the source files.
+Since GLUT is not open source, I have not touched any of the source files.
 Instead, I have linked the library to the executable and included glut32.dll in the project directory.
 For more information on GLUT, visit https://www.opengl.org/resources/libraries/glut/

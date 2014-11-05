@@ -54,14 +54,12 @@ void button::allign_label(std::string allignment)
 
 void button::mouse_function()
 {
-    if(visible)
+    if(visible && enabled)
     {
-        if(hovered_over() && !fill_color.changed)
-            fill_color.brighten();
-        if(!hovered_over())
-            fill_color.undo();
+        hover_function();
         if(left_clicked())
         {
+            cursor::left_clicked_ui = true;
             if(!performed_action)
             {
                 action();

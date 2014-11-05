@@ -15,6 +15,7 @@
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "checkbox.h"
+#include "cursor.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -62,22 +63,26 @@ void checkbox::bind_option(int* o)
 
 void checkbox::mouse_function()
 {
-    if(filled)
+    if(visible && enabled)
     {
-        if(hovered_over() && !fill_color.changed)
-            fill_color.brighten();
-        if(!hovered_over())
-            fill_color.undo();
-    }
-    if(left_clicked())
-    {
-        if(*option==1)
-            checked=0;
+        if(filled)
+        {
+            if(hovered_over() && !fill_color.changed)
+                fill_color.brighten();
+            if(!hovered_over())
+                fill_color.undo();
+        }
+        if(left_clicked())
+        {
+            cursor::left_clicked_ui = true;
+            if(*option==1)
+                checked=0;
+            else
+                checked=1;
+        }
         else
-            checked=1;
+            *option=checked;
     }
-    else
-        *option=checked;
 }
 
 void checkbox::render()

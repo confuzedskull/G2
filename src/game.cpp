@@ -221,8 +221,13 @@ void game::initialize()
     create_rtso_button->set_label("rts object");
     create_rtso_button->action=add_rts_object;//function is assigned without '()' at the end
 
+    button* create_object_button = new button();//create a button pointer and initialize it
+    create_object_button->set_position(window::width*0.9,window::height*0.1);//put the button on the right side, 1/5th of the way up
+    create_object_button->set_label("create object");
+    create_object_button->action=create_object;//function is assigned without '()' at the end
+
     button* delete_object_button = new button();//create a button pointer and initialize it
-    delete_object_button->set_position(window::width*0.9,window::height*0.1);//put the button on the right side, 1/5th of the way up
+    delete_object_button->set_position(window::width*0.9,window::height*0.05);//put the button on the right side, 1/5th of the way up
     delete_object_button->set_label("delete object");
     delete_object_button->action=delete_selected;//function is assigned without '()' at the end
 
@@ -302,6 +307,7 @@ void game::initialize()
     game_screen->add_checkbox(show_pos);
     game_screen->add_checkbox(show_rtsos);
     game_screen->add_button(delete_object_button);
+    game_screen->add_button(create_object_button);
     game_screen->add_button(menu_button);
     game_screen->add_menu(pause_menu);
     game_screen->add_menu(leave_menu);
@@ -359,18 +365,35 @@ void game::create_object()
 
 void game::delete_selected()
 {
-    current_scene->draggable_objects.erase(cursor::selected_object);//removes the selected object, if found
-    current_scene->physics_objects.erase(cursor::selected_object);//removes the selected object, if found
-    current_scene->rts_objects.erase(cursor::selected_object);//removes the selected object, if found
-    std::clog<<"object#"<<cursor::left_clicked_object->get_number()<<'('<<cursor::left_clicked_object->get_type()<<')'<<" deleted."<<std::endl;
+    for(auto so:cursor::selected_objects)
+    {
+        if(current_scene->draggable_objects.find(so.first)!=current_scene->draggable_objects.end())
+        {
+            std::clog<<"object#"<<so.second->get_number()<<'('<<so.second->get_type()<<')'<<" deleted."<<std::endl;
+            current_scene->draggable_objects.erase(so.first);
+        }
+        if(current_scene->physics_objects.find(so.first)!=current_scene->physics_objects.end())
+        {
+            std::clog<<"object#"<<so.second->get_number()<<'('<<so.second->get_type()<<')'<<" deleted."<<std::endl;
+            current_scene->physics_objects.erase(so.first);
+        }
+        if(current_scene->rts_objects.find(so.first)!=current_scene->rts_objects.end())
+        {
+            std::clog<<"object#"<<so.second->get_number()<<'('<<so.second->get_type()<<')'<<" deleted."<<std::endl;
+            current_scene->rts_objects.erase(so.first);
+        }
+    }
+    cursor::selected_objects.clear();
 }
 
 void game::play()
 {
     cursor::reset();
+    cursor::highlighting_enabled=true;
     paused=false;
-    scenes[1]->menus[0]->hide();//hide the pause menu
-    scenes[1]->menus[1]->hide();//hide the warning prompt
+    scenes[1]->enable_all();
+    scenes[1]->menus[0]->hide();
+    scenes[1]->menus[1]->hide();
     scenes[1]->current_menu=scenes[1]->dropdown_menus[0];//set the creation menu as current
     current_scene=scenes[1];//open game screen
     std::clog<<"started game."<<std::endl;
@@ -379,30 +402,34 @@ void game::play()
 void game::pause()
 {
     paused=true;
+    cursor::highlighting_enabled=false;
     scenes[1]->menus[0]->show();//show the pause menu
-    scenes[1]->menus[1]->hide();//hide the warning prompt
+    scenes[1]->menus[1]->hide();//hide the warning menu
     scenes[1]->current_menu=scenes[1]->menus[0];//set the pause menu as current
+    scenes[1]->disable_all();
     std::clog<<"paused game."<<std::endl;
 }
 
 void game::resume()
 {
     paused=false;
-    scenes[1]->menus[0]->hide();//hide the pause menu
-    scenes[1]->menus[1]->hide();//hide the warning prompt
+    cursor::highlighting_enabled=true;
+    scenes[1]->enable_all();
+    scenes[1]->menus[0]->hide();//hide pause menu
+    scenes[1]->menus[1]->hide();//hide warning menu
+    scenes[1]->current_menu=scenes[1]->dropdown_menus[0];//set the creation menu as current
     std::clog<<"resumed game."<<std::endl;
 }
 
 void game::warn_quit()
 {
-    cursor::reset();
-    scenes[0]->menus[1]->show();//show the warning prompt
+    scenes[0]->menus[0]->hide();//hide main menu
+    scenes[0]->menus[1]->show();//show the quit menu
     scenes[0]->current_menu=scenes[0]->menus[1];//set the warning menu as current
 }
 
 void game::warn_return()
 {
-    cursor::reset();
     scenes[1]->menus[0]->hide();//hide the pause menu
     scenes[1]->menus[1]->show();//show the warning prompt
     scenes[1]->current_menu=scenes[1]->menus[1];//set the warning menu as current
@@ -411,6 +438,7 @@ void game::warn_return()
 void game::return_menu()
 {
     cursor::reset();
+    scenes[0]->menus[0]->show();//enable the main menu
     scenes[0]->menus[1]->hide();//hide the quit menu
     scenes[0]->current_menu=scenes[0]->menus[0];//set main menu as current
     current_scene=scenes[0];//open home screen
@@ -431,6 +459,7 @@ void game::update()
         collision_detection();//apply collision effects
     }
     current_scene->update();//update scene
+
     //process options
     if(*options[0]==1)
         scenes[1]->show_draggable_objects();
