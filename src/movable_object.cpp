@@ -16,13 +16,8 @@
 
 #include "movable_object.h"
 #include "distance.h"
-#include "point.h"
-#include "physics_vector.h"
 #include <math.h>
-#include <queue>
 #include <iostream>
-
-std::queue< std::vector<int> > actions;
 
 void movable_object::set_resting()
 {
@@ -216,48 +211,65 @@ bool movable_object::move_to_point(float destination_x,float destination_y)
 
 void movable_object::cue_action(int action_no, int times)
 {
-    std::vector<int> action;
-    action.push_back(action_no);//number of the action to do. this will be put at index 0
-    action.push_back(times);//number of times to do the action. this will be stored at index 1
-    action.push_back(0);//how many times its already been done. this will be stored at index 2
-    actions.push(action);//add this vector to the actions queue
+    std::array<int,3> action = {action_no,times,0};
+    action_cue.push(action);//add this vector to the actions queue
+}
+
+void movable_object::cue_action(std::string action_name, int times)
+{
+    std::array<int,3> action;
+    if(action_name=="move left")
+        action[0]=MOVE_LEFT;//set the action
+    if(action_name=="move right")
+        action[0]=MOVE_RIGHT;//set the action
+    if(action_name=="move forward"||action_name=="move up")
+        action[0]=MOVE_FORWARD;//set the action
+    if(action_name=="move back"||action_name=="move down")
+        action[0]=MOVE_BACK;//set the action
+    if(action_name=="turn left")
+        action[0]=TURN_LEFT;//set the action
+    if(action_name=="turn right")
+        action[0]=TURN_RIGHT;//set the action
+    action[1]=times;//set the number of times to do the action
+    action[2]=0;//set the number of times action has been done
+    action_cue.push(action);
 }
 
 bool movable_object::perform_actions()
 {
-    if(!actions.empty())
+    if(!action_cue.empty())//there are still some actions to perform
     {
-        if(actions.front().at(2)<actions.front().at(1))//times done is less than times to do
+        if(action_cue.front().at(2)<action_cue.front().at(1))//times done(stored at index 2) is less than times to do (stored at index 1)
         {
-            switch(actions.front().at(0))//action number from index 0 of the stored vector
+            switch(action_cue.front().at(0))//action number from index 0 of the stored vector
             {
-            case 1://move left
+            case MOVE_LEFT:
                 move_left();
                 break;
-            case 2://move right
+            case MOVE_RIGHT:
                 move_right();
                 break;
-            case 3://move up
+            case MOVE_FORWARD:
                 move_forward();
                 break;
-            case 4://move down
+            case MOVE_BACK:
                 move_back();
                 break;
-            case 5://turn left
+            case TURN_LEFT:
                 turn_left();
                 break;
-            case 6://turn right
+            case TURN_RIGHT:
                 turn_right();
                 break;
             }
-            actions.front().at(2)++;
+            action_cue.front().at(2)++;//increment number of times done (stored at index 2)
         }
         else
-            actions.pop();
-        return true;
+            action_cue.pop();//if the action is done being performed, remove it from the queue
+        return true;//show that the action has been performed
     }
     else
-        return false;
+        return false;//still need to perform some actions
 }
 
 void movable_object::update()

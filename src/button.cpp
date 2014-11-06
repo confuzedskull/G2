@@ -59,7 +59,6 @@ void button::mouse_function()
         hover_function();
         if(left_clicked())
         {
-            cursor::left_clicked_ui = true;
             if(!performed_action)
             {
                 action();

@@ -74,7 +74,6 @@ void checkbox::mouse_function()
         }
         if(left_clicked())
         {
-            cursor::left_clicked_ui = true;
             if(*option==1)
                 checked=0;
             else

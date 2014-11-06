@@ -20,31 +20,39 @@
 #include "physics_vector.h"
 #include "point.h"
 #include <queue>
+#include <array>
 
 //A movable object uses the sides of a complex object to calculate steps in each direction relative to the object's rotation
 class movable_object: virtual public complex_object
 {
 public:
-    point2f * rally;
-    bool rally_set;//whether or not the object has a point to move to
-    float degrees_rotated;//keeps track of the progress of a rotation animation
-    float speed;
+    point2f* rally;
     point2f rest;
+    std::queue< std::array<int,3> > action_cue;//actions for the object to perform. The array consists of an action number,times to do, and times done
+    float speed;//rate at which an object moves
+    float degrees_rotated;//keeps track of the progress of a rotation animation
     float rest_rotation;
-    void set_resting();
+    bool rally_set;//whether or not the object has a point to move to
     bool moving_forward;
     bool moving_backward;
     bool moving_left;
     bool moving_right;
     bool turning_right;
     bool turning_left;
-    std::queue< std::vector<int> > actions;//a cue of actions for the object to perform
-    void reset_motion();
     bool moving_vertical();
     bool moving_horizontal();
     bool turning();
     bool moving();
-    //turn functions make the object rotate over time
+    //moves object to destination over time at specified rate
+    bool move_to_point(float destination_x, float destination_y, float rate);
+    bool move_to_point(point2f destination,float rate);
+    bool move_to_point(point2f destination);
+    bool move_to_point(float destination_x, float destination_y);
+    bool perform_actions();//makes the object perform the cued actions
+    void cue_action(int action_no, int times);//adds an action to be performed n times to the action cue
+    void cue_action(std::string action_name,int times);//adds an action to be performed n times to the action cue
+    void set_resting();
+    //turn functions make the object rotate over time (as opposed to rotating)
     void turn_right();
     void turn_right(float degrees);
     void turn_left();
@@ -60,14 +68,14 @@ public:
     //rotates object to face the given coordinates
     void turn_to_point(float destination_x, float destination_y);
     void turn_to_point(point2f destination);
-    //moves object to destination over time at specified rate
-    bool move_to_point(float destination_x, float destination_y, float rate);
-    bool move_to_point(point2f destination,float rate);
-    bool move_to_point(point2f destination);
-    bool move_to_point(float destination_x, float destination_y);
-    void cue_action(int action_no, int times);//adds an action to be performed n times to the action cue
-    bool perform_actions();//makes the object perform the cued actions
+    void reset_motion();
     void update();
     movable_object();
 };
+const int MOVE_LEFT = 1;
+const int MOVE_RIGHT = 2;
+const int MOVE_FORWARD = 3;
+const int MOVE_BACK = 4;
+const int TURN_LEFT = 5;
+const int TURN_RIGHT = 6;
 #endif // MOVABLE_H

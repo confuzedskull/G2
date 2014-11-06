@@ -98,8 +98,8 @@ void clickable_object::left_click_function()
         {
             if(cursor::left_clicked_an_object && cursor::selected_object !=number)//clicked another object
             {
-                cursor::selected_objects.erase(number);
                 selected = false;
+                cursor::selected_objects.erase(number);
             }
             if(!cursor::left_clicked_ui)//clicked nothing
                 selected = false;

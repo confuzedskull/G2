@@ -16,3 +16,36 @@
 
 #include "physics_vector.h"
 
+void physics_vector::set(float x_direction, float y_direction)
+{
+    x=x_direction;
+    y=y_direction;
+}
+
+void physics_vector::set(float x_direction, float y_direction, float magnitude)
+{
+    x=x_direction;
+    y=y_direction;
+    m=magnitude;
+}
+
+physics_vector::physics_vector()
+{
+    x=0.0f;
+    y=0.0f;
+    m=0.0f;
+}
+
+physics_vector::physics_vector(float x_direction, float y_direction)
+{
+    x=x_direction;
+    y=y_direction;
+    m=1.0f;
+}
+
+physics_vector::physics_vector(float x_direction, float y_direction, float magnitude)
+{
+    x=x_direction;
+    y=y_direction;
+    m=magnitude;
+}

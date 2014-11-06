@@ -37,7 +37,6 @@ void dropdown_menu::mouse_function()
         hover_function();
         if(left_clicked()||item_clicked()!=-1)
         {
-            cursor::left_clicked_ui = true;
             if(expanded)
             {
                 if(state_toggle)

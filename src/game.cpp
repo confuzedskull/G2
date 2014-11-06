@@ -330,9 +330,9 @@ void game::initialize()
     scenes.push_back(game_screen);//add to scenes
 }
 
-void game::add_option(int* o)
+void game::add_option(int* option)
 {
-    options.push_back(o);
+    options.push_back(option);
 }
 
 void game::add_draggable_object()
@@ -370,16 +370,19 @@ void game::delete_selected()
         if(current_scene->draggable_objects.find(so.first)!=current_scene->draggable_objects.end())
         {
             std::clog<<"object#"<<so.second->get_number()<<'('<<so.second->get_type()<<')'<<" deleted."<<std::endl;
+            delete current_scene->draggable_objects[so.first];
             current_scene->draggable_objects.erase(so.first);
         }
         if(current_scene->physics_objects.find(so.first)!=current_scene->physics_objects.end())
         {
             std::clog<<"object#"<<so.second->get_number()<<'('<<so.second->get_type()<<')'<<" deleted."<<std::endl;
+            delete current_scene->physics_objects[so.first];
             current_scene->physics_objects.erase(so.first);
         }
         if(current_scene->rts_objects.find(so.first)!=current_scene->rts_objects.end())
         {
             std::clog<<"object#"<<so.second->get_number()<<'('<<so.second->get_type()<<')'<<" deleted."<<std::endl;
+            delete current_scene->rts_objects[so.first];
             current_scene->rts_objects.erase(so.first);
         }
     }
@@ -459,7 +462,6 @@ void game::update()
         collision_detection();//apply collision effects
     }
     current_scene->update();//update scene
-
     //process options
     if(*options[0]==1)
         scenes[1]->show_draggable_objects();
