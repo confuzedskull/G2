@@ -29,6 +29,9 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #endif
+#include <iostream>
+
+int scene::total_scenes=0;
 
 void scene::add_object(draggable_object* new_do)
 {
@@ -337,6 +340,42 @@ void scene::update()
         b->update();
 }
 
+void scene::save()
+{
+    std::stringstream file_name;
+    file_name<<"./data/scenes/scene#"<<number<<".scn";//generate the file name
+    std::ofstream scene_file(file_name.str());//open the file
+    scene_file<<number<<"//number\n";
+    scene_file<<background_color.str()<<"//background color\n";
+    scene_file<<"//objects\n";
+    std::clog<<"saving objects...\n";
+    //save draggable objects
+    for(auto d:draggable_objects)
+    {
+        scene_file.open(file_name.str(),std::fstream::app);
+        scene_file<<"object#"<<d.first<<".dro\n";
+        scene_file.close();
+        d.second->save();
+    }
+    //save physics objects
+    for(auto p:physics_objects)
+    {
+        scene_file.open(file_name.str(),std::fstream::app);
+        scene_file<<"object#"<<p.first<<".pso\n";
+        scene_file.close();
+        p.second->save();
+    }
+    //save rts objects
+    for(auto r:rts_objects)
+    {
+        scene_file.open(file_name.str(),std::fstream::app);
+        scene_file<<"object#"<<r.first<<".rso\n";
+        scene_file.close();
+        r.second->save();
+    }
+    scene_file.close();
+}
+
 void scene::sync()
 {
     //move rts objects
@@ -364,5 +403,6 @@ void scene::clear()
 
 scene::scene()
 {
+    number=total_scenes++;
     background_color.set(0.25,0.25,0.25);//set the color to dark gray
 }

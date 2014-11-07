@@ -25,6 +25,7 @@ class rts_object: public clickable_object, public tangible_object
         static point2f origin;
         void mouse_function();//performs a variety of actions dependent on cursor interaction
         void update();
+        void save();
         rts_object();
 };
 

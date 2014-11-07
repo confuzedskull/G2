@@ -30,7 +30,8 @@ double game::time_elapsed = 0.0f;
 bool game::paused=false;
 scene* game::current_scene = new scene();
 std::vector<scene*> game::scenes;
-std::vector<int*> game::options;
+std::map<std::string, int> game::settings;
+std::map<std::string, std::map<int,void (*)()> > game::conditions;
 
 //This checks which objects are touching and what they should do when that occurs
 //NOTE: This function uses C++11 "for" loops
@@ -74,15 +75,18 @@ void game::collision_detection()
 
 void game::initialize()
 {
-//Initialize Options
-    int* show_draggable_objects=new int{1};
-    add_option(show_draggable_objects);
+//Initialize Settings
+    add_setting("show draggable objects",1);
+    add_setting("show physics objects",1);
+    add_setting("show rts objects",1);
 
-    int* show_physics_objects=new int{1};
-    add_option(show_physics_objects);
-
-    int* show_rts_objects=new int{1};
-    add_option(show_rts_objects);
+//Initialize Conditions
+    add_condition("show draggable objects",1,show_draggable_objects);
+    add_condition("show draggable objects",0,hide_draggable_objects);
+    add_condition("show physics objects",1,show_physics_objects);
+    add_condition("show physics objects",0,hide_physics_objects);
+    add_condition("show rts objects",1,show_rts_objects);
+    add_condition("show rts objects",0,hide_rts_objects);
 
 //Initialize Objects
     std::clog<<"initializing objects...\n";
@@ -163,17 +167,17 @@ void game::initialize()
     checkbox* show_dos = new checkbox();
     show_dos->set_position(window::width*0.9,window::height*0.4);
     show_dos->set_label("show draggable objects");
-    show_dos->bind_option(show_draggable_objects);
+    show_dos->bind_option(&settings["show draggable objects"]);
 
     checkbox* show_pos = new checkbox();
     show_pos->set_position(window::width*0.9,window::height*0.35);
     show_pos->set_label("show physics objects");
-    show_pos->bind_option(show_physics_objects);
+    show_pos->bind_option(&settings["show physics objects"]);
 
     checkbox* show_rtsos = new checkbox();
     show_rtsos->set_position(window::width*0.9,window::height*0.3);
     show_rtsos->set_label("show rts objects");
-    show_rtsos->bind_option(show_rts_objects);
+    show_rtsos->bind_option(&settings["show rts objects"]);
     std::clog<<"initialized checkboxes\n";
 //Initialize Buttons
     //Main Menu Buttons
@@ -196,6 +200,10 @@ void game::initialize()
     button* resume_button = new button();//create a button pointer and initialize it
     resume_button->set_label("Resume");
     resume_button->action=resume;//function is assigned without '()' at the end
+
+    button* save_button = new button();//create a button pointer and initialize it
+    save_button->set_label("Save");
+    save_button->action=save;//function is assigned without '()' at the end
 
     button* main_menu_button = new button();//create a button pointer and initialize it
     main_menu_button->set_label("Main Menu");
@@ -255,6 +263,7 @@ void game::initialize()
     menu* pause_menu = new menu();//create a pointer and initialize it
     pause_menu->set_title("Pause Menu");
     pause_menu->add_item(resume_button);
+    pause_menu->add_item(save_button);
     pause_menu->add_item(main_menu_button);
     pause_menu->format();//make sure everything is neat and tidy
     pause_menu->hide();//we don't want to see this right away
@@ -330,9 +339,44 @@ void game::initialize()
     scenes.push_back(game_screen);//add to scenes
 }
 
-void game::add_option(int* option)
+void game::add_setting(std::string name, int value)
 {
-    options.push_back(option);
+    settings[name]=value;
+}
+
+void game::add_condition(std::string name, int value, void (*action)())
+{
+    conditions[name][value]=action;
+}
+
+void game::show_draggable_objects()
+{
+    current_scene->show_draggable_objects();
+}
+
+void game::hide_draggable_objects()
+{
+    current_scene->hide_draggable_objects();
+}
+
+void game::show_physics_objects()
+{
+    current_scene->show_physics_objects();
+}
+
+void game::hide_physics_objects()
+{
+    current_scene->hide_physics_objects();
+}
+
+void game::show_rts_objects()
+{
+    current_scene->show_rts_objects();
+}
+
+void game::hide_rts_objects()
+{
+    current_scene->hide_rts_objects();
 }
 
 void game::add_draggable_object()
@@ -462,19 +506,27 @@ void game::update()
         collision_detection();//apply collision effects
     }
     current_scene->update();//update scene
-    //process options
-    if(*options[0]==1)
-        scenes[1]->show_draggable_objects();
-    else
-        scenes[1]->hide_draggable_objects();
-    if(*options[1]==1)
-        scenes[1]->show_physics_objects();
-    else
-        scenes[1]->hide_physics_objects();
-    if(*options[2]==1)
-        scenes[1]->show_rts_objects();
-    else
-        scenes[1]->hide_rts_objects();
+    //process settings
+    for(auto c:conditions)//iterate through conditions
+    {
+        for(auto v:c.second)//iterate through the inner map of values and actions
+        {
+            if(v.first==settings[c.first])//setting value matches the condition
+            v.second();//perform associated action
+
+        }
+    }
+}
+
+void game::save()
+{
+    std::clog<<"saving game...\n";
+    current_scene->save();
+    std::fstream settings_file("./data/settings.txt");
+    for(auto s:settings)
+        settings_file<<s.first<<'='<<s.second<<std::endl;
+    settings_file.close();
+    std::clog<<"game saved.\n";
 }
 
 void game::sync()

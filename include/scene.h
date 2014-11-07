@@ -30,6 +30,8 @@
 class scene
 {
 public:
+    static int total_scenes;
+    int number;
     color background_color;
     object* last_object;
     menu* current_menu;
@@ -87,6 +89,7 @@ public:
     void disable_all();//disable all ui elements
     void render();//render all objects and ui elements
     void update();//update all objects and ui elements
+    void save();//save data to file
     void sync();//update clock-based items
     void clear();//delete all objects and ui elements
     scene();

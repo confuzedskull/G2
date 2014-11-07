@@ -1,0 +1,3 @@
+show draggable objects=1
+show physics objects=1
+show rts objects=1

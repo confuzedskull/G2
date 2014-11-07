@@ -18,6 +18,21 @@
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
+#include <sstream>
+
+std::string color::str()
+{
+    std::stringstream name;
+    name<<r<<','<<g<<','<<b;
+    return name.str();
+}
+
+bool color::matches(color c)
+{
+    return (!isless(r,c.r) && !isgreater(r,c.r)
+       && !isless(g,c.g) && !isgreater(g,c.g)
+       && !isless(b,c.b) && !isgreater(b,c.b));
+}
 
 void color::randomize()
 {

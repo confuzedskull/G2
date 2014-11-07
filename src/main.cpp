@@ -31,6 +31,7 @@
 #include <GL/glut.h>
 #endif
 #include <iostream>
+#include <fstream>
 
 int main(int argc, char **argv)
 {

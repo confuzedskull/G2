@@ -28,11 +28,13 @@ class color
         float prev_a;//previous alpha value
         bool values_set;
         public:
+        std::string str();//returns the color values in a string
         float r;//red value
         float g;//green value
         float b;//blue value
         float a;//alpha value
         bool changed;//whether the color values have been modified
+        bool matches(color c);//whether this color has the same values as the other color
         void randomize();//generate a random color
         void brighten();//increase the brightness of the color
         void brighten(float brightness);//increase brightness by given value

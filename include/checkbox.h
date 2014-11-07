@@ -28,9 +28,9 @@ public:
     int* option;
     int margin;
     color check_color;
-    void set_label(std::string);
-    void set_label(std::string,std::string);
-    void put_label(std::string);
+    void set_label(std::string text);
+    void set_label(std::string text,std::string pos);
+    void put_label(std::string pos);
     void bind_option(int*);
     void mouse_function();
     void render();

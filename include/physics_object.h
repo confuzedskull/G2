@@ -46,6 +46,7 @@ class physics_object: public clickable_object, public tangible_object
     void inertia();
     void physics();
     void update();
+    void save();
     physics_object();
 };
 #endif // PHYSICS_H

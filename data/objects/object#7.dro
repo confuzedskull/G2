@@ -1,0 +1,32 @@
+//basic object properties
+7//number
+680,360//position
+90.1//rotation
+64X64//dimensions
+5X5//selection marker dimensions
+0,0,0//fill color RGB values
+0,1,0//marker color RGB values
+0,0,0//border color RGB values
+1//whether the shape is filled
+0//whether the shape has a border
+1//whether you can see the object
+0//whether the object is selected
+//complex object properties are generated after initialization
+//movable object properties
+1.01//speed
+0//degrees rotated
+90.1//resting rotation
+0//whether or not the rally has been set
+0//whether the object is moving forward
+0//whether the object is moving backward
+0//whether the object is moving left
+0//whether the object is moving right
+0//whether the object is turning right
+0//whether the object is turning left
+//cued actions
+//tangible object properties
+-1//number of the object touching the left side
+-1//number of the object touching the right side
+-1//number of the object touching the front side
+2883584//number of the object touching the back side
+0//whether the object has collided
