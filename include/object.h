@@ -19,6 +19,7 @@
 #include "color.h"
 #include "point.h"
 #include <string>
+#include <sstream>
 
 //This is the base class for all other object types. It has basic properties such as name, color, and dimensions.
 class object
@@ -37,6 +38,7 @@ protected:
 public:
     static int total_objects;//total number of objects. This is used to assign the object number
     static point2f origin;
+    std::string file_name;
     int get_number();
     std::string get_type();
     point2f get_position();

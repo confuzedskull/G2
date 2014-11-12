@@ -31,8 +31,9 @@ public:
     bool performed_action;//whether or not the button action executed
     void (*action)();//a function pointer which will be called when clicked
     void format();//adjusts the size of the button to fit the label
-    void set_label(std::string);
-    void allign_label(std::string);
+    void set_label(std::string l);
+    void set_action(void (*a)());
+    void allign_label(std::string allignment);
     void mouse_function();
     void render();
     void update();

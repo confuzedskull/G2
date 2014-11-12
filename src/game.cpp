@@ -30,8 +30,8 @@ double game::time_elapsed = 0.0f;
 bool game::paused=false;
 scene* game::current_scene = new scene();
 std::vector<scene*> game::scenes;
-std::map<std::string, int> game::settings;
-std::map<std::string, std::map<int,void (*)()> > game::conditions;
+std::map<std::string, game::setting> game::settings;
+std::map<std::string, game::condition> game::conditions;
 
 //This checks which objects are touching and what they should do when that occurs
 //NOTE: This function uses C++11 "for" loops
@@ -76,17 +76,25 @@ void game::collision_detection()
 void game::initialize()
 {
 //Initialize Settings
-    add_setting("show draggable objects",1);
-    add_setting("show physics objects",1);
-    add_setting("show rts objects",1);
+    add_setting("window","width",window::width);
+    add_setting("window","height",window::height);
+    add_setting("game","show_draggable_objects",1);
+    add_setting("game","show_physics_objects",1);
+    add_setting("game","show_rts_objects",1);
+    add_setting("draggable_object","origin_x",draggable_object::origin.x);
+    add_setting("draggable_object","origin_y",draggable_object::origin.y);
+    add_setting("physics_object","origin_x",physics_object::origin.x);
+    add_setting("physics_object","origin_y",physics_object::origin.y);
+    add_setting("rts_object","origin_x",rts_object::origin.x);
+    add_setting("rts_object","origin_y",rts_object::origin.y);
 
 //Initialize Conditions
-    add_condition("show draggable objects",1,show_draggable_objects);
-    add_condition("show draggable objects",0,hide_draggable_objects);
-    add_condition("show physics objects",1,show_physics_objects);
-    add_condition("show physics objects",0,hide_physics_objects);
-    add_condition("show rts objects",1,show_rts_objects);
-    add_condition("show rts objects",0,hide_rts_objects);
+    add_condition("game","show_draggable_objects",1,show_draggable_objects);
+    add_condition("game","show_draggable_objects",0,hide_draggable_objects);
+    add_condition("game","show_physics_objects",1,show_physics_objects);
+    add_condition("game","show_physics_objects",0,hide_physics_objects);
+    add_condition("game","show_rts_objects",1,show_rts_objects);
+    add_condition("game","show_rts_objects",0,hide_rts_objects);
 
 //Initialize Objects
     std::clog<<"initializing objects...\n";
@@ -167,87 +175,100 @@ void game::initialize()
     checkbox* show_dos = new checkbox();
     show_dos->set_position(window::width*0.9,window::height*0.4);
     show_dos->set_label("show draggable objects");
-    show_dos->bind_option(&settings["show draggable objects"]);
+    show_dos->bind_option(&settings["game"]["show draggable objects"]);
 
     checkbox* show_pos = new checkbox();
     show_pos->set_position(window::width*0.9,window::height*0.35);
     show_pos->set_label("show physics objects");
-    show_pos->bind_option(&settings["show physics objects"]);
+    show_pos->bind_option(&settings["game"]["show physics objects"]);
 
     checkbox* show_rtsos = new checkbox();
     show_rtsos->set_position(window::width*0.9,window::height*0.3);
     show_rtsos->set_label("show rts objects");
-    show_rtsos->bind_option(&settings["show rts objects"]);
+    show_rtsos->bind_option(&settings["game"]["show rts objects"]);
     std::clog<<"initialized checkboxes\n";
 //Initialize Buttons
     //Main Menu Buttons
     button* play_button = new button();//create a button pointer and initialize it
     play_button->set_label("Play");
-    play_button->action=game::play;//function is assigned without '()' at the end
+    play_button->set_action(play);
 
     button* quit_button = new button();//create a button pointer and initialize it
     quit_button->set_label("Quit");
-    quit_button->action=warn_quit;//function is assigned without '()' at the end
+    quit_button->set_action(warn_quit);
+
     //Quit Menu Buttons
     button* confirm_quit = new button();//create a pointer and initialize it
     confirm_quit->set_label("Yes");
-    confirm_quit->action=game::quit;
+    confirm_quit->set_action(quit);
 
     button* cancel_quit = new button();//create a pointer and initialize it
     cancel_quit->set_label("No");
-    cancel_quit->action=game::return_menu;
+    cancel_quit->set_action(return_menu);
     //Pause Menu Buttons
     button* resume_button = new button();//create a button pointer and initialize it
     resume_button->set_label("Resume");
-    resume_button->action=resume;//function is assigned without '()' at the end
+    resume_button->set_action(resume);
+
+    button* load_button = new button();
+    load_button->set_label("Load");
+    load_button->set_action(load);
 
     button* save_button = new button();//create a button pointer and initialize it
     save_button->set_label("Save");
-    save_button->action=save;//function is assigned without '()' at the end
+    save_button->set_action(save);
 
     button* main_menu_button = new button();//create a button pointer and initialize it
     main_menu_button->set_label("Main Menu");
-    main_menu_button->action=warn_return;//function is assigned without '()' at the end
+    main_menu_button->set_action(warn_return);
     //Warning Menu Buttons
     button* confirm_return_button = new button();//create a button pointer and initialize it
     confirm_return_button->set_label("Yes");
-    confirm_return_button->action=return_menu;//function is assigned without '()' at the end
+    confirm_return_button->set_action(return_menu);
 
     button* cancel_return_button = new button();//create a button pointer and initialize it
     cancel_return_button->set_label("No");
-    cancel_return_button->action=pause;//function is assigned without '()' at the end
+    cancel_return_button->set_action(pause);
     //Game Buttons
     button* create_po_button = new button();//"po" stands for "physics object"
     create_po_button->set_label("physics object");
-    create_po_button->action=add_physics_object;//function is assigned without '()' at the end
+    create_po_button->set_action(add_physics_object);
 
     button* create_do_button = new button();//"do" stands for "draggable object"
     create_do_button->set_label("draggable object");
-    create_do_button->action=add_draggable_object;//function is assigned without '()' at the end
+    create_do_button->set_action(add_draggable_object);
 
     button* create_rtso_button = new button();//"rtso" stands for "real-time strategy object"
     create_rtso_button->set_label("rts object");
-    create_rtso_button->action=add_rts_object;//function is assigned without '()' at the end
+    create_rtso_button->set_action(add_rts_object);
 
     button* create_object_button = new button();//create a button pointer and initialize it
     create_object_button->set_position(window::width*0.9,window::height*0.1);//put the button on the right side, 1/5th of the way up
     create_object_button->set_label("create object");
-    create_object_button->action=create_object;//function is assigned without '()' at the end
+    create_object_button->set_action(create_object);
 
     button* delete_object_button = new button();//create a button pointer and initialize it
     delete_object_button->set_position(window::width*0.9,window::height*0.05);//put the button on the right side, 1/5th of the way up
     delete_object_button->set_label("delete object");
-    delete_object_button->action=delete_selected;//function is assigned without '()' at the end
+    delete_object_button->set_action(delete_selected);
 
     button* menu_button = new button();//create a button pointer and initialize it
     menu_button->set_position(window::center.x,window::height-20);//put the button at the top middle, just below the top
     menu_button->set_label("Menu");
-    menu_button->action=pause;//function is assigned without '()' at the end
+    menu_button->set_action(pause);
     std::clog<<"initialized buttons\n";
 //Initialize Menus
+    dropdown_menu* creation_menu = new dropdown_menu();//create a pointer and initialize it
+    creation_menu->set_title("create new...");
+    creation_menu->set_position(window::width*0.9,window::height*0.25);
+    creation_menu->add_item(create_do_button);
+    creation_menu->add_item(create_po_button);
+    creation_menu->add_item(create_rtso_button);
+
     menu* main_menu = new menu();//create a pointer and initialize it
     main_menu->set_title("Main Menu");
     main_menu->add_item(play_button);
+    main_menu->add_item(load_button);
     main_menu->add_item(quit_button);
     main_menu->format();//make sure everything is neat and tidy
 
@@ -276,13 +297,6 @@ void game::initialize()
     leave_menu->add_item(cancel_return_button);
     leave_menu->format();//make sure everything is neat and tidy
     leave_menu->hide();//we don't want to see this right away
-
-    dropdown_menu* creation_menu = new dropdown_menu();//create a pointer and initialize it
-    creation_menu->set_title("create new...");
-    creation_menu->set_position(window::width*0.9,window::height*0.25);
-    creation_menu->add_item(create_do_button);
-    creation_menu->add_item(create_po_button);
-    creation_menu->add_item(create_rtso_button);
     std::clog<<"initialized menus\n";
 //Initialize Scenes
     std::clog<<"initializing scenes...\n";
@@ -339,14 +353,14 @@ void game::initialize()
     scenes.push_back(game_screen);//add to scenes
 }
 
-void game::add_setting(std::string name, int value)
+void game::add_setting(std::string section, std::string property, int value)
 {
-    settings[name]=value;
+    settings[section][property]=value;
 }
 
-void game::add_condition(std::string name, int value, void (*action)())
+void game::add_condition(std::string section, std::string property, int value, void (*action)())
 {
-    conditions[name][value]=action;
+    conditions[section][property][value]=action;
 }
 
 void game::show_draggable_objects()
@@ -507,25 +521,114 @@ void game::update()
     }
     current_scene->update();//update scene
     //process settings
-    for(auto c:conditions)//iterate through conditions
+    for(auto sect:settings)//iterate through sections
     {
-        for(auto v:c.second)//iterate through the inner map of values and actions
+        for(auto sett:sect.second)//iterate through settings
         {
-            if(v.first==settings[c.first])//setting value matches the condition
-            v.second();//perform associated action
-
+            if(conditions.find(sect.first)!=conditions.end())//section exists
+            {
+                if(conditions[sect.first].find(sett.first)!=conditions[sect.first].end())//matching condition exists
+                {
+                    for(auto val:conditions[sect.first][sett.first])//iterate through the conditions
+                    {
+                        if(sett.second==val.first)//setting value matches condition value
+                            val.second();//perform associated action
+                    }
+                }
+            }
         }
     }
+}
+
+void game::load()
+{
+    std::clog<<"loading settings...\n";
+    std::ifstream config_file("./data/settings.ini");
+    std::stringstream scene_names;
+    std::string file_line;
+    while(std::getline(config_file,file_line))
+    {
+        char first_char=config_file.peek();//check the first character
+        if(first_char==';')//comment is detected
+            std::getline(config_file,file_line);//get this line and move iterator to next line
+        if(first_char=='[')//section is detected
+        {
+            std::string section=file_line.substr(1,file_line.length()-1);//the section name is between the brackets
+            if(section=="scenes")
+            {
+                do
+                {
+                    first_char=config_file.peek();//check the first character
+                    //load scene names
+                    scene_names<<"./data/scenes/";//add the path
+                    scene_names<<config_file;//add the file name
+                    scene_names<<std::endl;//mark the end of the line
+                }
+                while(first_char!='[');//as long as new section is not detected
+                }
+            else//for all other sections
+            {
+                do
+                {
+                    first_char=config_file.peek();//check the first character
+                    //load settings
+                    std::string property;
+                    int value;
+                    config_file>>property>>value;
+                    add_setting(section,property,value);
+                    std::clog<<"setting: "<<section<<' '<<property<<' '<<value<<" loaded."<<std::endl;
+                }
+                while(first_char!='[');//as long as new section is not detected
+            }
+        }
+        std::clog<<scene_names.str()<<std::endl;
+    }
+    config_file.close();
+    std::clog<<"settings loaded.\n";
+
+    std::clog<<"loading scenes...\n";
+    while(!scene_names.good())//iterate through scene names
+    {
+        std::string scene_name;//string to store the current scene name
+        std::getline(scene_names,scene_name);//get the scene file name
+        std::ifstream scene_file(scene_name.c_str());//access scene file
+        scene* next_scene = new scene();//create a new scene pointer
+        //load the basic variables
+        scene_file>>next_scene->background_color.r>>next_scene->background_color.g>>next_scene->background_color.b;
+        //load the file list
+        while(!scene_file.eof())
+        {
+            std::string file_name;
+            char first_char=scene_file.peek();//take a look at the first character
+            if(first_char!=';' && first_char!='\n')//no comment or empty line detected
+            {
+                scene_file>>file_name;//extract the file name
+                next_scene->file_names<<file_name;//add the file name to the stream
+            }
+        }
+        scene_file.close();
+        next_scene->load();
+        scenes.push_back(next_scene);//add scene to container
+    }
+    std::clog<<"scenes loaded.\n";
+    std::clog<<"game loaded.\n";
 }
 
 void game::save()
 {
     std::clog<<"saving game...\n";
+    std::clog<<"saving settings...\n";
+    std::ofstream config_file("./data/settings.ini");
+    for(auto sect:settings)//iterate through sections
+    {
+        config_file<<'['<<sect.first<<']'<<std::endl;//add section header
+        for(auto sett:sect.second)//iterate through settings
+            config_file<<sett.first<<" = "<<sett.second<<std::endl;//add property and value
+    }
+    config_file.close();
+    std::clog<<"settings saved.\n";
+    std::clog<<"saving scene...\n";
     current_scene->save();
-    std::fstream settings_file("./data/settings.txt");
-    for(auto s:settings)
-        settings_file<<s.first<<'='<<s.second<<std::endl;
-    settings_file.close();
     std::clog<<"game saved.\n";
 }
 

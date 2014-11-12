@@ -32,10 +32,12 @@ namespace game
     extern bool paused;//whether the game is active or not
     extern scene* current_scene;
     extern std::vector<scene*> scenes;
-    extern std::map<std::string,int> settings;
-    extern std::map<std::string, std::map<int,void (*)()> > conditions;
-    void add_setting(std::string name, int value);
-    void add_condition(std::string name, int value, void (*action)());
+    typedef std::map<std::string,int> setting;
+    extern std::map<std::string,setting> settings;
+    typedef std::map<std::string, std::map<int,void (*)()> > condition;
+    extern std::map<std::string, condition> conditions;
+    void add_setting(std::string section, std::string property, int value);
+    void add_condition(std::string section, std::string property, int value, void (*action)());
     void initialize();//initialize the objects
     void collision_detection();//handles object collision
     void show_draggable_objects();//show all draggable objects in current scene

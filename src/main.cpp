@@ -41,11 +41,9 @@ int main(int argc, char **argv)
     std::clog<<"initializing GLUT...\n";
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE || GLUT_RGB);
-    std::clog<<"creating window...\n";
+    std::clog<<"initializing window...\n";
     glutInitWindowPosition(window::position.x,window::position.y);
-    std::clog<<"window position: "<< window::position.x<< ","<< window::position.y<<std::endl;
     glutInitWindowSize(window::width,window::height);
-    std::clog<<"window size: "<<window::width<<"X"<< window::height<<std::endl;
     glutCreateWindow("2DWorld");
     window::initialize();
     glutReshapeFunc(window::change_size);

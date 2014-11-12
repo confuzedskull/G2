@@ -1,6 +1,6 @@
-2//number
-1,1,1//background color
-//objects
+2;number
+1,1,1;background color
+;objects
 object#3.pso
 object#4.pso
 object#5.pso

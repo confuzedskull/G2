@@ -47,6 +47,11 @@ void button::set_label(std::string l)
     format();
 }
 
+void button::set_action(void (*a)())
+{
+    action=a;
+}
+
 void button::allign_label(std::string allignment)
 {
     text_allignment=allignment;

@@ -340,14 +340,47 @@ void scene::update()
         b->update();
 }
 
+void scene::load()
+{
+    //clear all objects before loading
+    draggable_objects.clear();
+    physics_objects.clear();
+    rts_objects.clear();
+    std::string file_name;
+    while(file_names.good())//iterate through the stream
+    {
+        std::getline(file_names,file_name);//retrieve file name from stream
+        std::string extension=file_name.substr(file_name.size()-3,file_name.length());//get the file extension
+        //identify file type
+        if(extension=="dro")//file is a draggable object
+        {
+            draggable_object* d = new draggable_object();
+            d->load();
+            add_object(d);
+        }
+        if(extension=="pso")//file is a physics object
+        {
+            physics_object* p = new physics_object();
+            p->load();
+            add_object(p);
+        }
+        if(extension=="rso")//file is a real-time strategy object
+        {
+            rts_object* r = new rts_object();
+            r->load();
+            add_object(r);
+        }
+    }
+}
+
 void scene::save()
 {
     std::stringstream file_name;
     file_name<<"./data/scenes/scene#"<<number<<".scn";//generate the file name
     std::ofstream scene_file(file_name.str());//open the file
-    scene_file<<number<<"//number\n";
-    scene_file<<background_color.str()<<"//background color\n";
-    scene_file<<"//objects\n";
+    scene_file<<number<<";number\n";
+    scene_file<<background_color.str()<<";background color\n";
+    scene_file<<";objects\n";
     std::clog<<"saving objects...\n";
     //save draggable objects
     for(auto d:draggable_objects)
