@@ -32,6 +32,7 @@
 #endif
 #include <string>
 #include <math.h>
+#include <iostream>
 
 int menu::item_selected()
 {
@@ -180,7 +181,6 @@ void menu::update()
 
 menu::menu()
 {
-    type="menu";
     set_position(window::center.x,window::center.y);
     fill_color.set(0.75,0.75,0.75);//make the background dark gray
     set_title("menu");
@@ -192,4 +192,5 @@ menu::menu()
     spacing=10;
     margin=20;
     bordered=true;
+    std::clog<<"object#"<<number<<"(menu)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

@@ -27,11 +27,11 @@ private:
     bool expanded;
     bool state_toggle;
 public:
-    void add_item(button*);
-    void mouse_function();
+    void add_item(button*) override;
+    void mouse_function() override;
     void expand();
     void collapse();
-    void update();
+    void update() override;
     dropdown_menu();
 };
 

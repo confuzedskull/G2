@@ -68,7 +68,7 @@ void button::mouse_function()
             {
                 action();
                 performed_action=true;
-                std::clog<<"object#"<<number<<'('<<type<<')'<<"clicked.\n";
+                std::clog<<"object#"<<number<<"(button)"<<" clicked.\n";
             }
         }
         else
@@ -103,7 +103,6 @@ void button::action_placeholder(){}
 
 button::button()
 {
-    type="button";
     margin=5;
     position.set(0.0f,0.0f);
     fill_color.set(0.75f,0.75f,0.75f);
@@ -113,12 +112,11 @@ button::button()
     action=button::action_placeholder;
     bordered=true;
     performed_action=false;
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<"(button)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }
 
 button::button(float x, float y, char* l, void (*a)(void))
 {
-    type="button";
     margin=5;
     position.set(x,y);
     fill_color.set(0.75f,0.75f,0.75f);
@@ -128,5 +126,5 @@ button::button(float x, float y, char* l, void (*a)(void))
     action=a;
     bordered=true;
     performed_action=false;
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<"(button)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

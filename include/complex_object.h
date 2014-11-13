@@ -46,7 +46,6 @@ class complex_object: virtual public object
     void calc_points();//calculates the midpoints and corners
     void mark_selected();
     void render();//makes the object visible on screen
-    void update();
     complex_object();
 };
 #endif // COMPLEX_H

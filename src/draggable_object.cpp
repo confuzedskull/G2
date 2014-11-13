@@ -36,6 +36,18 @@
 
 point2f draggable_object::origin = point2f(window::width*0.9,window::height*0.7);
 
+std::string draggable_object::get_filename()
+{
+    std::stringstream file_name;
+    file_name<<"./data/objects/object#"<<number<<".dro";
+    return file_name.str();
+}
+
+std::string draggable_object::get_type()
+{
+    return "draggable object";
+}
+
 bool draggable_object::grabbed()
 {
     if(cursor::left_dragging && !cursor::highlighting &&
@@ -70,7 +82,7 @@ void draggable_object::update()
 
 void draggable_object::load()
 {
-    std::ifstream object_file(file_name.c_str());//access file by name
+    std::ifstream object_file(get_filename());//access file by name
     //load basic object properties
     object_file>>position.x>>position.y;
     object_file>>rotation;
@@ -109,12 +121,12 @@ void draggable_object::load()
     object_file>>touching[4];
     object_file>>collided;
     object_file.close();
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" loaded.\n";
+    std::clog<<"object#"<<number<<"(draggable object)"<<" loaded.\n";
 }
 
 void draggable_object::save()
 {
-    std::ofstream object_file(file_name.c_str());
+    std::ofstream object_file(get_filename());
     object_file<<";basic object properties\n";
     object_file<<position.x<<','<<position.y<<";position\n";
     object_file<<rotation<<";rotation\n";
@@ -148,16 +160,12 @@ void draggable_object::save()
     object_file<<touching[4]<<";number of the object touching the back side\n";
     object_file<<collided<<";whether the object has collided\n";
     object_file.close();
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" saved.\n";
+    std::clog<<"object#"<<number<<"(draggable object)"<<" saved.\n";
 }
 
 draggable_object::draggable_object()
 {
-    std::stringstream fn;
-    fn<<"./data/objects/object#"<<number<<".dro";
-    file_name=fn.str();
-    type="draggable object";
     fill_color=BLACK;
     position.set(origin);
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<"(draggable object)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

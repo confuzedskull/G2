@@ -30,6 +30,7 @@
 #include <GL/glut.h>
 #endif
 #include <iostream>
+#include <sstream>
 #include <math.h>
 
 //initialize static variable
@@ -41,9 +42,16 @@ int object::get_number()
     return number;
 }
 
+std::string object::get_filename()
+{
+    std::stringstream file_name;
+    file_name<<"./data/objects/object#"<<number<<".bso";
+    return file_name.str();
+}
+
 std::string object::get_type()
 {
-    return type;
+    return "basic object";
 }
 
 point2f object::get_position()
@@ -186,10 +194,14 @@ void object::render()//draws the object
     }
 }
 
+void object::update()
+{
+
+}
+
 object::object()
 {
     number=++total_objects;
-    type="object";
     position.set(origin);
     set_dimensions(64,64);
     marker_width=5;
@@ -203,13 +215,11 @@ object::object()
     rotation=90.1;
     show();
     selected=false;
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" created "<<sizeof(*this)<<" bytes"<<std::endl;
 }
 
 object::object(float x, float y, float w, float h)
 {
     number=++total_objects;
-    type="object";
     position.set(x,y);
     set_dimensions(w,h);
     marker_width=5;
@@ -223,13 +233,11 @@ object::object(float x, float y, float w, float h)
     rotation=90.1;
     show();
     selected=false;
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" created "<<sizeof(*this)<<" bytes"<<std::endl;
 }
 
 object::object(float x, float y, float w, float h, color c)
 {
     number=++total_objects;
-    type="object";
     position.set(x,y);
     set_dimensions(w,h);
     marker_width=5;
@@ -243,5 +251,4 @@ object::object(float x, float y, float w, float h, color c)
     rotation=90.1;
     show();
     selected=false;
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" created "<<sizeof(*this)<<" bytes"<<std::endl;
 }

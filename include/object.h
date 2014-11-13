@@ -19,14 +19,12 @@
 #include "color.h"
 #include "point.h"
 #include <string>
-#include <sstream>
 
 //This is the base class for all other object types. It has basic properties such as name, color, and dimensions.
 class object
 {
 protected:
     int number;
-    std::string type;
     point2f position;
     float rotation;
     float width;
@@ -38,9 +36,11 @@ protected:
 public:
     static int total_objects;//total number of objects. This is used to assign the object number
     static point2f origin;
-    std::string file_name;
+    virtual std::string get_filename();
+    virtual std::string get_type();
+    virtual void render();//draws the object
+    virtual void update();
     int get_number();
-    std::string get_type();
     point2f get_position();
     point2f* get_positionptr();
     float get_rotation();
@@ -65,8 +65,6 @@ public:
     void hide();//make the object invisible
     void render_shape();//draw the object's shape
     void render_border();//draw the border
-    void render();//draws the object
-    void update();
     object();
     object(float x, float y, float w, float h);
     object(float x, float y, float w, float h, color c);

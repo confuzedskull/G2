@@ -89,7 +89,6 @@ void dropdown_menu::update()
 
 dropdown_menu::dropdown_menu()
 {
-	type="dropdown menu";
 	set_title("choose one");
 	allign_title("middle");
 	title.set_font("helvetica",12);
@@ -99,5 +98,5 @@ dropdown_menu::dropdown_menu()
     margin=0;
     state_toggle=false;
     expanded=false;
-	std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+	std::clog<<"object#"<<number<<"(dropdown menu)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

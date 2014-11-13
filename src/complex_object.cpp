@@ -117,7 +117,5 @@ void complex_object::render()
 
 complex_object::complex_object()
 {
-    type="complex object";
     marker_color=GREEN;
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

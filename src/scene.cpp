@@ -342,15 +342,31 @@ void scene::update()
 
 void scene::load()
 {
+    std::stringstream file_names;
+    std::ifstream scene_file(file_name.c_str());//access scene file
+    //load the basic variables
+    scene_file>>background_color.r>>background_color.g>>background_color.b;
+    //load the file list
+    while(scene_file.good())
+    {
+        std::string filename;
+        char first_char=scene_file.peek();//take a look at the first character
+        if(first_char!=';')//no comment detected
+        {
+            scene_file>>filename;//extract the file name
+            file_names<<filename;//add the file name to the stream
+        }
+    }
+    scene_file.close();
     //clear all objects before loading
     draggable_objects.clear();
     physics_objects.clear();
     rts_objects.clear();
-    std::string file_name;
-    while(file_names.good())//iterate through the stream
+    while(file_names.good())
     {
-        std::getline(file_names,file_name);//retrieve file name from stream
-        std::string extension=file_name.substr(file_name.size()-3,file_name.length());//get the file extension
+        std::string filename;
+        std::getline(file_names,filename);//retrieve file name from stream
+        std::string extension=filename.substr(filename.length()-3,filename.length());//get the file extension
         //identify file type
         if(extension=="dro")//file is a draggable object
         {
@@ -375,9 +391,7 @@ void scene::load()
 
 void scene::save()
 {
-    std::stringstream file_name;
-    file_name<<"./data/scenes/scene#"<<number<<".scn";//generate the file name
-    std::ofstream scene_file(file_name.str());//open the file
+    std::ofstream scene_file(file_name.c_str());//open the file
     scene_file<<number<<";number\n";
     scene_file<<background_color.str()<<";background color\n";
     scene_file<<";objects\n";
@@ -385,7 +399,7 @@ void scene::save()
     //save draggable objects
     for(auto d:draggable_objects)
     {
-        scene_file.open(file_name.str(),std::fstream::app);
+        scene_file.open(file_name.c_str(),std::fstream::app);
         scene_file<<"object#"<<d.first<<".dro\n";
         scene_file.close();
         d.second->save();
@@ -393,7 +407,7 @@ void scene::save()
     //save physics objects
     for(auto p:physics_objects)
     {
-        scene_file.open(file_name.str(),std::fstream::app);
+        scene_file.open(file_name.c_str(),std::fstream::app);
         scene_file<<"object#"<<p.first<<".pso\n";
         scene_file.close();
         p.second->save();
@@ -401,12 +415,13 @@ void scene::save()
     //save rts objects
     for(auto r:rts_objects)
     {
-        scene_file.open(file_name.str(),std::fstream::app);
+        scene_file.open(file_name.c_str(),std::fstream::app);
         scene_file<<"object#"<<r.first<<".rso\n";
         scene_file.close();
         r.second->save();
     }
     scene_file.close();
+    std::clog<<"scene#"<<number<<" saved.\n";
 }
 
 void scene::sync()
@@ -437,5 +452,8 @@ void scene::clear()
 scene::scene()
 {
     number=total_scenes++;
+    std::stringstream fn;
+    fn<<"./data/scenes/scene#"<<number<<".scn";//generate the file name
+    file_name=fn.str();
     background_color.set(0.25,0.25,0.25);//set the color to dark gray
 }

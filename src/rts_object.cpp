@@ -23,6 +23,18 @@
 
 point2f rts_object::origin = point2f(window::width*0.9,window::height*0.5);
 
+std::string rts_object::get_filename()
+{
+    std::stringstream file_name;
+    file_name<<"./data/objects/object#"<<number<<".rso";
+    return file_name.str();
+}
+
+std::string rts_object::get_type()
+{
+    return "rts object";
+}
+
 void rts_object::mouse_function()
 {
     if(visible && enabled)
@@ -60,7 +72,7 @@ void rts_object::update()
 
 void rts_object::load()
 {
-    std::ifstream object_file(file_name.c_str());//access file by name
+    std::ifstream object_file(get_filename());//access file by name
     //load basic object properties
     object_file>>position.x>>position.y;
     object_file>>rotation;
@@ -99,12 +111,12 @@ void rts_object::load()
     object_file>>touching[4];
     object_file>>collided;
     object_file.close();
-    std::clog<<"object#"<<get_number()<<'('<<type<<')'<<" loaded.\n";
+    std::clog<<"object#"<<get_number()<<"(rts object)"<<" loaded.\n";
 }
 
 void rts_object::save()
 {
-    std::ofstream object_file(file_name.c_str());
+    std::ofstream object_file(get_filename());
     object_file<<"//basic object properties\n";
     object_file<<position.x<<','<<position.y<<";position\n";
     object_file<<rotation<<";rotation\n";
@@ -138,16 +150,12 @@ void rts_object::save()
     object_file<<touching[4]<<";number of the object touching the back side\n";
     object_file<<collided<<";whether the object has collided\n";
     object_file.close();
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" saved.\n";
+    std::clog<<"object#"<<number<<"(rts object)"<<" saved.\n";
 }
 
 rts_object::rts_object(): clickable_object(), tangible_object(), complex_object()
 {
-    std::stringstream fn;
-    fn<<"./data/objects/object#"<<number<<".rso";
-    file_name=fn.str();
-    type="rts object";
     position.set(origin);
     speed=2.0f;
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<"(rts object)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

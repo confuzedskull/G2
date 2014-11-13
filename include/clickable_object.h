@@ -22,6 +22,7 @@
 class clickable_object: virtual public object
 {
     public:
+    virtual void mouse_function();//performs a variety of actions dependent on cursor interaction
     bool highlighted();//checks if the object lies within the cursor selection box
     bool hovered_over();//checks if the cursor lies within the this object
     bool left_clicked();//checks if the cursor left clicked inside this object
@@ -32,8 +33,7 @@ class clickable_object: virtual public object
     void hover_function();//function to perform when object is hovered over
     void left_click_function();//function to perform when object is left clicked
     void right_click_function();//function to perform when object is right clicked
-    void mouse_function();//performs a variety of actions dependent on cursor interaction
-    void update();
+    void update() override;
     clickable_object();
 };
 #endif // CLICKABLE_H

@@ -39,10 +39,10 @@ public:
     void set_subtitle(std::string s);
     void set_layout(std::string l);
     void allign_title(std::string a);
-    void add_item(button* b);
+    virtual void add_item(button* b);
     void format();
-    void render();
-    void update();
+    void render() override;
+    void update() override;
     menu();
 };
 

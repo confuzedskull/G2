@@ -282,12 +282,10 @@ void movable_object::update()
 
 movable_object::movable_object(): complex_object()
 {
-    type="movable object";
     speed=1.01f;
     rest.set(position);
     rest_rotation=rotation;
     rally = &rest;
     rally_set=false;
     reset_motion();
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

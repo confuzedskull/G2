@@ -26,5 +26,5 @@
 -1;number of the object touching the left side
 -1;number of the object touching the right side
 -1;number of the object touching the front side
-1865380608;number of the object touching the back side
+0;number of the object touching the back side
 0;whether the object has collided

@@ -111,12 +111,11 @@ void checkbox::update()
 
 checkbox::checkbox()
 {
-    type="checkbox";
     bordered=true;
     set_dimensions(16.0,16.0);
     fill_color = color(0.75f,0.75f,0.75f);
     margin=4;
     checked=1;
     check_color=BLACK;
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<"(checkbox)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

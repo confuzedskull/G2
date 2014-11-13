@@ -80,9 +80,8 @@ void label::clear()
 
 label::label()
 {
-    type="text object";
     fill_color=BLACK;
     set_font("helvetica",12);
     spacing=1;
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<"(label)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

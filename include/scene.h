@@ -32,7 +32,7 @@ class scene
 {
 public:
     static int total_scenes;
-    std::stringstream file_names;
+    std::string file_name;
     int number;
     color background_color;
     object* last_object;

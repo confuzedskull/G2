@@ -23,6 +23,18 @@
 
 point2f physics_object::origin = point2f(window::width*0.9,window::height*0.6);
 
+std::string physics_object::get_filename()
+{
+    std::stringstream file_name;
+    file_name<<"./data/objects/object#"<<number<<".pso";
+    return file_name.str();
+}
+
+std::string physics_object::get_type()
+{
+    return "physics object";
+}
+
 void physics_object::calc_delta_time()
 {
     if(isgreaterequal(fabs(position.x-rest.x),0.01f))//at least difference of 0.01
@@ -183,7 +195,7 @@ void physics_object::update()
 
 void physics_object::load()
 {
-    std::ifstream object_file(file_name.c_str());//access file by name
+    std::ifstream object_file(get_filename());//access file by name
     //load basic object properties
     object_file>>position.x>>position.y;
     object_file>>rotation;
@@ -239,12 +251,12 @@ void physics_object::load()
     object_file>>angular_momentum;
     object_file>>force.x>>force.y;
     object_file.close();
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" loaded.\n";
+    std::clog<<"object#"<<number<<"(physics object)"<<" loaded.\n";
 }
 
 void physics_object::save()
 {
-    std::ofstream object_file(file_name.c_str());
+    std::ofstream object_file(get_filename());
     object_file<<";basic object properties\n";
     object_file<<position.x<<','<<position.y<<";position\n";
     object_file<<rotation<<";rotation\n";
@@ -295,15 +307,11 @@ void physics_object::save()
     object_file<<angular_momentum<<";angular momentum\n";
     object_file<<force.x<<','<<force.y<<";force\n";
     object_file.close();
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" saved.\n";
+    std::clog<<"object#"<<number<<"(physics object)"<<" saved.\n";
 }
 
 physics_object::physics_object()
 {
-    std::stringstream fn;
-    fn<<"./data/objects/object#"<<number<<".pso";
-    file_name=fn.str();
-    type="physics object";
     mass=0.015f;//If this is too high, objects might just disappear off the screen
     fill_color=GRAY;
     position.set(origin);
@@ -311,5 +319,5 @@ physics_object::physics_object()
     velocity[0].x=0.00f;
     velocity[0].y=0.00f;
     angular_velocity[0]=0.00f;
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<"(physics object)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

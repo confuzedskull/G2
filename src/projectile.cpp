@@ -57,7 +57,6 @@ void projectile::reset()
 
 projectile::projectile()
 {
-    type="projectile";
     width=10.0f;
     height=10.0f;
     range=1000.0f;
@@ -66,5 +65,5 @@ projectile::projectile()
     fired=false;
     visible=false;
     fill_color=RED;
-    std::clog<<"object#"<<number<<'('<<type<<')'<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<"(projectile)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }
