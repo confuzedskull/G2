@@ -35,7 +35,7 @@
 
 //initialize static variable
 int object::total_objects=0;
-point2f object::origin = point2f(0.0,0.0);
+point2i object::origin = point2i(0,0);
 
 int object::get_number()
 {
@@ -54,12 +54,12 @@ std::string object::get_type()
     return "basic object";
 }
 
-point2f object::get_position()
+point2i object::get_position()
 {
     return position;
 }
 
-point2f* object::get_positionptr()
+point2i* object::get_positionptr()
 {
     return &position;
 }
@@ -69,12 +69,12 @@ float object::get_rotation()
     return rotation;
 }
 
-float object::get_width()
+int object::get_width()
 {
     return width;
 }
 
-float object::get_height()
+int object::get_height()
 {
     return height;
 }
@@ -84,7 +84,7 @@ float object::get_radius()
     return radius;
 }
 
-void object::set_position(float x, float y)
+void object::set_position(int x, int y)
 {
     position.set(x,y);
     calc_boundaries();
@@ -95,7 +95,7 @@ void object::set_rotation(float angle)
     rotation=angle;
 }
 
-void object::set_dimensions(float w, float h)
+void object::set_dimensions(int w, int h)
 {
     width=w;
     height=h;
@@ -105,8 +105,8 @@ void object::set_dimensions(float w, float h)
 void object::calc_boundaries()//calculates the limits of the object
 {
     //these two variables store reused data in order to save calculations
-    float half_width=width/2;
-    float half_height=height/2;
+    int half_width=width/2;
+    int half_height=height/2;
     xmin=position.x-half_width;
     xmax=position.x+half_width;
     ymin=position.y-half_height;
@@ -217,7 +217,7 @@ object::object()
     selected=false;
 }
 
-object::object(float x, float y, float w, float h)
+object::object(int x, int y, int w, int h)
 {
     number=++total_objects;
     position.set(x,y);
@@ -235,7 +235,7 @@ object::object(float x, float y, float w, float h)
     selected=false;
 }
 
-object::object(float x, float y, float w, float h, color c)
+object::object(int x, int y, int w, int h, color c)
 {
     number=++total_objects;
     position.set(x,y);
@@ -252,3 +252,5 @@ object::object(float x, float y, float w, float h, color c)
     show();
     selected=false;
 }
+
+object::~object(){}

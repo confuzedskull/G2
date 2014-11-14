@@ -25,27 +25,27 @@ class object
 {
 protected:
     int number;
-    point2f position;
+    point2i position;
     float rotation;
-    float width;
-    float height;
+    int width;
+    int height;
     int marker_width;
     int marker_height;
     float radius;
-    float xmax,xmin,ymax,ymin;//the boundaries of the object
+    int xmax,xmin,ymax,ymin;//the boundaries of the object
 public:
     static int total_objects;//total number of objects. This is used to assign the object number
-    static point2f origin;
+    static point2i origin;
     virtual std::string get_filename();
     virtual std::string get_type();
     virtual void render();//draws the object
     virtual void update();
     int get_number();
-    point2f get_position();
-    point2f* get_positionptr();
+    point2i get_position();
+    point2i* get_positionptr();
     float get_rotation();
-    float get_width();
-    float get_height();
+    int get_width();
+    int get_height();
     float get_radius();
     color fill_color;
     color marker_color;//color of marker when object is selected
@@ -56,9 +56,9 @@ public:
     bool selected;//whether the object has been selected or not
     bool enabled;//whether the object should be updated or not
     void rotate(float angle);//changes the object's rotation by the given angle
-    void set_position(float x, float y);
+    void set_position(int x, int y);
     void set_rotation(float angle);
-    void set_dimensions(float w, float h);
+    void set_dimensions(int w, int h);
     void calc_boundaries();//calculates the max's and mins
     void mark_selected();//visually indicate that the object is selected
     void show();//make the object visible
@@ -66,7 +66,8 @@ public:
     void render_shape();//draw the object's shape
     void render_border();//draw the border
     object();
-    object(float x, float y, float w, float h);
-    object(float x, float y, float w, float h, color c);
+    object(int x, int y, int w, int h);
+    object(int x, int y, int w, int h, color c);
+    virtual ~object();
 };
 #endif // OBJECT_H

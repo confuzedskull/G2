@@ -34,7 +34,7 @@
 #include <GL/glut.h>
 #endif
 
-point2f draggable_object::origin = point2f(window::width*0.9,window::height*0.7);
+point2i draggable_object::origin = point2i(window::width*0.9,window::height*0.7);
 
 std::string draggable_object::get_filename()
 {
@@ -51,8 +51,8 @@ std::string draggable_object::get_type()
 bool draggable_object::grabbed()
 {
     if(cursor::left_dragging && !cursor::highlighting &&
-       isless(cursor::left_drag.x,xmax) && isgreater(cursor::left_drag.x,xmin) &&
-       isless(cursor::left_drag.y,ymax) && isgreater(cursor::left_drag.y,ymin))
+       (cursor::left_drag.x<xmax) && (cursor::left_drag.x>xmin) &&
+       (cursor::left_drag.y<ymax) && (cursor::left_drag.y>ymin))
         return true;
     else
         return false;
@@ -66,7 +66,7 @@ void draggable_object::mouse_function()
         left_click_function();
         if(grabbed())//grabbed this object
         {
-            position.set(cursor::left_drag.x,cursor::left_drag.y);
+            position.set(cursor::left_drag);
             cursor::grabbed_an_object=true;
         }
     }

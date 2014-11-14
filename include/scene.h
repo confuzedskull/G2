@@ -43,9 +43,9 @@ public:
     std::map<int,physics_object*> physics_objects;
     std::map<int,rts_object*> rts_objects;
     std::map<unsigned char, void (*)()> key_bindings;
-    std::map<unsigned char, void (*)()> key_toggles;
+    std::map<unsigned char, int*> key_toggles;
     std::map<std::string, void (*)()> special_bindings;
-    std::map<std::string, void (*)()> special_toggles;
+    std::map<std::string, int*> special_toggles;
     std::vector<label*> labels;
     std::vector<checkbox*> checkboxes;
     std::vector<button*> buttons;
@@ -59,10 +59,10 @@ public:
     void add_button(button*);//add button to the scene
     void add_menu(menu*);//add menu to the scene
     void add_menu(dropdown_menu*);//add dropdown menu to the scene
-    void bind_key(unsigned char, std::string, void (*)());//associate a key with an action that will be performed under given condition
-    void bind_key(unsigned char, void (*)(), void (*)());//associate a key that will perform 1 of 2 actions when toggled
-    void bind_key(std::string, std::string, void (*)());//associate a special key with an action that will be performed under given condition
-    void bind_key(std::string, void (*)(), void (*)());//associate a special key that will perform 1 of 2 actions when toggled
+    void bind_key(unsigned char key, int* toggle);//associate a key which will toggle a game option on/off
+    void bind_key(std::string special_key, int* toggle);//associate a key which will toggle a game option on/off
+    void bind_key(unsigned char key, void (*action)());//associate a key with an action
+    void bind_key(std::string special_key, void (*action)());//associate a special key with an action
     void show_draggable_objects();//show all draggable objects
     void hide_draggable_objects();//hide all draggable objects
     void show_physics_objects();//show all physics objects

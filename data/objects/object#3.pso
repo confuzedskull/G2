@@ -1,6 +1,6 @@
 ;basic object properties
-632.099,407.703;position
-90.194;rotation
+632.095,407.704;position
+90.1946;rotation
 32X32;dimensions
 0.5,0.5,0.5;fill color RGB values
 0,1,0;marker color RGB values
@@ -13,7 +13,7 @@
 ;movable object properties
 1.01;speed
 0;degrees rotated
-90.194;resting rotation
+90.1946;resting rotation
 0;whether or not the rally has been set
 0;whether the object is moving forward
 0;whether the object is moving backward
@@ -36,12 +36,12 @@
 0;how long change in velocity y took
 0;how long change in angle took
 0;how long change in angular velocity took
--0.636084,0.628731;initial velocity
--0.645625,0.638162;final velocity
+-0.636093,0.62874;initial velocity
+-0.645635,0.638171;final velocity
 -0.602993;initial angular velocity
 -0.612038;final angular velocity
--0.0056908,0.005625;acceleration
--0.00579647;angular acceleration
--0.00954126,0.00943096;momentum
+-0.00569095,0.00562518;acceleration
+-0.00579654;angular acceleration
+-0.0095414,0.00943109;momentum
 -0.0090449;angular momentum
--8.5362e-005,8.4375e-005;force
+-8.53643e-005,8.43778e-005;force

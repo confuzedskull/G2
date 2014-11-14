@@ -22,7 +22,7 @@
 class draggable_object: public clickable_object, public tangible_object
 {
     public:
-        static point2f origin;
+        static point2i origin;
         bool grabbed();//checks if this object was grabbed by the cursor
         std::string get_type() override;
         std::string get_filename() override;

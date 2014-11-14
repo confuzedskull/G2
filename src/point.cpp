@@ -38,6 +38,12 @@ void point2f::set(point2f p)
     y = p.y;
 }
 
+point2i::point2i()
+{
+    x=0;
+    y=0;
+}
+
 point2i::point2i(int a, int b)
 {
     x = a;
@@ -48,4 +54,10 @@ void point2i::set(int a, int b)
 {
     x = a;
     y = b;
+}
+
+void point2i::set(point2i p)
+{
+    x=p.x;
+    y=p.y;
 }

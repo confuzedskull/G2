@@ -21,7 +21,7 @@
 #include <fstream>
 #include <math.h>
 
-point2f physics_object::origin = point2f(window::width*0.9,window::height*0.6);
+point2i physics_object::origin = point2i(window::width*0.9,window::height*0.6);
 
 std::string physics_object::get_filename()
 {
@@ -37,7 +37,7 @@ std::string physics_object::get_type()
 
 void physics_object::calc_delta_time()
 {
-    if(isgreaterequal(fabs(position.x-rest.x),0.01f))//at least difference of 0.01
+    if(abs(position.x-rest.x)>=1)//at least difference of 0.01
     {
         start_time[0]=game::time;
         delta_time[0]=stop_time[0]-start_time[0];
@@ -48,7 +48,7 @@ void physics_object::calc_delta_time()
         delta_time[0]=0.0f;
     }
 
-    if(isgreaterequal(fabs(position.y-rest.y),0.01f))//at least difference of 0.01
+    if(abs(position.y-rest.y)>=1)//at least difference of 0.01
     {
         start_time[1]=game::time;
         delta_time[1]=stop_time[1]-start_time[1];

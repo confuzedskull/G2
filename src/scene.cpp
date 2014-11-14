@@ -76,32 +76,24 @@ void scene::add_menu(dropdown_menu* dm)
     dropdown_menus.push_back(dm);
 }
 
-void scene::bind_key(unsigned char key, std::string condition, void (*action)())
+void scene::bind_key(unsigned char key, int* toggle)
 {
-    if(condition=="hold")
-        key_bindings.insert(std::pair<unsigned char, void (*)()>(key,action));
-    if(condition=="press")
-    {
-        key_bindings.insert(std::pair<unsigned char, void (*)()>(key,action));
-        key_toggles.insert(std::pair<unsigned char, void (*)()>(key,action));
-    }
+    key_toggles[key]=toggle;
 }
 
-void scene::bind_key(unsigned char key, void (*actionA)(), void (*actionB)())
+void scene::bind_key(std::string special_key, int* toggle)
 {
-    key_bindings.insert(std::pair<unsigned char, void (*)()>(key,actionA));
-    key_toggles.insert(std::pair<unsigned char, void (*)()>(key,actionB));//bind actionB to the shift form of the key
+    special_toggles[special_key]=toggle;
 }
 
-void scene::bind_key(std::string special_key, std::string condition, void (*action)())
+void scene::bind_key(unsigned char key, void (*action)())
 {
-    if(condition=="hold")
-        special_bindings.insert(std::pair<std::string, void (*)()>(special_key,action));
-    if(condition=="press")
-    {
-        special_bindings.insert(std::pair<std::string, void (*)()>(special_key,action));
-        special_toggles.insert(std::pair<std::string, void (*)()>(special_key,action));
-    }
+    key_bindings[key]=action;
+}
+
+void scene::bind_key(std::string special_key, void (*action)())
+{
+    special_bindings[special_key]=action;
 }
 
 void scene::show_draggable_objects()

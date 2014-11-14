@@ -26,14 +26,14 @@ class cursor
 {
 public:
     static color box_color;//RGB values
-    static point2f passive;
-    static point2f left_down;
-    static point2f left_up;
-    static point2f left_drag;
-    static point2f right_down;
-    static point2f right_up;
-    static point2f right_drag;
-    static point2f rally;
+    static point2i passive;
+    static point2i left_down;
+    static point2i left_up;
+    static point2i left_drag;
+    static point2i right_down;
+    static point2i right_up;
+    static point2i right_drag;
+    static point2i rally;
     static clickable_object* left_clicked_object;
     static clickable_object* right_clicked_object;
     static bool set_rally;
@@ -48,7 +48,7 @@ public:
     static bool highlighting;
     static bool highlighting_enabled;
     static std::map<int,clickable_object*> selected_objects;
-    static float xmin,xmax,ymin,ymax;
+    static int xmin,xmax,ymin,ymax;
     static int selected_object;
     static int objects_selected();
     static void calc_boundaries();

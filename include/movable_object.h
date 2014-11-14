@@ -26,8 +26,8 @@
 class movable_object: virtual public complex_object
 {
 public:
-    point2f* rally;
-    point2f rest;
+    point2i* rally;
+    point2i rest;
     std::queue< std::array<int,3> > action_cue;//actions for the object to perform. The array consists of an action number,times to do, and times done
     float speed;//rate at which an object moves
     float degrees_rotated;//keeps track of the progress of a rotation animation
@@ -44,10 +44,10 @@ public:
     bool turning();
     bool moving();
     //moves object to destination over time at specified rate
-    bool move_to_point(float destination_x, float destination_y, float rate);
-    bool move_to_point(point2f destination,float rate);
-    bool move_to_point(point2f destination);
-    bool move_to_point(float destination_x, float destination_y);
+    bool move_to_point(int destination_x, int destination_y, float rate);
+    bool move_to_point(point2i destination, float rate);
+    bool move_to_point(point2i destination);
+    bool move_to_point(int destination_x, int destination_y);
     bool perform_actions();//makes the object perform the cued actions
     void cue_action(int action_no, int times);//adds an action to be performed n times to the action cue
     void cue_action(std::string action_name,int times);//adds an action to be performed n times to the action cue
@@ -58,16 +58,16 @@ public:
     void turn_left();
     void turn_left(float degrees);
     void move_left();
-    void move_left(float units_left);
+    void move_left(int units_left);
     void move_right();
-    void move_right(float units_right);
+    void move_right(int units_right);
     void move_forward();
-    void move_forward(float units_forward);
+    void move_forward(int units_forward);
     void move_back();
-    void move_back(float units_back);
+    void move_back(int units_back);
     //rotates object to face the given coordinates
-    void turn_to_point(float destination_x, float destination_y);
-    void turn_to_point(point2f destination);
+    void turn_to_point(int destination_x, int destination_y);
+    void turn_to_point(point2i destination);
     void reset_motion();
     void update();
     movable_object();

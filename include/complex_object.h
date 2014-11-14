@@ -22,17 +22,18 @@
 //A complex object consists of a number of points which are calculated based on the object's position and rotation
 class complex_object: virtual public object
 {
-    public:
+protected:
+     //headings for each direction
+    point2f leftward;
+    point2f rightward;
+    point2f forward;
+    point2f backward;
+public:
     //the mid-point of each side
     point2f front;
     point2f back;
     point2f left;
     point2f right;
-    //headings for each direction
-    point2f leftward;
-    point2f rightward;
-    point2f forward;
-    point2f backward;
     //each corner of the object
     point2f front_right;
     point2f front_left;

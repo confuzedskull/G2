@@ -31,13 +31,13 @@
 #include <iostream>
 //initialize static variables
 color cursor::box_color = GREEN;
-point2f cursor::left_up = point2f(0.0,0.0);
-point2f cursor::right_up = point2f(0.0,0.0);
-point2f cursor::left_drag = point2f(0.0,0.0);
-point2f cursor::right_drag = point2f(0.0,0.0);
-point2f cursor::passive = point2f(0.0,0.0);
-point2f cursor::left_down = point2f(0.0,0.0);
-point2f cursor::right_down = point2f(0.0,0.0);
+point2i cursor::left_up = point2i(0.0,0.0);
+point2i cursor::right_up = point2i(0.0,0.0);
+point2i cursor::left_drag = point2i(0.0,0.0);
+point2i cursor::right_drag = point2i(0.0,0.0);
+point2i cursor::passive = point2i(0.0,0.0);
+point2i cursor::left_down = point2i(0.0,0.0);
+point2i cursor::right_down = point2i(0.0,0.0);
 clickable_object* cursor::left_clicked_object = new clickable_object();
 clickable_object* cursor::right_clicked_object = new clickable_object();
 bool cursor::left_click = false;
@@ -51,10 +51,10 @@ bool cursor::left_dragging = false;
 bool cursor::right_dragging = false;
 bool cursor::grabbed_an_object = false;
 std::map<int,clickable_object*> cursor::selected_objects;
-float cursor::xmax = 0.0;
-float cursor::xmin = 0.0;
-float cursor::ymax = 0.0;
-float cursor::ymin = 0.0;
+int cursor::xmax = 0;
+int cursor::xmin = 0;
+int cursor::ymax = 0;
+int cursor::ymin = 0;
 int cursor::selected_object = 1;
 
 int cursor::objects_selected()
@@ -94,13 +94,13 @@ void cursor::selection_box()//this is the box that is created when user clicks a
 void cursor::reset()
 {
     box_color = GREEN;
-    passive.set(0.0,0.0);
-    left_down.set(0.0,0.0);
-    right_down.set(0.0,0.0);
-    left_up.set(0.0,0.0);
-    right_up.set(0.0,0.0);
-    left_drag.set(0.0,0.0);
-    right_drag.set(0.0,0.0);
+    passive.set(0,0);
+    left_down.set(0,0);
+    right_down.set(0,0);
+    left_up.set(0,0);
+    right_up.set(0,0);
+    left_drag.set(0,0);
+    right_drag.set(0,0);
     left_clicked_object = new clickable_object();
     right_clicked_object = new clickable_object();
     left_click = false;
@@ -115,8 +115,8 @@ void cursor::reset()
     grabbed_an_object=false;
     selected_objects.clear();
     selected_object = 1;
-    xmax = 0.0;
-    xmin = 0.0;
-    ymax = 0.0;
-    ymin = 0.0;
+    xmax = 0;
+    xmin = 0;
+    ymax = 0;
+    ymin = 0;
 }

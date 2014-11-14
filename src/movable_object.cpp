@@ -97,10 +97,10 @@ void movable_object::turn_left(float degrees)
 
 void movable_object::move_left()
 {
-    move_left(1.0f);
+    move_left(1);
 }
 
-void movable_object::move_left(float units_left)
+void movable_object::move_left(int units_left)
 {
     position.x+=leftward.x*speed*units_left;
     position.y+=leftward.y*speed*units_left;
@@ -109,10 +109,10 @@ void movable_object::move_left(float units_left)
 
 void movable_object::move_right()
 {
-    move_right(1.0f);
+    move_right(1);
 }
 
-void movable_object::move_right(float units_right)
+void movable_object::move_right(int units_right)
 {
     position.x+=rightward.x*speed*units_right;
     position.y+=rightward.y*speed*units_right;
@@ -121,10 +121,10 @@ void movable_object::move_right(float units_right)
 
 void movable_object::move_forward()
 {
-    move_forward(1.0f);
+    move_forward(1);
 }
 
-void movable_object::move_forward(float units_forward)
+void movable_object::move_forward(int units_forward)
 {
     position.x+=forward.x*speed*units_forward;
     position.y+=forward.y*speed*units_forward;
@@ -133,53 +133,53 @@ void movable_object::move_forward(float units_forward)
 
 void movable_object::move_back()
 {
-    move_back(1.0f);
+    move_back(1);
 }
 
-void movable_object::move_back(float units_back)
+void movable_object::move_back(int units_back)
 {
     position.x+=backward.x*speed*units_back;
     position.y+=backward.y*speed*units_back;
     moving_backward=true;
 }
 
-void movable_object::turn_to_point(float destination_x, float destination_y)//rotates object to face the given coordinates
+void movable_object::turn_to_point(int destination_x, int destination_y)//rotates object to face the given coordinates
 {
     if(isgreater(distance(destination_x,destination_y,position.x,position.y),radius))//prevent infinite spin
     {
-        if(isgreater(destination_x,position.x) && isgreater(destination_y,position.y))//destination lies in quadrant 1
+        if(destination_x>position.x && destination_y>position.y)//destination lies in quadrant 1
             rotation = atan((destination_y-position.y)/(destination_x-position.x))*180.0f/3.14159f;
 
-        if(isless(destination_x,position.x) && isgreater(destination_y,position.y))//destination lies in quadrant 2
+        if(destination_x<position.x && destination_y>position.y)//destination lies in quadrant 2
             rotation = atan((destination_y-position.y)/(destination_x-position.x))*180.0f/3.14159f + 180.0f;
 
-        if(isless(destination_x,position.x) && isless(destination_y,position.y))//destination lies in quadrant 3
+        if(destination_x<position.x && destination_y<position.y)//destination lies in quadrant 3
             rotation = atan((destination_y-position.y)/(destination_x-position.x))*180.0f/3.14159f + 180.0f;
 
-        if(isgreater(destination_x,position.x) && isless(destination_y,position.y))//destination lies in quadrant 4
+        if(destination_x>position.x && destination_y<position.y)//destination lies in quadrant 4
             rotation = atan((destination_y-position.y)/(destination_x-position.x))*180.0f/3.14159f + 360.0f;
 
-        if((!isless(destination_x,position.x)&&!isgreater(destination_x,position.x)) && isgreater(destination_y,position.y))//destination lies at 12 O'clock
+        if((!destination_x<position.x &&!destination_x>position.x) && destination_y>position.y)//destination lies at 12 O'clock
             rotation = 90.0f;
 
-        if((!isless(destination_x,position.x)&&!isgreater(destination_x,position.x))&& isless(destination_y,position.y))//destination lies at 6'O'clock
+        if((!destination_x<position.x &&!destination_x>position.x) && destination_y<position.y)//destination lies at 6'O'clock
             rotation = 270.0f;
 
-        if(isless(destination_x,position.x) && (!isless(destination_y,position.y)&&!isgreater(destination_y,position.y)))//destination lies at 9 O'clock
+        if(destination_x<position.x && (!destination_y<position.y && !destination_y>position.y))//destination lies at 9 O'clock
             rotation = 180.0f;
 
-        if(isgreater(destination_x,position.x) && (!isless(destination_y,position.y)&&!isgreater(destination_y,position.y)))//destination lies at 3 O'clock
+        if(destination_x>position.x && (!destination_y<position.y && !destination_y>position.y))//destination lies at 3 O'clock
             rotation = 0.0f;
     }
 }
 
-void movable_object::turn_to_point(point2f destination)
+void movable_object::turn_to_point(point2i destination)
 {
     turn_to_point(destination.x,destination.y);
 }
 
 //moves object to destination over time at specified rate
-bool movable_object::move_to_point(float destination_x, float destination_y, float rate)
+bool movable_object::move_to_point(int destination_x, int destination_y, float rate)
 {
     if(rally_set)
     {
@@ -194,17 +194,17 @@ bool movable_object::move_to_point(float destination_x, float destination_y, flo
         return false;
 }
 
-bool movable_object::move_to_point(point2f destination,float rate)
+bool movable_object::move_to_point(point2i destination,float rate)
 {
     return move_to_point(destination.x,destination.y,rate);
 }
 
-bool movable_object::move_to_point(point2f destination)
+bool movable_object::move_to_point(point2i destination)
 {
     return move_to_point(destination.x,destination.y,1.0f);
 }
 
-bool movable_object::move_to_point(float destination_x,float destination_y)
+bool movable_object::move_to_point(int destination_x,int destination_y)
 {
     return move_to_point(destination_x,destination_y,1.0f);
 }

@@ -24,7 +24,7 @@
 class physics_object: public clickable_object, public tangible_object
 {
     public:
-    static point2f origin;
+    static point2i origin;
     std::string get_type() override;
     std::string get_filename() override;
     float mass;

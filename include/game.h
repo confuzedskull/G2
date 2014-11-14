@@ -29,15 +29,18 @@ namespace game
     extern float time;//stores the current game time in seconds
     extern clock_t time_started;//start time
     extern double time_elapsed;//time since start
-    extern bool paused;//whether the game is active or not
+    extern int state;//whether the game is active or not
     extern scene* current_scene;
+    extern scene* main_scene;
+    extern scene* play_scene;
     extern std::vector<scene*> scenes;
-    typedef std::map<std::string,int> setting;
+    typedef std::map<std::string,int*> setting;//a setting stores a variable which can be retrieved by a tag
     extern std::map<std::string,setting> settings;
     typedef std::map<std::string, std::map<int,void (*)()> > condition;
     extern std::map<std::string, condition> conditions;
-    void add_setting(std::string section, std::string property, int value);
-    void add_condition(std::string section, std::string property, int value, void (*action)());
+    void add_setting(std::string section, std::string property, int value);//creates a new variable containing the given value and associates it with a property
+    void add_setting(std::string section, std::string property, int* variable);//associates a property with a variable
+    void add_condition(std::string section, std::string property, int value, void (*action)());//specifies what action should be performed when a property has a specific value
     void initialize();//initialize the objects
     void collision_detection();//handles object collision
     void show_draggable_objects();//show all draggable objects in current scene

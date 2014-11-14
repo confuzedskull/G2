@@ -43,38 +43,38 @@ std::map<std::string,bool> controls::special_states;
 
 void controls::move_forward()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && !game::paused)
-    game::current_scene->physics_objects[cursor::selected_object]->move_forward();
+    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=0)
+    game::play_scene->physics_objects[cursor::selected_object]->move_forward();
 }
 
 void controls::move_back()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && !game::paused)
-    game::current_scene->physics_objects[cursor::selected_object]->move_back();
+    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=0)
+    game::play_scene->physics_objects[cursor::selected_object]->move_back();
 }
 
 void controls::move_left()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && !game::paused)
-    game::current_scene->physics_objects[cursor::selected_object]->move_left();
+    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=0)
+    game::play_scene->physics_objects[cursor::selected_object]->move_left();
 }
 
 void controls::move_right()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && !game::paused)
-    game::current_scene->physics_objects[cursor::selected_object]->move_right();
+    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=0)
+    game::play_scene->physics_objects[cursor::selected_object]->move_right();
 }
 
 void controls::turn_left()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && !game::paused)
-    game::current_scene->physics_objects[cursor::selected_object]->turn_left();
+    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=0)
+    game::play_scene->physics_objects[cursor::selected_object]->turn_left();
 }
 
 void controls::turn_right()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && !game::paused)
-    game::current_scene->physics_objects[cursor::selected_object]->turn_right();
+    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=0)
+    game::play_scene->physics_objects[cursor::selected_object]->turn_right();
 }
 
 void controls::next_item()
@@ -221,7 +221,7 @@ void controls::mouse_drag(int x, int y)
         if(cursor::highlighting_enabled && !cursor::left_clicked_an_object && !cursor::grabbed_an_object)
         {
             //this condition makes it so that the user has to make a rectangle larger than 10x10. That way, highlighting is less sensitive
-            if(isgreater(x,cursor::left_down.x+10) && isless((window::height - y),cursor::left_down.y+10))
+            if((x>cursor::left_down.x+10) && ((window::height - y)<cursor::left_down.y+10))
                 cursor::highlighting=true;
             else
                 cursor::highlighting=false;
@@ -230,8 +230,8 @@ void controls::mouse_drag(int x, int y)
             cursor::highlighting=false;
         cursor::left_drag.set(x,(window::height-y));
         //see if drag point is different from start point
-        if((isless(x,cursor::left_down.x)||isgreater(x,cursor::left_down.x))
-           &&(isless((window::height - y),cursor::left_down.y)||isgreater((window::height - y),cursor::left_down.y)))
+        if(((x<cursor::left_down.x)||(x>cursor::left_down.x))
+           &&(((window::height - y)<cursor::left_down.y)||((window::height - y)>cursor::left_down.y)))
             cursor::left_dragging=true;
         else
             cursor::left_dragging=false;
@@ -244,8 +244,8 @@ void controls::mouse_drag(int x, int y)
         cursor::highlighting=false;
         cursor::right_drag.set(x,(window::height-y));
         //see if drag point is different from start point
-        if((isless(x,cursor::right_down.x)||isgreater(x,cursor::right_down.x))
-           &&(isless((window::height - y),cursor::right_down.y)||isgreater((window::height - y),cursor::right_down.y)))
+        if(((x<cursor::right_down.x)||(x>cursor::right_down.x))
+           &&(((window::height - y)<cursor::right_down.y)||((window::height - y)>cursor::right_down.y)))
             cursor::right_dragging=true;
         else
             cursor::right_dragging=false;
@@ -268,28 +268,28 @@ void controls::key_operations(void)
 {
     for(auto key:game::current_scene->key_bindings)//C+11 "for" loop
     {
-        if(game::current_scene->key_toggles.find(key.first)!=game::current_scene->key_toggles.end())//key has a toggle
+        if(key_states[key.first])//binded key is pressed
+            key.second();//just perform the associated action
+    }
+    for(auto key:game::current_scene->key_toggles)
+    {
+        if(key_states[key.first])
         {
-            if(key_states[key.first])
+            if(toggles[key.first])
             {
-                if(toggles[key.first])
-                {
-                    if(toggle_states[key.first])
-                        key.second();//perform key action
-                    toggle_states[key.first]=false;
-                }
-                else
-                {
-                    if(!toggle_states[key.first])
-                        game::current_scene->key_toggles.at(key.first)();//perform key counter action
-                    toggle_states[key.first]=true;
-                }
+                if(toggle_states[key.first])
+                    *key.second=0;
+                toggle_states[key.first]=false;
             }
             else
-                toggles[key.first]=toggle_states[key.first];
+            {
+                if(!toggle_states[key.first])
+                    *key.second=1;
+                toggle_states[key.first]=true;
+            }
         }
-        else if(key_states[key.first])//binded key is pressed
-            key.second();//just perform the associated action
+        else
+            toggles[key.first]=toggle_states[key.first];
     }
 }
 
@@ -320,27 +320,28 @@ void controls::special_keys(int key,int x,int y)
 
     for(auto key:game::current_scene->special_bindings)//C+11 "for" loop
     {
-        if(game::current_scene->special_toggles.find(key.first)!=game::current_scene->special_toggles.end())//key has a toggle
-        {
+        if(special_states[key.first])//binded key is pressed
+            key.second();//just perform the associated action
+    }
+
+    for(auto key:game::current_scene->special_toggles)
+    {
             if(special_states[key.first])
             {
                 if(special_toggles[key.first])
                 {
                     if(special_toggle_states[key.first])
-                        key.second();//perform key action
+                        *key.second=0;
                     special_toggle_states[key.first]=false;
                 }
                 else
                 {
                     if(!special_toggle_states[key.first])
-                        game::current_scene->special_toggles.at(key.first)();//perform key counter action
+                        *key.second=1;
                     special_toggle_states[key.first]=true;
                 }
             }
             else
                 special_toggles[key.first]=special_toggle_states[key.first];
-        }
-        else if(special_states[key.first])//binded key is pressed
-            key.second();//just perform the associated action
     }
 }

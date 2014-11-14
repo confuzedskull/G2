@@ -35,8 +35,9 @@ class point2i
     public:
     int x;
     int y;
-
     void set(int a, int b);
+    void set(point2i p);
+    point2i();
     point2i(int a, int b);
 };
 #endif // POINT_H

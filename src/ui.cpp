@@ -28,18 +28,20 @@ int ui::margin = 10;
 
 void ui::show_text()
 {
-    game::current_scene->show_text();
+    if(game::state==1)
+    game::play_scene->show_text();
 }
 
 void ui::hide_text()
 {
-    game::current_scene->hide_text();
+    if(game::state==1)
+    game::play_scene->hide_text();
 }
 
 void ui::update_text()
 {
     using namespace std;
-    label* object_info = game::scenes[1]->labels[0];
+    label* object_info = game::play_scene->labels[0];
     if(object_info->visible && !cursor::selected_objects.empty())
     {
         unsigned index = cursor::selected_object;
@@ -78,7 +80,7 @@ void ui::update_text()
             object_info->add_line("object touching side L:"+to_string(rtso->touching[0])+"R:"+to_string(rtso->touching[1])+"T:"+to_string(rtso->touching[2])+"B:"+to_string(rtso->touching[3]));
         }
     }
-    label* game_info = game::scenes[1]->labels[1];
+    label* game_info = game::play_scene->labels[1];
     if(game_info->visible)
     {
         game_info->clear();

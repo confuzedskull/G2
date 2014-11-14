@@ -21,7 +21,7 @@
 #include <math.h>
 #include <iostream>
 
-point2f rts_object::origin = point2f(window::width*0.9,window::height*0.5);
+point2i rts_object::origin = point2i(window::width*0.9,window::height*0.5);
 
 std::string rts_object::get_filename()
 {
@@ -49,13 +49,13 @@ void rts_object::mouse_function()
                 if(cursor::right_clicked_an_object)
                     rally = cursor::right_clicked_object->get_positionptr();//set rally to reference point because position is always changing
                 else//move to right clicked empty space
-                    rally = new point2f(cursor::right_down.x,cursor::right_down.y);
+                    rally = new point2i(cursor::right_down.x,cursor::right_down.y);
                 rally_set=true;
             }
             if(cursor::right_dragging && !right_clicked())
             {
                 //move to right drag
-                rally = new point2f(cursor::right_drag.x,cursor::right_drag.y);
+                rally = new point2i(cursor::right_drag.x,cursor::right_drag.y);
                 rally_set=true;
             }
         }

@@ -24,10 +24,10 @@ bool clickable_object::highlighted()
 {
     //if object lies within selection box boundaries, return true
     if(cursor::highlighting && enabled &&
-            isless(position.x,cursor::xmax) &&
-            isgreater(position.x,cursor::xmin) &&
-            isgreater(position.y,cursor::ymax) &&
-            isless(position.y,cursor::ymin))
+            position.x<cursor::xmax &&
+            position.x>cursor::xmin &&
+            position.y>cursor::ymax &&
+            position.y<cursor::ymin)
         return true;
     else
         return false;
@@ -36,8 +36,8 @@ bool clickable_object::highlighted()
 bool clickable_object::hovered_over()
 {
     if(!cursor::left_click && enabled &&
-       isless(cursor::passive.x,xmax) && isgreater(cursor::passive.x,xmin) &&
-       isless(cursor::passive.y,ymax) && isgreater(cursor::passive.y,ymin))
+       (cursor::passive.x<xmax) && (cursor::passive.x>xmin) &&
+       (cursor::passive.y<ymax) && (cursor::passive.y>ymin))
         return true;
     else
         return false;
@@ -46,8 +46,8 @@ bool clickable_object::hovered_over()
 bool clickable_object::left_clicked()
 {
     if(cursor::left_click && enabled &&
-       isless(cursor::left_down.x,xmax) && isgreater(cursor::left_down.x,xmin) &&
-       isless(cursor::left_down.y,ymax) && isgreater(cursor::left_down.y,ymin))
+       (cursor::left_down.x<xmax) && (cursor::left_down.x>xmin) &&
+       (cursor::left_down.y<ymax) && (cursor::left_down.y>ymin))
         return true;
     else
         return false;
@@ -56,8 +56,8 @@ bool clickable_object::left_clicked()
 bool clickable_object::right_clicked()
 {
     if(cursor::right_click && enabled &&
-       isless(cursor::right_down.x,xmax) && isgreater(cursor::right_down.x,xmin) &&
-       isless(cursor::right_down.y,ymax) && isgreater(cursor::right_down.y,ymin))
+       (cursor::right_down.x<xmax) && (cursor::right_down.x>xmin) &&
+       (cursor::right_down.y<ymax) && (cursor::right_down.y>ymin))
         return true;
     else
         return false;

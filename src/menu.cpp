@@ -59,7 +59,7 @@ void menu::format()
     int total_width=0;//width of buttons and the spaces between
     int total_height=0;//height of buttons and spaces between
     int widest;//width of the widest item
-    if(isgreater(title.get_width(),subtitle.get_width()))
+    if(title.get_width()>subtitle.get_width())
         widest=title.get_width();
     else
         widest=subtitle.get_width();
@@ -69,7 +69,7 @@ void menu::format()
     for(unsigned i=0;i<items.size();i++)//use regular 'for' loop because 'i' is used as number
     {
         total_width+=items[i]->get_width();
-        if(isgreater(items[i]->get_width(),widest))
+        if(items[i]->get_width()>widest)
             widest=items[i]->get_width();
         if(layout=="vertical")
             items[i]->set_position(position.x,position.y-total_height);//arrange item at bottom
