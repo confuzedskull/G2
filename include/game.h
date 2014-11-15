@@ -66,4 +66,7 @@ namespace game
     void save();//saves the game
     void sync();//update clock-based events
 };
+const int PAUSED=0;
+const int PLAYING=1;
+const int LOADING=2;
 #endif // GAME_H

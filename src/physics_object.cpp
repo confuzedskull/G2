@@ -23,13 +23,6 @@
 
 point2i physics_object::origin = point2i(window::width*0.9,window::height*0.6);
 
-std::string physics_object::get_filename()
-{
-    std::stringstream file_name;
-    file_name<<"./data/objects/object#"<<number<<".pso";
-    return file_name.str();
-}
-
 std::string physics_object::get_type()
 {
     return "physics object";
@@ -37,7 +30,7 @@ std::string physics_object::get_type()
 
 void physics_object::calc_delta_time()
 {
-    if(abs(position.x-rest.x)>=1)//at least difference of 0.01
+    if(isgreaterequal(fabs(position.x-rest.x),0.01f))//at least difference of 0.01
     {
         start_time[0]=game::time;
         delta_time[0]=stop_time[0]-start_time[0];
@@ -48,7 +41,7 @@ void physics_object::calc_delta_time()
         delta_time[0]=0.0f;
     }
 
-    if(abs(position.y-rest.y)>=1)//at least difference of 0.01
+    if(isgreaterequal(fabs(position.y-rest.y),0.01f))//at least difference of 0.01
     {
         start_time[1]=game::time;
         delta_time[1]=stop_time[1]-start_time[1];
@@ -195,7 +188,10 @@ void physics_object::update()
 
 void physics_object::load()
 {
-    std::ifstream object_file(get_filename());//access file by name
+    std::clog<<file_name;
+    std::ifstream object_file(file_name);//access file by name
+    if(object_file.bad())//make sure the file is there
+        return;
     //load basic object properties
     object_file>>position.x>>position.y;
     object_file>>rotation;
@@ -219,7 +215,7 @@ void physics_object::load()
     object_file>>turning_right;
     object_file>>turning_left;
     char first_char;
-    while(first_char!=';' && first_char!='\n')//no comment line or empty space detected
+    while(first_char!='\n')//empty space detected
     {
         //load the cued actions
         first_char=object_file.peek();//check the first character of the line
@@ -256,56 +252,52 @@ void physics_object::load()
 
 void physics_object::save()
 {
-    std::ofstream object_file(get_filename());
-    object_file<<";basic object properties\n";
-    object_file<<position.x<<','<<position.y<<";position\n";
-    object_file<<rotation<<";rotation\n";
-    object_file<<width<<'X'<<height<<";dimensions\n";
-    object_file<<fill_color.str()<<";fill color RGB values\n";
-    object_file<<marker_color.str()<<";marker color RGB values\n";
-    object_file<<border_color.str()<<";border color RGB values\n";
-    object_file<<filled<<";whether the shape is filled\n";
-    object_file<<bordered<<";whether the shape has a border\n";
-    object_file<<visible<<";whether you can see the object\n";
-    object_file<<selected<<";whether the object is selected\n";
-    object_file<<";complex object properties are generated after initialization\n";
-    object_file<<";movable object properties\n";
-    object_file<<speed<<";speed\n";
-    object_file<<degrees_rotated<<";degrees rotated\n";
-    object_file<<rest_rotation<<";resting rotation\n";
-    object_file<<rally_set<<";whether or not the rally has been set\n";
-    object_file<<moving_forward<<";whether the object is moving forward\n";
-    object_file<<moving_backward<<";whether the object is moving backward\n";
-    object_file<<moving_left<<";whether the object is moving left\n";
-    object_file<<moving_right<<";whether the object is moving right\n";
-    object_file<<turning_right<<";whether the object is turning right\n";
-    object_file<<turning_left<<";whether the object is turning left\n";
-    object_file<<";cued actions\n";
+    std::stringstream filename;
+    filename<<"./data/objects/object#"<<number<<".pso";
+    std::ofstream object_file(filename.str());
+    object_file<<position.x<<' '<<position.y<<std::endl;
+    object_file<<rotation<<std::endl;
+    object_file<<width<<' '<<height<<std::endl;
+    object_file<<fill_color.str()<<std::endl;
+    object_file<<marker_color.str()<<std::endl;
+    object_file<<border_color.str()<<std::endl;
+    object_file<<filled<<std::endl;
+    object_file<<bordered<<std::endl;
+    object_file<<visible<<std::endl;
+    object_file<<selected<<std::endl;
+    object_file<<speed<<std::endl;
+    object_file<<degrees_rotated<<std::endl;
+    object_file<<rest_rotation<<std::endl;
+    object_file<<rally_set<<std::endl;
+    object_file<<moving_forward<<std::endl;
+    object_file<<moving_backward<<std::endl;
+    object_file<<moving_left<<std::endl;
+    object_file<<moving_right<<std::endl;
+    object_file<<turning_right<<std::endl;
+    object_file<<turning_left<<std::endl;
     for(int i=0;i<action_cue.size();i++)
-        object_file<<action_cue.front().at(0)<<','<<action_cue.front().at(1)<<','<<action_cue.front().at(2)<<";action number, times done, times to do\n";
-    object_file<<";tangible object properties\n";
-    object_file<<touching[1]<<";number of the object touching the left side\n";
-    object_file<<touching[2]<<";number of the object touching the right side\n";
-    object_file<<touching[3]<<";number of the object touching the front side\n";
-    object_file<<touching[4]<<";number of the object touching the back side\n";
-    object_file<<collided<<";whether the object has collided\n";
-    object_file<<";physics object properties\n";
-    object_file<<mass<<";mass\n";
-    object_file<<delta_time[0]<<";how long change in x took\n";
-    object_file<<delta_time[1]<<";how long change in y took\n";
-    object_file<<delta_time[2]<<";how long change in velocity x took\n";
-    object_file<<delta_time[3]<<";how long change in velocity y took\n";
-    object_file<<delta_time[4]<<";how long change in angle took\n";
-    object_file<<delta_time[5]<<";how long change in angular velocity took\n";
-    object_file<<velocity[0].x<<','<<velocity[0].y<<";initial velocity\n";
-    object_file<<velocity[1].x<<','<<velocity[1].y<<";final velocity\n";
-    object_file<<angular_velocity[0]<<";initial angular velocity\n";
-    object_file<<angular_velocity[1]<<";final angular velocity\n";
-    object_file<<acceleration.x<<','<<acceleration.y<<";acceleration\n";
-    object_file<<angular_acceleration<<";angular acceleration\n";
-    object_file<<momentum.x<<','<<momentum.y<<";momentum\n";
-    object_file<<angular_momentum<<";angular momentum\n";
-    object_file<<force.x<<','<<force.y<<";force\n";
+        object_file<<action_cue.front().at(0)<<' '<<action_cue.front().at(1)<<' '<<action_cue.front().at(2)<<std::endl;
+    object_file<<touching[1]<<std::endl;
+    object_file<<touching[2]<<std::endl;
+    object_file<<touching[3]<<std::endl;
+    object_file<<touching[4]<<std::endl;
+    object_file<<collided<<std::endl;
+    object_file<<mass<<std::endl;
+    object_file<<delta_time[0]<<std::endl;
+    object_file<<delta_time[1]<<std::endl;
+    object_file<<delta_time[2]<<std::endl;
+    object_file<<delta_time[3]<<std::endl;
+    object_file<<delta_time[4]<<std::endl;
+    object_file<<delta_time[5]<<std::endl;
+    object_file<<velocity[0].x<<' '<<velocity[0].y<<std::endl;
+    object_file<<velocity[1].x<<' '<<velocity[1].y<<std::endl;
+    object_file<<angular_velocity[0]<<std::endl;
+    object_file<<angular_velocity[1]<<std::endl;
+    object_file<<acceleration.x<<' '<<acceleration.y<<std::endl;
+    object_file<<angular_acceleration<<std::endl;
+    object_file<<momentum.x<<' '<<momentum.y<<std::endl;
+    object_file<<angular_momentum<<std::endl;
+    object_file<<force.x<<' '<<force.y<<std::endl;
     object_file.close();
     std::clog<<"object#"<<number<<"(physics object)"<<" saved.\n";
 }
@@ -314,7 +306,7 @@ physics_object::physics_object()
 {
     mass=0.015f;//If this is too high, objects might just disappear off the screen
     fill_color=GRAY;
-    position.set(origin);
+    position.set((float)origin.x, (float)origin.y);
     set_dimensions(32.0f,32.0f);
     velocity[0].x=0.00f;
     velocity[0].y=0.00f;

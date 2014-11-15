@@ -23,30 +23,28 @@
 class complex_object: virtual public object
 {
 protected:
+    point2f position;
      //headings for each direction
     point2f leftward;
     point2f rightward;
     point2f forward;
     point2f backward;
 public:
+    point2f get_position();
     //the mid-point of each side
     point2f front;
     point2f back;
     point2f left;
     point2f right;
-    //each corner of the object
-    point2f front_right;
-    point2f front_left;
-    point2f back_right;
-    point2f back_left;
     void calc_direction();//calculates each directional heading
     void rotate(float angle);//performs a rotation transformation based on the given angle
     void set_position(float x, float y);
     void set_rotation(float angle);
-    void set_dimensions(float w, float h);
+    void set_dimensions(int w, int h) override;
     void calc_points();//calculates the midpoints and corners
-    void mark_selected();
-    void render();//makes the object visible on screen
+    void mark_selected() override;
+    void render_shape();
+    void render() override;//makes the object visible on screen
     complex_object();
 };
 #endif // COMPLEX_H

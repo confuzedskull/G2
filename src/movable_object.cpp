@@ -1,16 +1,13 @@
 /*  This file is a part of 2DWorld - The Generic 2D Game Engine
     Copyright (C) 2014  James Nakano
-
     2DWorld is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
     2DWorld is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
@@ -107,12 +104,26 @@ void movable_object::move_left(int units_left)
     moving_left=true;
 }
 
+void movable_object::move_left(float units_left)
+{
+    position.x+=leftward.x*speed*units_left;
+    position.y+=leftward.y*speed*units_left;
+    moving_left=true;
+}
+
 void movable_object::move_right()
 {
     move_right(1);
 }
 
 void movable_object::move_right(int units_right)
+{
+    position.x+=rightward.x*speed*units_right;
+    position.y+=rightward.y*speed*units_right;
+    moving_right=true;
+}
+
+void movable_object::move_right(float units_right)
 {
     position.x+=rightward.x*speed*units_right;
     position.y+=rightward.y*speed*units_right;
@@ -131,9 +142,16 @@ void movable_object::move_forward(int units_forward)
     moving_forward=true;
 }
 
+void movable_object::move_forward(float units_forward)
+{
+    position.x+=forward.x*speed*units_forward;
+    position.y+=forward.y*speed*units_forward;
+    moving_forward=true;
+}
+
 void movable_object::move_back()
 {
-    move_back(1);
+    move_back(1.0f);
 }
 
 void movable_object::move_back(int units_back)
@@ -143,32 +161,39 @@ void movable_object::move_back(int units_back)
     moving_backward=true;
 }
 
+void movable_object::move_back(float units_back)
+{
+    position.x+=backward.x*speed*units_back;
+    position.y+=backward.y*speed*units_back;
+    moving_backward=true;
+}
+
 void movable_object::turn_to_point(int destination_x, int destination_y)//rotates object to face the given coordinates
 {
-    if(isgreater(distance(destination_x,destination_y,position.x,position.y),radius))//prevent infinite spin
+    if(isgreater(distance((float)destination_x,(float)destination_y,position.x,position.y),radius))//prevent infinite spin
     {
-        if(destination_x>position.x && destination_y>position.y)//destination lies in quadrant 1
+        if(isgreater(destination_x,position.x) && isgreater(destination_y,position.y))//destination lies in quadrant 1
             rotation = atan((destination_y-position.y)/(destination_x-position.x))*180.0f/3.14159f;
 
-        if(destination_x<position.x && destination_y>position.y)//destination lies in quadrant 2
+        if(isless(destination_x,position.x) && isgreater(destination_y,position.y))//destination lies in quadrant 2
             rotation = atan((destination_y-position.y)/(destination_x-position.x))*180.0f/3.14159f + 180.0f;
 
-        if(destination_x<position.x && destination_y<position.y)//destination lies in quadrant 3
+        if(isless(destination_x,position.x) && isless(destination_y,position.y))//destination lies in quadrant 3
             rotation = atan((destination_y-position.y)/(destination_x-position.x))*180.0f/3.14159f + 180.0f;
 
-        if(destination_x>position.x && destination_y<position.y)//destination lies in quadrant 4
+        if(isgreater(destination_x,position.x) && isless(destination_y,position.y))//destination lies in quadrant 4
             rotation = atan((destination_y-position.y)/(destination_x-position.x))*180.0f/3.14159f + 360.0f;
 
-        if((!destination_x<position.x &&!destination_x>position.x) && destination_y>position.y)//destination lies at 12 O'clock
+        if((!isless(destination_x,position.x)&&!isgreater(destination_x,position.x)) && isgreater(destination_y,position.y))//destination lies at 12 O'clock
             rotation = 90.0f;
 
-        if((!destination_x<position.x &&!destination_x>position.x) && destination_y<position.y)//destination lies at 6'O'clock
+        if((!isless(destination_x,position.x)&&!isgreater(destination_x,position.x))&& isless(destination_y,position.y))//destination lies at 6'O'clock
             rotation = 270.0f;
 
-        if(destination_x<position.x && (!destination_y<position.y && !destination_y>position.y))//destination lies at 9 O'clock
+        if(isless(destination_x,position.x) && (!isless(destination_y,position.y)&&!isgreater(destination_y,position.y)))//destination lies at 9 O'clock
             rotation = 180.0f;
 
-        if(destination_x>position.x && (!destination_y<position.y && !destination_y>position.y))//destination lies at 3 O'clock
+        if(isgreater(destination_x,position.x) && (!isless(destination_y,position.y)&&!isgreater(destination_y,position.y)))//destination lies at 3 O'clock
             rotation = 0.0f;
     }
 }
@@ -184,7 +209,7 @@ bool movable_object::move_to_point(int destination_x, int destination_y, float r
     if(rally_set)
     {
         movable_object::turn_to_point(destination_x,destination_y);
-        if(isless(distance(position.x,position.y,destination_x,destination_y),radius))
+        if(isless(distance(position.x,position.y,(float)destination_x,(float)destination_y),radius))
         rally_set=false;
         move_forward(speed*rate);
         moving_forward=true;
@@ -285,7 +310,7 @@ movable_object::movable_object(): complex_object()
     speed=1.01f;
     rest.set(position);
     rest_rotation=rotation;
-    rally = &rest;
+    rally = new point2i((int)rest.x,(int)rest.y);
     rally_set=false;
     reset_motion();
 }

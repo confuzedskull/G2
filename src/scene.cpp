@@ -334,59 +334,47 @@ void scene::update()
 
 void scene::load()
 {
-    std::stringstream file_names;
-    std::ifstream scene_file(file_name.c_str());//access scene file
-    //load the basic variables
-    scene_file>>background_color.r>>background_color.g>>background_color.b;
-    //load the file list
-    while(scene_file.good())
-    {
-        std::string filename;
-        char first_char=scene_file.peek();//take a look at the first character
-        if(first_char!=';')//no comment detected
-        {
-            scene_file>>filename;//extract the file name
-            file_names<<filename;//add the file name to the stream
-        }
-    }
-    scene_file.close();
+    std::string filename;
     //clear all objects before loading
     draggable_objects.clear();
     physics_objects.clear();
     rts_objects.clear();
-    while(file_names.good())
+    //access scene file
+    std::ifstream scene_file(file_name.c_str());
+    //load the file list
+    while(std::getline(scene_file,filename))
     {
-        std::string filename;
-        std::getline(file_names,filename);//retrieve file name from stream
         std::string extension=filename.substr(filename.length()-3,filename.length());//get the file extension
+        filename="./data/objects/"+filename;
         //identify file type
         if(extension=="dro")//file is a draggable object
         {
             draggable_object* d = new draggable_object();
+            d->file_name=filename.c_str();
             d->load();
             add_object(d);
         }
         if(extension=="pso")//file is a physics object
         {
             physics_object* p = new physics_object();
+            p->file_name=filename.c_str();
             p->load();
             add_object(p);
         }
         if(extension=="rso")//file is a real-time strategy object
         {
             rts_object* r = new rts_object();
+            r->file_name=filename.c_str();
             r->load();
             add_object(r);
         }
     }
+    scene_file.close();
 }
 
 void scene::save()
 {
     std::ofstream scene_file(file_name.c_str());//open the file
-    scene_file<<number<<";number\n";
-    scene_file<<background_color.str()<<";background color\n";
-    scene_file<<";objects\n";
     std::clog<<"saving objects...\n";
     //save draggable objects
     for(auto d:draggable_objects)

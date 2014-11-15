@@ -1,47 +1,41 @@
-;basic object properties
-727.708,407.903;position
-90.1946;rotation
-32X32;dimensions
-0.5,0.5,0.5;fill color RGB values
-0,1,0;marker color RGB values
-0,0,0;border color RGB values
-1;whether the shape is filled
-0;whether the shape has a border
-1;whether you can see the object
-0;whether the object is selected
-;complex object properties are generated after initialization
-;movable object properties
-1.01;speed
-0;degrees rotated
-90.1946;resting rotation
-0;whether or not the rally has been set
-0;whether the object is moving forward
-0;whether the object is moving backward
-0;whether the object is moving left
-0;whether the object is moving right
-0;whether the object is turning right
-0;whether the object is turning left
-;cued actions
-;tangible object properties
--1;number of the object touching the left side
--1;number of the object touching the right side
--1;number of the object touching the front side
-0;number of the object touching the back side
-0;whether the object has collided
-;physics object properties
-0.015;mass
-0;how long change in x took
-0;how long change in y took
-0;how long change in velocity x took
-0;how long change in velocity y took
-0;how long change in angle took
-0;how long change in angular velocity took
-0.636093,0.630578;initial velocity
-0.645635,0.640037;final velocity
--0.602993;initial angular velocity
--0.612038;final angular velocity
-0.00569095,0.00564161;acceleration
--0.00579654;angular acceleration
-0.0095414,0.00945867;momentum
--0.0090449;angular momentum
-8.53643e-005,8.46241e-005;force
+784.784 439.778
+90.1
+32 32
+0.5 0.5 0.5
+0 1 0
+0 0 0
+1
+0
+1
+0
+1.01
+0
+90.1
+0
+0
+0
+0
+0
+0
+0
+-1
+-1
+-1
+12648448
+0
+0.015
+0
+0
+0
+0
+0
+0
+0.614032 0.634255
+0.623243 0.643769
+0
+0
+0.00880716 0.0100548
+0
+0.00921049 0.00951382
+0
+0.000132107 0.000150822

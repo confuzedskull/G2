@@ -42,13 +42,6 @@ int object::get_number()
     return number;
 }
 
-std::string object::get_filename()
-{
-    std::stringstream file_name;
-    file_name<<"./data/objects/object#"<<number<<".bso";
-    return file_name.str();
-}
-
 std::string object::get_type()
 {
     return "basic object";
@@ -155,7 +148,6 @@ void object::render_shape()
         glTranslatef(position.x,position.y,0.0);//translate object according to coordinates
         glRotatef(rotation,0,0,1);//rotates object with object.rotation
         glTranslatef(-position.x,-position.y,0.0);//translate object according to coordinates
-        glPopMatrix();//reset transformation matrix
         glColor3f(fill_color.r,fill_color.g,fill_color.b);//color the square with object.fill_color
         glBegin(GL_POLYGON);//draws a filled in rectangle
         glVertex2f(xmin, ymin); // The bottom left corner
@@ -163,6 +155,7 @@ void object::render_shape()
         glVertex2f(xmax, ymax); // The top right corner
         glVertex2f(xmax, ymin); // The bottom right corner
         glEnd();//finish drawing
+        glPopMatrix();//reset transformation matrix
     }
 }
 
@@ -170,6 +163,10 @@ void object::render_border()
 {
     if(bordered)
     {
+        glPushMatrix();//need push and pop so that entire scene isn't rotated
+        glTranslatef(position.x,position.y,0.0);//translate object according to coordinates
+        glRotatef(rotation,0,0,1);//rotates object with object.rotation
+        glTranslatef(-position.x,-position.y,0.0);//translate object according to coordinates
         glColor3f(border_color.r,border_color.g,border_color.b);
         glBegin(GL_LINES);//draws lines (in this case, a rectangle)
         glVertex2f(xmin, ymax);//top left corner
@@ -181,6 +178,7 @@ void object::render_border()
         glVertex2f(xmin, ymin);//bottom left corner
         glVertex2f(xmin, ymax);//top left corner
         glEnd();
+        glPopMatrix();//reset transformation matrix
     }
 }
 
@@ -194,15 +192,13 @@ void object::render()//draws the object
     }
 }
 
-void object::update()
-{
-
-}
+void object::update(){}
 
 object::object()
 {
     number=++total_objects;
     position.set(origin);
+    rotation=0.0f;
     set_dimensions(64,64);
     marker_width=5;
     marker_height=5;
@@ -212,7 +208,6 @@ object::object()
     marker_color=BLACK;
     border_color=BLACK;
     bordered=false;
-    rotation=90.1;
     show();
     selected=false;
 }
@@ -221,6 +216,7 @@ object::object(int x, int y, int w, int h)
 {
     number=++total_objects;
     position.set(x,y);
+    rotation=0.0f;
     set_dimensions(w,h);
     marker_width=5;
     marker_height=5;
@@ -230,7 +226,6 @@ object::object(int x, int y, int w, int h)
     filled=true;
     border_color=BLACK;
     bordered=false;
-    rotation=90.1;
     show();
     selected=false;
 }
@@ -248,7 +243,6 @@ object::object(int x, int y, int w, int h, color c)
     filled=true;
     border_color=BLACK;
     bordered=false;
-    rotation=90.1;
     show();
     selected=false;
 }

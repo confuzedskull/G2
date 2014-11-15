@@ -27,7 +27,7 @@ class movable_object: virtual public complex_object
 {
 public:
     point2i* rally;
-    point2i rest;
+    point2f rest;
     std::queue< std::array<int,3> > action_cue;//actions for the object to perform. The array consists of an action number,times to do, and times done
     float speed;//rate at which an object moves
     float degrees_rotated;//keeps track of the progress of a rotation animation
@@ -59,12 +59,16 @@ public:
     void turn_left(float degrees);
     void move_left();
     void move_left(int units_left);
+    void move_left(float units_left);
     void move_right();
     void move_right(int units_right);
+    void move_right(float units_right);
     void move_forward();
     void move_forward(int units_forward);
+    void move_forward(float units_forward);
     void move_back();
     void move_back(int units_back);
+    void move_back(float units_back);
     //rotates object to face the given coordinates
     void turn_to_point(int destination_x, int destination_y);
     void turn_to_point(point2i destination);

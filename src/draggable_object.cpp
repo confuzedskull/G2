@@ -36,13 +36,6 @@
 
 point2i draggable_object::origin = point2i(window::width*0.9,window::height*0.7);
 
-std::string draggable_object::get_filename()
-{
-    std::stringstream file_name;
-    file_name<<"./data/objects/object#"<<number<<".dro";
-    return file_name.str();
-}
-
 std::string draggable_object::get_type()
 {
     return "draggable object";
@@ -66,7 +59,7 @@ void draggable_object::mouse_function()
         left_click_function();
         if(grabbed())//grabbed this object
         {
-            position.set(cursor::left_drag);
+            position.set((float)cursor::left_drag.x,(float)cursor::left_drag.y);
             cursor::grabbed_an_object=true;
         }
     }
@@ -75,14 +68,14 @@ void draggable_object::mouse_function()
 void draggable_object::update()
 {
     calc_boundaries();
-    calc_points();
-    calc_direction();
     mouse_function();
 }
 
 void draggable_object::load()
 {
-    std::ifstream object_file(get_filename());//access file by name
+    std::ifstream object_file(file_name);//access file by name
+    if(object_file.bad())//make sure the file is there
+        return;
     //load basic object properties
     object_file>>position.x>>position.y;
     object_file>>rotation;
@@ -126,39 +119,36 @@ void draggable_object::load()
 
 void draggable_object::save()
 {
-    std::ofstream object_file(get_filename());
-    object_file<<";basic object properties\n";
-    object_file<<position.x<<','<<position.y<<";position\n";
-    object_file<<rotation<<";rotation\n";
-    object_file<<width<<'X'<<height<<";dimensions\n";
-    object_file<<fill_color.str()<<";fill color RGB values\n";
-    object_file<<marker_color.str()<<";marker color RGB values\n";
-    object_file<<border_color.str()<<";border color RGB values\n";
-    object_file<<filled<<";whether the shape is filled\n";
-    object_file<<bordered<<";whether the shape has a border\n";
-    object_file<<visible<<";whether you can see the object\n";
-    object_file<<selected<<";whether the object is selected\n";
-    object_file<<";complex object properties are generated after initialization\n";
-    object_file<<";movable object properties\n";
-    object_file<<speed<<";speed\n";
-    object_file<<degrees_rotated<<";degrees rotated\n";
-    object_file<<rest_rotation<<";resting rotation\n";
-    object_file<<rally_set<<";whether or not the rally has been set\n";
-    object_file<<moving_forward<<";whether the object is moving forward\n";
-    object_file<<moving_backward<<";whether the object is moving backward\n";
-    object_file<<moving_left<<";whether the object is moving left\n";
-    object_file<<moving_right<<";whether the object is moving right\n";
-    object_file<<turning_right<<";whether the object is turning right\n";
-    object_file<<turning_left<<";whether the object is turning left\n";
-    object_file<<";cued actions\n";
+    std::stringstream filename;
+    filename<<"./data/objects/object#"<<number<<".dro";
+    std::ofstream object_file(filename.str());
+    object_file<<position.x<<' '<<position.y<<std::endl;
+    object_file<<rotation<<std::endl;
+    object_file<<width<<' '<<height<<std::endl;
+    object_file<<fill_color.str()<<std::endl;
+    object_file<<marker_color.str()<<std::endl;
+    object_file<<border_color.str()<<std::endl;
+    object_file<<filled<<std::endl;
+    object_file<<bordered<<std::endl;
+    object_file<<visible<<std::endl;
+    object_file<<selected<<std::endl;
+    object_file<<speed<<std::endl;
+    object_file<<degrees_rotated<<std::endl;
+    object_file<<rest_rotation<<std::endl;
+    object_file<<rally_set<<std::endl;
+    object_file<<moving_forward<<std::endl;
+    object_file<<moving_backward<<std::endl;
+    object_file<<moving_left<<std::endl;
+    object_file<<moving_right<<std::endl;
+    object_file<<turning_right<<std::endl;
+    object_file<<turning_left<<std::endl;
     for(int i=0;i<action_cue.size();i++)
-        object_file<<action_cue.front().at(0)<<','<<action_cue.front().at(1)<<','<<action_cue.front().at(2)<<";action number, times done, times to do\n";
-    object_file<<";tangible object properties\n";
-    object_file<<touching[1]<<";number of the object touching the left side\n";
-    object_file<<touching[2]<<";number of the object touching the right side\n";
-    object_file<<touching[3]<<";number of the object touching the front side\n";
-    object_file<<touching[4]<<";number of the object touching the back side\n";
-    object_file<<collided<<";whether the object has collided\n";
+        object_file<<action_cue.front().at(0)<<' '<<action_cue.front().at(1)<<' '<<action_cue.front().at(2)<<std::endl;
+    object_file<<touching[1]<<std::endl;
+    object_file<<touching[2]<<std::endl;
+    object_file<<touching[3]<<std::endl;
+    object_file<<touching[4]<<std::endl;
+    object_file<<collided<<std::endl;
     object_file.close();
     std::clog<<"object#"<<number<<"(draggable object)"<<" saved.\n";
 }
@@ -166,6 +156,6 @@ void draggable_object::save()
 draggable_object::draggable_object()
 {
     fill_color=BLACK;
-    position.set(origin);
+    position.set((float)origin.x,(float)origin.y);
     std::clog<<"object#"<<number<<"(draggable object)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

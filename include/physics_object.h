@@ -26,7 +26,6 @@ class physics_object: public clickable_object, public tangible_object
     public:
     static point2i origin;
     std::string get_type() override;
-    std::string get_filename() override;
     float mass;
     float delta_time[6];/*each element of this array represents how much time a change in a direction or velocity took
     0:change in x, 1:change in y, 2:change in velocity x, 3:change in velocity y, 4:change in angle, 5:change in angular velocity*/

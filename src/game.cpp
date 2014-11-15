@@ -1,16 +1,13 @@
 /*  This file is a part of 2DWorld - The Generic 2D Game Engine
     Copyright (C) 2014  James Nakano
-
     2DWorld is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
     2DWorld is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
@@ -43,7 +40,6 @@ void game::initialize()
     add_setting("window","height",&window::height);
     add_setting("window","position_x",&window::position.x);
     add_setting("window","position_y",&window::position.y);
-    add_setting("game","state",&state);
     add_setting("game","show_info_overlay",0);
     add_setting("game","show_draggable_objects",1);
     add_setting("game","show_physics_objects",1);
@@ -56,8 +52,6 @@ void game::initialize()
     add_setting("rts_object","origin_y",&rts_object::origin.y);
 
 //Initialize Conditions
-    add_condition("game","state",1,play);
-    add_condition("game","state",0,pause);
     add_condition("game","show_info_overlay",1,ui::show_text);
     add_condition("game","show_info_overlay",0,ui::hide_text);
     add_condition("game","show_draggable_objects",1,show_draggable_objects);
@@ -321,7 +315,7 @@ void game::initialize()
     game_screen->bind_key("right",controls::next_item);
     game_screen->bind_key("insert",game::create_object);
     game_screen->bind_key(127,delete_selected);
-    game_screen->bind_key(27,settings["game"]["paused"]);
+    game_screen->bind_key(27,&state);
     play_scene=game_screen;
     scenes.push_back(game_screen);//add to scenes
 }
@@ -468,11 +462,11 @@ void game::delete_selected()
 
 void game::play()
 {
-    if(state!=1)
+    if(state!=PLAYING)
     {
+        state=PLAYING;
         cursor::reset();
         cursor::highlighting_enabled=true;
-        state=1;
         play_scene->enable_all();
         play_scene->menus[0]->hide();//hide the pause menu
         play_scene->menus[1]->hide();//hide the warning menu
@@ -484,9 +478,9 @@ void game::play()
 
 void game::pause()
 {
-    if(state!=0)
+    if(state!=PAUSED)
     {
-        state=0;
+        state=PAUSED;
         cursor::highlighting_enabled=false;
         play_scene->menus[0]->show();//show the pause menu
         play_scene->menus[1]->hide();//hide the warning menu
@@ -498,7 +492,7 @@ void game::pause()
 
 void game::resume()
 {
-    state=1;
+    state=PLAYING;
     cursor::highlighting_enabled=true;
     play_scene->enable_all();
     play_scene->menus[0]->hide();//hide pause menu
@@ -539,7 +533,7 @@ void game::quit()
 
 void game::update()
 {
-    if(state!=0)
+    if(state!=PAUSED)
     {
         time_elapsed = ((float)clock()-time_started)/CLOCKS_PER_SEC;//update the start time
         collision_detection();//apply collision effects
@@ -567,6 +561,7 @@ void game::update()
 
 void game::load()
 {
+    state=LOADING;
     std::clog<<"loading settings...\n";
     std::ifstream config_file("./data/settings.ini");
     while(config_file.good())
@@ -599,6 +594,7 @@ void game::load()
     std::clog<<"loading scene...\n";
     play_scene->load();
     std::clog<<"game loaded.\n";
+    play();
 }
 
 void game::save()
@@ -621,7 +617,7 @@ void game::save()
 
 void game::sync()
 {
-    if(state!=0)
+    if(state!=PAUSED)
     {
         time_started=clock();//reset the start time
         time+=window::refresh_rate;//increment the game clock

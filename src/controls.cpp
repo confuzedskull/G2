@@ -43,37 +43,37 @@ std::map<std::string,bool> controls::special_states;
 
 void controls::move_forward()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=0)
+    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=PAUSED)
     game::play_scene->physics_objects[cursor::selected_object]->move_forward();
 }
 
 void controls::move_back()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=0)
+    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=PAUSED)
     game::play_scene->physics_objects[cursor::selected_object]->move_back();
 }
 
 void controls::move_left()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=0)
+    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=PAUSED)
     game::play_scene->physics_objects[cursor::selected_object]->move_left();
 }
 
 void controls::move_right()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=0)
+    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=PAUSED)
     game::play_scene->physics_objects[cursor::selected_object]->move_right();
 }
 
 void controls::turn_left()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=0)
+    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=PAUSED)
     game::play_scene->physics_objects[cursor::selected_object]->turn_left();
 }
 
 void controls::turn_right()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=0)
+    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=PAUSED)
     game::play_scene->physics_objects[cursor::selected_object]->turn_right();
 }
 

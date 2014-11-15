@@ -29,6 +29,11 @@
 #include <GL/glut.h>
 #endif
 
+point2f complex_object::get_position()
+{
+    return position;
+}
+
 void complex_object::calc_direction()
 {
     float var = 3.14159/180;
@@ -66,18 +71,33 @@ void complex_object::calc_points()
     back.set(position.x+(backward.x*half_height),position.y+(backward.y*half_height));
     left.set(position.x+(leftward.x*half_width),position.y+(leftward.y*half_width));
     right.set(position.x+(rightward.x*half_width),position.y+(rightward.y*half_width));
-    front_left.set(position.x+((forward.x+leftward.x)*half_height),position.y+((forward.y+leftward.y)*half_height));
-    front_right.set(position.x+((forward.x+rightward.x)*half_height),position.y+((forward.y+rightward.y)*half_height));
-    back_left.set(position.x+((backward.x+leftward.x)*half_width),position.y+((backward.y+leftward.y)*half_width));
-    back_right.set(position.x+((backward.x+rightward.x)*half_width),position.y+((backward.y+rightward.y)*half_width));
 }
 
-void complex_object::set_dimensions(float w, float h)
+void complex_object::set_dimensions(int w, int h)
 {
     width=w;
     height=h;
     calc_boundaries();
     calc_points();
+}
+
+void complex_object::render_shape()
+{
+    if(filled)
+    {
+        glPushMatrix();//need push and pop so that entire scene isn't rotated
+        glTranslatef(position.x,position.y,0.0);//translate object according to coordinates
+        glRotatef(rotation,0,0,1);//rotates object with object.rotation
+        //glTranslatef(-position.x,-position.y,0.0);//translate object according to coordinates
+        glColor3f(fill_color.r,fill_color.g,fill_color.b);//color the square with object.fill_color
+        glBegin(GL_POLYGON);//draws a filled in rectangle
+        glVertex2f(xmin, ymin); // The bottom left corner
+        glVertex2f(xmin, ymax); // The top left corner
+        glVertex2f(xmax, ymax); // The top right corner
+        glVertex2f(xmax, ymin); // The bottom right corner
+        glEnd();//finish drawing
+        glPopMatrix();//reset transformation matrix
+    }
 }
 
 void complex_object::mark_selected()
@@ -103,13 +123,7 @@ void complex_object::render()
 {
     if(visible)
     {
-        glColor3f(fill_color.r,fill_color.g,fill_color.b);//color the square with object.fill_color
-        glBegin(GL_POLYGON);//draws a filled in polygon
-        glVertex2f(back_left.x, back_left.y); // The bottom left corner
-        glVertex2f(front_left.x, front_left.y); // The top left corner
-        glVertex2f(front_right.x, front_right.y); // The top right corner
-        glVertex2f(back_right.x, back_right.y); // The bottom right corner
-        glEnd();//finish drawing
+        render_shape();
         render_border();
         mark_selected();
     }
@@ -118,4 +132,5 @@ void complex_object::render()
 complex_object::complex_object()
 {
     marker_color=GREEN;
+    rotation=90.1;
 }

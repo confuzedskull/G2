@@ -25,7 +25,6 @@ class draggable_object: public clickable_object, public tangible_object
         static point2i origin;
         bool grabbed();//checks if this object was grabbed by the cursor
         std::string get_type() override;
-        std::string get_filename() override;
         void mouse_function() override;//performs a variety of actions dependent on cursor interaction
         void update() override;
         void load();

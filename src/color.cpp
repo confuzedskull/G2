@@ -23,7 +23,7 @@
 std::string color::str()
 {
     std::stringstream name;
-    name<<r<<','<<g<<','<<b;
+    name<<r<<' '<<g<<' '<<b;
     return name.str();
 }
 

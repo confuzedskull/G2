@@ -24,10 +24,8 @@ bool clickable_object::highlighted()
 {
     //if object lies within selection box boundaries, return true
     if(cursor::highlighting && enabled &&
-            position.x<cursor::xmax &&
-            position.x>cursor::xmin &&
-            position.y>cursor::ymax &&
-            position.y<cursor::ymin)
+        position.x<cursor::xmax && position.x>cursor::xmin &&
+        position.y>cursor::ymax && position.y<cursor::ymin)
         return true;
     else
         return false;

@@ -36,10 +36,12 @@ protected:
 public:
     static int total_objects;//total number of objects. This is used to assign the object number
     static point2i origin;
-    virtual std::string get_filename();
     virtual std::string get_type();
     virtual void render();//draws the object
     virtual void update();
+    virtual void mark_selected();//visually indicate that the object is selected
+    virtual void set_dimensions(int w, int h);
+    const char* file_name;
     int get_number();
     point2i get_position();
     point2i* get_positionptr();
@@ -58,9 +60,7 @@ public:
     void rotate(float angle);//changes the object's rotation by the given angle
     void set_position(int x, int y);
     void set_rotation(float angle);
-    void set_dimensions(int w, int h);
     void calc_boundaries();//calculates the max's and mins
-    void mark_selected();//visually indicate that the object is selected
     void show();//make the object visible
     void hide();//make the object invisible
     void render_shape();//draw the object's shape
