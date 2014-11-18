@@ -408,7 +408,7 @@ void scene::sync()
 {
     //move rts objects
     for(auto r:rts_objects)//C++11 "for" loop
-        r.second->perform_actions()||r.second->move_to_point(*r.second->rally);
+        r.second->perform_actions()||r.second->move_to_rally();
     //move physics objects
     for(auto p:physics_objects)//C++11 "for" loop
     {

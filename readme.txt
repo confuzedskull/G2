@@ -1,6 +1,6 @@
 2DWorld
 =======
-by James Nakano A.K.A. "Confuzed Skull"
+by James Nakano A.K.A. "confuzedskull"
 
 I. Troubleshooting
 A. Windows
@@ -35,7 +35,7 @@ b. hold up or left arrow key to select previous item in menu
 c. press "enter" or "return" key to choose selected item in menu
 2. In-Game
 a. press 'i' to toggle information overlay
-b. press 'esc' to open pause menu
+b. press 'esc' to pause/resume game
 c. press "delete" to delete selected object
 d. press "insert" to create object of previous selection
 3. Physics Objects (gray squares)
@@ -46,10 +46,14 @@ III. Known Bugs:
 A. Global
 1. The "insert" key doesn't work on Macs.
 2. When navigating menus with the arrow keys, the selector sometimes gets stuck.
-B. Physics Objects
+3. Some objects appear to twitch when moving.
+4. After loading a game, the checkboxes no longer work.
+B. Draggable Objects
+1. While dragging, an object may get stuck on top of another object when they collide.
+C. Physics Objects
 1. An object's resting point gets set even when it's moving.
 2. Some of the object's physics values do not zero out when object is at rest.
-C. RTS Objects
+D. RTS Objects
 1. An object's resting point doesn't get set at all.
 
 Disclaimer:

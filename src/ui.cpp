@@ -54,7 +54,7 @@ void ui::update_text()
         if(cursor::left_clicked_object->get_type()=="physics object")//display the following if a physics object is selected
         {
             physics_object* po = game::current_scene->physics_objects[index];
-            object_info->add_line("resting position: "+to_string(po->rest.x)+", "+to_string(po->rest.y));
+            object_info->add_line("resting position: "+to_string(po->get_resting().x)+", "+to_string(po->get_resting().y));
             object_info->add_line("mass: "+to_string(po->mass));
             object_info->add_line("speed: "+to_string(po->speed));
             object_info->add_line("time moving: "+to_string(po->delta_time[0])+", "+to_string(po->delta_time[1]));
@@ -76,7 +76,7 @@ void ui::update_text()
         {
             rts_object* rtso=game::current_scene->rts_objects[index];
             object_info->add_line("speed: "+to_string(rtso->speed));
-            object_info->add_line("rally point: "+to_string(rtso->rally->x)+", "+to_string(rtso->rally->y));
+            object_info->add_line("rally point: "+to_string(rtso->get_rally()->x)+", "+to_string(rtso->get_rally()->y));
             object_info->add_line("object touching side L:"+to_string(rtso->touching[0])+"R:"+to_string(rtso->touching[1])+"T:"+to_string(rtso->touching[2])+"B:"+to_string(rtso->touching[3]));
         }
     }

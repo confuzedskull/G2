@@ -67,7 +67,7 @@ void draggable_object::mouse_function()
 
 void draggable_object::update()
 {
-    calc_boundaries();
+    movable_object::update();
     mouse_function();
 }
 
@@ -76,6 +76,8 @@ void draggable_object::load()
     std::ifstream object_file(file_name);//access file by name
     if(object_file.bad())//make sure the file is there
         return;
+    object_file.precision(3);
+    object_file.setf(std::ios::fixed);
     //load basic object properties
     object_file>>position.x>>position.y;
     object_file>>rotation;
@@ -122,6 +124,8 @@ void draggable_object::save()
     std::stringstream filename;
     filename<<"./data/objects/object#"<<number<<".dro";
     std::ofstream object_file(filename.str());
+    object_file.precision(3);
+    object_file.setf(std::ios::fixed);
     object_file<<position.x<<' '<<position.y<<std::endl;
     object_file<<rotation<<std::endl;
     object_file<<width<<' '<<height<<std::endl;
@@ -144,10 +148,10 @@ void draggable_object::save()
     object_file<<turning_left<<std::endl;
     for(int i=0;i<action_cue.size();i++)
         object_file<<action_cue.front().at(0)<<' '<<action_cue.front().at(1)<<' '<<action_cue.front().at(2)<<std::endl;
+    object_file<<touching[0]<<std::endl;
     object_file<<touching[1]<<std::endl;
     object_file<<touching[2]<<std::endl;
     object_file<<touching[3]<<std::endl;
-    object_file<<touching[4]<<std::endl;
     object_file<<collided<<std::endl;
     object_file.close();
     std::clog<<"object#"<<number<<"(draggable object)"<<" saved.\n";

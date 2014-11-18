@@ -31,39 +31,38 @@ protected:
     int height;
     int marker_width;
     int marker_height;
-    float radius;
     int xmax,xmin,ymax,ymin;//the boundaries of the object
 public:
     static int total_objects;//total number of objects. This is used to assign the object number
-    static point2i origin;
-    virtual std::string get_type();
+    static point2i origin;//point where a new object is created
+    virtual std::string get_type();//returns the object type
+    virtual void render_shape();//draw the object's shape
     virtual void render();//draws the object
     virtual void update();
     virtual void mark_selected();//visually indicate that the object is selected
+    virtual void set_position(int x, int y);
     virtual void set_dimensions(int w, int h);
-    const char* file_name;
-    int get_number();
+    virtual void rotate(float angle);//increments the object's rotation by the given angle
+    virtual void set_rotation(float angle);//changes the object's rotation to the given angle
+    virtual void calc_boundaries();//calculates the max's and mins
     point2i get_position();
     point2i* get_positionptr();
-    float get_rotation();
+    color fill_color;//color of the body of the object
+    color marker_color;//color of selection marker
+    color border_color;//color of the border
+    const char* file_name;
+    int get_number();
     int get_width();
     int get_height();
     float get_radius();
-    color fill_color;
-    color marker_color;//color of marker when object is selected
-    color border_color;//the color of the border
-    bool filled;
+    float get_rotation();
+    bool filled;//whether the body of the object is visible
     bool bordered;//whether or not a border should be shown
     bool visible;//whether the object should be shown or not
     bool selected;//whether the object has been selected or not
     bool enabled;//whether the object should be updated or not
-    void rotate(float angle);//changes the object's rotation by the given angle
-    void set_position(int x, int y);
-    void set_rotation(float angle);
-    void calc_boundaries();//calculates the max's and mins
     void show();//make the object visible
     void hide();//make the object invisible
-    void render_shape();//draw the object's shape
     void render_border();//draw the border
     object();
     object(int x, int y, int w, int h);

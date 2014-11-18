@@ -30,23 +30,23 @@ std::string physics_object::get_type()
 
 void physics_object::calc_delta_time()
 {
-    if(isgreaterequal(fabs(position.x-rest.x),0.01f))//at least difference of 0.01
+    if(abs(position.x-rest_position.x)>0)
     {
         start_time[0]=game::time;
         delta_time[0]=stop_time[0]-start_time[0];
     }
-    else//difference of 0.01 or less is negligible
+    else
     {
         stop_time[0]=game::time;
         delta_time[0]=0.0f;
     }
 
-    if(isgreaterequal(fabs(position.y-rest.y),0.01f))//at least difference of 0.01
+    if(abs(position.y-rest_position.y)>0)
     {
         start_time[1]=game::time;
         delta_time[1]=stop_time[1]-start_time[1];
     }
-    else//difference of 0.01 or less is negligible
+    else
     {
         stop_time[1]=game::time;
         delta_time[1]=0.0f;
@@ -99,11 +99,11 @@ void physics_object::calc_delta_time()
 void physics_object::calc_velocity()
 {
     if(isnormal(delta_time[0]))//makes sure it's not zero,infinity, or NaN
-        velocity[0].x=(rest.x-position.x)/delta_time[0];
+        velocity[0].x=(rest_position.x-position.x)/delta_time[0];
     velocity[1].x=velocity[0].x+momentum.x;//set final velocity
 
     if(isnormal(delta_time[1]))//makes sure it's not zero,infinity, or NaN
-        velocity[0].y=(rest.y-position.y)/delta_time[1];
+        velocity[0].y=(rest_position.y-position.y)/delta_time[1];
     velocity[1].y=velocity[0].y+momentum.y;//set final velocity
 
     if(isnormal(delta_time[4]))//makes sure it's not zero,infinity, or NaN
@@ -144,7 +144,7 @@ void physics_object::calc_momentum(physics_object p)
 
 void physics_object::inertia()
 {
-    if(isgreaterequal(fabs(momentum.x),0.01f))
+    /*if(isgreaterequal(fabs(momentum.x),0.01f))
     {
         position.x+=momentum.x;
         moving_left=true;
@@ -156,7 +156,7 @@ void physics_object::inertia()
         position.y+=momentum.y;
         moving_forward=true;
         moving_backward=true;
-    }
+    }*/
 
     if(isgreaterequal(fabs(angular_momentum),0.01f))
     {
@@ -178,10 +178,7 @@ void physics_object::physics()
 
 void physics_object::update()
 {
-    calc_boundaries();
-    set_resting();
-    calc_points();
-    calc_direction();
+    movable_object::update();
     physics();
     mouse_function();
 }
@@ -192,6 +189,8 @@ void physics_object::load()
     std::ifstream object_file(file_name);//access file by name
     if(object_file.bad())//make sure the file is there
         return;
+    object_file.precision(3);
+    object_file.setf(std::ios::fixed);
     //load basic object properties
     object_file>>position.x>>position.y;
     object_file>>rotation;
@@ -255,6 +254,8 @@ void physics_object::save()
     std::stringstream filename;
     filename<<"./data/objects/object#"<<number<<".pso";
     std::ofstream object_file(filename.str());
+    object_file.precision(3);
+    object_file.setf(std::ios::fixed);
     object_file<<position.x<<' '<<position.y<<std::endl;
     object_file<<rotation<<std::endl;
     object_file<<width<<' '<<height<<std::endl;
@@ -277,10 +278,10 @@ void physics_object::save()
     object_file<<turning_left<<std::endl;
     for(int i=0;i<action_cue.size();i++)
         object_file<<action_cue.front().at(0)<<' '<<action_cue.front().at(1)<<' '<<action_cue.front().at(2)<<std::endl;
+    object_file<<touching[0]<<std::endl;
     object_file<<touching[1]<<std::endl;
     object_file<<touching[2]<<std::endl;
     object_file<<touching[3]<<std::endl;
-    object_file<<touching[4]<<std::endl;
     object_file<<collided<<std::endl;
     object_file<<mass<<std::endl;
     object_file<<delta_time[0]<<std::endl;

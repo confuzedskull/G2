@@ -21,14 +21,14 @@
 
 class rts_object: public clickable_object, public tangible_object
 {
-    public:
-        static point2i origin;
-        std::string get_type() override;
-        void mouse_function() override;//performs a variety of actions dependent on cursor interaction
-        void update() override;
-        void load();
-        void save();
-        rts_object();
+public:
+    static point2i origin;
+    std::string get_type() override;
+    void mouse_function() override;//performs a variety of actions dependent on cursor interaction
+    void update() override;
+    void load();
+    void save();
+    rts_object();
 };
 
 #endif // RTS_OBJECT_H

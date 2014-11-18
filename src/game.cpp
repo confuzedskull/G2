@@ -518,6 +518,9 @@ void game::warn_return()
 void game::return_menu()
 {
     cursor::reset();
+    current_scene->draggable_objects.clear();
+    current_scene->physics_objects.clear();
+    current_scene->rts_objects.clear();
     main_scene->menus[0]->show();//enable the main menu
     main_scene->menus[1]->hide();//hide the quit menu
     main_scene->current_menu=main_scene->menus[0];//set main menu as current

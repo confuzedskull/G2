@@ -39,6 +39,9 @@ void rts_object::mouse_function()
         {
             if(cursor::right_click && !right_clicked())
             {
+                //get rid of previous rally point
+                if(rally_set)
+                    delete rally;
                 if(cursor::right_clicked_an_object)
                     rally = cursor::right_clicked_object->get_positionptr();//set rally to reference point because position is always changing
                 else//move to right clicked empty space
@@ -47,6 +50,9 @@ void rts_object::mouse_function()
             }
             if(cursor::right_dragging && !right_clicked())
             {
+                //get rid of previous rally point
+                if(rally_set)
+                    delete rally;
                 //move to right drag
                 rally = new point2i(cursor::right_drag.x,cursor::right_drag.y);
                 rally_set=true;
@@ -57,9 +63,7 @@ void rts_object::mouse_function()
 
 void rts_object::update()
 {
-    calc_boundaries();
-    calc_points();
-    calc_direction();
+    movable_object::update();
     mouse_function();
 }
 
@@ -69,6 +73,8 @@ void rts_object::load()
     if(object_file.bad())//make sure the file is there
         return;
     //load basic object properties
+    object_file.precision(3);
+    object_file.setf(std::ios::fixed);
     object_file>>position.x>>position.y;
     object_file>>rotation;
     object_file>>width>>height;
@@ -114,6 +120,8 @@ void rts_object::save()
     std::stringstream filename;
     filename<<"./data/objects/object#"<<number<<".rso";
     std::ofstream object_file(filename.str());
+    object_file.precision(3);
+    object_file.setf(std::ios::fixed);
     object_file<<position.x<<' '<<position.y<<std::endl;
     object_file<<rotation<<std::endl;
     object_file<<width<<' '<<height<<std::endl;
@@ -136,10 +144,10 @@ void rts_object::save()
     object_file<<turning_left<<std::endl;
     for(int i=0;i<action_cue.size();i++)
         object_file<<action_cue.front().at(0)<<' '<<action_cue.front().at(1)<<' '<<action_cue.front().at(2)<<std::endl;
+    object_file<<touching[0]<<std::endl;
     object_file<<touching[1]<<std::endl;
     object_file<<touching[2]<<std::endl;
     object_file<<touching[3]<<std::endl;
-    object_file<<touching[4]<<std::endl;
     object_file<<collided<<std::endl;
     object_file.close();
     std::clog<<"object#"<<number<<"(rts object)"<<" saved.\n";
@@ -148,6 +156,5 @@ void rts_object::save()
 rts_object::rts_object(): clickable_object(), tangible_object(), complex_object()
 {
     position.set((float)origin.x, (float)origin.y);
-    speed=2.0f;
     std::clog<<"object#"<<number<<"(rts object)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

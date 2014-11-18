@@ -22,7 +22,7 @@
 
 bool tangible_object::is_close(complex_object B)
 {
-    if(islessequal(distance(position,B.get_position()),(radius+B.get_radius())))
+    if(islessequal(distance(position,B.get_position()),(get_radius()+B.get_radius())))
         return true;
     else
         return false;

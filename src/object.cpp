@@ -74,7 +74,7 @@ int object::get_height()
 
 float object::get_radius()
 {
-    return radius;
+    return distance(xmin,ymin,xmax,ymax)/2;;
 }
 
 void object::set_position(int x, int y)
@@ -104,7 +104,6 @@ void object::calc_boundaries()//calculates the limits of the object
     xmax=position.x+half_width;
     ymin=position.y-half_height;
     ymax=position.y+half_height;
-    radius=distance(xmin,ymin,xmax,ymax)/2;
 }
 
 void object::rotate(float angle)

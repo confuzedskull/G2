@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 #include "complex_object.h"
+#include "distance.h"
 #include <math.h>
 #include <iostream>
 #ifdef __APPLE__
@@ -29,18 +30,13 @@
 #include <GL/glut.h>
 #endif
 
-point2f complex_object::get_position()
-{
-    return position;
-}
-
 void complex_object::calc_direction()
 {
     float var = 3.14159/180;
-    leftward.set(-(sin(rotation*var)),cos(rotation*var));
-    rightward.set(sin(rotation*var),-(cos(rotation*var)));
-    forward.set(cos(rotation*var),sin(rotation*var));
-    backward.set(-(cos(rotation*var)),-(sin(rotation*var)));
+    leftward.set(-(sin(rotation*var))*step_size,cos(rotation*var)*step_size);
+    rightward.set(sin(rotation*var)*step_size,-(cos(rotation*var))*step_size);
+    forward.set(cos(rotation*var)*step_size,sin(rotation*var)*step_size);
+    backward.set(-(cos(rotation*var))*step_size,-(sin(rotation*var))*step_size);
 }
 
 void complex_object::rotate(float angle)
@@ -50,7 +46,7 @@ void complex_object::rotate(float angle)
     calc_points();//points must move with rotation
 }
 
-void complex_object::set_position(float x, float y)
+void complex_object::set_position(int x, int y)
 {
     position.set(x,y);
     calc_points();
@@ -67,10 +63,10 @@ void complex_object::calc_points()
 {
     float half_width=width/2;
     float half_height=height/2;
-    front.set(position.x+(forward.x*half_height),position.y+(forward.y*half_height));
-    back.set(position.x+(backward.x*half_height),position.y+(backward.y*half_height));
-    left.set(position.x+(leftward.x*half_width),position.y+(leftward.y*half_width));
-    right.set(position.x+(rightward.x*half_width),position.y+(rightward.y*half_width));
+    front.set(position.x+((forward.x/step_size)*half_height),position.y+((forward.y/step_size)*half_height));
+    back.set(position.x+((backward.x/step_size)*half_height),position.y+((backward.y/step_size)*half_height));
+    left.set(position.x+((leftward.x/step_size)*half_width),position.y+((leftward.y/step_size)*half_width));
+    right.set(position.x+((rightward.x/step_size)*half_width),position.y+((rightward.y/step_size)*half_width));
 }
 
 void complex_object::set_dimensions(int w, int h)
@@ -79,25 +75,6 @@ void complex_object::set_dimensions(int w, int h)
     height=h;
     calc_boundaries();
     calc_points();
-}
-
-void complex_object::render_shape()
-{
-    if(filled)
-    {
-        glPushMatrix();//need push and pop so that entire scene isn't rotated
-        glTranslatef(position.x,position.y,0.0);//translate object according to coordinates
-        glRotatef(rotation,0,0,1);//rotates object with object.rotation
-        //glTranslatef(-position.x,-position.y,0.0);//translate object according to coordinates
-        glColor3f(fill_color.r,fill_color.g,fill_color.b);//color the square with object.fill_color
-        glBegin(GL_POLYGON);//draws a filled in rectangle
-        glVertex2f(xmin, ymin); // The bottom left corner
-        glVertex2f(xmin, ymax); // The top left corner
-        glVertex2f(xmax, ymax); // The top right corner
-        glVertex2f(xmax, ymin); // The bottom right corner
-        glEnd();//finish drawing
-        glPopMatrix();//reset transformation matrix
-    }
 }
 
 void complex_object::mark_selected()
@@ -111,7 +88,7 @@ void complex_object::mark_selected()
         for(int i=0; i<360; i++)
         {
             float deg_rad=i*3.14159/180;//calculate degrees in radians
-            glVertex2f(cos(deg_rad)*radius,sin(deg_rad)*radius);//ellipse function
+            glVertex2f(cos(deg_rad)*get_radius(),sin(deg_rad)*get_radius());//ellipse function
         }
         glEnd();//finish drawing
         glPopMatrix();//reset transformation matrix
@@ -132,5 +109,6 @@ void complex_object::render()
 complex_object::complex_object()
 {
     marker_color=GREEN;
-    rotation=90.1;
+    rotation=90.1f;
+    step_size=4.0f;
 }

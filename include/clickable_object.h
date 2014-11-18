@@ -21,7 +21,7 @@
 //A clickable object interfaces with the cursor
 class clickable_object: virtual public object
 {
-    public:
+public:
     virtual void mouse_function();//performs a variety of actions dependent on cursor interaction
     bool highlighted();//checks if the object lies within the cursor selection box
     bool hovered_over();//checks if the cursor lies within the this object

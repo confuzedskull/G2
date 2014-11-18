@@ -25,14 +25,17 @@
 //A movable object uses the sides of a complex object to calculate steps in each direction relative to the object's rotation
 class movable_object: virtual public complex_object
 {
-public:
+protected:
+    point2i rest_position;
     point2i* rally;
-    point2f rest;
     std::queue< std::array<int,3> > action_cue;//actions for the object to perform. The array consists of an action number,times to do, and times done
-    float speed;//rate at which an object moves
     float degrees_rotated;//keeps track of the progress of a rotation animation
-    float rest_rotation;
+    float rest_rotation;//the rotation of the object at rest
     bool rally_set;//whether or not the object has a point to move to
+public:
+    point2i* get_rally();
+    point2i get_resting();
+    float speed;//rate at which an object moves
     bool moving_forward;
     bool moving_backward;
     bool moving_left;
@@ -48,10 +51,11 @@ public:
     bool move_to_point(point2i destination, float rate);
     bool move_to_point(point2i destination);
     bool move_to_point(int destination_x, int destination_y);
+    bool move_to_rally();
     bool perform_actions();//makes the object perform the cued actions
     void cue_action(int action_no, int times);//adds an action to be performed n times to the action cue
     void cue_action(std::string action_name,int times);//adds an action to be performed n times to the action cue
-    void set_resting();
+    void rest();
     //turn functions make the object rotate over time (as opposed to rotating)
     void turn_right();
     void turn_right(float degrees);
@@ -73,7 +77,7 @@ public:
     void turn_to_point(int destination_x, int destination_y);
     void turn_to_point(point2i destination);
     void reset_motion();
-    void update();
+    void update() override;
     movable_object();
 };
 const int MOVE_LEFT = 1;
