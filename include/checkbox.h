@@ -16,25 +16,22 @@
 
 #ifndef CHECKBOX_H
 #define CHECKBOX_H
-#include "clickable_object.h"
-#include "label.h"
+#include "button.h"
 
-class checkbox: public clickable_object
+class checkbox: public button
 {
 protected:
     int checked;
-    label text;
 public:
     int* option;
-    int margin;
-    color check_color;
-    void set_label(std::string text);
-    void set_label(std::string text,std::string pos);
-    void put_label(std::string pos);
+    int checkmark_margin;
+    color checkmark_color;
     void bind_option(int*);
-    void mouse_function();
-    void render();
-    void update();
+    void set_label(std::string l) override;
+    void allign_label(std::string allignment) override;
+    void mouse_function() override;
+    void update() override;
+    void render() override;
     checkbox();
 };
 

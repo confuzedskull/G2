@@ -52,6 +52,12 @@ void button::set_action(void (*a)())
     action=a;
 }
 
+void button::set_action(void (*a)(int),int i)
+{
+    action1i=a;
+    int_param1=i;
+}
+
 void button::allign_label(std::string allignment)
 {
     text_allignment=allignment;
@@ -67,6 +73,7 @@ void button::mouse_function()
             if(!performed_action)
             {
                 action();
+                action1i(int_param1);
                 performed_action=true;
                 std::clog<<"object#"<<number<<"(button)"<<" clicked.\n";
             }
@@ -101,6 +108,8 @@ void button::update()
 
 void button::action_placeholder(){}
 
+void button::action_placeholder1i(int i){}
+
 button::button()
 {
     margin=5;
@@ -110,6 +119,7 @@ button::button()
     set_label("click me");
     allign_label("center");
     action=button::action_placeholder;
+    action1i=button::action_placeholder1i;
     bordered=true;
     performed_action=false;
     std::clog<<"object#"<<number<<"(button)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;

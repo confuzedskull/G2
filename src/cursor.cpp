@@ -70,7 +70,7 @@ void cursor::calc_boundaries()//boundaries of the selection box
     ymax = left_drag.y;
 }
 
-void cursor::selection_box()//this is the box that is created when user clicks and drags
+void cursor::render_box()//this is the box that is created when user clicks and drags
 {
     if(highlighting_enabled && highlighting)
     {

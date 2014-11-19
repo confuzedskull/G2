@@ -30,29 +30,22 @@
 #endif
 #include <iostream>
 
-void checkbox::set_label(std::string str)
+void checkbox::set_label(std::string l)
 {
     text.clear();
-    text.add_line(str);
-    put_label("left");
+    text.add_line(l);
+    allign_label("left");
 }
 
-void checkbox::set_label(std::string str, std::string pos)
+void checkbox::allign_label(std::string allignment)
 {
-    text.clear();
-    text.add_line(str);
-    put_label(pos);
-}
-
-void checkbox::put_label(std::string pos)
-{
-    if(pos=="left")
+    if(allignment=="left")
         text.set_position(xmin-margin-text.get_width(),position.y-(text.get_height()/2));
-    if(pos=="right")
+    if(allignment=="right")
         text.set_position(xmax+margin,position.y);
-    if(pos=="top")
+    if(allignment=="top")
         text.set_position(position.x-(text.get_width()/2),ymax+margin);
-    if(pos=="bottom")
+    if(allignment=="bottom")
         text.set_position(position.x-(text.get_width()/2),ymin-margin-text.get_height());
 }
 
@@ -91,12 +84,12 @@ void checkbox::render()
         render_shape();
         if(checked==1)
         {
-            glColor3f(check_color.r,check_color.g,check_color.b);//color the square with object.fill_color
-            glBegin(GL_POLYGON);//draws a filled in rectangle
-            glVertex2f(xmin+2, ymin+2); // The bottom left corner
-            glVertex2f(xmin+2, ymax-2); // The top left corner
-            glVertex2f(xmax-2, ymax-2); // The top right corner
-            glVertex2f(xmax-2, ymin+2); // The bottom right corner
+            glColor3f(checkmark_color.r,checkmark_color.g,checkmark_color.b);//color the square with object.fill_color
+            glBegin(GL_POLYGON);//draws a filled in polygon
+            glVertex2f(xmin+checkmark_margin, ymin+checkmark_margin); // The bottom left corner
+            glVertex2f(xmin+checkmark_margin, ymax-checkmark_margin); // The top left corner
+            glVertex2f(xmax-checkmark_margin, ymax-checkmark_margin); // The top right corner
+            glVertex2f(xmax-checkmark_margin, ymin+checkmark_margin); // The bottom right corner
             glEnd();//finish drawing
         }
         render_border();
@@ -116,6 +109,7 @@ checkbox::checkbox()
     fill_color = color(0.75f,0.75f,0.75f);
     margin=4;
     checked=1;
-    check_color=BLACK;
+    checkmark_margin=2;
+    checkmark_color=BLACK;
     std::clog<<"object#"<<number<<"(checkbox)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

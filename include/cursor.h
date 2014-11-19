@@ -33,10 +33,8 @@ public:
     static point2i right_down;
     static point2i right_up;
     static point2i right_drag;
-    static point2i rally;
     static clickable_object* left_clicked_object;
     static clickable_object* right_clicked_object;
-    static bool set_rally;
     static bool left_click;
     static bool left_dragging;
     static bool right_click;
@@ -52,7 +50,7 @@ public:
     static int selected_object;
     static int objects_selected();
     static void calc_boundaries();
-    static void selection_box();
+    static void render_box();
     static void reset();
 };
 #endif // CURSOR_H

@@ -24,7 +24,7 @@ namespace window
     extern int height;
     extern point2i center;
     extern point2i position;//this refers to the upper left corner of the window
-    extern double refresh_rate;
+    extern int refresh_rate;//frequency of screen updates (in hertz)
     void change_size(int w, int h);
     void initialize();
     void render();

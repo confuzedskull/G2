@@ -47,7 +47,6 @@ A. Global
 1. The "insert" key doesn't work on Macs.
 2. When navigating menus with the arrow keys, the selector sometimes gets stuck.
 3. Some objects appear to twitch when moving.
-4. After loading a game, the checkboxes no longer work.
 B. Draggable Objects
 1. While dragging, an object may get stuck on top of another object when they collide.
 C. Physics Objects

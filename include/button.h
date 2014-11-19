@@ -26,18 +26,22 @@ class button: public clickable_object
 protected:
     label text;
     std::string text_allignment;
+    int int_param1;
 public:
     int margin;//space between label and button border
     bool performed_action;//whether or not the button action executed
     void (*action)();//a function pointer which will be called when clicked
+    void (*action1i)(int i);//a function pointer which will be called when clicked
     void format();//adjusts the size of the button to fit the label
-    void set_label(std::string l);
     void set_action(void (*a)());
-    void allign_label(std::string allignment);
+    void set_action(void (*a)(int),int i);
     void mouse_function();
-    void render();
+    void render() override;
     void update();
+    virtual void set_label(std::string l);
+    virtual void allign_label(std::string allignment);
     static void action_placeholder();
+    static void action_placeholder1i(int i);
     button();
     button(float x, float y, char* l, void (*a)(void));
 };

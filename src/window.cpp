@@ -39,24 +39,19 @@ int window::width=1360;
 int window::height=720;
 point2i window::center=point2i(width/2,height/2);
 point2i window::position=point2i(0,0);
-double window::refresh_rate=0.0166f;//refresh window at 1/60th of a second (for 60FPS)
+int window::refresh_rate=60;//refresh window at 1/60th of a second (for 60FPS)
 
 //resize the window
 void window::change_size(int w, int h)
 {
-    // Prevent a divide by zero, when window is too short
-    // (you cant make a window of zero width).
-    if (h == 0)
-        h = 1;
-    // Use the Projection Matrix
+    //use the projection matrix
     glMatrixMode(GL_PROJECTION);
-    // Reset Matrix
     glLoadIdentity();
     glOrtho(0.0,(GLdouble)w,0.0,(GLdouble)h, -1.0,1.0);
-    // Get Back to the Modelview
+    //get back to the modelview
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    // Set the viewport to be the entire window
+    //set the viewport to be the entire window
     glViewport(0, 0, w, h);
     glClear(GL_COLOR_BUFFER_BIT);
     glFlush();
@@ -66,7 +61,6 @@ void window::change_size(int w, int h)
 
 void window::initialize()
 {
-    glClearColor (1.0, 1.0, 1.0, 1.0);//white background
     glViewport(0, 0, width,height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -78,9 +72,9 @@ void window::initialize()
 
 void window::render()
 {
-    glClear(GL_COLOR_BUFFER_BIT);// Clear Color Buffers
+    glClear(GL_COLOR_BUFFER_BIT);
     game::current_scene->render();
-    cursor::selection_box();
+    cursor::render_box();
     glFlush();
 }
 
@@ -91,7 +85,7 @@ void window::update()
     cursor::calc_boundaries();//calculate the size of the selection box
     controls::check_clicked();//check if objects are clicked
     //This condition makes sure events occur at the set refresh rate
-    if(isgreaterequal(game::time_elapsed,window::refresh_rate))//time elapsed is >= refresh rate
+    if(isgreaterequal(game::time_elapsed,(double)1/window::refresh_rate))//time elapsed is >= refresh rate
     {
         controls::key_operations();//keyboard controls
         game::sync();//update clock-based events in game

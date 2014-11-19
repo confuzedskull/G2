@@ -329,7 +329,7 @@ movable_object::movable_object(): complex_object()
     speed=1.01f;
     rest_position.set(position);
     rest_rotation=rotation;
-    rally = new point2i((int)rest_position.x,(int)rest_position.y);
+    rally = new point2i(rest_position.x,rest_position.y);
     rally_set=false;
     reset_motion();
 }

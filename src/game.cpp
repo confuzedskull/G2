@@ -22,7 +22,7 @@
 
 //initialize variables
 clock_t game::time_started;
-float game::time = 0.0f;
+double game::time = 0.0f;
 double game::time_elapsed = 0.0f;
 int  game::state=2;
 scene* game::current_scene = new scene();
@@ -40,6 +40,8 @@ void game::initialize()
     add_setting("window","height",&window::height);
     add_setting("window","position_x",&window::position.x);
     add_setting("window","position_y",&window::position.y);
+    add_setting("window","refresh_rate",&window::refresh_rate);
+    add_setting("ui","overlay_margin",&ui::overlay_margin);
     add_setting("game","show_info_overlay",0);
     add_setting("game","show_draggable_objects",1);
     add_setting("game","show_physics_objects",1);
@@ -126,31 +128,31 @@ void game::initialize()
     //Information Overlay Text
     label* object_info = new label();
     object_info->spacing=20;
-    object_info->set_position(ui::margin,window::height-20);
+    object_info->set_position(ui::overlay_margin,window::height-20);
     object_info->hide();//we don't want to see this right away
 
     label* game_info = new label();
     game_info->spacing=20;
-    game_info->set_position(window::width-(ui::margin+200),window::height-20);
+    game_info->set_position(window::width-(ui::overlay_margin+200),window::height-20);
     game_info->hide();//we don't want to see this right away
 
     std::clog<<"initialized text\n";
     std::clog<<"initializing user interface...\n";
 //Initialize Checkboxes
-    checkbox* show_dos = new checkbox();
-    show_dos->set_position(window::width*0.9,window::height*0.4);
-    show_dos->set_label("show draggable objects");
-    show_dos->bind_option(settings["game"]["show_draggable_objects"]);
+    checkbox* show_dos_checkbox = new checkbox();
+    show_dos_checkbox->set_position(window::width*0.9,window::height*0.4);
+    show_dos_checkbox->set_label("show draggable objects");
+    show_dos_checkbox->bind_option(settings["game"]["show_draggable_objects"]);
 
-    checkbox* show_pos = new checkbox();
-    show_pos->set_position(window::width*0.9,window::height*0.35);
-    show_pos->set_label("show physics objects");
-    show_pos->bind_option(settings["game"]["show_physics_objects"]);
+    checkbox* show_pos_checkbox = new checkbox();
+    show_pos_checkbox->set_position(window::width*0.9,window::height*0.35);
+    show_pos_checkbox->set_label("show physics objects");
+    show_pos_checkbox->bind_option(settings["game"]["show_physics_objects"]);
 
-    checkbox* show_rtsos = new checkbox();
-    show_rtsos->set_position(window::width*0.9,window::height*0.3);
-    show_rtsos->set_label("show rts objects");
-    show_rtsos->bind_option(settings["game"]["show_rts_objects"]);
+    checkbox* show_rtsos_checkbox = new checkbox();
+    show_rtsos_checkbox->set_position(window::width*0.9,window::height*0.3);
+    show_rtsos_checkbox->set_label("show rts objects");
+    show_rtsos_checkbox->bind_option(settings["game"]["show_rts_objects"]);
     std::clog<<"initialized checkboxes\n";
 //Initialize Buttons
     //Main Menu Buttons
@@ -158,10 +160,13 @@ void game::initialize()
     play_button->set_label("Play");
     play_button->set_action(play);
 
+    button* load_button = new button();
+    load_button->set_label("Load");
+    load_button->set_action(load);
+
     button* quit_button = new button();
     quit_button->set_label("Quit");
-    quit_button->set_action(warn_quit);
-
+    quit_button->set_action(switch_menu,1);
     //Quit Menu Buttons
     button* confirm_quit = new button();
     confirm_quit->set_label("Yes");
@@ -169,15 +174,11 @@ void game::initialize()
 
     button* cancel_quit = new button();
     cancel_quit->set_label("No");
-    cancel_quit->set_action(return_menu);
+    cancel_quit->set_action(switch_menu,0);
     //Pause Menu Buttons
     button* resume_button = new button();
     resume_button->set_label("Resume");
     resume_button->set_action(resume);
-
-    button* load_button = new button();
-    load_button->set_label("Load");
-    load_button->set_action(load);
 
     button* save_button = new button();
     save_button->set_label("Save");
@@ -185,7 +186,7 @@ void game::initialize()
 
     button* main_menu_button = new button();
     main_menu_button->set_label("Main Menu");
-    main_menu_button->set_action(warn_return);
+    main_menu_button->set_action(switch_menu,1);
     //Warning Menu Buttons
     button* confirm_return_button = new button();
     confirm_return_button->set_label("Yes");
@@ -193,7 +194,7 @@ void game::initialize()
 
     button* cancel_return_button = new button();
     cancel_return_button->set_label("No");
-    cancel_return_button->set_action(pause);
+    cancel_return_button->set_action(switch_menu,0);
     //Game Buttons
     button* create_po_button = new button();//"po" stands for "physics object"
     create_po_button->set_label("physics object");
@@ -274,7 +275,7 @@ void game::initialize()
     home_screen->bind_key("left",controls::previous_item);
     home_screen->bind_key("right",controls::next_item);
     home_screen->bind_key('\r',controls::choose_item);
-    home_screen->bind_key(27,warn_quit);
+    home_screen->bind_key(27,warn_quit);//27 is the 'esc' key
     scenes.push_back(home_screen);//add to scenes
     main_scene=home_screen;//make this the main scene
     current_scene=home_screen;//start the game with this screen
@@ -292,9 +293,9 @@ void game::initialize()
     game_screen->add_object(rtso4);
     game_screen->add_text(object_info);
     game_screen->add_text(game_info);
-    game_screen->add_checkbox(show_dos);
-    game_screen->add_checkbox(show_pos);
-    game_screen->add_checkbox(show_rtsos);
+    game_screen->add_checkbox(show_dos_checkbox);
+    game_screen->add_checkbox(show_pos_checkbox);
+    game_screen->add_checkbox(show_rtsos_checkbox);
     game_screen->add_button(delete_object_button);
     game_screen->add_button(create_object_button);
     game_screen->add_button(menu_button);
@@ -314,8 +315,8 @@ void game::initialize()
     game_screen->bind_key("left",controls::previous_item);
     game_screen->bind_key("right",controls::next_item);
     game_screen->bind_key("insert",game::create_object);
-    game_screen->bind_key(127,delete_selected);
-    game_screen->bind_key(27,&state);
+    game_screen->bind_key(127,delete_selected);//127 is the delete key
+    game_screen->bind_key(27,&state);//27 is the 'esc' key
     play_scene=game_screen;
     scenes.push_back(game_screen);//add to scenes
 }
@@ -360,10 +361,21 @@ void game::collision_detection()
     }
 }
 
+void game::switch_menu(int index)
+{
+    current_scene->switch_menu(index);
+}
+
 void game::add_setting(std::string section, std::string property, int value)
 {
-    int* v = new int(value);
-    settings[section][property]=v;
+    //check if the setting already exists
+    if(settings.find(section)!=settings.end() && settings[section].find(property)!=settings[section].end())
+        *settings[section][property]=value;//assign setting given value
+    else
+    {
+        int* variable = new int(value);//create a new variable to associate with this value
+        settings[section][property]=variable;//add variable to settings
+    }
 }
 
 void game::add_setting(std::string section, std::string property, int* variable)
@@ -374,6 +386,52 @@ void game::add_setting(std::string section, std::string property, int* variable)
 void game::add_condition(std::string section, std::string property, int value, void (*action)())
 {
     conditions[section][property][value]=action;
+}
+
+void game::load_settings()
+{
+    state=LOADING;
+    std::clog<<"loading settings...\n";
+    std::ifstream config_file("./data/settings.ini");
+    while(config_file.good())
+    {
+        std::string file_line;
+        char first_char=config_file.peek();//check the first character
+        if(first_char=='[')//section is detected
+        {
+            config_file>>file_line;
+            std::string section=file_line.substr(1,file_line.length()-2);//the section name is between the brackets
+            do
+            {
+                //load settings
+                std::string property;
+                char separator;
+                int value;
+                config_file>>property>>separator>>value;
+                add_setting(section,property,value);
+                std::clog<<"setting: "<<section<<"::"<<property<<':'<<value<<" loaded."<<std::endl;
+                config_file.get();//eat the newline character
+                first_char=config_file.peek();//check the first character
+            }
+            while(first_char!='[' && first_char>0);//as long as new section is not detected
+        }
+    }
+    config_file.close();
+    std::clog<<"settings loaded.\n";
+}
+
+void game::save_settings()
+{
+    std::clog<<"saving settings...\n";
+    std::ofstream config_file("./data/settings.ini");
+    for(auto sect:settings)//iterate through sections
+    {
+        config_file<<'['<<sect.first<<']'<<std::endl;//add section header
+        for(auto sett:sect.second)//iterate through settings
+            config_file<<sett.first<<" = "<<*sett.second<<std::endl;//add property and value
+    }
+    config_file.close();
+    std::clog<<"settings saved.\n";
 }
 
 void game::show_draggable_objects()
@@ -472,7 +530,7 @@ void game::play()
         play_scene->menus[1]->hide();//hide the warning menu
         play_scene->current_menu=play_scene->dropdown_menus[0];//set the creation menu as current
         current_scene=play_scene;//open game screen
-        std::clog<<"started game."<<std::endl;
+        std::clog<<"game started.\n";
     }
 }
 
@@ -482,11 +540,9 @@ void game::pause()
     {
         state=PAUSED;
         cursor::highlighting_enabled=false;
-        play_scene->menus[0]->show();//show the pause menu
-        play_scene->menus[1]->hide();//hide the warning menu
-        play_scene->current_menu=play_scene->menus[0];//set the pause menu as current
+        switch_menu(0);
         play_scene->disable_all();
-        std::clog<<"paused game."<<std::endl;
+        std::clog<<"game paused.\n";
     }
 }
 
@@ -498,22 +554,14 @@ void game::resume()
     play_scene->menus[0]->hide();//hide pause menu
     play_scene->menus[1]->hide();//hide warning menu
     play_scene->current_menu=play_scene->dropdown_menus[0];//set the creation menu as current
-    std::clog<<"resumed game."<<std::endl;
+    std::clog<<"game resumed.\n";
 }
 
 void game::warn_quit()
 {
-    main_scene->menus[0]->hide();//hide main menu
-    main_scene->menus[1]->show();//show the quit menu
-    main_scene->current_menu=main_scene->menus[1];//set the warning menu as current
+    switch_menu(1);
 }
 
-void game::warn_return()
-{
-    play_scene->menus[0]->hide();//hide the pause menu
-    play_scene->menus[1]->show();//show the warning prompt
-    play_scene->current_menu=play_scene->menus[1];//set the warning menu as current
-}
 
 void game::return_menu()
 {
@@ -525,11 +573,12 @@ void game::return_menu()
     main_scene->menus[1]->hide();//hide the quit menu
     main_scene->current_menu=main_scene->menus[0];//set main menu as current
     current_scene=main_scene;//open home screen
-    std::clog<<"returned to menu."<<std::endl;
+    std::clog<<"returned to menu.\n";
 }
 
 void game::quit()
 {
+    save_settings();
     std::clog<<"quitting...\n";
     exit(0);
 }
@@ -564,37 +613,8 @@ void game::update()
 
 void game::load()
 {
+    std::clog<<"loading game...\n";
     state=LOADING;
-    std::clog<<"loading settings...\n";
-    std::ifstream config_file("./data/settings.ini");
-    while(config_file.good())
-    {
-        std::string file_line;
-        char first_char=config_file.peek();//check the first character
-        if(first_char==';')//comment is detected
-            std::getline(config_file,file_line);//get this line and move iterator to next line
-        if(first_char=='[')//section is detected
-        {
-            config_file>>file_line;
-            std::string section=file_line.substr(1,file_line.length()-2);//the section name is between the brackets
-            do
-            {
-                //load settings
-                std::string property;
-                char separator;
-                int value;
-                config_file>>property>>separator>>value;
-                add_setting(section,property,value);
-                std::clog<<"setting: "<<section<<"::"<<property<<':'<<value<<" loaded."<<std::endl;
-                config_file.get();//eat the newline character
-                first_char=config_file.peek();//check the first character
-            }
-            while(first_char!='[' && first_char>0);//as long as new section is not detected
-        }
-    }
-    config_file.close();
-    std::clog<<"settings loaded.\n";
-    std::clog<<"loading scene...\n";
     play_scene->load();
     std::clog<<"game loaded.\n";
     play();
@@ -603,17 +623,7 @@ void game::load()
 void game::save()
 {
     std::clog<<"saving game...\n";
-    std::clog<<"saving settings...\n";
-    std::ofstream config_file("./data/settings.ini");
-    for(auto sect:settings)//iterate through sections
-    {
-        config_file<<'['<<sect.first<<']'<<std::endl;//add section header
-        for(auto sett:sect.second)//iterate through settings
-            config_file<<sett.first<<" = "<<*sett.second<<std::endl;//add property and value
-    }
-    config_file.close();
-    std::clog<<"settings saved.\n";
-    std::clog<<"saving scene...\n";
+    state=SAVING;
     play_scene->save();
     std::clog<<"game saved.\n";
 }
@@ -623,7 +633,7 @@ void game::sync()
     if(state!=PAUSED)
     {
         time_started=clock();//reset the start time
-        time+=window::refresh_rate;//increment the game clock
+        time+=(double)1/window::refresh_rate;//increment the game clock
         play_scene->sync();//update clock-based events
     }
 }

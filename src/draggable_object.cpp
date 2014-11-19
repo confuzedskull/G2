@@ -101,7 +101,7 @@ void draggable_object::load()
     object_file>>turning_right;
     object_file>>turning_left;
     char first_char;
-    while(first_char!=';' && first_char!='\n')//no comment line or empty space detected
+    while(first_char!='\n')//no empty space detected
     {
         //load the cued actions
         first_char=object_file.peek();//check the first character of the line
@@ -110,10 +110,10 @@ void draggable_object::load()
         action_cue.push(action);//add action to the cue
     }
     //load tangible object properties
+    object_file>>touching[0];
     object_file>>touching[1];
     object_file>>touching[2];
     object_file>>touching[3];
-    object_file>>touching[4];
     object_file>>collided;
     object_file.close();
     std::clog<<"object#"<<number<<"(draggable object)"<<" loaded.\n";
@@ -126,6 +126,7 @@ void draggable_object::save()
     std::ofstream object_file(filename.str());
     object_file.precision(3);
     object_file.setf(std::ios::fixed);
+    //save basic object properties
     object_file<<position.x<<' '<<position.y<<std::endl;
     object_file<<rotation<<std::endl;
     object_file<<width<<' '<<height<<std::endl;
@@ -136,6 +137,7 @@ void draggable_object::save()
     object_file<<bordered<<std::endl;
     object_file<<visible<<std::endl;
     object_file<<selected<<std::endl;
+    //save movable object properties
     object_file<<speed<<std::endl;
     object_file<<degrees_rotated<<std::endl;
     object_file<<rest_rotation<<std::endl;
@@ -148,6 +150,8 @@ void draggable_object::save()
     object_file<<turning_left<<std::endl;
     for(int i=0;i<action_cue.size();i++)
         object_file<<action_cue.front().at(0)<<' '<<action_cue.front().at(1)<<' '<<action_cue.front().at(2)<<std::endl;
+    object_file<<std::endl;//add an empty line to signal end of action cue
+    //save tangible object properties
     object_file<<touching[0]<<std::endl;
     object_file<<touching[1]<<std::endl;
     object_file<<touching[2]<<std::endl;

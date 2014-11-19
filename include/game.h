@@ -26,7 +26,7 @@
 //stores important functions and variables related to the game
 namespace game
 {
-    extern float time;//stores the current game time in seconds
+    extern double time;//stores the current game time in seconds
     extern clock_t time_started;//start time
     extern double time_elapsed;//time since start
     extern int state;//whether the game is active or not
@@ -42,7 +42,10 @@ namespace game
     void add_setting(std::string section, std::string property, int* variable);//associates a property with a variable
     void add_condition(std::string section, std::string property, int value, void (*action)());//specifies what action should be performed when a property has a specific value
     void initialize();//initialize the objects
+    void load_settings();
+    void save_settings();
     void collision_detection();//handles object collision
+    void switch_menu(int index);
     void show_draggable_objects();//show all draggable objects in current scene
     void hide_draggable_objects();//hide all draggable objects in current scene
     void show_physics_objects();//show all physics objects in current scene
@@ -54,12 +57,11 @@ namespace game
     void add_rts_object();//add an rts object to the current scene
     void create_object();//creates an object of the previously created type
     void delete_selected();//remove the selected object from the game
-    void play();//open game screen
-    void pause();//open pause screen
+    void play();//open play scene
+    void pause();//pause the game
     void resume();//unpause the game
-    void warn_quit();//warn user before quitting
-    void warn_return();//warn user before returning to main menu
     void return_menu();//open main menu
+    void warn_quit();
     void quit();//close the program
     void update();//update variables
     void load();//loads the game
@@ -69,4 +71,5 @@ namespace game
 const int PAUSED=0;
 const int PLAYING=1;
 const int LOADING=2;
+const int SAVING=3;
 #endif // GAME_H

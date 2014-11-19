@@ -24,17 +24,17 @@
 #include <stdlib.h>
 
 //initialize variables
-int ui::margin = 10;
+int ui::overlay_margin = 10;
 
 void ui::show_text()
 {
-    if(game::state==1)
+    if(game::state==PLAYING)
     game::play_scene->show_text();
 }
 
 void ui::hide_text()
 {
-    if(game::state==1)
+    if(game::state==PLAYING)
     game::play_scene->hide_text();
 }
 

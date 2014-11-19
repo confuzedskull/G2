@@ -31,12 +31,12 @@
 #include <GL/glut.h>
 #endif
 #include <iostream>
-#include <fstream>
 
 int main(int argc, char **argv)
 {
     std::clog<<"initializing...\n";
     game::initialize();
+    game::load_settings();
     // initialize GLUT and create window
     std::clog<<"initializing GLUT...\n";
     glutInit(&argc, argv);

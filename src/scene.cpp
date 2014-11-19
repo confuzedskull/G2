@@ -76,6 +76,17 @@ void scene::add_menu(dropdown_menu* dm)
     dropdown_menus.push_back(dm);
 }
 
+void scene::switch_menu(int index)
+{
+    for(int i=0;i<menus.size();i++)
+    {
+        if(i!=index)
+            menus[i]->hide();
+    }
+    menus[index]->show();
+    current_menu=menus[index];
+}
+
 void scene::bind_key(unsigned char key, int* toggle)
 {
     key_toggles[key]=toggle;
@@ -334,6 +345,7 @@ void scene::update()
 
 void scene::load()
 {
+    std::clog<<"loading scene...\n";
     std::string filename;
     //clear all objects before loading
     draggable_objects.clear();
@@ -341,7 +353,9 @@ void scene::load()
     rts_objects.clear();
     //access scene file
     std::ifstream scene_file(file_name.c_str());
-    //load the file list
+    if(scene_file.bad())
+        return;
+    //load the list of files
     while(std::getline(scene_file,filename))
     {
         std::string extension=filename.substr(filename.length()-3,filename.length());//get the file extension
@@ -370,10 +384,12 @@ void scene::load()
         }
     }
     scene_file.close();
+    std::clog<<"scene#"<<number<<" loaded.\n";
 }
 
 void scene::save()
 {
+    std::clog<<"saving scene...\n";
     std::ofstream scene_file(file_name.c_str());//open the file
     std::clog<<"saving objects...\n";
     //save draggable objects
@@ -406,6 +422,9 @@ void scene::save()
 
 void scene::sync()
 {
+    //move draggable objects
+    for(auto d:draggable_objects)
+        d.second->perform_actions();
     //move rts objects
     for(auto r:rts_objects)//C++11 "for" loop
         r.second->perform_actions()||r.second->move_to_rally();

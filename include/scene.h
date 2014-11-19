@@ -59,6 +59,7 @@ public:
     void add_button(button*);//add button to the scene
     void add_menu(menu*);//add menu to the scene
     void add_menu(dropdown_menu*);//add dropdown menu to the scene
+    void switch_menu(int index);//make the menu at given index current and hide other menus
     void bind_key(unsigned char key, int* toggle);//associate a key which will toggle a game option on/off
     void bind_key(std::string special_key, int* toggle);//associate a key which will toggle a game option on/off
     void bind_key(unsigned char key, void (*action)());//associate a key with an action
