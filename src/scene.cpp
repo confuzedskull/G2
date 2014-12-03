@@ -424,16 +424,13 @@ void scene::sync()
 {
     //move draggable objects
     for(auto d:draggable_objects)
-        d.second->perform_actions();
+        d.second->sync();
     //move rts objects
     for(auto r:rts_objects)//C++11 "for" loop
-        r.second->perform_actions()||r.second->move_to_rally();
+        r.second->sync();
     //move physics objects
     for(auto p:physics_objects)//C++11 "for" loop
-    {
-        p.second->perform_actions();
-        p.second->inertia();
-    }
+        p.second->sync();
 }
 
 void scene::clear()

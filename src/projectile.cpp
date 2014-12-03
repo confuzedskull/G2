@@ -23,8 +23,7 @@ void projectile::fire(movable_object source)//fires the projectile from the sour
 {
     position.set(source.get_position());//put the projectile where the source is
     rotation=source.get_rotation();//match the rotation of the source
-    calc_points();
-    calc_direction();
+    orient();
     fired=true;
     visible=true;
 }
@@ -35,7 +34,6 @@ void projectile::update()
     {
         if(isless(traveled,range) && !collided)//projectile is within range and hasn't collided
         {
-            calc_points();
             move_forward();
             traveled+=speed;
         }

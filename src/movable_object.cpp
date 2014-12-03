@@ -16,26 +16,11 @@
 #include <math.h>
 #include <iostream>
 
-point2i* movable_object::get_rally()
+float movable_object::default_speed=1.00f;
+
+point2f* movable_object::get_rally()
 {
     return rally;
-}
-
-point2i movable_object::get_resting()
-{
-    return rest_position;
-}
-
-void movable_object::rest()
-{
-    if(!moving_horizontal())
-        rest_position.x=position.x;
-
-    if(!moving_vertical())
-        rest_position.y=position.y;
-
-    if(!turning())
-        rest_rotation=rotation;
 }
 
 void movable_object::reset_motion()
@@ -46,6 +31,7 @@ void movable_object::reset_motion()
     moving_right=false;
     turning_left=false;
     turning_right=false;
+    speed=default_speed;
 }
 
 bool movable_object::moving_vertical()
@@ -161,7 +147,7 @@ void movable_object::move_forward(float units_forward)
 
 void movable_object::move_back()
 {
-    move_back(1.0f);
+    move_back(1);
 }
 
 void movable_object::move_back(int units_back)
@@ -180,34 +166,33 @@ void movable_object::move_back(float units_back)
 
 void movable_object::turn_to_point(int destination_x, int destination_y)//rotates object to face the given coordinates
 {
-    if(isgreater((float)distance(destination_x,destination_y,position.x,position.y),get_radius()))//prevent infinite spin
+    if(isgreater(distance((float)destination_x,(float)destination_y,position.x,position.y),get_radius()))//prevent infinite spin
     {
-        if(destination_x>position.x && destination_y>position.y)//destination lies in quadrant 1
-            rotation = atan((float)(destination_y-position.y)/(float)(destination_x-position.x))*180.0f/3.14159f;
+        if(isgreater((float)destination_x,position.x) && isgreater((float)destination_y,position.y))//destination lies in quadrant 1
+            rotation = atan(((float)destination_y-position.y)/((float)destination_x-position.x))*180.0f/3.14159f;
 
-        if(destination_x<position.x && destination_y>position.y)//destination lies in quadrant 2
-            rotation = atan((float)(destination_y-position.y)/(float)(destination_x-position.x))*180.0f/3.14159f + 180.0f;
+        if(isless((float)destination_x,position.x) && isgreater((float)destination_y,position.y))//destination lies in quadrant 2
+            rotation = atan(((float)destination_y-position.y)/((float)destination_x-position.x))*180.0f/3.14159f + 180.0f;
 
-        if(destination_x<position.x && destination_y<position.y)//destination lies in quadrant 3
-            rotation = atan((float)(destination_y-position.y)/(float)(destination_x-position.x))*180.0f/3.14159f + 180.0f;
+        if(isless((float)destination_x,position.x) && isless((float)destination_y,position.y))//destination lies in quadrant 3
+            rotation = atan(((float)destination_y-position.y)/((float)destination_x-position.x))*180.0f/3.14159f + 180.0f;
 
-        if(destination_x>position.x && destination_y<position.y)//destination lies in quadrant 4
-            rotation = atan((float)(destination_y-position.y)/(float)(destination_x-position.x))*180.0f/3.14159f + 360.0f;
+        if(isgreater((float)destination_x,position.x) && isless((float)destination_y,position.y))//destination lies in quadrant 4
+            rotation = atan(((float)destination_y-position.y)/((float)destination_x-position.x))*180.0f/3.14159f + 360.0f;
 
-        if((destination_x==position.x) && destination_y>position.y)//destination lies at 12 O'clock
+        if((!isless((float)destination_x,position.x)&&!isgreater((float)destination_x,position.x)) && isgreater((float)destination_y,position.y))//destination lies at 12 O'clock
             rotation = 90.0f;
 
-        if((destination_x==position.x) && destination_y<position.y)//destination lies at 6'O'clock
+        if((!isless((float)destination_x,position.x)&&!isgreater((float)destination_x,position.x))&& isless((float)destination_y,position.y))//destination lies at 6'O'clock
             rotation = 270.0f;
 
-        if(destination_x<position.x && (destination_y==position.y))//destination lies at 9 O'clock
+        if(isless((float)destination_x,position.x) && (!isless((float)destination_y,position.y)&&!isgreater((float)destination_y,position.y)))//destination lies at 9 O'clock
             rotation = 180.0f;
 
-        if(destination_x>position.x && (destination_y==position.y))//destination lies at 3 O'clock
+        if(isgreater((float)destination_x,position.x) && (!isless((float)destination_y,position.y)&&!isgreater((float)destination_y,position.y)))//destination lies at 3 O'clock
             rotation = 0.0f;
     }
 }
-
 void movable_object::turn_to_point(point2i destination)
 {
     turn_to_point(destination.x,destination.y);
@@ -218,10 +203,10 @@ bool movable_object::move_to_point(int destination_x, int destination_y, float r
 {
     if(rally_set)
     {
-        movable_object::turn_to_point(destination_x,destination_y);
-        if(isless((float)distance(position.x,position.y,destination_x,destination_y),get_radius()))
+        movable_object::turn_to_point(destination_x, destination_y);
+        if(isless((float)distance(position.x,position.y,(float)destination_x,(float)destination_y),get_radius()))
             rally_set=false;
-        move_forward(speed*rate);
+        move_forward(rate);
         moving_forward=true;
         return true;
     }
@@ -246,7 +231,7 @@ bool movable_object::move_to_point(int destination_x,int destination_y)
 
 bool movable_object::move_to_rally()
 {
-    return move_to_point(*rally);
+    return move_to_point((int)rally->x,(int)rally->y);
 }
 
 void movable_object::cue_action(int action_no, int times)
@@ -314,22 +299,20 @@ bool movable_object::perform_actions()
 
 void movable_object::update()
 {
-    rest();
     calc_boundaries();
-    if(moving())//the calculations below only need to happen when the object is moving
-    {
-        calc_points();
-        calc_direction();
-    }
-    reset_motion();
+    if(moving())
+        orient();//object only needs to orient itself when it moves
+}
+
+void movable_object::sync()
+{
+    perform_actions();
 }
 
 movable_object::movable_object(): complex_object()
 {
-    speed=1.01f;
-    rest_position.set(position);
-    rest_rotation=rotation;
-    rally = new point2i(rest_position.x,rest_position.y);
+    speed=default_speed;
+    rally = new point2f(position.x,position.y);
     rally_set=false;
     reset_motion();
 }

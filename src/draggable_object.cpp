@@ -92,7 +92,6 @@ void draggable_object::load()
     //load movable object properties
     object_file>>speed;
     object_file>>degrees_rotated;
-    object_file>>rest_rotation;
     object_file>>rally_set;
     object_file>>moving_forward;
     object_file>>moving_backward;
@@ -110,10 +109,10 @@ void draggable_object::load()
         action_cue.push(action);//add action to the cue
     }
     //load tangible object properties
-    object_file>>touching[0];
-    object_file>>touching[1];
-    object_file>>touching[2];
-    object_file>>touching[3];
+    object_file>>touched_side[0];
+    object_file>>touched_side[1];
+    object_file>>touched_side[2];
+    object_file>>touched_side[3];
     object_file>>collided;
     object_file.close();
     std::clog<<"object#"<<number<<"(draggable object)"<<" loaded.\n";
@@ -140,7 +139,6 @@ void draggable_object::save()
     //save movable object properties
     object_file<<speed<<std::endl;
     object_file<<degrees_rotated<<std::endl;
-    object_file<<rest_rotation<<std::endl;
     object_file<<rally_set<<std::endl;
     object_file<<moving_forward<<std::endl;
     object_file<<moving_backward<<std::endl;
@@ -152,10 +150,10 @@ void draggable_object::save()
         object_file<<action_cue.front().at(0)<<' '<<action_cue.front().at(1)<<' '<<action_cue.front().at(2)<<std::endl;
     object_file<<std::endl;//add an empty line to signal end of action cue
     //save tangible object properties
-    object_file<<touching[0]<<std::endl;
-    object_file<<touching[1]<<std::endl;
-    object_file<<touching[2]<<std::endl;
-    object_file<<touching[3]<<std::endl;
+    object_file<<touched_side[0]<<std::endl;
+    object_file<<touched_side[1]<<std::endl;
+    object_file<<touched_side[2]<<std::endl;
+    object_file<<touched_side[3]<<std::endl;
     object_file<<collided<<std::endl;
     object_file.close();
     std::clog<<"object#"<<number<<"(draggable object)"<<" saved.\n";

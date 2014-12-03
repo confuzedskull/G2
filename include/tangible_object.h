@@ -19,11 +19,11 @@
 #include "movable_object.h"
 #include "point.h"
 
-//A tangible object can move and detect collision with another object
+//A tangible object can detect collision with another object and move
 class tangible_object: virtual public movable_object
 {
     public:
-    int touching[4];/*The number of the touching object is stored in each index. "0" is no object
+    int touched_side[4];/*The number of the touching object is stored in each index. "0" is no object
     Each index corresponds to a side: [1] is left, [2] is right, [3] is front, [4] is back*/
     bool collided;
     bool is_close(complex_object B);//check if object B is close to the center of this object
@@ -31,7 +31,6 @@ class tangible_object: virtual public movable_object
     bool near_back(complex_object B);
     bool near_left(complex_object B);
     bool near_right(complex_object B);
-    point2f closest_point(complex_object B);
     void repel(complex_object B);//object moves away from object B
     void attract(complex_object B);//object moves toward object B
     void simon_says(complex_object B);//object changes color according to side touched

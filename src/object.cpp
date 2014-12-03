@@ -47,12 +47,12 @@ std::string object::get_type()
     return "basic object";
 }
 
-point2i object::get_position()
+point2f object::get_position()
 {
     return position;
 }
 
-point2i* object::get_positionptr()
+point2f* object::get_positionptr()
 {
     return &position;
 }
@@ -79,7 +79,7 @@ float object::get_radius()
 
 void object::set_position(int x, int y)
 {
-    position.set(x,y);
+    position.set((float)x,(float)y);
     calc_boundaries();
 }
 
@@ -193,10 +193,12 @@ void object::render()//draws the object
 
 void object::update(){}
 
+void object::sync(){}
+
 object::object()
 {
     number=++total_objects;
-    position.set(origin);
+    position.set((float)origin.x,(float)origin.y);
     rotation=0.0f;
     set_dimensions(64,64);
     marker_width=5;

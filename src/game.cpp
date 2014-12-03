@@ -316,7 +316,7 @@ void game::initialize()
     game_screen->bind_key("right",controls::next_item);
     game_screen->bind_key("insert",game::create_object);
     game_screen->bind_key(127,delete_selected);//127 is the delete key
-    game_screen->bind_key(27,&state);//27 is the 'esc' key
+    game_screen->bind_key(27, pause);//27 is the 'esc' key
     play_scene=game_screen;
     scenes.push_back(game_screen);//add to scenes
 }

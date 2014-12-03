@@ -30,51 +30,49 @@
 #include <GL/glut.h>
 #endif
 
-void complex_object::calc_direction()
+point2f complex_object::front()
 {
-    float var = 3.14159/180;
-    leftward.set(-(sin(rotation*var))*step_size,cos(rotation*var)*step_size);
-    rightward.set(sin(rotation*var)*step_size,-(cos(rotation*var))*step_size);
-    forward.set(cos(rotation*var)*step_size,sin(rotation*var)*step_size);
-    backward.set(-(cos(rotation*var))*step_size,-(sin(rotation*var))*step_size);
+    float half_height = height/2;
+    return point2f(position.x+((forward.x/step_size)*half_height),position.y+((forward.y/step_size)*half_height));
+}
+
+point2f complex_object::back()
+{
+    float half_height = height/2;
+    return point2f(position.x+((backward.x/step_size)*half_height),position.y+((backward.y/step_size)*half_height));
+}
+
+point2f complex_object::left()
+{
+    float half_width = width/2;
+    return point2f(position.x+((leftward.x/step_size)*half_width),position.y+((leftward.y/step_size)*half_width));
+}
+
+point2f complex_object::right()
+{
+    float half_width = width/2;
+    return point2f(position.x+((rightward.x/step_size)*half_width),position.y+((rightward.y/step_size)*half_width));
+}
+
+void complex_object::orient()
+{
+    float deg_rad = 3.14159/180;
+    leftward.set(-(sin(rotation*deg_rad))*step_size,cos(rotation*deg_rad)*step_size);
+    rightward.set(sin(rotation*deg_rad)*step_size,-(cos(rotation*deg_rad))*step_size);
+    forward.set(cos(rotation*deg_rad)*step_size,sin(rotation*deg_rad)*step_size);
+    backward.set(-(cos(rotation*deg_rad))*step_size,-(sin(rotation*deg_rad))*step_size);
 }
 
 void complex_object::rotate(float angle)
 {
     rotation+=angle;
-    calc_direction();//direction is relative to rotation so it must be updated
-    calc_points();//points must move with rotation
-}
-
-void complex_object::set_position(int x, int y)
-{
-    position.set(x,y);
-    calc_points();
+    orient();//direction is relative to rotation so it must be updated
 }
 
 void complex_object::set_rotation(float angle)
 {
     rotation=angle;
-    calc_direction();
-    calc_points();
-}
-
-void complex_object::calc_points()
-{
-    float half_width=width/2;
-    float half_height=height/2;
-    front.set(position.x+((forward.x/step_size)*half_height),position.y+((forward.y/step_size)*half_height));
-    back.set(position.x+((backward.x/step_size)*half_height),position.y+((backward.y/step_size)*half_height));
-    left.set(position.x+((leftward.x/step_size)*half_width),position.y+((leftward.y/step_size)*half_width));
-    right.set(position.x+((rightward.x/step_size)*half_width),position.y+((rightward.y/step_size)*half_width));
-}
-
-void complex_object::set_dimensions(int w, int h)
-{
-    width=w;
-    height=h;
-    calc_boundaries();
-    calc_points();
+    orient();
 }
 
 void complex_object::mark_selected()
@@ -110,5 +108,5 @@ complex_object::complex_object()
 {
     marker_color=GREEN;
     rotation=90.1f;
-    step_size=4.0f;
+    step_size=1.0f;
 }

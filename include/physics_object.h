@@ -23,8 +23,12 @@
 //A physics object has physical properties and inherits the ability to detect collision from the tangible object class
 class physics_object: public clickable_object, public tangible_object
 {
-    public:
+protected:
+    point2f rest_position;
+    float rest_rotation;//the rotation of the object at rest
+public:
     static point2i origin;
+    point2f get_resting();
     std::string get_type() override;
     float mass;
     float delta_time[6];/*each element of this array represents how much time a change in a direction or velocity took
@@ -38,15 +42,19 @@ class physics_object: public clickable_object, public tangible_object
     physics_vector momentum;
     float angular_momentum;
     physics_vector force;
+    float friction;
+    void rest();//set the resting point when the object is not moving
     void calc_delta_time();
     void calc_velocity();
     void calc_acceleration();
     void calc_force();
     void calc_momentum();
     void calc_momentum(physics_object p);
-    void inertia();
-    void physics();
+    void apply_friction();
+    void apply_inertia();
+    void calc_physics();
     void update() override;
+    void sync() override;
     void load();
     void save();
     physics_object();

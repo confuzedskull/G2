@@ -20,6 +20,7 @@
 #include <iostream>
 #include <fstream>
 #include <math.h>
+#include <stdlib.h>
 
 point2i physics_object::origin = point2i(window::width*0.9,window::height*0.6);
 
@@ -28,9 +29,26 @@ std::string physics_object::get_type()
     return "physics object";
 }
 
+point2f physics_object::get_resting()
+{
+    return rest_position;
+}
+
+void physics_object::rest()
+{
+    if(!moving_horizontal())
+        rest_position.x=position.x;
+    if(!moving_vertical())
+        rest_position.y=position.y;
+    if(!turning())
+        rest_rotation=rotation;
+    if(isless(speed,0.1f))
+        reset_motion();
+}
+
 void physics_object::calc_delta_time()
 {
-    if(abs(position.x-rest_position.x)>0)
+    if(isgreater(fabs(position.x-rest_position.x),0.01f))//check for a change in position
     {
         start_time[0]=game::time;
         delta_time[0]=stop_time[0]-start_time[0];
@@ -40,8 +58,7 @@ void physics_object::calc_delta_time()
         stop_time[0]=game::time;
         delta_time[0]=0.0f;
     }
-
-    if(abs(position.y-rest_position.y)>0)
+    if(isgreater(fabs(position.y-rest_position.y),0.01f))//check for a change in position
     {
         start_time[1]=game::time;
         delta_time[1]=stop_time[1]-start_time[1];
@@ -51,7 +68,6 @@ void physics_object::calc_delta_time()
         stop_time[1]=game::time;
         delta_time[1]=0.0f;
     }
-
     if(isgreaterequal(fabs(velocity[1].x-velocity[0].x),0.01f))//at least difference of 0.01
     {
         start_time[2]=game::time;
@@ -62,7 +78,6 @@ void physics_object::calc_delta_time()
         stop_time[2]=game::time;
         delta_time[2]=0.0f;
     }
-
     if(isgreaterequal(fabs(velocity[1].y-velocity[0].y),0.01f))//at least difference of 0.01
     {
         start_time[3]=game::time;
@@ -73,7 +88,6 @@ void physics_object::calc_delta_time()
         stop_time[3]=game::time;
         delta_time[3]=0.0f;
     }
-
     if(isgreaterequal(fabs(rotation-rest_rotation),0.01f))//at least difference of 0.01
     {
         start_time[4]=game::time;
@@ -84,7 +98,6 @@ void physics_object::calc_delta_time()
         stop_time[4]=game::time;
         delta_time[4]=0.0f;
     }
-
     if(isgreaterequal(fabs(angular_velocity[1]-angular_velocity[0]),0.01f))//at least difference of 0.01
     {
         start_time[5]=game::time;
@@ -142,45 +155,56 @@ void physics_object::calc_momentum(physics_object p)
     momentum.y=momentum.y+p.momentum.y-(p.mass*p.velocity[1].y);
 }
 
-void physics_object::inertia()
+void physics_object::apply_inertia()
 {
-    /*if(isgreaterequal(fabs(momentum.x),0.01f))
+    if(moving_horizontal() && isgreaterequal(fabs(momentum.x),0.01f))
     {
-        position.x+=momentum.x;
+        position.x+=momentum.x*speed;
         moving_left=true;
         moving_right=true;
     }
-
-    if(isgreaterequal(fabs(momentum.y),0.01f))
+    if(moving_vertical() && isgreaterequal(fabs(momentum.y),0.01f))
     {
-        position.y+=momentum.y;
+        position.y+=momentum.y*speed;
         moving_forward=true;
         moving_backward=true;
-    }*/
-
-    if(isgreaterequal(fabs(angular_momentum),0.01f))
+    }
+    if(turning() && isgreaterequal(fabs(angular_momentum),0.01f))
     {
-        rotation+=angular_momentum;
+        rotation+=angular_momentum*speed;
         turning_left=true;
         turning_right=true;
     }
 }
 
-void physics_object::physics()
+void physics_object::apply_friction()
+{
+    if(moving() && isgreater(speed,0.01f))
+        speed-=friction;
+}
+
+void physics_object::calc_physics()
 {
     calc_delta_time();
     calc_velocity();
     calc_acceleration();
     calc_force();
     calc_momentum();
-    reset_motion();
 }
 
 void physics_object::update()
 {
     movable_object::update();
-    physics();
+    calc_physics();
+    rest();
     mouse_function();
+}
+
+void physics_object::sync()
+{
+    perform_actions();
+    apply_inertia();
+    apply_friction();
 }
 
 void physics_object::load()
@@ -223,10 +247,10 @@ void physics_object::load()
         action_cue.push(action);//add action to the cue
     }
     //load tangible object properties
-    object_file>>touching[0];
-    object_file>>touching[1];
-    object_file>>touching[2];
-    object_file>>touching[3];
+    object_file>>touched_side[0];
+    object_file>>touched_side[1];
+    object_file>>touched_side[2];
+    object_file>>touched_side[3];
     object_file>>collided;
     //load physics objects properties
     object_file>>mass;
@@ -282,10 +306,10 @@ void physics_object::save()
         object_file<<action_cue.front().at(0)<<' '<<action_cue.front().at(1)<<' '<<action_cue.front().at(2)<<std::endl;
     object_file<<std::endl;//add an empty line to signal end of action cue
     //save tangible object properties
-    object_file<<touching[0]<<std::endl;
-    object_file<<touching[1]<<std::endl;
-    object_file<<touching[2]<<std::endl;
-    object_file<<touching[3]<<std::endl;
+    object_file<<touched_side[0]<<std::endl;
+    object_file<<touched_side[1]<<std::endl;
+    object_file<<touched_side[2]<<std::endl;
+    object_file<<touched_side[3]<<std::endl;
     object_file<<collided<<std::endl;
     //save physics object properties
     object_file<<mass<<std::endl;
@@ -314,8 +338,11 @@ physics_object::physics_object()
     fill_color=GRAY;
     position.set((float)origin.x, (float)origin.y);
     set_dimensions(32.0f,32.0f);
+    rest_position.set(position.x,position.y);
+    rest_rotation=rotation;
     velocity[0].x=0.00f;
     velocity[0].y=0.00f;
     angular_velocity[0]=0.00f;
+    friction=0.01f;
     std::clog<<"object#"<<number<<"(physics object)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

@@ -45,7 +45,7 @@ void rts_object::mouse_function()
                 if(cursor::right_clicked_an_object)
                     rally = cursor::right_clicked_object->get_positionptr();//set rally to reference point because position is always changing
                 else//move to right clicked empty space
-                    rally = new point2i(cursor::right_down.x,cursor::right_down.y);
+                    rally = new point2f(cursor::right_down.x,cursor::right_down.y);
                 rally_set=true;
             }
             if(cursor::right_dragging && !right_clicked())
@@ -54,7 +54,7 @@ void rts_object::mouse_function()
                 if(rally_set)
                     delete rally;
                 //move to right drag
-                rally = new point2i(cursor::right_drag.x,cursor::right_drag.y);
+                rally = new point2f((float)cursor::right_drag.x,(float)cursor::right_drag.y);
                 rally_set=true;
             }
         }
@@ -65,6 +65,11 @@ void rts_object::update()
 {
     movable_object::update();
     mouse_function();
+}
+
+void rts_object::sync()
+{
+    perform_actions()||move_to_rally();
 }
 
 void rts_object::load()
@@ -89,7 +94,6 @@ void rts_object::load()
     //load movable object properties
     object_file>>speed;
     object_file>>degrees_rotated;
-    object_file>>rest_rotation;
     object_file>>rally_set;
     object_file>>moving_forward;
     object_file>>moving_backward;
@@ -107,10 +111,10 @@ void rts_object::load()
         action_cue.push(action);//add action to the cue
     }
     //load tangible object properties
-    object_file>>touching[0];
-    object_file>>touching[1];
-    object_file>>touching[2];
-    object_file>>touching[3];
+    object_file>>touched_side[0];
+    object_file>>touched_side[1];
+    object_file>>touched_side[2];
+    object_file>>touched_side[3];
     object_file>>collided;
     object_file.close();
     std::clog<<"object#"<<get_number()<<"(rts object)"<<" loaded.\n";
@@ -137,7 +141,6 @@ void rts_object::save()
     //save movable object properties
     object_file<<speed<<std::endl;
     object_file<<degrees_rotated<<std::endl;
-    object_file<<rest_rotation<<std::endl;
     object_file<<rally_set<<std::endl;
     object_file<<moving_forward<<std::endl;
     object_file<<moving_backward<<std::endl;
@@ -149,10 +152,10 @@ void rts_object::save()
         object_file<<action_cue.front().at(0)<<' '<<action_cue.front().at(1)<<' '<<action_cue.front().at(2)<<std::endl;
     object_file<<std::endl;//add an empty line to signal end of action cue
     //save tangible object properties
-    object_file<<touching[0]<<std::endl;
-    object_file<<touching[1]<<std::endl;
-    object_file<<touching[2]<<std::endl;
-    object_file<<touching[3]<<std::endl;
+    object_file<<touched_side[0]<<std::endl;
+    object_file<<touched_side[1]<<std::endl;
+    object_file<<touched_side[2]<<std::endl;
+    object_file<<touched_side[3]<<std::endl;
     object_file<<collided<<std::endl;
     object_file.close();
     std::clog<<"object#"<<number<<"(rts object)"<<" saved.\n";

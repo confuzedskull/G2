@@ -28,19 +28,16 @@ protected:
     point2f rightward;
     point2f forward;
     point2f backward;
-public:
     float step_size;
+public:
     //the mid-point of each side
-    point2f front;
-    point2f back;
-    point2f left;
-    point2f right;
-    void calc_direction();//calculates each directional heading
-    void calc_points();
+    point2f front();
+    point2f back();
+    point2f left();
+    point2f right();
+    void orient();//calculates each directional heading
     void rotate(float angle) override;//performs a rotation transformation based on the given angle
-    void set_position(int x, int y) override;
     void set_rotation(float angle) override;
-    void set_dimensions(int w, int h) override;
     void mark_selected() override;
     void render() override;//makes the object visible on screen
     complex_object();

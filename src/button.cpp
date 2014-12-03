@@ -98,11 +98,11 @@ void button::update()
 {
     text.visible=visible;
     if(text_allignment=="left")
-        text.set_position(xmin+margin,position.y-(text.get_height()/2));
+        text.set_position(xmin+margin,get_position().y-(text.get_height()/2));
     if(text_allignment=="center")
-        text.set_position(position.x-(text.get_width()/2),position.y-(text.get_height()/2));
+        text.set_position(get_position().x-(text.get_width()/2),get_position().y-(text.get_height()/2));
     if(text_allignment=="right")
-        text.set_position(xmax-margin-text.get_width(),position.y-(text.get_height()/2));
+        text.set_position(xmax-margin-text.get_width(),get_position().y-(text.get_height()/2));
     mouse_function();
 }
 

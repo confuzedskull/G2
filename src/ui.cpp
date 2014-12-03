@@ -64,20 +64,20 @@ void ui::update_text()
             object_info->add_line("acceleration: "+to_string(po->acceleration.x)+", "+to_string(po->acceleration.y));
             object_info->add_line("momentum: "+to_string(po->momentum.x)+", "+to_string(po->momentum.y));
             object_info->add_line("force: "+to_string(po->force.x)+", "+to_string(po->force.y));
-            object_info->add_line("object touching side L:"+to_string(po->touching[0])+"R:"+to_string(po->touching[1])
-                                                        +"T:"+to_string(po->touching[2])+"B:"+to_string(po->touching[3]));
+            object_info->add_line("object touching side L:"+to_string(po->touched_side[0])+"R:"+to_string(po->touched_side[1])
+                                                        +"T:"+to_string(po->touched_side[2])+"B:"+to_string(po->touched_side[3]));
         }
         if(cursor::left_clicked_object->get_type()=="draggable object")//display the following if a draggable object is selected
         {
             draggable_object* draggable=game::current_scene->draggable_objects[index];
-            object_info->add_line("object touching side"+to_string(draggable->touching[0])+to_string(draggable->touching[1])+to_string(draggable->touching[2])+to_string(draggable->touching[3]));
+            object_info->add_line("object touching side"+to_string(draggable->touched_side[0])+to_string(draggable->touched_side[1])+to_string(draggable->touched_side[2])+to_string(draggable->touched_side[3]));
         }
         if(cursor::left_clicked_object->get_type()=="rts object")//display the following if a RTS object is selected
         {
             rts_object* rtso=game::current_scene->rts_objects[index];
-            object_info->add_line("speed: "+to_string(rtso->speed));
             object_info->add_line("rally point: "+to_string(rtso->get_rally()->x)+", "+to_string(rtso->get_rally()->y));
-            object_info->add_line("object touching side L:"+to_string(rtso->touching[0])+"R:"+to_string(rtso->touching[1])+"T:"+to_string(rtso->touching[2])+"B:"+to_string(rtso->touching[3]));
+            object_info->add_line("speed: "+to_string(rtso->speed));
+            object_info->add_line("object touching side L:"+to_string(rtso->touched_side[0])+"R:"+to_string(rtso->touched_side[1])+"T:"+to_string(rtso->touched_side[2])+"B:"+to_string(rtso->touched_side[3]));
         }
     }
     label* game_info = game::play_scene->labels[1];

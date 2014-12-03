@@ -24,8 +24,8 @@
 class object
 {
 protected:
+    point2f position;
     int number;
-    point2i position;
     float rotation;
     int width;
     int height;
@@ -38,15 +38,14 @@ public:
     virtual std::string get_type();//returns the object type
     virtual void render_shape();//draw the object's shape
     virtual void render();//draws the object
-    virtual void update();
+    virtual void update();//update CPU-regulated functions
+    virtual void sync();//update clock-regulated functions
     virtual void mark_selected();//visually indicate that the object is selected
-    virtual void set_position(int x, int y);
-    virtual void set_dimensions(int w, int h);
     virtual void rotate(float angle);//increments the object's rotation by the given angle
     virtual void set_rotation(float angle);//changes the object's rotation to the given angle
     virtual void calc_boundaries();//calculates the max's and mins
-    point2i get_position();
-    point2i* get_positionptr();
+    point2f get_position();
+    point2f* get_positionptr();
     color fill_color;//color of the body of the object
     color marker_color;//color of selection marker
     color border_color;//color of the border
@@ -64,6 +63,8 @@ public:
     void show();//make the object visible
     void hide();//make the object invisible
     void render_border();//draw the border
+    void set_position(int x, int y);
+    void set_dimensions(int w, int h);
     object();
     object(int x, int y, int w, int h);
     object(int x, int y, int w, int h, color c);
