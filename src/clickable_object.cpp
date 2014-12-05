@@ -139,7 +139,7 @@ void clickable_object::update()
     mouse_function();
 }
 
-clickable_object::clickable_object(): object()
+clickable_object::clickable_object(): basic_object()
 {
     enable();
 }

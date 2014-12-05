@@ -22,7 +22,9 @@
 class rts_object: public clickable_object, public tangible_object
 {
 public:
-    static point2i origin;
+    static point2i default_position;
+    static int default_width;
+    static int default_height;
     std::string get_type() override;
     void mouse_function() override;//performs a variety of actions dependent on cursor interaction
     void update() override;

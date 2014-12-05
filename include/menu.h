@@ -21,7 +21,7 @@
 #include <vector>
 #include <string>
 
-class menu: virtual public object
+class menu: virtual public basic_object
 {
 protected:
     label title;

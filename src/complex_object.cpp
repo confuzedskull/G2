@@ -33,34 +33,34 @@
 point2f complex_object::front()
 {
     float half_height = height/2;
-    return point2f(position.x+((forward.x/step_size)*half_height),position.y+((forward.y/step_size)*half_height));
+    return point2f(position.x+(forward.x*half_height),position.y+(forward.y*half_height));
 }
 
 point2f complex_object::back()
 {
     float half_height = height/2;
-    return point2f(position.x+((backward.x/step_size)*half_height),position.y+((backward.y/step_size)*half_height));
+    return point2f(position.x+(backward.x*half_height),position.y+(backward.y*half_height));
 }
 
 point2f complex_object::left()
 {
     float half_width = width/2;
-    return point2f(position.x+((leftward.x/step_size)*half_width),position.y+((leftward.y/step_size)*half_width));
+    return point2f(position.x+(leftward.x*half_width),position.y+(leftward.y*half_width));
 }
 
 point2f complex_object::right()
 {
     float half_width = width/2;
-    return point2f(position.x+((rightward.x/step_size)*half_width),position.y+((rightward.y/step_size)*half_width));
+    return point2f(position.x+(rightward.x*half_width),position.y+(rightward.y*half_width));
 }
 
 void complex_object::orient()
 {
-    float deg_rad = 3.14159/180;
-    leftward.set(-(sin(rotation*deg_rad))*step_size,cos(rotation*deg_rad)*step_size);
-    rightward.set(sin(rotation*deg_rad)*step_size,-(cos(rotation*deg_rad))*step_size);
-    forward.set(cos(rotation*deg_rad)*step_size,sin(rotation*deg_rad)*step_size);
-    backward.set(-(cos(rotation*deg_rad))*step_size,-(sin(rotation*deg_rad))*step_size);
+    float deg_rad = 3.14159f/180.0f;
+    leftward.set(-(sin(rotation*deg_rad)),cos(rotation*deg_rad));
+    rightward.set(sin(rotation*deg_rad),-(cos(rotation*deg_rad)));
+    forward.set(cos(rotation*deg_rad),sin(rotation*deg_rad));
+    backward.set(-(cos(rotation*deg_rad)),-(sin(rotation*deg_rad)));
 }
 
 void complex_object::rotate(float angle)
@@ -80,12 +80,12 @@ void complex_object::mark_selected()
     if(selected)//selected objects are marked by a green ellipse
     {
         glPushMatrix();//modify transformation matrix
-        glTranslatef(position.x,position.y,0.0);//translate ellipse according to object coordinates
+        glTranslatef(position.x,position.y,0.0f);//translate ellipse according to object coordinates
         glColor3f(marker_color.r,marker_color.g,marker_color.b);
         glBegin(GL_LINE_LOOP);//draws a series of lines
         for(int i=0; i<360; i++)
         {
-            float deg_rad=i*3.14159/180;//calculate degrees in radians
+            float deg_rad=i*3.14159f/180.0f;//calculate degrees in radians
             glVertex2f(cos(deg_rad)*get_radius(),sin(deg_rad)*get_radius());//ellipse function
         }
         glEnd();//finish drawing
@@ -108,5 +108,4 @@ complex_object::complex_object()
 {
     marker_color=GREEN;
     rotation=90.1f;
-    step_size=1.0f;
 }

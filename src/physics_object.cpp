@@ -22,7 +22,9 @@
 #include <math.h>
 #include <stdlib.h>
 
-point2i physics_object::origin = point2i(window::width*0.9,window::height*0.6);
+point2i physics_object::default_position = point2i(window::width*0.9,window::height*0.6);
+int physics_object::default_width = 32;
+int physics_object::default_height = 32;
 
 std::string physics_object::get_type()
 {
@@ -42,7 +44,7 @@ void physics_object::rest()
         rest_position.y=position.y;
     if(!turning())
         rest_rotation=rotation;
-    if(isless(speed,0.1f))
+    if(islessequal(momentum.magnitude(),1.0f))
         reset_motion();
 }
 
@@ -68,7 +70,7 @@ void physics_object::calc_delta_time()
         stop_time[1]=game::time;
         delta_time[1]=0.0f;
     }
-    if(isgreaterequal(fabs(velocity[1].x-velocity[0].x),0.01f))//at least difference of 0.01
+    if(moving_horizontal() && isgreaterequal(fabs(velocity[1].x-velocity[0].x),0.01f))//at least difference of 0.01
     {
         start_time[2]=game::time;
         delta_time[2]=stop_time[2]-start_time[2];
@@ -78,7 +80,7 @@ void physics_object::calc_delta_time()
         stop_time[2]=game::time;
         delta_time[2]=0.0f;
     }
-    if(isgreaterequal(fabs(velocity[1].y-velocity[0].y),0.01f))//at least difference of 0.01
+    if(moving_vertical() && isgreaterequal(fabs(velocity[1].y-velocity[0].y),0.01f))//at least difference of 0.01
     {
         start_time[3]=game::time;
         delta_time[3]=stop_time[3]-start_time[3];
@@ -121,6 +123,7 @@ void physics_object::calc_velocity()
 
     if(isnormal(delta_time[4]))//makes sure it's not zero,infinity, or NaN
         angular_velocity[0]=(rest_rotation-rotation)/delta_time[4];
+
     angular_velocity[1]=angular_velocity[0]+angular_momentum;//set final velocity
 }
 
@@ -155,32 +158,12 @@ void physics_object::calc_momentum(physics_object p)
     momentum.y=momentum.y+p.momentum.y-(p.mass*p.velocity[1].y);
 }
 
-void physics_object::apply_inertia()
+void physics_object::calc_energy()
 {
-    if(moving_horizontal() && isgreaterequal(fabs(momentum.x),0.01f))
-    {
-        position.x+=momentum.x*speed;
-        moving_left=true;
-        moving_right=true;
-    }
-    if(moving_vertical() && isgreaterequal(fabs(momentum.y),0.01f))
-    {
-        position.y+=momentum.y*speed;
-        moving_forward=true;
-        moving_backward=true;
-    }
-    if(turning() && isgreaterequal(fabs(angular_momentum),0.01f))
-    {
-        rotation+=angular_momentum*speed;
-        turning_left=true;
-        turning_right=true;
-    }
-}
-
-void physics_object::apply_friction()
-{
-    if(moving() && isgreater(speed,0.01f))
-        speed-=friction;
+    if(moving())
+        energy[1]=(mass/2)*(velocity[0].magnitude()*velocity[0].magnitude());//calculate energy
+    else
+        energy[0]=speed;//the object has the potential energy of one step
 }
 
 void physics_object::calc_physics()
@@ -190,6 +173,23 @@ void physics_object::calc_physics()
     calc_acceleration();
     calc_force();
     calc_momentum();
+    calc_energy();
+}
+
+void physics_object::apply_inertia()
+{
+    if(moving_horizontal() && isgreaterequal(fabs(momentum.x),0.01f))
+        position.x+=momentum.x*energy[0];
+    if(moving_vertical() && isgreaterequal(fabs(momentum.y),0.01f))
+        position.y+=momentum.y*energy[0];
+    if(turning() && isgreaterequal(fabs(angular_momentum),0.01f))
+        rotation+=angular_momentum*energy[0];
+}
+
+void physics_object::apply_friction()
+{
+    if(moving() && isgreater(energy[0],0.01f))
+        energy[0]-=friction;
 }
 
 void physics_object::update()
@@ -241,6 +241,7 @@ void physics_object::load()
     while(first_char!='\n')//empty space detected
     {
         //load the cued actions
+        object_file.get();//eat the null character
         first_char=object_file.peek();//check the first character of the line
         std::array<int,3> action;
         object_file>>action[0]>>action[1]>>action[2];//add action number, times to do, and  times performed
@@ -269,6 +270,9 @@ void physics_object::load()
     object_file>>momentum.x>>momentum.y;
     object_file>>angular_momentum;
     object_file>>force.x>>force.y;
+    object_file>>friction;
+    object_file>>energy[0];
+    object_file>>energy[1];
     object_file.close();
     std::clog<<"object#"<<number<<"(physics object)"<<" loaded.\n";
 }
@@ -302,8 +306,11 @@ void physics_object::save()
     object_file<<moving_right<<std::endl;
     object_file<<turning_right<<std::endl;
     object_file<<turning_left<<std::endl;
-    for(int i=0;i<action_cue.size();i++)
+    while(!action_cue.empty())
+    {
         object_file<<action_cue.front().at(0)<<' '<<action_cue.front().at(1)<<' '<<action_cue.front().at(2)<<std::endl;
+        action_cue.pop();
+    }
     object_file<<std::endl;//add an empty line to signal end of action cue
     //save tangible object properties
     object_file<<touched_side[0]<<std::endl;
@@ -328,21 +335,25 @@ void physics_object::save()
     object_file<<momentum.x<<' '<<momentum.y<<std::endl;
     object_file<<angular_momentum<<std::endl;
     object_file<<force.x<<' '<<force.y<<std::endl;
+    object_file<<friction<<std::endl;
+    object_file<<energy[0]<<std::endl;
+    object_file<<energy[1]<<std::endl;
     object_file.close();
     std::clog<<"object#"<<number<<"(physics object)"<<" saved.\n";
 }
 
 physics_object::physics_object()
 {
-    mass=0.015f;//If this is too high, objects might just disappear off the screen
     fill_color=GRAY;
-    position.set((float)origin.x, (float)origin.y);
-    set_dimensions(32.0f,32.0f);
+    position.set((float)default_position.x, (float)default_position.y);
+    set_dimensions(default_width,default_height);
     rest_position.set(position.x,position.y);
     rest_rotation=rotation;
+    mass=0.015f;//warning: if you set this too high with inertia enabled, the object may fly off the screen
     velocity[0].x=0.00f;
     velocity[0].y=0.00f;
     angular_velocity[0]=0.00f;
     friction=0.01f;
+    energy[0]=speed;
     std::clog<<"object#"<<number<<"(physics object)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

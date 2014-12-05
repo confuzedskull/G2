@@ -64,6 +64,8 @@ void ui::update_text()
             object_info->add_line("acceleration: "+to_string(po->acceleration.x)+", "+to_string(po->acceleration.y));
             object_info->add_line("momentum: "+to_string(po->momentum.x)+", "+to_string(po->momentum.y));
             object_info->add_line("force: "+to_string(po->force.x)+", "+to_string(po->force.y));
+            object_info->add_line("potential energy: "+to_string(po->energy[0]));
+            object_info->add_line("kinetic energy: "+to_string(po->energy[1]));
             object_info->add_line("object touching side L:"+to_string(po->touched_side[0])+"R:"+to_string(po->touched_side[1])
                                                         +"T:"+to_string(po->touched_side[2])+"B:"+to_string(po->touched_side[3]));
         }

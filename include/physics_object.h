@@ -27,7 +27,9 @@ protected:
     point2f rest_position;
     float rest_rotation;//the rotation of the object at rest
 public:
-    static point2i origin;
+    static point2i default_position;
+    static int default_width;
+    static int default_height;
     point2f get_resting();
     std::string get_type() override;
     float mass;
@@ -43,6 +45,7 @@ public:
     float angular_momentum;
     physics_vector force;
     float friction;
+    float energy[2];//index 0: potential energy, index 1: kinetic energy
     void rest();//set the resting point when the object is not moving
     void calc_delta_time();
     void calc_velocity();
@@ -50,9 +53,10 @@ public:
     void calc_force();
     void calc_momentum();
     void calc_momentum(physics_object p);
-    void apply_friction();
-    void apply_inertia();
+    void calc_energy();
     void calc_physics();
+    void apply_inertia();
+    void apply_friction();
     void update() override;
     void sync() override;
     void load();

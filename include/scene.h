@@ -35,7 +35,7 @@ public:
     std::string file_name;
     int number;
     color background_color;
-    object* last_object;
+    basic_object* last_object;
     menu* current_menu;
     //maps are used because we need to access the objects by referencing a common identifier (object.number)
     //pointers are used because everything is created in game::initialize() and we just need to reference them

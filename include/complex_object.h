@@ -16,19 +16,19 @@
 
 #ifndef COMPLEX_H
 #define COMPLEX_H
-#include "object.h"
+#include "basic_object.h"
 #include "point.h"
+#include "physics_vector.h"
 
 //A complex object consists of a number of points which are calculated based on the object's position and rotation
-class complex_object: virtual public object
+class complex_object: virtual public basic_object
 {
 protected:
-     //headings for each direction
-    point2f leftward;
-    point2f rightward;
-    point2f forward;
-    point2f backward;
-    float step_size;
+    //headings for each direction
+    physics_vector leftward;
+    physics_vector rightward;
+    physics_vector forward;
+    physics_vector backward;
 public:
     //the mid-point of each side
     point2f front();

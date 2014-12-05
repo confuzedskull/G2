@@ -34,7 +34,9 @@
 #include <GL/glut.h>
 #endif
 
-point2i draggable_object::origin = point2i(window::width*0.9,window::height*0.7);
+point2i draggable_object::default_position = point2i(window::width*0.9,window::height*0.7);
+int draggable_object::default_width = 64;
+int draggable_object::default_height = 64;
 
 std::string draggable_object::get_type()
 {
@@ -103,6 +105,7 @@ void draggable_object::load()
     while(first_char!='\n')//no empty space detected
     {
         //load the cued actions
+        object_file.get();//eat the null character
         first_char=object_file.peek();//check the first character of the line
         std::array<int,3> action;
         object_file>>action[0]>>action[1]>>action[2];//add action number, times to do, and  times performed
@@ -146,8 +149,11 @@ void draggable_object::save()
     object_file<<moving_right<<std::endl;
     object_file<<turning_right<<std::endl;
     object_file<<turning_left<<std::endl;
-    for(int i=0;i<action_cue.size();i++)
+    while(!action_cue.empty())
+    {
         object_file<<action_cue.front().at(0)<<' '<<action_cue.front().at(1)<<' '<<action_cue.front().at(2)<<std::endl;
+        action_cue.pop();
+    }
     object_file<<std::endl;//add an empty line to signal end of action cue
     //save tangible object properties
     object_file<<touched_side[0]<<std::endl;
@@ -162,6 +168,7 @@ void draggable_object::save()
 draggable_object::draggable_object()
 {
     fill_color=BLACK;
-    position.set((float)origin.x,(float)origin.y);
+    position.set((float)default_position.x,(float)default_position.y);
+    set_dimensions(default_width,default_height);
     std::clog<<"object#"<<number<<"(draggable object)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

@@ -16,7 +16,7 @@
 #include <math.h>
 #include <iostream>
 
-float movable_object::default_speed=1.00f;
+float movable_object::default_speed=1.0f;
 
 point2f* movable_object::get_rally()
 {

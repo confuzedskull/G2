@@ -23,11 +23,9 @@ class physics_vector
 public:
     float x;//x direction
     float y;//y direction
-    float m;//magnitude
+    float magnitude();
     void set(float x_direction, float y_direction);
-    void set(float x_direction, float y_direction, float magnitude);
     physics_vector();
     physics_vector(float x_direction, float y_direction);
-    physics_vector(float x_direction, float y_direction, float magnitude);
 };
 #endif // PHYSICSVECTOR_H

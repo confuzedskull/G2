@@ -46,12 +46,18 @@ void game::initialize()
     add_setting("game","show_draggable_objects",1);
     add_setting("game","show_physics_objects",1);
     add_setting("game","show_rts_objects",1);
-    add_setting("draggable_object","origin_x",&draggable_object::origin.x);
-    add_setting("draggable_object","origin_y",&draggable_object::origin.y);
-    add_setting("physics_object","origin_x",&physics_object::origin.x);
-    add_setting("physics_object","origin_y",&physics_object::origin.y);
-    add_setting("rts_object","origin_x",&rts_object::origin.x);
-    add_setting("rts_object","origin_y",&rts_object::origin.y);
+    add_setting("draggable_object","default_x",&draggable_object::default_position.x);
+    add_setting("draggable_object","default_y",&draggable_object::default_position.y);
+    add_setting("draggable_object","default_width",&draggable_object::default_width);
+    add_setting("draggable_object","default_height",&draggable_object::default_height);
+    add_setting("physics_object","default_x",&physics_object::default_position.x);
+    add_setting("physics_object","default_y",&physics_object::default_position.y);
+    add_setting("physics_object","default_width",&physics_object::default_width);
+    add_setting("physics_object","default_height",&physics_object::default_height);
+    add_setting("rts_object","default_x",&rts_object::default_position.x);
+    add_setting("rts_object","default_y",&rts_object::default_position.y);
+    add_setting("rts_object","default_width",&rts_object::default_width);
+    add_setting("rts_object","default_height",&rts_object::default_height);
 
 //Initialize Conditions
     add_condition("game","show_info_overlay",1,ui::show_text);

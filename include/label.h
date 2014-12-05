@@ -16,13 +16,13 @@
 
 #ifndef LABEL_H
 #define LABEL_H
-#include "object.h"
+#include "basic_object.h"
 #include <vector>
 #include <string>
 #include <sstream>
 
 //A label stores a string which can be formatted and displayed on screen
-class label: public object
+class label: public basic_object
 {
 protected:
     std::vector<std::string> text;

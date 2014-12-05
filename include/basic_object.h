@@ -14,14 +14,14 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#ifndef OBJECT_H
-#define OBJECT_H
+#ifndef BASICOBJECT_H
+#define BASICOBJECT_H
 #include "color.h"
 #include "point.h"
 #include <string>
 
 //This is the base class for all other object types. It has basic properties such as name, color, and dimensions.
-class object
+class basic_object
 {
 protected:
     point2f position;
@@ -34,7 +34,7 @@ protected:
     int xmax,xmin,ymax,ymin;//the boundaries of the object
 public:
     static int total_objects;//total number of objects. This is used to assign the object number
-    static point2i origin;//point where a new object is created
+    static point2i default_position;//point where a new object is created
     virtual std::string get_type();//returns the object type
     virtual void render_shape();//draw the object's shape
     virtual void render();//draws the object
@@ -65,9 +65,9 @@ public:
     void render_border();//draw the border
     void set_position(int x, int y);
     void set_dimensions(int w, int h);
-    object();
-    object(int x, int y, int w, int h);
-    object(int x, int y, int w, int h, color c);
-    virtual ~object();
+    basic_object();
+    basic_object(int x, int y, int w, int h);
+    basic_object(int x, int y, int w, int h, color c);
+    virtual ~basic_object();
 };
-#endif // OBJECT_H
+#endif // BASICOBJECT_H

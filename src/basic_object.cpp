@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#include "object.h"
+#include "basic_object.h"
 #include "window.h"
 #include "distance.h"
 #ifdef __APPLE__
@@ -34,68 +34,68 @@
 #include <math.h>
 
 //initialize static variable
-int object::total_objects=0;
-point2i object::origin = point2i(0,0);
+int basic_object::total_objects=0;
+point2i basic_object::default_position = point2i(0,0);
 
-int object::get_number()
+int basic_object::get_number()
 {
     return number;
 }
 
-std::string object::get_type()
+std::string basic_object::get_type()
 {
     return "basic object";
 }
 
-point2f object::get_position()
+point2f basic_object::get_position()
 {
     return position;
 }
 
-point2f* object::get_positionptr()
+point2f* basic_object::get_positionptr()
 {
     return &position;
 }
 
-float object::get_rotation()
+float basic_object::get_rotation()
 {
     return rotation;
 }
 
-int object::get_width()
+int basic_object::get_width()
 {
     return width;
 }
 
-int object::get_height()
+int basic_object::get_height()
 {
     return height;
 }
 
-float object::get_radius()
+float basic_object::get_radius()
 {
     return distance(xmin,ymin,xmax,ymax)/2;;
 }
 
-void object::set_position(int x, int y)
+void basic_object::set_position(int x, int y)
 {
     position.set((float)x,(float)y);
     calc_boundaries();
 }
 
-void object::set_rotation(float angle)
+void basic_object::set_rotation(float angle)
 {
     rotation=angle;
 }
 
-void object::set_dimensions(int w, int h)
+void basic_object::set_dimensions(int w, int h)
 {
     width=w;
     height=h;
     calc_boundaries();
 }
 
-void object::calc_boundaries()//calculates the limits of the object
+void basic_object::calc_boundaries()//calculates the limits of the object
 {
     //these two variables store reused data in order to save calculations
     int half_width=width/2;
@@ -106,12 +106,12 @@ void object::calc_boundaries()//calculates the limits of the object
     ymax=position.y+half_height;
 }
 
-void object::rotate(float angle)
+void basic_object::rotate(float angle)
 {
     rotation+=angle;
 }
 
-void object::mark_selected()
+void basic_object::mark_selected()
 {
     if(selected)
     {
@@ -129,17 +129,17 @@ void object::mark_selected()
     }
 }
 
-void object::hide()
+void basic_object::hide()
 {
     visible=false;
 }
 
-void object::show()
+void basic_object::show()
 {
     visible=true;
 }
 
-void object::render_shape()
+void basic_object::render_shape()
 {
     if(filled)
     {
@@ -158,7 +158,7 @@ void object::render_shape()
     }
 }
 
-void object::render_border()
+void basic_object::render_border()
 {
     if(bordered)
     {
@@ -181,7 +181,7 @@ void object::render_border()
     }
 }
 
-void object::render()//draws the object
+void basic_object::render()//draws the object
 {
     if(visible)
     {
@@ -191,14 +191,14 @@ void object::render()//draws the object
     }
 }
 
-void object::update(){}
+void basic_object::update(){}
 
-void object::sync(){}
+void basic_object::sync(){}
 
-object::object()
+basic_object::basic_object()
 {
     number=++total_objects;
-    position.set((float)origin.x,(float)origin.y);
+    position.set((float)default_position.x,(float)default_position.y);
     rotation=0.0f;
     set_dimensions(64,64);
     marker_width=5;
@@ -213,7 +213,7 @@ object::object()
     selected=false;
 }
 
-object::object(int x, int y, int w, int h)
+basic_object::basic_object(int x, int y, int w, int h)
 {
     number=++total_objects;
     position.set(x,y);
@@ -231,7 +231,7 @@ object::object(int x, int y, int w, int h)
     selected=false;
 }
 
-object::object(int x, int y, int w, int h, color c)
+basic_object::basic_object(int x, int y, int w, int h, color c)
 {
     number=++total_objects;
     position.set(x,y);
@@ -248,4 +248,4 @@ object::object(int x, int y, int w, int h, color c)
     selected=false;
 }
 
-object::~object(){}
+basic_object::~basic_object(){}

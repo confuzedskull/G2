@@ -105,7 +105,7 @@ void checkbox::update()
 checkbox::checkbox()
 {
     bordered=true;
-    set_dimensions(16.0,16.0);
+    set_dimensions(16,16);
     fill_color = color(0.75f,0.75f,0.75f);
     margin=4;
     checked=1;

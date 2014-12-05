@@ -16,10 +16,10 @@
 
 #ifndef CLICKABLE_H
 #define CLICKABLE_H
-#include "object.h"
+#include "basic_object.h"
 
 //A clickable object interfaces with the cursor
-class clickable_object: virtual public object
+class clickable_object: virtual public basic_object
 {
 public:
     virtual void mouse_function();//performs a variety of actions dependent on cursor interaction

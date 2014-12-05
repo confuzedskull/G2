@@ -50,10 +50,7 @@ A. Global
 B. Draggable Objects
 1. While dragging, an object may get stuck on top of another object when they collide.
 C. Physics Objects
-1. An object's resting point gets set even when it's moving.
-2. Some of the object's physics values do not zero out when object is at rest.
-D. RTS Objects
-1. An object's resting point doesn't get set at all.
+1. Some of the object's physics values do not zero out when object is at rest.
 
 Disclaimer:
 This program uses the OpenGL Utility Toolkit(A.K.A."GLUT") created by Mark Kilgard.

@@ -15,6 +15,12 @@
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "physics_vector.h"
+#include <math.h>
+
+float physics_vector::magnitude()
+{
+    return sqrt((x*x)+(y*y));
+}
 
 void physics_vector::set(float x_direction, float y_direction)
 {
@@ -22,30 +28,14 @@ void physics_vector::set(float x_direction, float y_direction)
     y=y_direction;
 }
 
-void physics_vector::set(float x_direction, float y_direction, float magnitude)
-{
-    x=x_direction;
-    y=y_direction;
-    m=magnitude;
-}
-
 physics_vector::physics_vector()
 {
     x=0.0f;
     y=0.0f;
-    m=0.0f;
 }
 
 physics_vector::physics_vector(float x_direction, float y_direction)
 {
     x=x_direction;
     y=y_direction;
-    m=1.0f;
-}
-
-physics_vector::physics_vector(float x_direction, float y_direction, float magnitude)
-{
-    x=x_direction;
-    y=y_direction;
-    m=magnitude;
 }
