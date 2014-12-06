@@ -15,6 +15,7 @@
 #include "window.h"
 #include "controls.h"
 #include "cursor.h"
+#include "audio.h"
 #include "ui.h"
 #include <stdlib.h>
 #include <iostream>
@@ -367,6 +368,8 @@ void game::collision_detection()
             {
                 a.second->identify_touched(*b.second);
                 a.second->repel(*b.second);
+                if(a.second->collided)
+                    audio::play();
             }
         }
     }
@@ -379,6 +382,8 @@ void game::collision_detection()
                 a.second->identify_touched(*b.second);
                 a.second->repel(*b.second);
                 a.second->calc_momentum(*b.second);
+                if(a.second->collided)
+                    audio::play();
             }
         }
     }
@@ -390,6 +395,8 @@ void game::collision_detection()
             {
                 a.second->identify_touched(*b.second);
                 a.second->repel(*b.second);
+                if(a.second->collided)
+                    audio::play();
             }
         }
     }
@@ -616,6 +623,7 @@ void game::quit()
 {
     save_settings();
     std::clog<<"quitting...\n";
+    audio::close();
     exit(0);
 }
 

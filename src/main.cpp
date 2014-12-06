@@ -18,6 +18,7 @@
 #include "window.h"
 #include "game.h"
 #include "controls.h"
+#include "audio.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -34,6 +35,7 @@
 
 int main(int argc, char **argv)
 {
+    audio::load();
     std::clog<<"initializing...\n";
     game::initialize();
     game::load_settings();
