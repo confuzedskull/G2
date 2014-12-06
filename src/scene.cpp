@@ -395,7 +395,6 @@ void scene::save()
     //save draggable objects
     for(auto d:draggable_objects)
     {
-        scene_file.open(file_name.c_str(),std::fstream::app);
         scene_file<<"object#"<<d.first<<".dro\n";
         scene_file.close();
         d.second->save();
@@ -403,7 +402,7 @@ void scene::save()
     //save physics objects
     for(auto p:physics_objects)
     {
-        scene_file.open(file_name.c_str(),std::fstream::app);
+        scene_file.open(file_name.c_str(),std::fstream::app);//the file is already open so we need to append
         scene_file<<"object#"<<p.first<<".pso\n";
         scene_file.close();
         p.second->save();
@@ -411,7 +410,7 @@ void scene::save()
     //save rts objects
     for(auto r:rts_objects)
     {
-        scene_file.open(file_name.c_str(),std::fstream::app);
+        scene_file.open(file_name.c_str(),std::fstream::app);//the file is already open so we need to append
         scene_file<<"object#"<<r.first<<".rso\n";
         scene_file.close();
         r.second->save();
@@ -423,7 +422,7 @@ void scene::save()
 void scene::sync()
 {
     //move draggable objects
-    for(auto d:draggable_objects)
+    for(auto d:draggable_objects)//C++11 "for" loop
         d.second->sync();
     //move rts objects
     for(auto r:rts_objects)//C++11 "for" loop

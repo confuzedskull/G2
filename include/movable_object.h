@@ -84,4 +84,5 @@ const int MOVE_FORWARD = 3;
 const int MOVE_BACK = 4;
 const int TURN_LEFT = 5;
 const int TURN_RIGHT = 6;
+const int WAIT = 7;
 #endif // MOVABLE_H

@@ -74,39 +74,67 @@ void game::initialize()
     //initialize the physics objects
     physics_object* po1 = new physics_object();
     po1->set_position(window::center.x-48,window::center.y+48);//set position forward left of window center
-    po1->cue_action("move right",12);
-    po1->cue_action("move back",12);
-    po1->cue_action("move left",12);
-    po1->cue_action("move forward",12);
-    po1->cue_action("turn left",15);
-    po1->cue_action("turn right",15);
+    po1->rest();//make sure the resting point matches the new position
+    po1->cue_action("wait",50);
+    po1->cue_action("move right",10);
+    po1->cue_action("wait",100);
+    po1->cue_action("move back",10);
+    po1->cue_action("wait",100);
+    po1->cue_action("move left",10);
+    po1->cue_action("wait",100);
+    po1->cue_action("move forward",10);
+    po1->cue_action("wait",100);
+    po1->cue_action("turn left",30);
+    po1->cue_action("wait",50);
+    po1->cue_action("turn right",30);
 
     physics_object* po2 = new physics_object();
     po2->set_position(window::center.x+48,window::center.y+48);//set position forward right of window center
-    po2->cue_action("move back",12);
-    po2->cue_action("move left",12);
-    po2->cue_action("move forward",12);
-    po2->cue_action("move right",12);
-    po2->cue_action("turn left",15);
-    po2->cue_action("turn right",15);
+    po2->rest();//make sure the resting point matches the new position
+    po2->cue_action("wait",50);
+    po2->cue_action("move back",10);
+    po2->cue_action("wait",100);
+    po2->cue_action("move left",10);
+    po2->cue_action("wait",100);
+    po2->cue_action("move forward",10);
+    po2->cue_action("wait",100);
+    po2->cue_action("move right",10);
+    po2->cue_action("wait",100);
+    po2->cue_action("turn left",30);
+    po2->cue_action("wait",50);
+    po2->cue_action("turn right",30);
 
     physics_object* po3 = new physics_object();
     po3->set_position(window::center.x+48,window::center.y-48);//set position backward right of window center
-    po3->cue_action("move left",12);
-    po3->cue_action("move forward",12);
-    po3->cue_action("move right",12);
-    po3->cue_action("move back",12);
-    po3->cue_action("turn left",15);
-    po3->cue_action("turn right",15);
+    po3->rest();//make sure the resting point matches the new position
+    po3->cue_action("wait",50);
+    po3->cue_action("move left",10);
+    po3->cue_action("wait",100);
+    po3->cue_action("move forward",10);
+    po3->cue_action("wait",100);
+    po3->cue_action("move right",10);
+    po3->cue_action("wait",100);
+    po3->cue_action("move back",10);
+    po3->cue_action("wait",100);
+    po3->cue_action("turn left",30);
+    po3->cue_action("wait",50);
+    po3->cue_action("turn right",30);
 
     physics_object* po4 = new physics_object();
     po4->set_position(window::center.x-48,window::center.y-48);//set position backward left of window center
-    po4->cue_action("move forward",12);
-    po4->cue_action("move right",12);
-    po4->cue_action("move back",12);
-    po4->cue_action("move left",12);
-    po4->cue_action("turn left",15);
-    po4->cue_action("turn right",15);
+    po4->rest();//make sure the resting point matches the new position
+    po4->cue_action("wait",50);
+    po4->cue_action("move forward",10);
+    po4->cue_action("wait",100);
+    po4->cue_action("move right",10);
+    po4->cue_action("wait",100);
+    po4->cue_action("move back",10);
+    po4->cue_action("wait",100);
+    po4->cue_action("move left",10);
+    po4->cue_action("wait",100);
+    po4->cue_action("turn left",30);
+    po4->cue_action("wait",50);
+    po4->cue_action("turn right",30);
     std::clog<<"initialized physics objects\n";
     //initialize the draggable objects
     draggable_object* do1 = new draggable_object();
@@ -531,6 +559,8 @@ void game::play()
         state=PLAYING;
         cursor::reset();
         cursor::highlighting_enabled=true;
+        time=0.0;//reset the clock
+        time_elapsed=0.0;
         play_scene->enable_all();
         play_scene->menus[0]->hide();//hide the pause menu
         play_scene->menus[1]->hide();//hide the warning menu
@@ -621,6 +651,8 @@ void game::load()
 {
     std::clog<<"loading game...\n";
     state=LOADING;
+    time=0.0;
+    time_elapsed=0.0;
     play_scene->load();
     std::clog<<"game loaded.\n";
     play();

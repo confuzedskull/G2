@@ -78,8 +78,7 @@ void rts_object::load()
 {
     std::ifstream object_file(file_name);//access file by name
     if(object_file.bad())//make sure the file is there
-        return;
-
+        std::cerr<<"bad file name\n";
     object_file.precision(3);
     object_file.setf(std::ios::fixed);
     //load basic object properties
@@ -103,12 +102,14 @@ void rts_object::load()
     object_file>>moving_right;
     object_file>>turning_right;
     object_file>>turning_left;
-    char first_char;
-    while(first_char!='\n')//no empty space detected
+    char first_char=' ';
+    while(first_char>0)//not newline or out of bounds
     {
         //load the cued actions
         object_file.get();//eat the null character
         first_char=object_file.peek();//check the first character of the line
+        if(first_char=='\n')
+            break;
         std::array<int,3> action;
         object_file>>action[0]>>action[1]>>action[2];//add action number, times to do, and  times performed
         action_cue.push(action);//add action to the cue
@@ -128,6 +129,8 @@ void rts_object::save()
     std::stringstream filename;
     filename<<"./data/objects/object#"<<number<<".rso";
     std::ofstream object_file(filename.str());
+    if(object_file.bad())
+        std::cerr<<"bad file name\n";
     object_file.precision(3);
     object_file.setf(std::ios::fixed);
     //save basic object properties

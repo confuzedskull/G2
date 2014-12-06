@@ -255,6 +255,8 @@ void movable_object::cue_action(std::string action_name, int times)
         action[0]=TURN_LEFT;//set the action
     if(action_name=="turn right")
         action[0]=TURN_RIGHT;//set the action
+    if(action_name=="wait")
+        action[0]=WAIT;
     action[1]=times;//set the number of times to do the action
     action[2]=0;//set the number of times action has been done
     action_cue.push(action);
@@ -286,6 +288,8 @@ bool movable_object::perform_actions()
             case TURN_RIGHT:
                 turn_right();
                 break;
+            case WAIT:
+                break;//waiting is doing nothing
             }
             action_cue.front().at(2)++;//increment number of times done (stored at index 2)
         }

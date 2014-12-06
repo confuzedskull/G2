@@ -182,7 +182,7 @@ void physics_object::apply_inertia()
         position.x+=momentum.x*energy[0];
     if(moving_vertical() && isgreaterequal(fabs(momentum.y),0.01f))
         position.y+=momentum.y*energy[0];
-    if(turning() && isgreaterequal(fabs(angular_momentum),0.01f))
+    if(isgreaterequal(fabs(angular_momentum),0.01f))
         rotation+=angular_momentum*energy[0];
 }
 
@@ -212,7 +212,7 @@ void physics_object::load()
     std::clog<<file_name;
     std::ifstream object_file(file_name);//access file by name
     if(object_file.bad())//make sure the file is there
-        return;
+        std::cerr<<"bad file name\n";
     object_file.precision(3);
     object_file.setf(std::ios::fixed);
     //load basic object properties
@@ -229,7 +229,6 @@ void physics_object::load()
     //load movable object properties
     object_file>>speed;
     object_file>>degrees_rotated;
-    object_file>>rest_rotation;
     object_file>>rally_set;
     object_file>>moving_forward;
     object_file>>moving_backward;
@@ -237,12 +236,14 @@ void physics_object::load()
     object_file>>moving_right;
     object_file>>turning_right;
     object_file>>turning_left;
-    char first_char;
-    while(first_char!='\n')//empty space detected
+    char first_char=' ';
+    while(first_char>0)//not newline or out of bounds
     {
         //load the cued actions
         object_file.get();//eat the null character
         first_char=object_file.peek();//check the first character of the line
+        if(first_char=='\n')
+            break;
         std::array<int,3> action;
         object_file>>action[0]>>action[1]>>action[2];//add action number, times to do, and  times performed
         action_cue.push(action);//add action to the cue
@@ -254,6 +255,8 @@ void physics_object::load()
     object_file>>touched_side[3];
     object_file>>collided;
     //load physics objects properties
+    object_file>>rest_position.x>>rest_position.y;
+    object_file>>rest_rotation;
     object_file>>mass;
     object_file>>delta_time[0];
     object_file>>delta_time[1];
@@ -282,6 +285,8 @@ void physics_object::save()
     std::stringstream filename;
     filename<<"./data/objects/object#"<<number<<".pso";
     std::ofstream object_file(filename.str());
+    if(object_file.bad())
+        std::cerr<<"bad file name\n";
     object_file.precision(3);
     object_file.setf(std::ios::fixed);
     //save basic object properties
@@ -298,7 +303,6 @@ void physics_object::save()
     //save movable object properties
     object_file<<speed<<std::endl;
     object_file<<degrees_rotated<<std::endl;
-    object_file<<rest_rotation<<std::endl;
     object_file<<rally_set<<std::endl;
     object_file<<moving_forward<<std::endl;
     object_file<<moving_backward<<std::endl;
@@ -319,6 +323,8 @@ void physics_object::save()
     object_file<<touched_side[3]<<std::endl;
     object_file<<collided<<std::endl;
     //save physics object properties
+    object_file<<rest_position.x<<' '<<rest_position.y<<std::endl;
+    object_file<<rest_rotation<<std::endl;
     object_file<<mass<<std::endl;
     object_file<<delta_time[0]<<std::endl;
     object_file<<delta_time[1]<<std::endl;
@@ -347,8 +353,7 @@ physics_object::physics_object()
     fill_color=GRAY;
     position.set((float)default_position.x, (float)default_position.y);
     set_dimensions(default_width,default_height);
-    rest_position.set(position.x,position.y);
-    rest_rotation=rotation;
+    rest();
     mass=0.015f;//warning: if you set this too high with inertia enabled, the object may fly off the screen
     velocity[0].x=0.00f;
     velocity[0].y=0.00f;
