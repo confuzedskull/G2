@@ -98,14 +98,20 @@ void complex_object::render()
 {
     if(visible)
     {
+        glPushMatrix();//need push and pop so that entire scene isn't rotated
+        glTranslatef(position.x,position.y,0.0);//translate object according to coordinates
+        glRotatef(rotation,0,0,1);//rotates object with object.rotation
+        glTranslatef(-position.x,-position.y,0.0);//translate object according to coordinates
         render_shape();
         render_border();
+        render_texture();
         mark_selected();
+        glPopMatrix();//reset transformation matrix
     }
 }
 
 complex_object::complex_object()
 {
     marker_color=GREEN;
-    rotation=90.1f;
+    rotation=90.0f;
 }

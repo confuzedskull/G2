@@ -58,6 +58,7 @@ int32_t audio::to_int32(char* buffer, int length)
 
 void audio::load()
 {
+    std::clog<<"loading audio..\n";
     char file_info[4];
     int16_t format_type, channels, byte_sample, bit_sample;
     int32_t chunk_size, sample_rate, byte_rate, data_size;
@@ -145,6 +146,7 @@ void audio::load()
     alSourcefv(source, AL_POSITION, source_position);
     alSourcefv(source, AL_VELOCITY, source_velocity);
     alSourcei(source, AL_LOOPING, AL_FALSE);
+    std::clog<<"audio loaded.\n";
 }
 
 void audio::play()

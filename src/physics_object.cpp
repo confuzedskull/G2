@@ -224,6 +224,7 @@ void physics_object::load()
     object_file>>border_color.r>>border_color.g>>border_color.b;
     object_file>>filled;
     object_file>>bordered;
+    object_file>>textured;
     object_file>>visible;
     object_file>>selected;
     //load movable object properties
@@ -298,6 +299,7 @@ void physics_object::save()
     object_file<<border_color.str()<<std::endl;
     object_file<<filled<<std::endl;
     object_file<<bordered<<std::endl;
+    object_file<<textured<<std::endl;
     object_file<<visible<<std::endl;
     object_file<<selected<<std::endl;
     //save movable object properties
@@ -350,9 +352,9 @@ void physics_object::save()
 
 physics_object::physics_object()
 {
-    fill_color=GRAY;
     position.set((float)default_position.x, (float)default_position.y);
     set_dimensions(default_width,default_height);
+    fill_color=GRAY;
     rest();
     mass=0.015f;//warning: if you set this too high with inertia enabled, the object may fly off the screen
     velocity[0].x=0.00f;

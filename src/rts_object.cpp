@@ -90,6 +90,7 @@ void rts_object::load()
     object_file>>border_color.r>>border_color.g>>border_color.b;
     object_file>>filled;
     object_file>>bordered;
+    object_file>>textured;
     object_file>>visible;
     object_file>>selected;
     //load movable object properties
@@ -142,6 +143,7 @@ void rts_object::save()
     object_file<<border_color.str()<<std::endl;
     object_file<<filled<<std::endl;
     object_file<<bordered<<std::endl;
+    object_file<<textured<<std::endl;
     object_file<<visible<<std::endl;
     object_file<<selected<<std::endl;
     //save movable object properties

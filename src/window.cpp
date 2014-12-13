@@ -44,17 +44,10 @@ int window::refresh_rate=60;//refresh window at 1/60th of a second (for 60FPS)
 //resize the window
 void window::change_size(int w, int h)
 {
-    //use the projection matrix
+    glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0.0,(GLdouble)w,0.0,(GLdouble)h, -1.0,1.0);
-    //get back to the modelview
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    //set the viewport to be the entire window
-    glViewport(0, 0, w, h);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glFlush();
+    gluOrtho2D(0.0, (GLdouble)width, 0.0,(GLdouble)height);
     window::width=w;//set the global window width
     window::height=h;//set the global window height
 }
@@ -64,7 +57,7 @@ void window::initialize()
     glViewport(0, 0, width,height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0.0, (GLdouble)width, 0.0,(GLdouble)height, -1.0, 1.0);
+    gluOrtho2D(0.0, (GLdouble)width, 0.0,(GLdouble)height);
     glClearColor(1.0, 1.0, 1.0, 1.0);//white background
     glClear(GL_COLOR_BUFFER_BIT);
     glFlush();

@@ -89,6 +89,7 @@ void draggable_object::load()
     object_file>>border_color.r>>border_color.g>>border_color.b;
     object_file>>filled;
     object_file>>bordered;
+    object_file>>textured;
     object_file>>visible;
     object_file>>selected;
     //load movable object properties
@@ -141,6 +142,7 @@ void draggable_object::save()
     object_file<<border_color.str()<<std::endl;
     object_file<<filled<<std::endl;
     object_file<<bordered<<std::endl;
+    object_file<<textured<<std::endl;
     object_file<<visible<<std::endl;
     object_file<<selected<<std::endl;
     //save movable object properties
@@ -171,8 +173,10 @@ void draggable_object::save()
 
 draggable_object::draggable_object()
 {
-    fill_color=BLACK;
     position.set((float)default_position.x,(float)default_position.y);
+    rotation=0.0f;
     set_dimensions(default_width,default_height);
+    fill_color=BLACK;
+    textured=true;
     std::clog<<"object#"<<number<<"(draggable object)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

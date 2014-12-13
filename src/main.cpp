@@ -19,6 +19,7 @@
 #include "game.h"
 #include "controls.h"
 #include "audio.h"
+#include "graphics.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -35,11 +36,10 @@
 
 int main(int argc, char **argv)
 {
-    audio::load();
-    std::clog<<"initializing...\n";
+    std::clog<<"initializing game...\n";
     game::initialize();
     game::load_settings();
-    // initialize GLUT and create window
+    game::save();
     std::clog<<"initializing GLUT...\n";
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE || GLUT_RGB);
@@ -58,6 +58,9 @@ int main(int argc, char **argv)
     glutMouseFunc(controls::mouse_click);
     glutPassiveMotionFunc(controls::mouse_move);
     glutMotionFunc(controls::mouse_drag);
+    std::clog<<"loading resources...\n";
+    audio::load();
+    graphics::load();
     std::clog<<"rendering...\n";
     glutDisplayFunc(window::render);
     glutMainLoop();

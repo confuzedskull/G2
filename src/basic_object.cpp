@@ -17,6 +17,7 @@
 #include "basic_object.h"
 #include "window.h"
 #include "distance.h"
+#include "graphics.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -33,7 +34,7 @@
 #include <sstream>
 #include <math.h>
 
-//initialize static variable
+//initialize static variables
 int basic_object::total_objects=0;
 point2i basic_object::default_position = point2i(0,0);
 
@@ -143,10 +144,6 @@ void basic_object::render_shape()
 {
     if(filled)
     {
-        glPushMatrix();//need push and pop so that entire scene isn't rotated
-        glTranslatef(position.x,position.y,0.0);//translate object according to coordinates
-        glRotatef(rotation,0,0,1);//rotates object with object.rotation
-        glTranslatef(-position.x,-position.y,0.0);//translate object according to coordinates
         glColor3f(fill_color.r,fill_color.g,fill_color.b);//color the square with object.fill_color
         glBegin(GL_POLYGON);//draws a filled in rectangle
         glVertex2f(xmin, ymin); // The bottom left corner
@@ -154,7 +151,6 @@ void basic_object::render_shape()
         glVertex2f(xmax, ymax); // The top right corner
         glVertex2f(xmax, ymin); // The bottom right corner
         glEnd();//finish drawing
-        glPopMatrix();//reset transformation matrix
     }
 }
 
@@ -162,10 +158,6 @@ void basic_object::render_border()
 {
     if(bordered)
     {
-        glPushMatrix();//need push and pop so that entire scene isn't rotated
-        glTranslatef(position.x,position.y,0.0);//translate object according to coordinates
-        glRotatef(rotation,0,0,1);//rotates object with object.rotation
-        glTranslatef(-position.x,-position.y,0.0);//translate object according to coordinates
         glColor3f(border_color.r,border_color.g,border_color.b);
         glBegin(GL_LINES);//draws lines (in this case, a rectangle)
         glVertex2f(xmin, ymax);//top left corner
@@ -177,7 +169,22 @@ void basic_object::render_border()
         glVertex2f(xmin, ymin);//bottom left corner
         glVertex2f(xmin, ymax);//top left corner
         glEnd();
-        glPopMatrix();//reset transformation matrix
+    }
+}
+
+void basic_object::render_texture()
+{
+    if(textured)
+    {
+        glBindTexture(GL_TEXTURE_2D, graphics::texture);
+        glEnable(GL_TEXTURE_2D);
+        glBegin(GL_QUADS);
+        glTexCoord2i(0, 0); glVertex2f(xmin, ymin);
+        glTexCoord2i(0, 1); glVertex2f(xmin, ymax);
+        glTexCoord2i(1, 1); glVertex2f(xmax, ymax);
+        glTexCoord2i(1, 0); glVertex2f(xmax, ymin);
+        glEnd();
+        glDisable(GL_TEXTURE_2D);
     }
 }
 
@@ -185,9 +192,15 @@ void basic_object::render()//draws the object
 {
     if(visible)
     {
+        glPushMatrix();//need push and pop so that entire scene isn't rotated
+        glTranslatef(position.x,position.y,0.0);//translate object according to coordinates
+        glRotatef(rotation,0,0,1);//rotates object with object.rotation
+        glTranslatef(-position.x,-position.y,0.0);//translate object according to coordinates
         render_shape();
         render_border();
+        render_texture();
         mark_selected();
+        glPopMatrix();//reset transformation matrix
     }
 }
 
@@ -203,14 +216,15 @@ basic_object::basic_object()
     set_dimensions(64,64);
     marker_width=5;
     marker_height=5;
+    marker_color=BLACK;
+    border_color=BLACK;
     fill_color.randomize();
     fill_color.changed=false;
     filled=true;
-    marker_color=BLACK;
-    border_color=BLACK;
     bordered=false;
-    show();
+    textured=false;
     selected=false;
+    show();
 }
 
 basic_object::basic_object(int x, int y, int w, int h)
@@ -222,30 +236,33 @@ basic_object::basic_object(int x, int y, int w, int h)
     marker_width=5;
     marker_height=5;
     marker_color=BLACK;
+    border_color=BLACK;
     fill_color.randomize();
     fill_color.changed=false;
     filled=true;
-    border_color=BLACK;
     bordered=false;
-    show();
+    textured=false;
     selected=false;
+    show();
 }
 
 basic_object::basic_object(int x, int y, int w, int h, color c)
 {
     number=++total_objects;
     position.set(x,y);
+    rotation=0.0f;
     set_dimensions(w,h);
     marker_width=5;
     marker_height=5;
     marker_color=BLACK;
+    border_color=BLACK;
     fill_color.set(c);
     fill_color.changed=false;
     filled=true;
-    border_color=BLACK;
     bordered=false;
-    show();
+    textured=false;
     selected=false;
+    show();
 }
 
 basic_object::~basic_object(){}

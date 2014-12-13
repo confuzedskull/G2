@@ -56,13 +56,15 @@ public:
     float get_radius();
     float get_rotation();
     bool filled;//whether the body of the object is visible
-    bool bordered;//whether or not a border should be shown
+    bool bordered;//whether or not the object has a border
+    bool textured;//whether the object has a texture
     bool visible;//whether the object should be shown or not
     bool selected;//whether the object has been selected or not
     bool enabled;//whether the object should be updated or not
     void show();//make the object visible
     void hide();//make the object invisible
     void render_border();//draw the border
+    void render_texture();
     void set_position(int x, int y);
     void set_dimensions(int w, int h);
     basic_object();

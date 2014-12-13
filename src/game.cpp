@@ -17,6 +17,7 @@
 #include "cursor.h"
 #include "audio.h"
 #include "ui.h"
+#include "graphics.h"
 #include <stdlib.h>
 #include <iostream>
 #include <time.h>
@@ -140,7 +141,7 @@ void game::initialize()
     //initialize the draggable objects
     draggable_object* do1 = new draggable_object();
     do1->set_position(window::center.x,window::center.y);//set position window center
-    do1->fill_color.set("black");
+    
     std::clog<<"initialized draggable objects\n";
     //initialize the rts objects
     rts_object* rtso1 = new rts_object();
@@ -188,6 +189,7 @@ void game::initialize()
     show_rtsos_checkbox->set_position(window::width*0.9,window::height*0.3);
     show_rtsos_checkbox->set_label("show rts objects");
     show_rtsos_checkbox->bind_option(settings["game"]["show_rts_objects"]);
+    
     std::clog<<"initialized checkboxes\n";
 //Initialize Buttons
     //Main Menu Buttons
