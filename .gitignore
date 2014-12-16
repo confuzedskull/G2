@@ -164,6 +164,16 @@ pip-log.txt
 ._.DS_Store
 ._confuzedskull.bmp
 ._settings.ini
+._graphics.h
+._basic_object.cpp
+._complex_object.cpp
+._draggable_object.cpp
+._game.cpp
+._graphics.cpp
+._main.cpp
+._physics_object.cpp
+._rts_object.cpp
+._window.cpp
 
 # CodeBlocks stuff
 2DWorld.cbp
