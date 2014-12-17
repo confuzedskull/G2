@@ -17,6 +17,7 @@
 #include "clickable_object.h"
 #include "cursor.h"
 #include "distance.h"
+#include "audio.h"
 #include <math.h>
 #include <iostream>
 
@@ -73,7 +74,10 @@ void clickable_object::highlight_function()
 void clickable_object::hover_function()
 {
     if(hovered_over() && !fill_color.changed)
+    {
+        audio::play("swipe.wav");
         fill_color.brighten();
+    }
     if(!hovered_over())
         fill_color.undo();
 }

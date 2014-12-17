@@ -60,7 +60,6 @@ void game::initialize()
     add_setting("rts_object","default_y",&rts_object::default_position.y);
     add_setting("rts_object","default_width",&rts_object::default_width);
     add_setting("rts_object","default_height",&rts_object::default_height);
-
 //Initialize Conditions
     add_condition("game","show_info_overlay",1,ui::show_text);
     add_condition("game","show_info_overlay",0,ui::hide_text);
@@ -70,7 +69,12 @@ void game::initialize()
     add_condition("game","show_physics_objects",0,hide_physics_objects);
     add_condition("game","show_rts_objects",1,show_rts_objects);
     add_condition("game","show_rts_objects",0,hide_rts_objects);
-
+//Initialize Sound Effects
+    audio::add_sound("clack.wav");
+    audio::add_sound("pop.wav");
+    audio::add_sound("trash.wav");
+    audio::add_sound("click.wav");
+    audio::add_sound("swipe.wav");
 //Initialize Objects
     std::clog<<"initializing objects...\n";
     //initialize the physics objects
@@ -141,7 +145,7 @@ void game::initialize()
     //initialize the draggable objects
     draggable_object* do1 = new draggable_object();
     do1->set_position(window::center.x,window::center.y);//set position window center
-    
+
     std::clog<<"initialized draggable objects\n";
     //initialize the rts objects
     rts_object* rtso1 = new rts_object();
@@ -189,7 +193,7 @@ void game::initialize()
     show_rtsos_checkbox->set_position(window::width*0.9,window::height*0.3);
     show_rtsos_checkbox->set_label("show rts objects");
     show_rtsos_checkbox->bind_option(settings["game"]["show_rts_objects"]);
-    
+
     std::clog<<"initialized checkboxes\n";
 //Initialize Buttons
     //Main Menu Buttons
@@ -371,7 +375,7 @@ void game::collision_detection()
                 a.second->identify_touched(*b.second);
                 a.second->repel(*b.second);
                 if(a.second->collided)
-                    audio::play();
+                    audio::play("clack.wav");
             }
         }
     }
@@ -385,7 +389,7 @@ void game::collision_detection()
                 a.second->repel(*b.second);
                 a.second->calc_momentum(*b.second);
                 if(a.second->collided)
-                    audio::play();
+                    audio::play("clack.wav");
             }
         }
     }
@@ -398,7 +402,7 @@ void game::collision_detection()
                 a.second->identify_touched(*b.second);
                 a.second->repel(*b.second);
                 if(a.second->collided)
-                    audio::play();
+                    audio::play("clack.wav");
             }
         }
     }
@@ -509,24 +513,28 @@ void game::hide_rts_objects()
 
 void game::add_draggable_object()
 {
+    audio::play("pop.wav");
     draggable_object* new_do = new draggable_object();
     play_scene->add_object(new_do);
 }
 
 void game::add_physics_object()
 {
+    audio::play("pop.wav");
     physics_object* new_po = new physics_object();
     play_scene->add_object(new_po);
 }
 
 void game::add_rts_object()
 {
+    audio::play("pop.wav");
     rts_object* new_rtso = new rts_object();
     play_scene->add_object(new_rtso);
 }
 
 void game::create_object()
 {
+    audio::play("pop.wav");
     if(play_scene->last_object->get_type()=="draggable object")
         play_scene->add_object(new draggable_object());
     if(play_scene->last_object->get_type()=="physics object")
@@ -537,6 +545,7 @@ void game::create_object()
 
 void game::delete_selected()
 {
+    audio::play("trash.wav");
     for(auto so:cursor::selected_objects)
     {
         if(play_scene->draggable_objects.find(so.first)!=play_scene->draggable_objects.end())
@@ -585,6 +594,7 @@ void game::pause()
     {
         state=PAUSED;
         cursor::highlighting_enabled=false;
+        audio::pause_all();
         switch_menu(0);
         play_scene->disable_all();
         std::clog<<"game paused.\n";
@@ -606,7 +616,6 @@ void game::warn_quit()
 {
     switch_menu(1);
 }
-
 
 void game::return_menu()
 {

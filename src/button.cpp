@@ -18,6 +18,7 @@
 #include "ui.h"
 #include "window.h"
 #include "cursor.h"
+#include "audio.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -72,6 +73,7 @@ void button::mouse_function()
         {
             if(!performed_action)
             {
+                audio::play("click.wav");
                 action();
                 action1i(int_param1);
                 performed_action=true;

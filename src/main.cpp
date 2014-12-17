@@ -59,7 +59,8 @@ int main(int argc, char **argv)
     glutPassiveMotionFunc(controls::mouse_move);
     glutMotionFunc(controls::mouse_drag);
     std::clog<<"loading resources...\n";
-    audio::load();
+    audio::initialize();
+    audio::load_all();
     graphics::load();
     std::clog<<"rendering...\n";
     glutDisplayFunc(window::render);

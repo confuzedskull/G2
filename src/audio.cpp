@@ -19,9 +19,9 @@
 std::ifstream audio::sound_file;
 ALCdevice* audio::device;
 ALCcontext* audio::context;
-ALuint audio::source;
 ALuint audio::buffer;
 char* audio::data;
+std::map<std::string, ALuint> audio::sounds;
 
 //this function checks endianness
 bool audio::is_big_endian()
@@ -56,41 +56,8 @@ int32_t audio::to_int32(char* buffer, int length)
     return i;
 }
 
-void audio::load()
+void audio::initialize()
 {
-    std::clog<<"loading audio..\n";
-    char file_info[4];
-    int16_t format_type, channels, byte_sample, bit_sample;
-    int32_t chunk_size, sample_rate, byte_rate, data_size;
-    //open wave file
-    sound_file.open("./audio/collision.wav",std::ios::binary);
-    if(sound_file.bad())
-        std::cerr<<"error opening sound file\n";
-    sound_file.read(file_info,4);
-    //read file information
-    sound_file.read(file_info,4);//"RIFF" label
-    sound_file.read(file_info,4);//"WAVE" label
-    sound_file.read(file_info,4);//"fmt" label
-    sound_file.read(file_info,4);//chunk size
-    chunk_size=to_int32(file_info,4);
-    sound_file.read(file_info,2);//format type
-    format_type=to_int16(file_info,2);
-    sound_file.read(file_info,2);//channels
-    channels=to_int16(file_info,2);
-    sound_file.read(file_info,4);//sample rate
-    sample_rate=to_int32(file_info,4);
-    sound_file.read(file_info,4);//byte rate
-    byte_rate=to_int32(file_info,4);
-    sound_file.read(file_info,2);//byte sample
-    byte_sample=to_int16(file_info,2);
-    sound_file.read(file_info,2);//bit sample
-    bit_sample=to_int16(file_info,2);
-    sound_file.read(file_info,4);//"data" label
-    sound_file.read(file_info,4);//data size
-    data_size=to_int32(file_info,4);
-    data= new char[data_size];//create a buffer to store sound data
-    sound_file.read(data,data_size);//retrieve sound data
-
     //initialize OpenAL
     device = alcOpenDevice(NULL);
     if(!device)
@@ -99,12 +66,71 @@ void audio::load()
     alcMakeContextCurrent(context);
     if(!context)
         std::cerr<<"no sound context\n";
+    //listener settings
+    ALfloat listener_position[] = {0.0, 0.0, 0.0};
+    ALfloat listener_velocity[] = {0.0, 0.0, 0.0};
+    ALfloat listener_orientation[] = {0.0, 0.0, -1.0, 0.0, 1.0, 0.0};
+    alListenerfv(AL_POSITION, listener_position);
+    alListenerfv(AL_VELOCITY, listener_velocity);
+    alListenerfv(AL_ORIENTATION, listener_orientation);
+}
+
+void audio::add_sound(std::string filename)
+{
+    std::string filepath="./audio/"+filename;
+    sound_file.open(filepath.c_str());
+    if(sound_file.good())
+    {
+        sounds[filename]=0;
+        sound_file.close();
+    }
+    else
+        std::cerr<<filename<<" does not exist.\n";
+}
+
+void audio::load(std::string filename)
+{
+    std::string filepath="./audio/"+filename;
+    char file_info[4];
+    int16_t channels, bit_sample;
+    int32_t sample_rate, data_size;
+    //open wave file
+    if(sounds.find(filename)!=sounds.end())
+        sound_file.open(filepath.c_str(),std::ios::binary);
+    else
+    {
+       std::cerr<<filename<<" not found.\n";
+        return;
+    }
+    //read file information
+    sound_file.read(file_info,4);
+    sound_file.read(file_info,4);//"RIFF" label
+    sound_file.read(file_info,4);//"WAVE" label
+    sound_file.read(file_info,4);//"fmt" label
+    sound_file.read(file_info,4);//chunk size
+    sound_file.read(file_info,2);//format type
+    sound_file.read(file_info,2);//channels
+    channels=to_int16(file_info,2);
+    sound_file.read(file_info,4);//sample rate
+    sample_rate=to_int32(file_info,4);
+    sound_file.read(file_info,4);//byte rate
+    sound_file.read(file_info,2);//byte sample
+    sound_file.read(file_info,2);//bit sample
+    bit_sample=to_int16(file_info,2);
+    sound_file.read(file_info,4);//"data" label
+    sound_file.read(file_info,4);//data size
+    data_size=to_int32(file_info,4);
+    data= new char[data_size];//create a buffer to store sound data
+    sound_file.read(data,data_size);//retrieve sound data
+
     ALuint format=0;
     alGenBuffers(1, &buffer);
-    alGenSources(1, &source);
+    alGenSources(1, &sounds[filename]);
     if(alGetError() != AL_NO_ERROR)
+    {
         std::cerr<<"error generating source\n";
-
+        return;
+    }
     //identify wave format
     if(bit_sample == 8)
     {
@@ -121,46 +147,83 @@ void audio::load()
             format = AL_FORMAT_STEREO16;
     }
     if(!format)
+    {
         std::cerr<<"wrong bit sample\n";
-
+        return;
+    }
     alBufferData(buffer, format, data, data_size, sample_rate);
     if(alGetError() != AL_NO_ERROR)
+    {
         std::cerr<<"error loading buffer\n";
-
+        return;
+    }
     //sound settings
     ALfloat source_position[] = {0.0, 0.0, 0.0};
     ALfloat source_velocity[] = {0.0, 0.0, 0.0};
-    ALfloat listener_position[] = {0.0, 0.0, 0.0};
-    ALfloat listener_velocity[] = {0.0, 0.0, 0.0};
-    ALfloat listener_orientation[] = {0.0, 0.0, -1.0, 0.0, 1.0, 0.0};
-
-    //listener
-    alListenerfv(AL_POSITION, listener_position);
-    alListenerfv(AL_VELOCITY, listener_velocity);
-    alListenerfv(AL_ORIENTATION, listener_orientation);
-
-    //source
-    alSourcei(source, AL_BUFFER, buffer);
-    alSourcef(source, AL_PITCH, 1.0f);
-    alSourcef(source, AL_GAIN, 1.0f);
-    alSourcefv(source, AL_POSITION, source_position);
-    alSourcefv(source, AL_VELOCITY, source_velocity);
-    alSourcei(source, AL_LOOPING, AL_FALSE);
-    std::clog<<"audio loaded.\n";
+    alSourcei(sounds[filename], AL_BUFFER, buffer);
+    alSourcef(sounds[filename], AL_PITCH, 1.0f);
+    alSourcef(sounds[filename], AL_GAIN, 1.0f);
+    alSourcefv(sounds[filename], AL_POSITION, source_position);
+    alSourcefv(sounds[filename], AL_VELOCITY, source_velocity);
+    alSourcei(sounds[filename], AL_LOOPING, AL_FALSE);
+    std::clog<<filename<<" loaded.\n";
+    sound_file.close();
 }
 
-void audio::play()
+void audio::load_all()
 {
-    alSourcePlay(source);
-    if(alGetError() != AL_NO_ERROR)
-        std::cerr<<"error playing sound\n";
+    for(auto s:sounds)
+        load(s.first);
+}
+
+void audio::play(std::string filename)
+{
+    if(sounds.find(filename)!=sounds.end())
+        alSourcePlay(sounds[filename]);
+    else
+        std::cerr<<filename<<" not loaded.\n";
+}
+
+void audio::play_all()
+{
+    for(auto s:sounds)
+        alSourcePlay(s.second);
+}
+
+void audio::pause(std::string filename)
+{
+    if(sounds.find(filename)!=sounds.end())
+        alSourcePause(sounds[filename]);
+    else
+        std::cerr<<filename<<" not loaded.\n";
+}
+
+void audio::pause_all()
+{
+    for(auto s:sounds)
+        alSourcePause(s.second);
+}
+
+void audio::stop(std::string filename)
+{
+    if(sounds.find(filename)!=sounds.end())
+        alSourceStop(sounds[filename]);
+    else
+        std::cerr<<filename<<" not loaded.\n";
+}
+
+void audio::stop_all()
+{
+    for(auto s:sounds)
+        alSourceStop(s.second);
 }
 
 void audio::close()
 {
     sound_file.close();
     delete[] data;
-    alDeleteSources(1, &source);
+    for(auto s:sounds)
+        alDeleteSources(1, &s.second);
     alDeleteBuffers(1, &buffer);
     alcMakeContextCurrent(NULL);
     alcDestroyContext(context);
