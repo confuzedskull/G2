@@ -17,7 +17,7 @@
 #include "draggable_object.h"
 #include "complex_object.h"
 #include "cursor.h"
-#include "distance.h"
+#include "utilities.h"
 #include "window.h"
 #include <math.h>
 #include <iostream>
@@ -178,5 +178,6 @@ draggable_object::draggable_object()
     set_dimensions(default_width,default_height);
     fill_color=BLACK;
     textured=true;
+    set_texture("companioncube.bmp");
     std::clog<<"object#"<<number<<"(draggable object)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

@@ -16,7 +16,7 @@
 
 #include "clickable_object.h"
 #include "cursor.h"
-#include "distance.h"
+#include "utilities.h"
 #include "audio.h"
 #include <math.h>
 #include <iostream>

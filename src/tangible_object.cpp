@@ -15,14 +15,14 @@
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "tangible_object.h"
-#include "distance.h"
+#include "utilities.h"
 #include "game.h"
 #include <iostream>
 #include <math.h>
 
 bool tangible_object::is_close(complex_object B)
 {
-    if(islessequal(distance(position,B.get_position()),(get_radius()+B.get_radius())))
+    if(islessequal(utilities::distance(position,B.get_position()),(get_radius()+B.get_radius())))
         return true;
     else
         return false;
@@ -30,14 +30,14 @@ bool tangible_object::is_close(complex_object B)
 
 bool tangible_object::near_front(complex_object B)
 {
-    if(isless(distance(front(),B.get_position()),B.get_height()/2))
+    if(isless(utilities::distance(front(),B.get_position()),B.get_height()/2))
         return true;
     else
         return false;
 }
 bool tangible_object::near_back(complex_object B)
 {
-    if(isless(distance(back(),B.get_position()),B.get_height()/2))
+    if(isless(utilities::distance(back(),B.get_position()),B.get_height()/2))
         return true;
     else
         return false;
@@ -45,7 +45,7 @@ bool tangible_object::near_back(complex_object B)
 
 bool tangible_object::near_left(complex_object B)
 {
-    if(isless(distance(left(),B.get_position()),B.get_width()/2))
+    if(isless(utilities::distance(left(),B.get_position()),B.get_width()/2))
         return true;
     else
         return false;
@@ -53,7 +53,7 @@ bool tangible_object::near_left(complex_object B)
 
 bool tangible_object::near_right(complex_object B)
 {
-    if(isless(distance(right(),B.get_position()),B.get_width()/2))
+    if(isless(utilities::distance(right(),B.get_position()),B.get_width()/2))
         return true;
     else
         return false;

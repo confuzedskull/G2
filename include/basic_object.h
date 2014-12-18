@@ -32,6 +32,7 @@ protected:
     int marker_width;
     int marker_height;
     int xmax,xmin,ymax,ymin;//the boundaries of the object
+    std::string texture;
 public:
     static int total_objects;//total number of objects. This is used to assign the object number
     static point2i default_position;//point where a new object is created
@@ -67,6 +68,7 @@ public:
     void render_texture();
     void set_position(int x, int y);
     void set_dimensions(int w, int h);
+    void set_texture(std::string filename);
     basic_object();
     basic_object(int x, int y, int w, int h);
     basic_object(int x, int y, int w, int h, color c);

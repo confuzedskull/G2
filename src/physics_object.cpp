@@ -355,6 +355,8 @@ physics_object::physics_object()
     position.set((float)default_position.x, (float)default_position.y);
     set_dimensions(default_width,default_height);
     fill_color=GRAY;
+    textured=true;
+    set_texture("angrybird.bmp");
     rest();
     mass=0.015f;//warning: if you set this too high with inertia enabled, the object may fly off the screen
     velocity[0].x=0.00f;

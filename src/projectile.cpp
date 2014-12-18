@@ -15,7 +15,7 @@
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "projectile.h"
-#include "distance.h"
+#include "utilities.h"
 #include <math.h>
 #include <iostream>
 

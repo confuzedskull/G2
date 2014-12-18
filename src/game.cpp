@@ -75,6 +75,10 @@ void game::initialize()
     audio::add_sound("trash.wav");
     audio::add_sound("click.wav");
     audio::add_sound("swipe.wav");
+//Initialize Textures
+    graphics::add_image("angrybird.bmp");
+    graphics::add_image("companioncube.bmp");
+    graphics::add_image("SC2siegetank.bmp");
 //Initialize Objects
     std::clog<<"initializing objects...\n";
     //initialize the physics objects

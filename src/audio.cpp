@@ -12,49 +12,14 @@
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "audio.h"
-#include <cstdlib>
-#include <cstdio>
+#include "utilities.h"
 #include <iostream>
 
-std::ifstream audio::sound_file;
 ALCdevice* audio::device;
 ALCcontext* audio::context;
 ALuint audio::buffer;
-char* audio::data;
+
 std::map<std::string, ALuint> audio::sounds;
-
-//this function checks endianness
-bool audio::is_big_endian()
-{
-    int i=1;
-    return !((char*)&i)[0];
-}
-
-//this function retrieves the appropriate value according to endianness
-int16_t audio::to_int16(char* buffer, int length)
-{
-    int16_t i=0;
-    if(!is_big_endian())
-        for(int j=0;j<length;j++)
-            ((char*)&i)[j]=buffer[j];
-    else
-        for(int j=0;j<length;j++)
-            ((char*)&i)[3-j]=buffer[j];
-    return i;
-}
-
-//this function retrieves the appropriate value according to endianness
-int32_t audio::to_int32(char* buffer, int length)
-{
-    int32_t i=0;
-    if(!is_big_endian())
-        for(int j=0;j<length;j++)
-            ((char*)&i)[j]=buffer[j];
-    else
-        for(int j=0;j<length;j++)
-            ((char*)&i)[sizeof(int)-1-j]=buffer[j];
-    return i;
-}
 
 void audio::initialize()
 {
@@ -78,7 +43,7 @@ void audio::initialize()
 void audio::add_sound(std::string filename)
 {
     std::string filepath="./audio/"+filename;
-    sound_file.open(filepath.c_str());
+    std::ifstream sound_file(filepath.c_str());
     if(sound_file.good())
     {
         sounds[filename]=0;
@@ -90,12 +55,13 @@ void audio::add_sound(std::string filename)
 
 void audio::load(std::string filename)
 {
-    std::string filepath="./audio/"+filename;
+    char* data;
     char file_info[4];
     int16_t channels, bit_sample;
     int32_t sample_rate, data_size;
-    //open wave file
-    if(sounds.find(filename)!=sounds.end())
+    std::string filepath="./audio/"+filename;
+    std::ifstream sound_file;
+    if(sounds.find(filename)!=sounds.end())//check if sound has been added to collection
         sound_file.open(filepath.c_str(),std::ios::binary);
     else
     {
@@ -110,18 +76,19 @@ void audio::load(std::string filename)
     sound_file.read(file_info,4);//chunk size
     sound_file.read(file_info,2);//format type
     sound_file.read(file_info,2);//channels
-    channels=to_int16(file_info,2);
+    channels=utilities::to_int16(file_info,2);
     sound_file.read(file_info,4);//sample rate
-    sample_rate=to_int32(file_info,4);
+    sample_rate=utilities::to_int32(file_info,4);
     sound_file.read(file_info,4);//byte rate
     sound_file.read(file_info,2);//byte sample
     sound_file.read(file_info,2);//bit sample
-    bit_sample=to_int16(file_info,2);
+    bit_sample=utilities::to_int16(file_info,2);
     sound_file.read(file_info,4);//"data" label
     sound_file.read(file_info,4);//data size
-    data_size=to_int32(file_info,4);
+    data_size=utilities::to_int32(file_info,4);
     data= new char[data_size];//create a buffer to store sound data
     sound_file.read(data,data_size);//retrieve sound data
+    sound_file.close();
 
     ALuint format=0;
     alGenBuffers(1, &buffer);
@@ -166,12 +133,13 @@ void audio::load(std::string filename)
     alSourcefv(sounds[filename], AL_POSITION, source_position);
     alSourcefv(sounds[filename], AL_VELOCITY, source_velocity);
     alSourcei(sounds[filename], AL_LOOPING, AL_FALSE);
+    delete[] data;
     std::clog<<filename<<" loaded.\n";
-    sound_file.close();
 }
 
 void audio::load_all()
 {
+    std::clog<<"loading sounds...\n";
     for(auto s:sounds)
         load(s.first);
 }
@@ -220,8 +188,6 @@ void audio::stop_all()
 
 void audio::close()
 {
-    sound_file.close();
-    delete[] data;
     for(auto s:sounds)
         alDeleteSources(1, &s.second);
     alDeleteBuffers(1, &buffer);

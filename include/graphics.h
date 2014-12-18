@@ -28,11 +28,15 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #endif
+#include <string>
+#include <map>
 
 namespace graphics
 {
-    extern GLuint texture;
-    void load();
+    extern std::map<std::string, GLuint> images;
+    void add_image(std::string filename);
+    void load(std::string filename);
+    void load_all();
 };
 
 #endif // GRAPHICS_H

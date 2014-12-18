@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     std::clog<<"loading resources...\n";
     audio::initialize();
     audio::load_all();
-    graphics::load();
+    graphics::load_all();
     std::clog<<"rendering...\n";
     glutDisplayFunc(window::render);
     glutMainLoop();

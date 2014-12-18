@@ -12,7 +12,7 @@
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "movable_object.h"
-#include "distance.h"
+#include "utilities.h"
 #include <math.h>
 #include <iostream>
 
@@ -166,7 +166,7 @@ void movable_object::move_back(float units_back)
 
 void movable_object::turn_to_point(int destination_x, int destination_y)//rotates object to face the given coordinates
 {
-    if(isgreater(distance((float)destination_x,(float)destination_y,position.x,position.y),get_radius()))//prevent infinite spin
+    if(isgreater(utilities::distance((float)destination_x,(float)destination_y,position.x,position.y),get_radius()))//prevent infinite spin
     {
         if(isgreater((float)destination_x,position.x) && isgreater((float)destination_y,position.y))//destination lies in quadrant 1
             rotation = atan(((float)destination_y-position.y)/((float)destination_x-position.x))*180.0f/3.14159f;
@@ -204,7 +204,7 @@ bool movable_object::move_to_point(int destination_x, int destination_y, float r
     if(rally_set)
     {
         movable_object::turn_to_point(destination_x, destination_y);
-        if(isless((float)distance(position.x,position.y,(float)destination_x,(float)destination_y),get_radius()))
+        if(isless((float)utilities::distance(position.x,position.y,(float)destination_x,(float)destination_y),get_radius()))
             rally_set=false;
         move_forward(rate);
         moving_forward=true;

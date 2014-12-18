@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 #include "complex_object.h"
-#include "distance.h"
+#include "utilities.h"
 #include <math.h>
 #include <iostream>
 #ifdef __APPLE__

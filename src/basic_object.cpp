@@ -16,7 +16,7 @@
 
 #include "basic_object.h"
 #include "window.h"
-#include "distance.h"
+#include "utilities.h"
 #include "graphics.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
@@ -75,7 +75,7 @@ int basic_object::get_height()
 
 float basic_object::get_radius()
 {
-    return distance(xmin,ymin,xmax,ymax)/2;;
+    return utilities::distance(xmin,ymin,xmax,ymax)/2;;
 }
 
 void basic_object::set_position(int x, int y)
@@ -94,6 +94,14 @@ void basic_object::set_dimensions(int w, int h)
     width=w;
     height=h;
     calc_boundaries();
+}
+
+void basic_object::set_texture(std::string filename)
+{
+    if(graphics::images.find(filename)!=graphics::images.end())
+        texture=filename;
+    else
+        std::cerr<<filename<<" not found.\n";
 }
 
 void basic_object::calc_boundaries()//calculates the limits of the object
@@ -176,7 +184,7 @@ void basic_object::render_texture()
 {
     if(textured)
     {
-        glBindTexture(GL_TEXTURE_2D, graphics::texture);
+        glBindTexture(GL_TEXTURE_2D, graphics::images[texture]);
         glEnable(GL_TEXTURE_2D);
         glBegin(GL_QUADS);
         glTexCoord2i(0, 0); glVertex2f(xmin, ymin);

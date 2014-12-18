@@ -177,5 +177,7 @@ rts_object::rts_object(): clickable_object(), tangible_object(), complex_object(
     position.set((float)default_position.x, (float)default_position.y);
     set_dimensions(default_width,default_height);
     speed=2.0f;
+    textured=true;
+    set_texture("SC2siegetank.bmp");
     std::clog<<"object#"<<number<<"(rts object)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

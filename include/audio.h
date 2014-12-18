@@ -20,7 +20,6 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 #endif
-#include <cstdint>
 #include <fstream>
 #include <string>
 #include <map>
@@ -29,13 +28,8 @@ namespace audio
 {
 extern ALCdevice *device;
 extern ALCcontext *context;
-extern std::ifstream sound_file;
 extern ALuint buffer;
-extern char* data;
 extern std::map<std::string,ALuint> sounds;
-bool is_big_endian();
-int16_t to_int16(char* buffer, int length);
-int32_t to_int32(char* buffer, int length);
 void initialize();
 void add_sound(std::string filename);
 void load(std::string filename);
