@@ -42,6 +42,8 @@ public:
     virtual void allign_label(std::string allignment);
     static void action_placeholder();
     static void action_placeholder1i(int i);
+    static std::string default_click_sound;
+    static std::string default_hover_sound;
     button();
     button(float x, float y, char* l, void (*a)(void));
 };

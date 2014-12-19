@@ -21,6 +21,9 @@
 //A clickable object interfaces with the cursor
 class clickable_object: virtual public basic_object
 {
+protected:
+    std::string click_sound;
+    std::string hover_sound;
 public:
     virtual void mouse_function();//performs a variety of actions dependent on cursor interaction
     bool highlighted();//checks if the object lies within the cursor selection box
@@ -33,6 +36,8 @@ public:
     void hover_function();//function to perform when object is hovered over
     void left_click_function();//function to perform when object is left clicked
     void right_click_function();//function to perform when object is right clicked
+    void set_click_sound(std::string filename);//sets the sound to be made when clicked
+    void set_hover_sound(std::string filename);//sets the sound to be made when hovered over
     void update() override;
     clickable_object();
 };

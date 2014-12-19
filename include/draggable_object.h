@@ -25,6 +25,10 @@ class draggable_object: public clickable_object, public tangible_object
         static point2i default_position;
         static int default_width;
         static int default_height;
+        static std::string default_texture;
+        static std::string default_click_sound;
+        static std::string default_hover_sound;
+        static std::string default_collision_sound;
         bool grabbed();//checks if this object was grabbed by the cursor
         std::string get_type() override;
         void mouse_function() override;//performs a variety of actions dependent on cursor interaction

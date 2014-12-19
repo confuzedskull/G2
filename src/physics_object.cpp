@@ -25,6 +25,10 @@
 point2i physics_object::default_position = point2i(window::width*0.9,window::height*0.6);
 int physics_object::default_width = 32;
 int physics_object::default_height = 32;
+std::string physics_object::default_texture = "confuzedskull.bmp";
+std::string physics_object::default_click_sound = "click.wav";
+std::string physics_object::default_hover_sound = "swipe.wav";
+std::string physics_object::default_collision_sound = "clack.wav";
 
 std::string physics_object::get_type()
 {
@@ -194,6 +198,7 @@ void physics_object::apply_friction()
 
 void physics_object::update()
 {
+    tangible_object::update();
     movable_object::update();
     calc_physics();
     rest();
@@ -356,7 +361,7 @@ physics_object::physics_object()
     set_dimensions(default_width,default_height);
     fill_color=GRAY;
     textured=true;
-    set_texture("angrybird.bmp");
+    set_texture(default_texture);
     rest();
     mass=0.015f;//warning: if you set this too high with inertia enabled, the object may fly off the screen
     velocity[0].x=0.00f;
@@ -364,5 +369,8 @@ physics_object::physics_object()
     angular_velocity[0]=0.00f;
     friction=0.01f;
     energy[0]=speed;
+    set_click_sound(default_click_sound);
+    set_hover_sound(default_hover_sound);
+    set_collision_sound(default_collision_sound);
     std::clog<<"object#"<<number<<"(physics object)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

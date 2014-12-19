@@ -76,12 +76,14 @@ void game::initialize()
     audio::add_sound("click.wav");
     audio::add_sound("swipe.wav");
 //Initialize Textures
+    graphics::add_image("confuzedskull.bmp");
     graphics::add_image("angrybird.bmp");
     graphics::add_image("companioncube.bmp");
     graphics::add_image("SC2siegetank.bmp");
 //Initialize Objects
     std::clog<<"initializing objects...\n";
     //initialize the physics objects
+    physics_object::default_texture="angrybird.bmp";
     physics_object* po1 = new physics_object();
     po1->set_position(window::center.x-48,window::center.y+48);//set position forward left of window center
     po1->rest();//make sure the resting point matches the new position
@@ -147,11 +149,13 @@ void game::initialize()
     po4->cue_action("turn right",30);
     std::clog<<"initialized physics objects\n";
     //initialize the draggable objects
+    draggable_object::default_texture="companioncube.bmp";
     draggable_object* do1 = new draggable_object();
     do1->set_position(window::center.x,window::center.y);//set position window center
 
     std::clog<<"initialized draggable objects\n";
     //initialize the rts objects
+    rts_object::default_texture="SC2siegetank.bmp";
     rts_object* rtso1 = new rts_object();
     rtso1->set_position(window::center.x+96,window::center.y);//set position right of window center
     rtso1->fill_color.set("yellow");
@@ -201,6 +205,8 @@ void game::initialize()
     std::clog<<"initialized checkboxes\n";
 //Initialize Buttons
     //Main Menu Buttons
+    button::default_click_sound="click.wav";
+    button::default_hover_sound="swipe.wav";
     button* play_button = new button();
     play_button->set_label("Play");
     play_button->set_action(play);
@@ -378,8 +384,6 @@ void game::collision_detection()
             {
                 a.second->identify_touched(*b.second);
                 a.second->repel(*b.second);
-                if(a.second->collided)
-                    audio::play("clack.wav");
             }
         }
     }
@@ -392,8 +396,6 @@ void game::collision_detection()
                 a.second->identify_touched(*b.second);
                 a.second->repel(*b.second);
                 a.second->calc_momentum(*b.second);
-                if(a.second->collided)
-                    audio::play("clack.wav");
             }
         }
     }
@@ -405,8 +407,6 @@ void game::collision_detection()
             {
                 a.second->identify_touched(*b.second);
                 a.second->repel(*b.second);
-                if(a.second->collided)
-                    audio::play("clack.wav");
             }
         }
     }

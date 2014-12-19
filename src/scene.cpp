@@ -289,6 +289,44 @@ void scene::disable_all()
     disable_menus();
 }
 
+void scene::mute_all()
+{
+    //mute the rts objects
+    for(auto r:rts_objects)
+        r.second->mute();
+    //mute the draggable objects
+    for(auto d:draggable_objects)
+        d.second->mute();
+    //mute the physics objects
+    for(auto p:physics_objects)
+        p.second->mute();
+    //mute checkboxes
+    for(auto c:checkboxes)
+        c->mute();
+    //mute buttons
+    for(auto b:buttons)
+        b->mute();
+}
+
+void scene::unmute_all()
+{
+    //unmute the rts objects
+    for(auto r:rts_objects)
+        r.second->unmute();
+    //unmute the draggable objects
+    for(auto d:draggable_objects)
+        d.second->unmute();
+    //unmute the physics objects
+    for(auto p:physics_objects)
+        p.second->unmute();
+    //unmute checkboxes
+    for(auto c:checkboxes)
+        c->unmute();
+    //unmute buttons
+    for(auto b:buttons)
+        b->unmute();
+}
+
 //NOTE: This function uses C++11 "for" loops
 void scene::render()
 {

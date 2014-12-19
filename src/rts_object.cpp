@@ -24,6 +24,10 @@
 point2i rts_object::default_position = point2i(window::width*0.9,window::height*0.5);
 int rts_object::default_width = 64;
 int rts_object::default_height = 64;
+std::string rts_object::default_texture = "confuzedskull.bmp";
+std::string rts_object::default_click_sound = "click.wav";
+std::string rts_object::default_hover_sound = "swipe.wav";
+std::string rts_object::default_collision_sound = "clack.wav";
 
 std::string rts_object::get_type()
 {
@@ -65,6 +69,7 @@ void rts_object::mouse_function()
 
 void rts_object::update()
 {
+    tangible_object::update();
     movable_object::update();
     mouse_function();
 }
@@ -178,6 +183,9 @@ rts_object::rts_object(): clickable_object(), tangible_object(), complex_object(
     set_dimensions(default_width,default_height);
     speed=2.0f;
     textured=true;
-    set_texture("SC2siegetank.bmp");
+    set_texture(default_texture);
+    set_click_sound(default_click_sound);
+    set_hover_sound(default_hover_sound);
+    set_collision_sound(default_collision_sound);
     std::clog<<"object#"<<number<<"(rts object)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

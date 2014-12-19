@@ -17,8 +17,11 @@
 #include "tangible_object.h"
 #include "utilities.h"
 #include "game.h"
+#include "audio.h"
 #include <iostream>
 #include <math.h>
+
+std::string tangible_object::default_collision_sound="clack.wav";
 
 bool tangible_object::is_close(complex_object B)
 {
@@ -128,6 +131,20 @@ void tangible_object::identify_touched(complex_object B)//variable touched_side[
     collided=touched;
 }
 
+void tangible_object::set_collision_sound(std::string filename)
+{
+    if(audio::sounds.find(filename)!=audio::sounds.end())
+        collision_sound=filename;
+    else
+        std::cerr<<filename<<" not found.\n";
+}
+
+void tangible_object::update()
+{
+    if(collided && !muted)
+        audio::play(collision_sound);
+}
+
 tangible_object::tangible_object(): movable_object()
 {
     collided=false;
@@ -135,4 +152,5 @@ tangible_object::tangible_object(): movable_object()
     touched_side[1]=-1;
     touched_side[2]=-1;
     touched_side[3]=-1;
+    set_collision_sound(default_collision_sound);
 }

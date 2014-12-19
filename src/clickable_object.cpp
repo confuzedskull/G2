@@ -75,7 +75,8 @@ void clickable_object::hover_function()
 {
     if(hovered_over() && !fill_color.changed)
     {
-        audio::play("swipe.wav");
+        if(!muted)
+            audio::play(hover_sound);
         fill_color.brighten();
     }
     if(!hovered_over())
@@ -87,7 +88,11 @@ void clickable_object::left_click_function()
     if(left_clicked())//clicked this object
     {
         if(!selected)
+        {
+            if(!muted)
+                audio::play(click_sound);
             std::clog<<"object#"<<number<<"(clickable object)"<<" selected"<<std::endl;
+        }
         cursor::left_clicked_object=this;
         cursor::left_clicked_an_object = true;
         cursor::selected_object=number;
@@ -126,6 +131,22 @@ void clickable_object::mouse_function()
         left_click_function();
         right_click_function();
     }
+}
+
+void clickable_object::set_click_sound(std::string filename)
+{
+    if(audio::sounds.find(filename)!=audio::sounds.end())
+        click_sound=filename;
+    else
+        std::cerr<<filename<<" not found.\n";
+}
+
+void clickable_object::set_hover_sound(std::string filename)
+{
+    if(audio::sounds.find(filename)!=audio::sounds.end())
+        hover_sound=filename;
+    else
+        std::cerr<<filename<<" not found.\n";
 }
 
 void clickable_object::enable()

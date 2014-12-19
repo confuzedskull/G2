@@ -22,7 +22,10 @@
 //A tangible object can detect collision with another object and move
 class tangible_object: virtual public movable_object
 {
-    public:
+protected:
+    std::string collision_sound;
+public:
+    static std::string default_collision_sound;
     int touched_side[4];/*The number of the touching object is stored in each index. "0" is no object
     Each index corresponds to a side: [1] is left, [2] is right, [3] is front, [4] is back*/
     bool collided;
@@ -35,6 +38,8 @@ class tangible_object: virtual public movable_object
     void attract(complex_object B);//object moves toward object B
     void simon_says(complex_object B);//object changes color according to side touched
     void identify_touched(complex_object B);//variable touching[] is updated with the number of the touched object
+    void set_collision_sound(std::string filename);
+    void update() override;
     tangible_object();
 };
 #endif // TANGIBLE_H

@@ -148,6 +148,16 @@ void basic_object::show()
     visible=true;
 }
 
+void basic_object::mute()
+{
+    muted=true;
+}
+
+void basic_object::unmute()
+{
+    muted=false;
+}
+
 void basic_object::render_shape()
 {
     if(filled)
@@ -232,6 +242,7 @@ basic_object::basic_object()
     bordered=false;
     textured=false;
     selected=false;
+    muted=false;
     show();
 }
 
@@ -251,6 +262,7 @@ basic_object::basic_object(int x, int y, int w, int h)
     bordered=false;
     textured=false;
     selected=false;
+    muted=false;
     show();
 }
 
@@ -270,6 +282,7 @@ basic_object::basic_object(int x, int y, int w, int h, color c)
     bordered=false;
     textured=false;
     selected=false;
+    muted=false;
     show();
 }
 

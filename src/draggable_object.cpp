@@ -37,6 +37,10 @@
 point2i draggable_object::default_position = point2i(window::width*0.9,window::height*0.7);
 int draggable_object::default_width = 64;
 int draggable_object::default_height = 64;
+std::string draggable_object::default_texture = "confuzedskull.bmp";
+std::string draggable_object::default_click_sound = "click.wav";
+std::string draggable_object::default_hover_sound = "swipe.wav";
+std::string draggable_object::default_collision_sound = "clack.wav";
 
 std::string draggable_object::get_type()
 {
@@ -69,6 +73,7 @@ void draggable_object::mouse_function()
 
 void draggable_object::update()
 {
+    tangible_object::update();
     movable_object::update();
     mouse_function();
 }
@@ -178,6 +183,9 @@ draggable_object::draggable_object()
     set_dimensions(default_width,default_height);
     fill_color=BLACK;
     textured=true;
-    set_texture("companioncube.bmp");
+    set_texture(default_texture);
+    set_click_sound(default_click_sound);
+    set_hover_sound(default_hover_sound);
+    set_collision_sound(default_collision_sound);
     std::clog<<"object#"<<number<<"(draggable object)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

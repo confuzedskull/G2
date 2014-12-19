@@ -34,6 +34,9 @@
 #include <iostream>
 #include <math.h>
 
+std::string button::default_click_sound="";
+std::string button::default_hover_sound="";
+
 void button::format()
 {
     width=text.get_width()+(margin*2);
@@ -73,7 +76,8 @@ void button::mouse_function()
         {
             if(!performed_action)
             {
-                audio::play("click.wav");
+                if(!muted)
+                    audio::play(click_sound);
                 action();
                 action1i(int_param1);
                 performed_action=true;
@@ -124,6 +128,8 @@ button::button()
     action1i=button::action_placeholder1i;
     bordered=true;
     performed_action=false;
+    set_click_sound(default_click_sound);
+    set_hover_sound(default_hover_sound);
     std::clog<<"object#"<<number<<"(button)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }
 
@@ -138,5 +144,7 @@ button::button(float x, float y, char* l, void (*a)(void))
     action=a;
     bordered=true;
     performed_action=false;
+    set_click_sound(default_click_sound);
+    set_hover_sound(default_hover_sound);
     std::clog<<"object#"<<number<<"(button)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

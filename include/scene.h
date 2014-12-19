@@ -90,6 +90,8 @@ public:
     void hide_all();//hide all objects and ui elements
     void enable_all();//enable all ui elements
     void disable_all();//disable all ui elements
+    void mute_all();//disable all sounds
+    void unmute_all();//enable all sounds
     void render();//render all objects and ui elements
     void update();//update all objects and ui elements
     void load();//load all objects
