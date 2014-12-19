@@ -33,6 +33,7 @@ class draggable_object: public clickable_object, public tangible_object
         std::string get_type() override;
         void mouse_function() override;//performs a variety of actions dependent on cursor interaction
         void update() override;
+        void sync() override;
         void load();
         void save();
         draggable_object();

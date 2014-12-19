@@ -73,16 +73,24 @@ void draggable_object::mouse_function()
 
 void draggable_object::update()
 {
-    tangible_object::update();
     movable_object::update();
-    mouse_function();
+    tangible_object::update();
+    clickable_object::update();
+}
+
+void draggable_object::sync()
+{
+    perform_actions();
 }
 
 void draggable_object::load()
 {
     std::ifstream object_file(file_name);//access file by name
     if(object_file.bad())//make sure the file is there
+    {
         std::cerr<<"bad file name\n";
+        return;
+    }
     object_file.precision(3);
     object_file.setf(std::ios::fixed);
     //load basic object properties
@@ -97,6 +105,11 @@ void draggable_object::load()
     object_file>>textured;
     object_file>>visible;
     object_file>>selected;
+    object_file>>muted;
+    object_file>>texture;
+    //load clickable object properties
+    object_file>>click_sound;
+    object_file>>hover_sound;
     //load movable object properties
     object_file>>speed;
     object_file>>degrees_rotated;
@@ -125,6 +138,7 @@ void draggable_object::load()
     object_file>>touched_side[2];
     object_file>>touched_side[3];
     object_file>>collided;
+    object_file>>collision_sound;
     object_file.close();
     std::clog<<"object#"<<number<<"(draggable object)"<<" loaded.\n";
 }
@@ -135,7 +149,10 @@ void draggable_object::save()
     filename<<"./data/objects/object#"<<number<<".dro";
     std::ofstream object_file(filename.str());
     if(object_file.bad())
+    {
         std::cerr<<"bad file name\n";
+        return;
+    }
     object_file.precision(3);
     object_file.setf(std::ios::fixed);
     //save basic object properties
@@ -150,6 +167,11 @@ void draggable_object::save()
     object_file<<textured<<std::endl;
     object_file<<visible<<std::endl;
     object_file<<selected<<std::endl;
+    object_file<<muted<<std::endl;
+    object_file<<texture<<std::endl;
+    //save clickable object properties
+    object_file<<click_sound<<std::endl;
+    object_file<<hover_sound<<std::endl;
     //save movable object properties
     object_file<<speed<<std::endl;
     object_file<<degrees_rotated<<std::endl;
@@ -172,6 +194,7 @@ void draggable_object::save()
     object_file<<touched_side[2]<<std::endl;
     object_file<<touched_side[3]<<std::endl;
     object_file<<collided<<std::endl;
+    object_file<<collision_sound<<std::endl;
     object_file.close();
     std::clog<<"object#"<<number<<"(draggable object)"<<" saved.\n";
 }

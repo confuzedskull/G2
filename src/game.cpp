@@ -380,7 +380,7 @@ void game::collision_detection()
     {
         for(auto b:current_scene->rts_objects)//iterate through rts objects being compared
         {
-            if(a.first!=b.first && a.second->is_close(*b.second))//check objects colliding with other objects
+            if(a.first!=b.first && a.second->is_close(*b.second))//make sure compared objects are different and close to each other
             {
                 a.second->identify_touched(*b.second);
                 a.second->repel(*b.second);
@@ -391,7 +391,7 @@ void game::collision_detection()
     {
         for(auto b:current_scene->physics_objects)//iterate through physics objects being compared
         {
-            if(a.first!=b.first && a.second->is_close(*b.second))//check objects colliding with other objects
+            if(a.first!=b.first && a.second->is_close(*b.second))//make sure compared objects are different and close to each other
             {
                 a.second->identify_touched(*b.second);
                 a.second->repel(*b.second);
@@ -403,7 +403,7 @@ void game::collision_detection()
     {
         for(auto b:current_scene->draggable_objects)//iterate through draggable objects being compared
         {
-            if(a.first!=b.first && a.second->is_close(*b.second))//check objects colliding with other objects
+            if(a.first!=b.first && a.second->is_close(*b.second))//make sure compared objects are different and close to each other
             {
                 a.second->identify_touched(*b.second);
                 a.second->repel(*b.second);
