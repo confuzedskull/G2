@@ -20,9 +20,11 @@
 
 class checkbox: public button
 {
-protected:
+private:
     int checked;
 public:
+    static std::string default_click_sound;
+    static std::string default_hover_sound;
     int* option;
     int checkmark_margin;
     color checkmark_color;

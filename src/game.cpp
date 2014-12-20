@@ -48,6 +48,11 @@ void game::initialize()
     add_setting("game","show_draggable_objects",1);
     add_setting("game","show_physics_objects",1);
     add_setting("game","show_rts_objects",1);
+    add_setting("game","show_foreground",1);
+    add_setting("game","show_middleground",1);
+    add_setting("game","show_background",1);
+    add_setting("game","show_textures",1);
+    add_setting("game","mute_all",0);
     add_setting("draggable_object","default_x",&draggable_object::default_position.x);
     add_setting("draggable_object","default_y",&draggable_object::default_position.y);
     add_setting("draggable_object","default_width",&draggable_object::default_width);
@@ -69,6 +74,16 @@ void game::initialize()
     add_condition("game","show_physics_objects",0,hide_physics_objects);
     add_condition("game","show_rts_objects",1,show_rts_objects);
     add_condition("game","show_rts_objects",0,hide_rts_objects);
+    add_condition("game","show_foreground",1,show_foreground);
+    add_condition("game","show_foreground",0,hide_foreground);
+    add_condition("game","show_middleground",1,show_middleground);
+    add_condition("game","show_middleground",0,hide_middleground);
+    add_condition("game","show_background",1,show_background);
+    add_condition("game","show_background",0,hide_background);
+    add_condition("game","show_textures",1,show_textures);
+    add_condition("game","show_textures",0,hide_textures);
+    add_condition("game","mute_all",1,mute_all);
+    add_condition("game","mute_all",0,unmute_all);
 //Initialize Sound Effects
     audio::add_sound("clack.wav");
     audio::add_sound("pop.wav");
@@ -80,6 +95,9 @@ void game::initialize()
     graphics::add_image("angrybird.bmp");
     graphics::add_image("companioncube.bmp");
     graphics::add_image("SC2siegetank.bmp");
+    graphics::add_image("angrybirds_ground.bmp");
+    graphics::add_image("SC2background.bmp");
+    graphics::add_image("portals.bmp");
 //Initialize Objects
     std::clog<<"initializing objects...\n";
     //initialize the physics objects
@@ -187,6 +205,31 @@ void game::initialize()
     std::clog<<"initialized text\n";
     std::clog<<"initializing user interface...\n";
 //Initialize Checkboxes
+    checkbox* mute_all_checkbox = new checkbox();
+    mute_all_checkbox->set_position(window::width*0.9,window::height*0.65);
+    mute_all_checkbox->set_label("mute all");
+    mute_all_checkbox->bind_option(settings["game"]["mute_all"]);
+
+    checkbox* show_textures_checkbox = new checkbox();
+    show_textures_checkbox->set_position(window::width*0.9,window::height*0.6);
+    show_textures_checkbox->set_label("show textures");
+    show_textures_checkbox->bind_option(settings["game"]["show_textures"]);
+
+    checkbox* show_foreground_checkbox = new checkbox();
+    show_foreground_checkbox->set_position(window::width*0.9,window::height*0.55);
+    show_foreground_checkbox->set_label("show foreground");
+    show_foreground_checkbox->bind_option(settings["game"]["show_foreground"]);
+
+    checkbox* show_middleground_checkbox = new checkbox();
+    show_middleground_checkbox->set_position(window::width*0.9,window::height*0.5);
+    show_middleground_checkbox->set_label("show middleground");
+    show_middleground_checkbox->bind_option(settings["game"]["show_middleground"]);
+
+    checkbox* show_background_checkbox = new checkbox();
+    show_background_checkbox->set_position(window::width*0.9,window::height*0.45);
+    show_background_checkbox->set_label("show background");
+    show_background_checkbox->bind_option(settings["game"]["show_background"]);
+
     checkbox* show_dos_checkbox = new checkbox();
     show_dos_checkbox->set_position(window::width*0.9,window::height*0.4);
     show_dos_checkbox->set_label("show draggable objects");
@@ -250,24 +293,29 @@ void game::initialize()
     button* create_po_button = new button();//"po" stands for "physics object"
     create_po_button->set_label("physics object");
     create_po_button->set_action(add_physics_object);
+    create_po_button->set_click_sound("pop.wav");
 
     button* create_do_button = new button();//"do" stands for "draggable object"
     create_do_button->set_label("draggable object");
     create_do_button->set_action(add_draggable_object);
+    create_do_button->set_click_sound("pop.wav");
 
     button* create_rtso_button = new button();//"rtso" stands for "real-time strategy object"
     create_rtso_button->set_label("rts object");
     create_rtso_button->set_action(add_rts_object);
+    create_rtso_button->set_click_sound("pop.wav");
 
     button* create_object_button = new button();
     create_object_button->set_position(window::width*0.9,window::height*0.1);//put the button on the right side, 1/5th of the way up
     create_object_button->set_label("create object");
     create_object_button->set_action(create_object);
+    create_object_button->set_click_sound("pop.wav");
 
     button* delete_object_button = new button();
     delete_object_button->set_position(window::width*0.9,window::height*0.05);//put the button on the right side, 1/5th of the way up
     delete_object_button->set_label("delete object");
     delete_object_button->set_action(delete_selected);
+    delete_object_button->set_click_sound("trash.wav");
 
     button* menu_button = new button();
     menu_button->set_position(window::center.x,window::height-20);//put the button at the top middle, just below the top
@@ -318,6 +366,7 @@ void game::initialize()
 //Initialize Scenes
     std::clog<<"initializing scenes...\n";
     scene* home_screen = new scene();
+    home_screen->foreground.fill_color.set(0.25,0.25,0.25);
     home_screen->add_menu(main_menu);
     home_screen->add_menu(quit_menu);
     home_screen->current_menu=main_menu;
@@ -332,7 +381,16 @@ void game::initialize()
     current_scene=home_screen;//start the game with this screen
 
     scene* game_screen = new scene();
-    game_screen->background_color.set("white");
+    game_screen->background.set_dimensions(window::width,window::height);
+    game_screen->background.textured=true;
+    game_screen->background.set_texture("SC2background.bmp");
+    game_screen->middleground.set_dimensions(window::width/4,window::height/3);
+    game_screen->middleground.textured=true;
+    game_screen->middleground.set_texture("portals.bmp");
+    game_screen->foreground.set_position(window::center.x,window::center.y-(window::height/3));
+    game_screen->foreground.set_dimensions(window::width,window::height/3);
+    game_screen->foreground.textured=true;
+    game_screen->foreground.set_texture("angrybirds_ground.bmp");
     game_screen->add_object(do1);
     game_screen->add_object(po1);
     game_screen->add_object(po2);
@@ -344,6 +402,11 @@ void game::initialize()
     game_screen->add_object(rtso4);
     game_screen->add_text(object_info);
     game_screen->add_text(game_info);
+    game_screen->add_checkbox(mute_all_checkbox);
+    game_screen->add_checkbox(show_textures_checkbox);
+    game_screen->add_checkbox(show_foreground_checkbox);
+    game_screen->add_checkbox(show_middleground_checkbox);
+    game_screen->add_checkbox(show_background_checkbox);
     game_screen->add_checkbox(show_dos_checkbox);
     game_screen->add_checkbox(show_pos_checkbox);
     game_screen->add_checkbox(show_rtsos_checkbox);
@@ -485,6 +548,35 @@ void game::save_settings()
     std::clog<<"settings saved.\n";
 }
 
+void game::show_foreground()
+{
+    play_scene->foreground.show();
+}
+void game::hide_foreground()
+{
+    play_scene->foreground.hide();
+}
+
+void game::show_middleground()
+{
+    play_scene->middleground.show();
+}
+
+void game::hide_middleground()
+{
+    play_scene->middleground.hide();
+}
+
+void game::show_background()
+{
+    play_scene->background.show();
+}
+
+void game::hide_background()
+{
+    play_scene->background.hide();
+}
+
 void game::show_draggable_objects()
 {
     play_scene->show_draggable_objects();
@@ -515,30 +607,46 @@ void game::hide_rts_objects()
     play_scene->hide_rts_objects();
 }
 
+void game::show_textures()
+{
+    play_scene->show_textures();
+}
+
+void game::hide_textures()
+{
+    play_scene->hide_textures();
+}
+
+void game::mute_all()
+{
+    play_scene->mute_all();
+}
+
+void game::unmute_all()
+{
+    play_scene->unmute_all();
+}
+
 void game::add_draggable_object()
 {
-    audio::play("pop.wav");
     draggable_object* new_do = new draggable_object();
     play_scene->add_object(new_do);
 }
 
 void game::add_physics_object()
 {
-    audio::play("pop.wav");
     physics_object* new_po = new physics_object();
     play_scene->add_object(new_po);
 }
 
 void game::add_rts_object()
 {
-    audio::play("pop.wav");
     rts_object* new_rtso = new rts_object();
     play_scene->add_object(new_rtso);
 }
 
 void game::create_object()
 {
-    audio::play("pop.wav");
     if(play_scene->last_object->get_type()=="draggable object")
         play_scene->add_object(new draggable_object());
     if(play_scene->last_object->get_type()=="physics object")
@@ -549,7 +657,6 @@ void game::create_object()
 
 void game::delete_selected()
 {
-    audio::play("trash.wav");
     for(auto so:cursor::selected_objects)
     {
         if(play_scene->draggable_objects.find(so.first)!=play_scene->draggable_objects.end())

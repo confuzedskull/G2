@@ -56,6 +56,7 @@ public:
     int get_height();
     float get_radius();
     float get_rotation();
+    std::string get_texture();
     bool filled;//whether the body of the object is visible
     bool bordered;//whether or not the object has a border
     bool textured;//whether the object has a texture

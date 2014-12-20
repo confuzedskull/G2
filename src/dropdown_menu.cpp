@@ -82,6 +82,7 @@ void dropdown_menu::update()
             i->visible=true;
         else
             i->visible=false;
+        i->muted=muted;
         i->update();
     }
     mouse_function();

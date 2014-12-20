@@ -22,7 +22,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-point2i physics_object::default_position = point2i(window::width*0.9,window::height*0.6);
+point2i physics_object::default_position = point2i(64,window::height*0.6);
 int physics_object::default_width = 32;
 int physics_object::default_height = 32;
 std::string physics_object::default_texture = "confuzedskull.bmp";

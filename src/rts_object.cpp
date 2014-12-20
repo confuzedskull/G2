@@ -21,7 +21,7 @@
 #include <math.h>
 #include <iostream>
 
-point2i rts_object::default_position = point2i(window::width*0.9,window::height*0.5);
+point2i rts_object::default_position = point2i(64,window::height*0.5);
 int rts_object::default_width = 64;
 int rts_object::default_height = 64;
 std::string rts_object::default_texture = "confuzedskull.bmp";

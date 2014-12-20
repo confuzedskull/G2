@@ -30,11 +30,12 @@
 
 class scene
 {
+private:
+    int number;
 public:
     static int total_scenes;
     std::string file_name;
-    int number;
-    color background_color;
+    basic_object foreground, middleground, background;
     basic_object* last_object;
     menu* current_menu;
     //maps are used because we need to access the objects by referencing a common identifier (object.number)
@@ -72,20 +73,32 @@ public:
     void hide_rts_objects();//hide all rts objects
     void show_text();//show the text
     void hide_text();//hide the text
+    void show_objects();//show all objects
+    void hide_objects();//hide all objects
     void enable_objects();//enable object mouse interaction
     void disable_objects();//disable object mouse interaction
+    void mute_objects();
+    void unmute_objects();
     void show_checkboxes();//show all checkboxes
     void hide_checkboxes();//hide all checkboxes
-    void enable_checkboxes();
-    void disable_checkboxes();
+    void enable_checkboxes();//enable checkbox mouse interaction
+    void disable_checkboxes();//disable checkbox mouse interaction
+    void mute_checkboxes();
+    void unmute_checkboxes();
     void show_buttons();//show all buttons
     void hide_buttons();//hide all buttons
-    void enable_buttons();
-    void disable_buttons();
+    void enable_buttons();//enable button mouse interaction
+    void disable_buttons();//disable button mouse interaction
+    void mute_buttons();
+    void unmute_buttons();
     void show_menus();//show all menus
     void hide_menus();//hide all menus
     void enable_menus();//enable all menus
     void disable_menus();//disable all menus
+    void mute_menus();//mute all menus
+    void unmute_menus();//unmute all menus
+    void show_textures();
+    void hide_textures();
     void show_all();//show all objects and ui elements
     void hide_all();//hide all objects and ui elements
     void enable_all();//enable all ui elements

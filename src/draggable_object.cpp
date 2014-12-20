@@ -34,7 +34,7 @@
 #include <GL/glut.h>
 #endif
 
-point2i draggable_object::default_position = point2i(window::width*0.9,window::height*0.7);
+point2i draggable_object::default_position = point2i(64,window::height*0.7);
 int draggable_object::default_width = 64;
 int draggable_object::default_height = 64;
 std::string draggable_object::default_texture = "confuzedskull.bmp";

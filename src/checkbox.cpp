@@ -16,6 +16,7 @@
 
 #include "checkbox.h"
 #include "cursor.h"
+#include "audio.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -29,6 +30,9 @@
 #include <GL/glut.h>
 #endif
 #include <iostream>
+
+std::string checkbox::default_click_sound = "click.wav";
+std::string checkbox::default_hover_sound = "swipe.wav";
 
 void checkbox::set_label(std::string l)
 {
@@ -59,14 +63,11 @@ void checkbox::mouse_function()
     if(visible && enabled)
     {
         if(filled)
-        {
-            if(hovered_over() && !fill_color.changed)
-                fill_color.brighten();
-            if(!hovered_over())
-                fill_color.undo();
-        }
+            hover_function();
         if(left_clicked())
         {
+            if(!muted)
+                audio::play(click_sound);
             if(*option==1)
                 checked=0;
             else
@@ -111,5 +112,7 @@ checkbox::checkbox()
     checked=1;
     checkmark_margin=2;
     checkmark_color=BLACK;
+    set_click_sound(default_click_sound);
+    set_hover_sound(default_hover_sound);
     std::clog<<"object#"<<number<<"(checkbox)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

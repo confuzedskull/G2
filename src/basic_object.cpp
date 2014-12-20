@@ -36,7 +36,7 @@
 
 //initialize static variables
 int basic_object::total_objects=0;
-point2i basic_object::default_position = point2i(0,0);
+point2i basic_object::default_position = point2i(window::center.x,window::center.y);
 
 int basic_object::get_number()
 {
@@ -76,6 +76,11 @@ int basic_object::get_height()
 float basic_object::get_radius()
 {
     return utilities::distance(xmin,ymin,xmax,ymax)/2;;
+}
+
+std::string basic_object::get_texture()
+{
+    return texture;
 }
 
 void basic_object::set_position(int x, int y)
@@ -243,6 +248,7 @@ basic_object::basic_object()
     textured=false;
     selected=false;
     muted=false;
+    set_texture("confuzedskull.bmp");
     show();
 }
 
@@ -263,6 +269,7 @@ basic_object::basic_object(int x, int y, int w, int h)
     textured=false;
     selected=false;
     muted=false;
+    set_texture("confuzedskull.bmp");
     show();
 }
 
@@ -283,6 +290,7 @@ basic_object::basic_object(int x, int y, int w, int h, color c)
     textured=false;
     selected=false;
     muted=false;
+    set_texture("confuzedskull.bmp");
     show();
 }
 
