@@ -109,6 +109,14 @@ void basic_object::set_texture(std::string filename)
         std::cerr<<filename<<" not found.\n";
 }
 
+void basic_object::set_mask(std::string filename)
+{
+    if(graphics::images.find(filename)!=graphics::images.end())
+        mask=filename;
+    else
+        std::cerr<<filename<<" not found.\n";
+}
+
 void basic_object::calc_boundaries()//calculates the limits of the object
 {
     //these two variables store reused data in order to save calculations
@@ -199,14 +207,29 @@ void basic_object::render_texture()
 {
     if(textured)
     {
-        glBindTexture(GL_TEXTURE_2D, graphics::images[texture]);
         glEnable(GL_TEXTURE_2D);
+        if(masked)
+        {
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_DST_COLOR,GL_ZERO);
+            glBindTexture(GL_TEXTURE_2D, graphics::images[mask]);
+            glBegin(GL_QUADS);
+            glTexCoord2i(0, 0); glVertex2f(xmin, ymin);
+            glTexCoord2i(0, 1); glVertex2f(xmin, ymax);
+            glTexCoord2i(1, 1); glVertex2f(xmax, ymax);
+            glTexCoord2i(1, 0); glVertex2f(xmax, ymin);
+            glEnd();
+            glBlendFunc(GL_ONE,GL_ONE);
+        }
+        glBindTexture(GL_TEXTURE_2D, graphics::images[texture]);
         glBegin(GL_QUADS);
         glTexCoord2i(0, 0); glVertex2f(xmin, ymin);
         glTexCoord2i(0, 1); glVertex2f(xmin, ymax);
         glTexCoord2i(1, 1); glVertex2f(xmax, ymax);
         glTexCoord2i(1, 0); glVertex2f(xmax, ymin);
         glEnd();
+        if(masked)
+            glDisable(GL_BLEND);
         glDisable(GL_TEXTURE_2D);
     }
 }
@@ -246,9 +269,9 @@ basic_object::basic_object()
     filled=true;
     bordered=false;
     textured=false;
+    masked=false;
     selected=false;
     muted=false;
-    set_texture("confuzedskull.bmp");
     show();
 }
 
@@ -267,9 +290,9 @@ basic_object::basic_object(int x, int y, int w, int h)
     filled=true;
     bordered=false;
     textured=false;
+    masked=false;
     selected=false;
     muted=false;
-    set_texture("confuzedskull.bmp");
     show();
 }
 
@@ -288,9 +311,9 @@ basic_object::basic_object(int x, int y, int w, int h, color c)
     filled=true;
     bordered=false;
     textured=false;
+    masked=false;
     selected=false;
     muted=false;
-    set_texture("confuzedskull.bmp");
     show();
 }
 

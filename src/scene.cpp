@@ -329,27 +329,51 @@ void scene::unmute_menus()
 void scene::show_textures()
 {
     background.textured=true;
+    background.filled=false;
     middleground.textured=true;
+    middleground.filled=false;
     foreground.textured=true;
+    foreground.filled=false;
     for(auto r:rts_objects)
+    {
         r.second->textured=true;
+        r.second->filled=false;
+    }
     for(auto d:draggable_objects)
+    {
         d.second->textured=true;
+        d.second->filled=false;
+    }
     for(auto p:physics_objects)
+    {
         p.second->textured=true;
+        p.second->filled=false;
+    }
 }
 
 void scene::hide_textures()
 {
     background.textured=false;
+    background.filled=true;
     middleground.textured=false;
+    middleground.filled=true;
     foreground.textured=false;
+    foreground.filled=true;
     for(auto r:rts_objects)
+    {
         r.second->textured=false;
+        r.second->filled=true;
+    }
     for(auto d:draggable_objects)
+    {
         d.second->textured=false;
+        d.second->filled=true;
+    }
     for(auto p:physics_objects)
+    {
         p.second->textured=false;
+        p.second->filled=true;
+    }
 }
 
 void scene::show_all()
@@ -687,10 +711,13 @@ scene::scene()
     std::stringstream fn;
     fn<<"./data/scenes/scene#"<<number<<".scn";//generate the file name
     file_name=fn.str();
+    background.set_position(window::center.x,window::center.y);
     background.set_dimensions(window::width,window::height);
     background.fill_color.set(BLACK);
+    middleground.set_position(window::center.x,window::center.y);
     middleground.set_dimensions(window::width,window::height);
     middleground.fill_color.set(0.25,0.25,0.25);
+    foreground.set_position(window::center.x,window::center.y);
     foreground.set_dimensions(window::width,window::height);
     foreground.fill_color.set(GRAY);
 }

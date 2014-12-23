@@ -33,6 +33,7 @@ protected:
     int marker_height;
     int xmax,xmin,ymax,ymin;//the boundaries of the object
     std::string texture;
+    std::string mask;
 public:
     static int total_objects;//total number of objects. This is used to assign the object number
     static point2i default_position;//point where a new object is created
@@ -60,6 +61,7 @@ public:
     bool filled;//whether the body of the object is visible
     bool bordered;//whether or not the object has a border
     bool textured;//whether the object has a texture
+    bool masked;//whether the object's texture is masked (has a matching silhouette texture)
     bool visible;//whether the object should be shown or not
     bool selected;//whether the object has been selected or not
     bool enabled;//whether the object should be updated or not
@@ -73,6 +75,7 @@ public:
     void set_position(int x, int y);
     void set_dimensions(int w, int h);
     void set_texture(std::string filename);
+    void set_mask(std::string filename);
     basic_object();
     basic_object(int x, int y, int w, int h);
     basic_object(int x, int y, int w, int h, color c);

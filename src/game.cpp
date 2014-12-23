@@ -93,15 +93,20 @@ void game::initialize()
 //Initialize Textures
     graphics::add_image("confuzedskull.bmp");
     graphics::add_image("angrybird.bmp");
+    graphics::add_image("angrybird-mask.bmp");
     graphics::add_image("companioncube.bmp");
+    graphics::add_image("companioncube-mask.bmp");
     graphics::add_image("SC2siegetank.bmp");
+    graphics::add_image("SC2siegetank-mask.bmp");
     graphics::add_image("angrybirds_ground.bmp");
+    graphics::add_image("angrybirds_ground-mask.bmp");
     graphics::add_image("SC2background.bmp");
     graphics::add_image("portals.bmp");
 //Initialize Objects
     std::clog<<"initializing objects...\n";
     //initialize the physics objects
     physics_object::default_texture="angrybird.bmp";
+    physics_object::default_mask="angrybird-mask.bmp";
     physics_object* po1 = new physics_object();
     po1->set_position(window::center.x-48,window::center.y+48);//set position forward left of window center
     po1->rest();//make sure the resting point matches the new position
@@ -168,12 +173,14 @@ void game::initialize()
     std::clog<<"initialized physics objects\n";
     //initialize the draggable objects
     draggable_object::default_texture="companioncube.bmp";
+    draggable_object::default_mask="companioncube-mask.bmp";
     draggable_object* do1 = new draggable_object();
     do1->set_position(window::center.x,window::center.y);//set position window center
 
     std::clog<<"initialized draggable objects\n";
     //initialize the rts objects
     rts_object::default_texture="SC2siegetank.bmp";
+    rts_object::default_mask="SC2siegetank-mask.bmp";
     rts_object* rtso1 = new rts_object();
     rtso1->set_position(window::center.x+96,window::center.y);//set position right of window center
     rtso1->fill_color.set("yellow");
@@ -390,7 +397,9 @@ void game::initialize()
     game_screen->foreground.set_position(window::center.x,window::center.y-(window::height/3));
     game_screen->foreground.set_dimensions(window::width,window::height/3);
     game_screen->foreground.textured=true;
+    game_screen->foreground.masked=true;
     game_screen->foreground.set_texture("angrybirds_ground.bmp");
+    game_screen->foreground.set_mask("angrybirds_ground-mask.bmp");
     game_screen->add_object(do1);
     game_screen->add_object(po1);
     game_screen->add_object(po2);

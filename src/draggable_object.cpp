@@ -37,10 +37,11 @@
 point2i draggable_object::default_position = point2i(64,window::height*0.7);
 int draggable_object::default_width = 64;
 int draggable_object::default_height = 64;
-std::string draggable_object::default_texture = "confuzedskull.bmp";
-std::string draggable_object::default_click_sound = "click.wav";
-std::string draggable_object::default_hover_sound = "swipe.wav";
-std::string draggable_object::default_collision_sound = "clack.wav";
+std::string draggable_object::default_texture = "";
+std::string draggable_object::default_mask = "";
+std::string draggable_object::default_click_sound = "";
+std::string draggable_object::default_hover_sound = "";
+std::string draggable_object::default_collision_sound = "";
 
 std::string draggable_object::get_type()
 {
@@ -206,7 +207,9 @@ draggable_object::draggable_object()
     set_dimensions(default_width,default_height);
     fill_color=BLACK;
     textured=true;
+    masked=true;
     set_texture(default_texture);
+    set_mask(default_mask);
     set_click_sound(default_click_sound);
     set_hover_sound(default_hover_sound);
     set_collision_sound(default_collision_sound);

@@ -25,10 +25,11 @@
 point2i physics_object::default_position = point2i(64,window::height*0.6);
 int physics_object::default_width = 32;
 int physics_object::default_height = 32;
-std::string physics_object::default_texture = "confuzedskull.bmp";
-std::string physics_object::default_click_sound = "click.wav";
-std::string physics_object::default_hover_sound = "swipe.wav";
-std::string physics_object::default_collision_sound = "clack.wav";
+std::string physics_object::default_texture = "";
+std::string physics_object::default_mask = "";
+std::string physics_object::default_click_sound = "";
+std::string physics_object::default_hover_sound = "";
+std::string physics_object::default_collision_sound = "";
 
 std::string physics_object::get_type()
 {
@@ -379,7 +380,9 @@ physics_object::physics_object()
     set_dimensions(default_width,default_height);
     fill_color=GRAY;
     textured=true;
+    masked=true;
     set_texture(default_texture);
+    set_mask(default_mask);
     rest();
     mass=0.015f;//warning: if you set this too high with inertia enabled, the object may fly off the screen
     velocity[0].x=0.00f;

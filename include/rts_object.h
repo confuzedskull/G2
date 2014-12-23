@@ -26,6 +26,7 @@ public:
     static int default_width;
     static int default_height;
     static std::string default_texture;
+    static std::string default_mask;
     static std::string default_click_sound;
     static std::string default_hover_sound;
     static std::string default_collision_sound;

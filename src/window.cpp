@@ -58,7 +58,7 @@ void window::initialize()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(0.0, (GLdouble)width, 0.0,(GLdouble)height);
-    glClearColor(1.0, 1.0, 1.0, 1.0);//white background
+    glClearColor(1.0,1.0,1.0,1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     glFlush();
 }
