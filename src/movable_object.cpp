@@ -13,6 +13,7 @@
 
 #include "movable_object.h"
 #include "utilities.h"
+#include "audio.h"
 #include <math.h>
 #include <iostream>
 
@@ -75,6 +76,8 @@ void movable_object::turn_right(float degrees)
 {
     rotation-=speed*degrees;
     turning_right=true;
+    if(!muted)
+        audio::play(movement_sound);
 }
 
 void movable_object::turn_left()
@@ -86,6 +89,8 @@ void movable_object::turn_left(float degrees)
 {
     rotation+=speed*degrees;
     turning_left=true;
+    if(!muted)
+        audio::play(movement_sound);
 }
 
 void movable_object::move_left()
@@ -98,6 +103,8 @@ void movable_object::move_left(int units_left)
     position.x+=leftward.x*speed*units_left;
     position.y+=leftward.y*speed*units_left;
     moving_left=true;
+    if(!muted)
+        audio::play(movement_sound);
 }
 
 void movable_object::move_left(float units_left)
@@ -105,6 +112,8 @@ void movable_object::move_left(float units_left)
     position.x+=leftward.x*speed*units_left;
     position.y+=leftward.y*speed*units_left;
     moving_left=true;
+    if(!muted)
+        audio::play(movement_sound);
 }
 
 void movable_object::move_right()
@@ -117,6 +126,8 @@ void movable_object::move_right(int units_right)
     position.x+=rightward.x*speed*units_right;
     position.y+=rightward.y*speed*units_right;
     moving_right=true;
+    if(!muted)
+        audio::play(movement_sound);
 }
 
 void movable_object::move_right(float units_right)
@@ -124,6 +135,8 @@ void movable_object::move_right(float units_right)
     position.x+=rightward.x*speed*units_right;
     position.y+=rightward.y*speed*units_right;
     moving_right=true;
+    if(!muted)
+        audio::play(movement_sound);
 }
 
 void movable_object::move_forward()
@@ -136,6 +149,8 @@ void movable_object::move_forward(int units_forward)
     position.x+=forward.x*speed*units_forward;
     position.y+=forward.y*speed*units_forward;
     moving_forward=true;
+    if(!muted)
+        audio::play(movement_sound);
 }
 
 void movable_object::move_forward(float units_forward)
@@ -143,6 +158,8 @@ void movable_object::move_forward(float units_forward)
     position.x+=forward.x*speed*units_forward;
     position.y+=forward.y*speed*units_forward;
     moving_forward=true;
+    if(!muted)
+        audio::play(movement_sound);
 }
 
 void movable_object::move_back()
@@ -155,6 +172,8 @@ void movable_object::move_back(int units_back)
     position.x+=backward.x*speed*units_back;
     position.y+=backward.y*speed*units_back;
     moving_backward=true;
+    if(!muted)
+        audio::play(movement_sound);
 }
 
 void movable_object::move_back(float units_back)
@@ -162,6 +181,8 @@ void movable_object::move_back(float units_back)
     position.x+=backward.x*speed*units_back;
     position.y+=backward.y*speed*units_back;
     moving_backward=true;
+    if(!muted)
+        audio::play(movement_sound);
 }
 
 void movable_object::turn_to_point(int destination_x, int destination_y)//rotates object to face the given coordinates
@@ -205,7 +226,10 @@ bool movable_object::move_to_point(int destination_x, int destination_y, float r
     {
         movable_object::turn_to_point(destination_x, destination_y);
         if(isless((float)utilities::distance(position.x,position.y,(float)destination_x,(float)destination_y),get_radius()))
+        {
             rally_set=false;
+            reset_motion();
+        }
         move_forward(rate);
         moving_forward=true;
         return true;
@@ -299,6 +323,14 @@ bool movable_object::perform_actions()
     }
     else
         return false;//still need to perform some actions
+}
+
+void movable_object::set_movement_sound(std::string filename)
+{
+    if(audio::sounds.find(filename)!=audio::sounds.end())
+        movement_sound=filename;
+    else
+        std::cerr<<filename<<" not found.\n";
 }
 
 void movable_object::update()

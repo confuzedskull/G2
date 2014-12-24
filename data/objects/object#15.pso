@@ -8,11 +8,14 @@
 0
 1
 1
+1
 0
 0
 angrybird.bmp
-click.wav
-swipe.wav
+angrybird-mask.bmp
+angrybird-aheheha.wav
+
+
 1.000
 0.000
 0
@@ -40,7 +43,7 @@ swipe.wav
 -1
 -1
 0
-clack.wav
+angrybird-ow.wav
 632.000 312.000
 90.000
 0.015

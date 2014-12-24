@@ -18,7 +18,6 @@
 #define BUTTON_H
 #include "clickable_object.h"
 #include "label.h"
-#include <string>
 
 //A button displays text and executes a function when clicked
 class button: public clickable_object
@@ -28,22 +27,28 @@ protected:
     std::string text_allignment;
     int int_param1;
 public:
+    static std::string default_texture;
+    static std::string default_mask;
+    static std::string default_click_sound;
+    static std::string default_hover_sound;
+    static std::string default_allignment;
+    static int default_margin;
+    static int default_width;
+    static int default_height;
     int margin;//space between label and button border
     bool performed_action;//whether or not the button action executed
     void (*action)();//a function pointer which will be called when clicked
     void (*action1i)(int i);//a function pointer which will be called when clicked
     void format();//adjusts the size of the button to fit the label
-    void set_action(void (*a)());
-    void set_action(void (*a)(int),int i);
+    void set_action(void (*act)());
+    void set_action(void (*act)(int),int i);
     void mouse_function();
     void render() override;
     void update();
-    virtual void set_label(std::string l);
+    virtual void set_label(std::string txt);
     virtual void allign_label(std::string allignment);
     static void action_placeholder();
     static void action_placeholder1i(int i);
-    static std::string default_click_sound;
-    static std::string default_hover_sound;
     button();
     button(float x, float y, char* l, void (*a)(void));
 };

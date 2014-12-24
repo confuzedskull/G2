@@ -31,14 +31,20 @@
 #endif
 #include <iostream>
 
-std::string checkbox::default_click_sound = "click.wav";
-std::string checkbox::default_hover_sound = "swipe.wav";
+std::string checkbox::default_texture = "";
+std::string checkbox::default_mask = "";
+std::string checkbox::default_click_sound = "";
+std::string checkbox::default_hover_sound = "";
+std::string checkbox::default_allignment = "left";
+int checkbox::default_margin = 4;
+int checkbox::default_width = 16;
+int checkbox::default_height = 16;
 
-void checkbox::set_label(std::string l)
+void checkbox::set_label(std::string txt)
 {
     text.clear();
-    text.add_line(l);
-    allign_label("left");
+    text.add_line(txt);
+    allign_label(text_allignment);
 }
 
 void checkbox::allign_label(std::string allignment)
@@ -106,12 +112,14 @@ void checkbox::update()
 checkbox::checkbox()
 {
     bordered=true;
-    set_dimensions(16,16);
+    set_dimensions(default_width,default_height);
     fill_color = color(0.75f,0.75f,0.75f);
-    margin=4;
+    margin=default_margin;
     checked=1;
     checkmark_margin=2;
     checkmark_color=BLACK;
+    set_texture(default_texture);
+    set_mask(default_mask);
     set_click_sound(default_click_sound);
     set_hover_sound(default_hover_sound);
     std::clog<<"object#"<<number<<"(checkbox)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;

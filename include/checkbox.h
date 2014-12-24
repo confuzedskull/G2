@@ -23,13 +23,19 @@ class checkbox: public button
 private:
     int checked;
 public:
+    static std::string default_texture;
+    static std::string default_mask;
     static std::string default_click_sound;
     static std::string default_hover_sound;
+    static std::string default_allignment;
+    static int default_margin;
+    static int default_width;
+    static int default_height;
     int* option;
     int checkmark_margin;
     color checkmark_color;
     void bind_option(int*);
-    void set_label(std::string l) override;
+    void set_label(std::string txt) override;
     void allign_label(std::string allignment) override;
     void mouse_function() override;
     void update() override;

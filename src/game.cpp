@@ -44,15 +44,17 @@ void game::initialize()
     add_setting("window","position_y",&window::position.y);
     add_setting("window","refresh_rate",&window::refresh_rate);
     add_setting("ui","overlay_margin",&ui::overlay_margin);
-    add_setting("game","show_info_overlay",0);
-    add_setting("game","show_draggable_objects",1);
-    add_setting("game","show_physics_objects",1);
-    add_setting("game","show_rts_objects",1);
-    add_setting("game","show_foreground",1);
-    add_setting("game","show_middleground",1);
-    add_setting("game","show_background",1);
-    add_setting("game","show_textures",1);
-    add_setting("game","mute_all",0);
+    add_setting("label","default_size",&label::default_size);
+    add_setting("label","default_spacing",&label::default_spacing);
+    add_setting("menu","default_margin",&menu::default_margin);
+    add_setting("menu","default_spacing",&menu::default_spacing);
+    add_setting("button","default_width",&button::default_width);
+    add_setting("button","default_height",&button::default_height);
+    add_setting("button","default_margin",&button::default_margin);
+    add_setting("button","default_spacing",&button::default_margin);
+    add_setting("checkbox","default_width",&checkbox::default_width);
+    add_setting("checkbox","default_height",&checkbox::default_height);
+    add_setting("checkbox","default_margin",&checkbox::default_margin);
     add_setting("draggable_object","default_x",&draggable_object::default_position.x);
     add_setting("draggable_object","default_y",&draggable_object::default_position.y);
     add_setting("draggable_object","default_width",&draggable_object::default_width);
@@ -65,6 +67,15 @@ void game::initialize()
     add_setting("rts_object","default_y",&rts_object::default_position.y);
     add_setting("rts_object","default_width",&rts_object::default_width);
     add_setting("rts_object","default_height",&rts_object::default_height);
+    add_setting("game","show_info_overlay",0);
+    add_setting("game","show_draggable_objects",1);
+    add_setting("game","show_physics_objects",1);
+    add_setting("game","show_rts_objects",1);
+    add_setting("game","show_foreground",1);
+    add_setting("game","show_middleground",1);
+    add_setting("game","show_background",1);
+    add_setting("game","show_textures",1);
+    add_setting("game","mute_all",0);
 //Initialize Conditions
     add_condition("game","show_info_overlay",1,ui::show_text);
     add_condition("game","show_info_overlay",0,ui::hide_text);
@@ -90,6 +101,11 @@ void game::initialize()
     audio::add_sound("trash.wav");
     audio::add_sound("click.wav");
     audio::add_sound("swipe.wav");
+    audio::add_sound("angrybird-aheheha.wav");
+    audio::add_sound("angrybird-ow.wav");
+    audio::add_sound("siegetank-yessir.wav");
+    audio::add_sound("siegetank-move_it.wav");
+    audio::add_sound("low_clack.wav");
 //Initialize Textures
     graphics::add_image("confuzedskull.bmp");
     graphics::add_image("angrybird.bmp");
@@ -107,6 +123,8 @@ void game::initialize()
     //initialize the physics objects
     physics_object::default_texture="angrybird.bmp";
     physics_object::default_mask="angrybird-mask.bmp";
+    physics_object::default_click_sound="angrybird-aheheha.wav";
+    physics_object::default_collision_sound="angrybird-ow.wav";
     physics_object* po1 = new physics_object();
     po1->set_position(window::center.x-48,window::center.y+48);//set position forward left of window center
     po1->rest();//make sure the resting point matches the new position
@@ -181,6 +199,9 @@ void game::initialize()
     //initialize the rts objects
     rts_object::default_texture="SC2siegetank.bmp";
     rts_object::default_mask="SC2siegetank-mask.bmp";
+    rts_object::default_click_sound="siegetank-yessir.wav";
+    rts_object::default_collision_sound="siegetank-move_it.wav";
+    rts_object::default_movement_sound="low_clack.wav";
     rts_object* rtso1 = new rts_object();
     rtso1->set_position(window::center.x+96,window::center.y);//set position right of window center
     rtso1->fill_color.set("yellow");
@@ -200,18 +221,20 @@ void game::initialize()
 //Initialize Text
     //Information Overlay Text
     label* object_info = new label();
-    object_info->spacing=20;
+    object_info->set_spacing(20);
     object_info->set_position(ui::overlay_margin,window::height-20);
     object_info->hide();//we don't want to see this right away
 
     label* game_info = new label();
-    game_info->spacing=20;
+    game_info->set_spacing(20);
     game_info->set_position(window::width-(ui::overlay_margin+200),window::height-20);
     game_info->hide();//we don't want to see this right away
 
     std::clog<<"initialized text\n";
     std::clog<<"initializing user interface...\n";
 //Initialize Checkboxes
+    checkbox::default_click_sound="click.wav";
+    checkbox::default_hover_sound="swipe.wav";
     checkbox* mute_all_checkbox = new checkbox();
     mute_all_checkbox->set_position(window::width*0.9,window::height*0.65);
     mute_all_checkbox->set_label("mute all");

@@ -27,6 +27,10 @@ private:
     bool expanded;
     bool state_toggle;
 public:
+    static std::string default_texture;
+    static std::string default_mask;
+    static std::string default_click_sound;
+    static std::string default_hover_sound;
     void add_item(button*) override;
     void mouse_function() override;
     void expand();

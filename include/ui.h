@@ -24,10 +24,10 @@
 //This namespace contains functions and variables related to the user interface
 namespace ui
 {
-        extern int overlay_margin;//space between window edge and overlay text
-        void check_clicked();//check every clickable object to see if the cursor clicked it
-        void show_text();//makes the text of the current scene visible
-        void hide_text();//makes the text of the current scene invisible
-        void update_text();//updates the text
+    extern int overlay_margin;//space between window edge and overlay text
+    void check_clicked();//check every clickable object to see if the cursor clicked it
+    void show_text();//makes the text of the current scene visible
+    void hide_text();//makes the text of the current scene invisible
+    void update_text();//updates the text
 }
 #endif // UI_H

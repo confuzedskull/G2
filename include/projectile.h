@@ -22,7 +22,7 @@
 //A projectile collides with other physics objects
 class projectile: public tangible_object
 {
-    public:
+public:
     float range;//how far the projectile can go until it resets
     float traveled;//how far the projectile has gone
     int power;//how much damage the projectile will make

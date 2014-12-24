@@ -30,6 +30,7 @@ protected:
     std::queue< std::array<int,3> > action_cue;//actions for the object to perform. The array consists of an action number,times to do, and times done
     float degrees_rotated;//keeps track of the progress of a rotation animation
     bool rally_set;//whether or not the object has a point to move to
+    std::string movement_sound;
 public:
     static float default_speed;
     point2f* get_rally();
@@ -73,6 +74,7 @@ public:
     //rotates object to face the given coordinates
     void turn_to_point(int destination_x, int destination_y);
     void turn_to_point(point2i destination);
+    void set_movement_sound(std::string filename);
     void reset_motion();
     void update() override;
     void sync() override;

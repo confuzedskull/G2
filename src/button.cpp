@@ -34,31 +34,39 @@
 #include <iostream>
 #include <math.h>
 
+std::string button::default_texture="";
+std::string button::default_mask="";
 std::string button::default_click_sound="";
 std::string button::default_hover_sound="";
+std::string button::default_allignment="center";
+int button::default_margin = 5;
+int button::default_width = 48;
+int button::default_height = 16;
 
 void button::format()
 {
-    width=text.get_width()+(margin*2);
-    height=text.get_height()+(margin*2);
+    if(width<text.get_width()+(margin*2))
+        width=text.get_width()+(margin*2);
+    if(height<text.get_height()+(margin*2))
+        height=text.get_height()+(margin*2);
     calc_boundaries();
 }
 
-void button::set_label(std::string l)
+void button::set_label(std::string txt)
 {
     text.clear();
-    text.add_line(l);
+    text.add_line(txt);
     format();
 }
 
-void button::set_action(void (*a)())
+void button::set_action(void (*act)())
 {
-    action=a;
+    action=act;
 }
 
-void button::set_action(void (*a)(int),int i)
+void button::set_action(void (*act)(int),int i)
 {
-    action1i=a;
+    action1i=act;
     int_param1=i;
 }
 
@@ -118,32 +126,38 @@ void button::action_placeholder1i(int i){}
 
 button::button()
 {
-    margin=5;
     position.set(0.0f,0.0f);
+    set_dimensions(default_width,default_height);
     fill_color.set(0.75f,0.75f,0.75f);
     fill_color.changed=false;
+    margin=default_margin;
     set_label("click me");
-    allign_label("center");
+    allign_label(default_allignment);
     action=button::action_placeholder;
     action1i=button::action_placeholder1i;
     bordered=true;
     performed_action=false;
+    set_texture(default_texture);
+    set_mask(default_mask);
     set_click_sound(default_click_sound);
     set_hover_sound(default_hover_sound);
     std::clog<<"object#"<<number<<"(button)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }
 
-button::button(float x, float y, char* l, void (*a)(void))
+button::button(float x, float y, char* txt, void (*act)(void))
 {
-    margin=5;
     position.set(x,y);
+    set_dimensions(default_width,default_height);
     fill_color.set(0.75f,0.75f,0.75f);
     fill_color.changed=false;
-    set_label("click me");
-    allign_label("center");
-    action=a;
+    margin=default_margin;
+    set_label(txt);
+    allign_label(default_allignment);
+    action=act;
     bordered=true;
     performed_action=false;
+    set_texture(default_texture);
+    set_mask(default_mask);
     set_click_sound(default_click_sound);
     set_hover_sound(default_hover_sound);
     std::clog<<"object#"<<number<<"(button)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;

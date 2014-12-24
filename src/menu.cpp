@@ -34,6 +34,12 @@
 #include <math.h>
 #include <iostream>
 
+int menu::default_spacing = 10;
+int menu::default_margin = 20;
+std::string menu::default_layout = "vertical";
+std::string menu::default_texture = "";
+std::string menu::default_mask = "";
+
 int menu::item_selected()
 {
     for(int i=0;i<items.size();i++)
@@ -183,14 +189,16 @@ menu::menu()
 {
     set_position(window::center.x,window::center.y);
     fill_color.set(0.75,0.75,0.75);//make the background dark gray
+    set_texture(default_texture);
+    set_mask(default_mask);
     set_title("menu");
     title.set_font("helvetica",18);
     allign_title("top");
     subtitle.set_font("helvetica",12);
     subtitle.hide();
-    layout="vertical";
-    spacing=10;
-    margin=20;
+    layout=default_layout;
+    spacing=default_spacing;
+    margin=default_margin;
     bordered=true;
     std::clog<<"object#"<<number<<"(menu)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

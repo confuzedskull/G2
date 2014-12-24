@@ -27,12 +27,16 @@ class label: public basic_object
 protected:
     std::vector<std::string> text;
     void* font;
+    int spacing;//the space between each line
     int font_size;
     float font_width;
     float font_height;
 public:
-    int spacing;//the space between each line
+    static std::string default_style;
+    static int default_size;
+    static int default_spacing;
     void add_line(std::string str);
+    void set_spacing(int space);
     void set_font(std::string style, int size);
     void clear();
     void render();//prints the text to the screen

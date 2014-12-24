@@ -8,11 +8,14 @@
 0
 1
 1
+1
 0
 0
 SC2siegetank.bmp
-click.wav
-swipe.wav
+SC2siegetank-mask.bmp
+siegetank-yessir.wav
+
+low_clack.wav
 2.000
 0.000
 0
@@ -28,4 +31,4 @@ swipe.wav
 -1
 -1
 0
-clack.wav
+siegetank-move_it.wav

@@ -29,6 +29,7 @@ std::string rts_object::default_mask = "";
 std::string rts_object::default_click_sound = "";
 std::string rts_object::default_hover_sound = "";
 std::string rts_object::default_collision_sound = "";
+std::string rts_object::default_movement_sound = "";
 
 std::string rts_object::get_type()
 {
@@ -100,13 +101,16 @@ void rts_object::load()
     object_file>>filled;
     object_file>>bordered;
     object_file>>textured;
+    object_file>>masked;
     object_file>>visible;
     object_file>>selected;
     object_file>>muted;
     object_file>>texture;
+    object_file>>mask;
     //load clickable object properties
     object_file>>click_sound;
     object_file>>hover_sound;
+    object_file>>movement_sound;
     //load movable object properties
     object_file>>speed;
     object_file>>degrees_rotated;
@@ -162,13 +166,16 @@ void rts_object::save()
     object_file<<filled<<std::endl;
     object_file<<bordered<<std::endl;
     object_file<<textured<<std::endl;
+    object_file<<masked<<std::endl;
     object_file<<visible<<std::endl;
     object_file<<selected<<std::endl;
     object_file<<muted<<std::endl;
     object_file<<texture<<std::endl;
+    object_file<<mask<<std::endl;
     //save clickable object properties
     object_file<<click_sound<<std::endl;
     object_file<<hover_sound<<std::endl;
+    object_file<<movement_sound<<std::endl;
     //save movable object properties
     object_file<<speed<<std::endl;
     object_file<<degrees_rotated<<std::endl;
@@ -208,5 +215,6 @@ rts_object::rts_object(): clickable_object(), tangible_object(), complex_object(
     set_click_sound(default_click_sound);
     set_hover_sound(default_hover_sound);
     set_collision_sound(default_collision_sound);
+    set_movement_sound(default_movement_sound);
     std::clog<<"object#"<<number<<"(rts object)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

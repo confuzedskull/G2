@@ -29,8 +29,13 @@ protected:
     std::string layout;
     std::string title_allignment;
 public:
+    static int default_spacing;
+    static int default_margin;
+    static std::string default_layout;
+    static std::string default_texture;
+    static std::string default_mask;
     std::vector<button*> items;
-    int spacing;//space between buttons
+    int spacing;//space between items
     int margin;
     button* current_item;
     int item_selected();//returns index of selected item

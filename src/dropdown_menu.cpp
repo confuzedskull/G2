@@ -18,6 +18,11 @@
 #include "cursor.h"
 #include <iostream>
 
+std::string dropdown_menu::default_texture = "";
+std::string dropdown_menu::default_mask = "";
+std::string dropdown_menu::default_click_sound = "";
+std::string dropdown_menu::default_hover_sound = "";
+
 void dropdown_menu::add_item(button* b)
 {
     b->bordered=false;
@@ -99,5 +104,9 @@ dropdown_menu::dropdown_menu()
     margin=0;
     state_toggle=false;
     expanded=false;
+    set_texture(default_texture);
+    set_mask(default_mask);
+    set_click_sound(default_click_sound);
+    set_hover_sound(default_hover_sound);
 	std::clog<<"object#"<<number<<"(dropdown menu)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }

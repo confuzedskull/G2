@@ -30,6 +30,7 @@ public:
     static std::string default_click_sound;
     static std::string default_hover_sound;
     static std::string default_collision_sound;
+    static std::string default_movement_sound;
     std::string get_type() override;
     void mouse_function() override;//performs a variety of actions dependent on cursor interaction
     void update() override;

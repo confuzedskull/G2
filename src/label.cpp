@@ -30,10 +30,19 @@
 #endif
 #include <iostream>
 
+std::string label::default_style = "helvetica";
+int label::default_size = 12;
+int label::default_spacing = 1;
+
 void label::add_line(std::string str)
 {
     text.push_back(str);
     set_dimensions(font_width*str.length(),font_height);
+}
+
+void label::set_spacing(int space)
+{
+    spacing=space;
 }
 
 void label::set_font(std::string style, int size)
@@ -45,18 +54,22 @@ void label::set_font(std::string style, int size)
     {
         if(size==10)
             font=GLUT_BITMAP_HELVETICA_10;
-        if(size==12)
+        else if(size==12)
             font=GLUT_BITMAP_HELVETICA_12;
-        if(size==18)
+        else if(size==18)
             font=GLUT_BITMAP_HELVETICA_18;
+        else
+            std::cerr<<"invalid font size\n";
     }
-    if(style=="times new roman")
+    else if(style=="times new roman")
     {
         if(size==10)
             font=GLUT_BITMAP_TIMES_ROMAN_10;
         if(size==24)
             font=GLUT_BITMAP_TIMES_ROMAN_24;
     }
+    else
+        std::cerr<<"invalid font style\n";
 }
 
 void label::render()
@@ -81,7 +94,7 @@ void label::clear()
 label::label()
 {
     fill_color=BLACK;
-    set_font("helvetica",12);
-    spacing=1;
+    set_font(default_style,default_size);
+    spacing=default_spacing;
     std::clog<<"object#"<<number<<"(label)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
 }
