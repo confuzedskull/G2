@@ -38,10 +38,35 @@ std::string button::default_texture="";
 std::string button::default_mask="";
 std::string button::default_click_sound="";
 std::string button::default_hover_sound="";
-std::string button::default_allignment="center";
 int button::default_margin = 5;
 int button::default_width = 48;
-int button::default_height = 16;
+int button::default_height = 12;
+
+int button::combined_width()
+{
+    if(text.get_allignment()==LEFT || text.get_allignment()==RIGHT)
+        return text.get_width()+margin+width;
+    else
+    {
+        if(text.get_width()>width)
+            return text.get_width();
+        else
+            return width;
+    }
+}
+
+int button::combined_height()
+{
+    if(text.get_allignment()==TOP || text.get_allignment()==BOTTOM)
+        return text.get_height()+margin+height;
+    else
+    {
+        if(text.get_height()>height)
+            return text.get_height();
+        else
+            return height;
+    }
+}
 
 void button::format()
 {
@@ -50,12 +75,13 @@ void button::format()
     if(height<text.get_height()+(margin*2))
         height=text.get_height()+(margin*2);
     calc_boundaries();
+    text.set_position(position.x,position.y);
 }
 
 void button::set_label(std::string txt)
 {
-    text.clear();
-    text.add_line(txt);
+    text.set_text(txt);
+    text.set_position(position.x,position.y);
     format();
 }
 
@@ -68,11 +94,6 @@ void button::set_action(void (*act)(int),int i)
 {
     action1i=act;
     int_param1=i;
-}
-
-void button::allign_label(std::string allignment)
-{
-    text_allignment=allignment;
 }
 
 void button::mouse_function()
@@ -111,12 +132,6 @@ void button::render()
 void button::update()
 {
     text.visible=visible;
-    if(text_allignment=="left")
-        text.set_position(xmin+margin,get_position().y-(text.get_height()/2));
-    if(text_allignment=="center")
-        text.set_position(get_position().x-(text.get_width()/2),get_position().y-(text.get_height()/2));
-    if(text_allignment=="right")
-        text.set_position(xmax-margin-text.get_width(),get_position().y-(text.get_height()/2));
     mouse_function();
 }
 
@@ -131,8 +146,7 @@ button::button()
     fill_color.set(0.75f,0.75f,0.75f);
     fill_color.changed=false;
     margin=default_margin;
-    set_label("click me");
-    allign_label(default_allignment);
+    text.set_text("click me");
     action=button::action_placeholder;
     action1i=button::action_placeholder1i;
     bordered=true;
@@ -141,7 +155,7 @@ button::button()
     set_mask(default_mask);
     set_click_sound(default_click_sound);
     set_hover_sound(default_hover_sound);
-    std::clog<<"object#"<<number<<"(button)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<"(button)"<<" created.\n";
 }
 
 button::button(float x, float y, char* txt, void (*act)(void))
@@ -152,7 +166,6 @@ button::button(float x, float y, char* txt, void (*act)(void))
     fill_color.changed=false;
     margin=default_margin;
     set_label(txt);
-    allign_label(default_allignment);
     action=act;
     bordered=true;
     performed_action=false;
@@ -160,5 +173,5 @@ button::button(float x, float y, char* txt, void (*act)(void))
     set_mask(default_mask);
     set_click_sound(default_click_sound);
     set_hover_sound(default_hover_sound);
-    std::clog<<"object#"<<number<<"(button)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<"(button)"<<" created.\n";
 }

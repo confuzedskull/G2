@@ -35,11 +35,12 @@
 #endif
 
 //initialize the variables
-int window::width=1360;
-int window::height=720;
-point2i window::center=point2i(width/2,height/2);
-point2i window::position=point2i(0,0);
-int window::refresh_rate=60;//refresh window at 1/60th of a second (for 60FPS)
+int window::width = 1360;
+int window::height = 720;
+int window::refresh_rate = 60;//refresh window at 1/60th of a second (for 60FPS)
+point2i window::center = point2i(width/2,height/2);
+point2i window::position = point2i(0,0);
+std::string window::title = "2DWorld";
 
 //resize the window
 void window::change_size(int w, int h)

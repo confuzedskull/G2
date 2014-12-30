@@ -16,19 +16,21 @@
 
 #include "dropdown_menu.h"
 #include "cursor.h"
+#include "ui.h"
 #include <iostream>
 
 std::string dropdown_menu::default_texture = "";
 std::string dropdown_menu::default_mask = "";
 std::string dropdown_menu::default_click_sound = "";
 std::string dropdown_menu::default_hover_sound = "";
+std::string dropdown_menu::default_layout = "vertical";
 
-void dropdown_menu::add_item(button* b)
+void dropdown_menu::add_item(button* item)
 {
-    b->bordered=false;
-    b->allign_label("left");
-	items.push_back(b);
-    format();//match menu width to the width of the widest item
+    item->bordered=false;
+    item->text.allign(CENTER);
+	items.push_back(item);
+    menu::format();//match menu width to the width of the widest item
     //make all the items the same size
     for(auto i:items)
         i->set_dimensions(width,items.back()->get_height());
@@ -79,6 +81,12 @@ void dropdown_menu::collapse()
     }
 }
 
+void dropdown_menu::render()
+{
+    menu::render();
+    button::render();
+}
+
 void dropdown_menu::update()
 {
     for(auto i:items)
@@ -88,6 +96,7 @@ void dropdown_menu::update()
         else
             i->visible=false;
         i->muted=muted;
+        i->enabled=enabled;
         i->update();
     }
     mouse_function();
@@ -95,13 +104,13 @@ void dropdown_menu::update()
 
 dropdown_menu::dropdown_menu()
 {
-	set_title("choose one");
-	allign_title("middle");
-	title.set_font("helvetica",12);
+	title.hide();
     subtitle.hide();
-    layout = "vertical";
+    text.allign(CENTER);
+    set_label("choose one:");
+    set_layout(default_layout);
     spacing=0;
-    margin=0;
+    menu::margin=0;
     state_toggle=false;
     expanded=false;
     set_texture(default_texture);

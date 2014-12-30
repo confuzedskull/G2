@@ -24,10 +24,7 @@
 class menu: virtual public basic_object
 {
 protected:
-    label title;
-    label subtitle;
     std::string layout;
-    std::string title_allignment;
 public:
     static int default_spacing;
     static int default_margin;
@@ -35,16 +32,17 @@ public:
     static std::string default_texture;
     static std::string default_mask;
     std::vector<button*> items;
-    int spacing;//space between items
-    int margin;
     button* current_item;
+    label title;
+    label subtitle;
+    int spacing;//space between items
+    int margin;//space between edges and content
     int item_selected();//returns index of selected item
     int item_clicked();//returns index of clicked item
-    void set_title(std::string t);
-    void set_subtitle(std::string s);
+    virtual void add_item(button* item);
+    void set_title(std::string txt);
+    void set_subtitle(std::string txt);
     void set_layout(std::string l);
-    void allign_title(std::string a);
-    virtual void add_item(button* b);
     void format();
     void render() override;
     void update() override;

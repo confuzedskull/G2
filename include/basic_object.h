@@ -19,8 +19,9 @@
 #include "color.h"
 #include "point.h"
 #include <string>
+#include <map>
 
-//This is the base class for all other object types. It has basic properties such as name, color, and dimensions.
+//This is the base class for all other object types. A basic object stores information about size and appearance.
 class basic_object
 {
 protected:
@@ -34,6 +35,7 @@ protected:
     int xmax,xmin,ymax,ymin;//the boundaries of the object
     std::string texture;
     std::string mask;
+    std::map<std::string,int> properties;
 public:
     static int total_objects;//total number of objects. This is used to assign the object number
     static point2i default_position;//point where a new object is created
@@ -52,12 +54,14 @@ public:
     color marker_color;//color of selection marker
     color border_color;//color of the border
     const char* file_name;
-    int get_number();
+    int get_number();//returns the object number
     int get_width();
     int get_height();
-    float get_radius();
-    float get_rotation();
-    std::string get_texture();
+    float get_x();
+    float get_y();
+    float get_radius();//returns the distance from the center to the outermost point of the object
+    float get_rotation();//returns the current rotation of the object
+    std::string get_texture();//returns the texture filename
     bool filled;//whether the body of the object is visible
     bool bordered;//whether or not the object has a border
     bool textured;//whether the object has a texture
@@ -71,11 +75,13 @@ public:
     void mute();//make the object inaudible
     void unmute();//make the object audible
     void render_border();//draw the border
-    void render_texture();
+    void render_texture();//apply the texture
+    void add_property(std::string name, int value);
     void set_position(int x, int y);
     void set_dimensions(int w, int h);
     void set_texture(std::string filename);
     void set_mask(std::string filename);
+    void set_property(std::string name, int value);
     basic_object();
     basic_object(int x, int y, int w, int h);
     basic_object(int x, int y, int w, int h, color c);

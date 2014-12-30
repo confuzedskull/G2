@@ -21,6 +21,7 @@
 #include "basic_object.h"
 #include "game.h"
 #include <map>
+
 //The cursor class stores data from the mouse that it's interfaced with. Since there can only be one mouse, all the data is static.
 class cursor
 {

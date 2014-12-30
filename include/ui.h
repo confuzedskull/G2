@@ -30,4 +30,10 @@ namespace ui
     void hide_text();//makes the text of the current scene invisible
     void update_text();//updates the text
 }
+const int CENTER=0;
+const int LEFT=1;
+const int RIGHT=2;
+const int TOP=3;
+const int BOTTOM=4;
+const int MIDDLE=5;
 #endif // UI_H

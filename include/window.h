@@ -16,15 +16,17 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 #include "point.h"
+#include <string>
 
 //This namespace contains variables and functions related to function
 namespace window
 {
     extern int width;
     extern int height;
+    extern int refresh_rate;//frequency of screen updates (in hertz)
     extern point2i center;
     extern point2i position;//this refers to the upper left corner of the window
-    extern int refresh_rate;//frequency of screen updates (in hertz)
+    extern std::string title;
     void change_size(int w, int h);
     void initialize();
     void render();

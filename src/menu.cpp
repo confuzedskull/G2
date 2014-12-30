@@ -69,23 +69,28 @@ void menu::format()
         widest=title.get_width();
     else
         widest=subtitle.get_width();
-    if(title_allignment=="middle")
-        total_height=items.front()->get_height();
     //arrange the items
     for(unsigned i=0;i<items.size();i++)//use regular 'for' loop because 'i' is used as number
     {
-        total_width+=items[i]->get_width();
-        if(items[i]->get_width()>widest)
-            widest=items[i]->get_width();
+        if(items[i]->combined_width()>widest)
+            widest=items[i]->combined_width();
         if(layout=="vertical")
-            items[i]->set_position(position.x,position.y-total_height);//arrange item at bottom
+        {
+            if(items[i]->get_type()=="checkbox")
+                items[i]->set_position(xmax-margin-items[i]->get_width(),ymax-margin-title.get_height()-total_height);
+            else
+                items[i]->set_position(position.x,ymax-margin-title.get_height()-items[i]->get_height()-total_height);
+        }
         if(layout=="horizontal")
         {
-            if(i%2==0)//divide the items among either side of the center of the menu
-                items[i]->set_position(position.x-(total_width/2),position.y-(items[0]->get_height()));//even numbers go to the left side
+            if(subtitle.visible)
+                items[i]->set_position(xmin+margin+total_width,ymax-margin-title.get_height()-spacing-subtitle.get_height()-spacing-(items[0]->get_height()/2));
             else
-                items[i]->set_position(position.x+(total_width/2),position.y-(items[0]->get_height()));//odd numbers go to the right side
+                items[i]->set_position(xmin+margin+total_width,ymax-margin-title.get_height()-spacing-(items[0]->get_height()/2));
+            total_width+=spacing;
         }
+        items[i]->format();
+        total_width+=items[i]->combined_width();
         total_height+=(items[i]->get_height()+spacing);
     }
     //resize the menu
@@ -100,65 +105,49 @@ void menu::format()
         }
         else
             set_dimensions(widest+(margin*2),total_height+(margin*2));
-
     }
     if(layout=="horizontal")
     {
         if(title.visible)
         {
             if(subtitle.visible)
-                set_dimensions(widest+(margin*2),items[0]->get_height()+title.get_height()+subtitle.get_height()+spacing+(margin*2));
+                set_dimensions(total_width+(margin*2),items[0]->get_height()+title.get_height()+spacing+subtitle.get_height()+spacing+(margin*2));
             else
-                set_dimensions(widest+(margin*2),items[0]->get_height()+title.get_height()+spacing+(margin*2));
+                set_dimensions(total_width+(margin*2),items[0]->get_height()+title.get_height()+spacing+(margin*2));
         }
         else
-            set_dimensions(widest+(margin*2),items[0]->get_height()+(margin*2));
+            set_dimensions(total_width+(margin*2),items[0]->get_height()+(margin*2));
     }
-    //set the position of the text
-    if(title_allignment=="top")
-    {
-        title.set_position(position.x-(title.get_width()/2),ymax-margin-title.get_height());
-        subtitle.set_position(position.x-(subtitle.get_width()/2),ymax-margin-title.get_height()-subtitle.get_height());
-    }
-    if(title_allignment=="middle")
-    {
-        title.set_position(position.x-(title.get_width()/2),position.y-(title.get_height()/2));
-        subtitle.set_position(position.x-(subtitle.get_width()/2),position.y-(subtitle.get_height()/2));
-    }
-    if(title_allignment=="bottom")
-    {
-        title.set_position(position.x-(title.get_width()/2),ymin+margin+title.get_height()+subtitle.get_height());
-        subtitle.set_position(position.x-(subtitle.get_width()/2),ymin+margin+subtitle.get_height());
-    }
+    title.set_position(position.x,ymax-margin-(title.get_height()/2));
+    subtitle.set_position(position.x,ymax-margin-title.get_height()-spacing-(subtitle.get_height()/2));
 }
 
-void menu::set_title(std::string t)
+void menu::set_title(std::string txt)
 {
-    title.clear();
-    title.add_line(t);
+    title.set_text(txt);
+    format();
 }
 
-void menu::set_subtitle(std::string s)
+void menu::set_subtitle(std::string txt)
 {
-    subtitle.clear();
-    subtitle.add_line(s);
+    subtitle.set_text(txt);
     subtitle.show();
+    format();
 }
 
 void menu::set_layout(std::string l)
 {
     if(l=="vertical" || l=="horizontal")
         layout=l;
+    else
+        std::cerr<<"invalid layout.\n";
 }
 
-void menu::allign_title(std::string a)
-{
-    title_allignment=a;
-}
 
-void menu::add_item(button* b)
+void menu::add_item(button* item)
 {
-    items.push_back(b);
+    items.push_back(item);
+    format();
 }
 
 void menu::render()
@@ -191,14 +180,13 @@ menu::menu()
     fill_color.set(0.75,0.75,0.75);//make the background dark gray
     set_texture(default_texture);
     set_mask(default_mask);
-    set_title("menu");
+    title.set_text("menu");
     title.set_font("helvetica",18);
-    allign_title("top");
     subtitle.set_font("helvetica",12);
     subtitle.hide();
     layout=default_layout;
     spacing=default_spacing;
     margin=default_margin;
     bordered=true;
-    std::clog<<"object#"<<number<<"(menu)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<"(menu)"<<" created.\n";
 }

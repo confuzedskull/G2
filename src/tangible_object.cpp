@@ -23,100 +23,102 @@
 
 std::string tangible_object::default_collision_sound="clack.wav";
 
-bool tangible_object::is_close(complex_object B)
+bool tangible_object::within_range(complex_object target)
 {
-    if(islessequal(utilities::distance(position,B.get_position()),(get_radius()+B.get_radius())))
-        return true;
-    else
-        return false;
+    return isless(utilities::distance(position,target.get_position()),(get_radius()+target.get_radius()));
 }
 
-bool tangible_object::near_front(complex_object B)
+bool tangible_object::within_range(complex_object target, float range)
 {
-    if(isless(utilities::distance(front(),B.get_position()),B.get_height()/2))
-        return true;
-    else
-        return false;
-}
-bool tangible_object::near_back(complex_object B)
-{
-    if(isless(utilities::distance(back(),B.get_position()),B.get_height()/2))
-        return true;
-    else
-        return false;
+    return isless(utilities::distance(position,target.get_position()),(get_radius()+target.get_radius()+range));
 }
 
-bool tangible_object::near_left(complex_object B)
+bool tangible_object::near_front(complex_object target)
 {
-    if(isless(utilities::distance(left(),B.get_position()),B.get_width()/2))
-        return true;
-    else
-        return false;
+    return isless(utilities::distance(front(),target.get_position()),target.get_height()/2);
+}
+bool tangible_object::near_back(complex_object target)
+{
+    return isless(utilities::distance(back(),target.get_position()),target.get_height()/2);
 }
 
-bool tangible_object::near_right(complex_object B)
+bool tangible_object::near_left(complex_object target)
 {
-    if(isless(utilities::distance(right(),B.get_position()),B.get_width()/2))
-        return true;
-    else
-        return false;
+    return isless(utilities::distance(left(),target.get_position()),target.get_width()/2);
 }
 
-void tangible_object::repel(complex_object B)//object moves away from object B
+bool tangible_object::near_right(complex_object target)
 {
-    if(near_front(B))
+    return isless(utilities::distance(right(),target.get_position()),target.get_width()/2);
+}
+
+void tangible_object::watch(complex_object target)
+{
+    if(within_range(target))
+        turn_to_point((int)target.get_y(),(int)target.get_y());
+}
+
+void tangible_object::follow(complex_object target)
+{
+    if(within_range(target))
+        move_to_point((int)target.get_x(),(int)target.get_position().y);
+}
+
+void tangible_object::repel(complex_object target)//object moves away from object B
+{
+    if(near_front(target))
         move_back();
-    if(near_back(B))
+    if(near_back(target))
         move_forward();
-    if(near_left(B))
+    if(near_left(target))
         move_right();
-    if(near_right(B))
+    if(near_right(target))
         move_left();
 }
 
-void tangible_object::attract(complex_object B)//object moves toward object B
+void tangible_object::attract(complex_object target)//object moves toward object B
 {
-    if(near_front(B))
+    if(near_front(target))
         move_forward();
-    if(near_back(B))
+    if(near_back(target))
         move_back();
-    if(near_left(B))
+    if(near_left(target))
         move_left();
-    if(near_right(B))
+    if(near_right(target))
         move_right();
 }
 
-void tangible_object::simon_says(complex_object B)//object changes color according to side touched
+void tangible_object::simon_says(complex_object target)//object changes color according to side touched
 {
-    if(near_front(B))
+    if(near_front(target))
         fill_color.set(RED);
-    if(near_back(B))
+    if(near_back(target))
         fill_color.set(GREEN);
-    if(near_left(B))
+    if(near_left(target))
         fill_color.set(BLUE);
-    if(near_right(B))
+    if(near_right(target))
         fill_color.set(YELLOW);
 }
 
-void tangible_object::identify_touched(complex_object B)//variable touched_side[] is updated with number of the touched object
+void tangible_object::identify_touched(complex_object target)//variable touched_side[] is updated with number of the touched object
 {
-    if(near_left(B))
-        touched_side[0]=B.get_number();
+    if(near_left(target))
+        touched_side[0]=target.get_number();
     else
         touched_side[0]=-1;
 
-    if(near_right(B))
-        touched_side[1]=B.get_number();
+    if(near_right(target))
+        touched_side[1]=target.get_number();
     else
         touched_side[1]=-1;
 
-    if(near_front(B))
-        touched_side[2]=B.get_number();
+    if(near_front(target))
+        touched_side[2]=target.get_number();
     else
         touched_side[2]=-1;
 
-    if(near_back(B))
-        touched_side[3]=B.get_number();
+    if(near_back(target))
+        touched_side[3]=target.get_number();
     else
         touched_side[3]=-1;
 

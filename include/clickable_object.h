@@ -18,7 +18,7 @@
 #define CLICKABLE_H
 #include "basic_object.h"
 
-//A clickable object interfaces with the cursor
+//A clickable object interacts with the cursor
 class clickable_object: virtual public basic_object
 {
 protected:

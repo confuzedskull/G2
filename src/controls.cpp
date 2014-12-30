@@ -32,6 +32,7 @@
 #endif
 #include <math.h>
 #include <string.h>
+#include <iostream>
 
 //initialize variables
 bool controls::toggles[256] = {false};
@@ -112,7 +113,174 @@ void controls::previous_item()
 void controls::choose_item()
 {
     if(game::current_scene->current_menu->item_selected()!=-1)
-        game::current_scene->current_menu->current_item->action();
+    {
+        cursor::left_click=true;
+        cursor::left_down.x=(int)game::current_scene->current_menu->current_item->get_x();
+        cursor::left_down.y=(int)game::current_scene->current_menu->current_item->get_y();
+    }
+}
+
+void controls::switch_menu(int index)
+{
+    game::current_scene->switch_menu(index);
+}
+
+void controls::switch_menu(menu* new_menu)
+{
+    game::current_scene->switch_menu(new_menu);
+}
+
+void controls::switch_scene(int index)
+{
+    if(index>=0 && index<game::scenes.size())
+    {
+        cursor::reset();
+        game::scenes[index]->switch_menu(0);
+        game::current_scene=game::scenes[index];
+    }
+    else
+        std::cerr<<"scene index out of bounds.\n";
+}
+
+void controls::switch_scene(scene* new_scene)
+{
+    cursor::reset();
+    new_scene->switch_menu(0);
+    game::current_scene=new_scene;
+}
+
+
+void controls::show_foreground()
+{
+    game::play_scene->foreground.show();
+}
+void controls::hide_foreground()
+{
+    game::play_scene->foreground.hide();
+}
+
+void controls::show_middleground()
+{
+    game::play_scene->middleground.show();
+}
+
+void controls::hide_middleground()
+{
+    game::play_scene->middleground.hide();
+}
+
+void controls::show_background()
+{
+    game::play_scene->background.show();
+}
+
+void controls::hide_background()
+{
+    game::play_scene->background.hide();
+}
+
+void controls::show_draggable_objects()
+{
+    game::play_scene->show_draggable_objects();
+}
+
+void controls::hide_draggable_objects()
+{
+    game::play_scene->hide_draggable_objects();
+}
+
+void controls::show_physics_objects()
+{
+    game::play_scene->show_physics_objects();
+}
+
+void controls::hide_physics_objects()
+{
+    game::play_scene->hide_physics_objects();
+}
+
+void controls::show_rts_objects()
+{
+    game::play_scene->show_rts_objects();
+}
+
+void controls::hide_rts_objects()
+{
+    game::play_scene->hide_rts_objects();
+}
+
+void controls::show_textures()
+{
+    game::play_scene->show_textures();
+}
+
+void controls::hide_textures()
+{
+    game::play_scene->hide_textures();
+}
+
+void controls::mute_all()
+{
+    game::play_scene->mute_all();
+}
+
+void controls::unmute_all()
+{
+    game::play_scene->unmute_all();
+}
+
+void controls::add_draggable_object()
+{
+    draggable_object* new_do = new draggable_object();
+    game::play_scene->add_object(new_do);
+}
+
+void controls::add_physics_object()
+{
+    physics_object* new_po = new physics_object();
+    game::play_scene->add_object(new_po);
+}
+
+void controls::add_rts_object()
+{
+    rts_object* new_rtso = new rts_object();
+    game::play_scene->add_object(new_rtso);
+}
+
+void controls::create_object()
+{
+    if(game::play_scene->last_object->get_type()=="draggable object")
+        game::play_scene->add_object(new draggable_object());
+    if(game::play_scene->last_object->get_type()=="physics object")
+        game::play_scene->add_object(new physics_object());
+    if(game::play_scene->last_object->get_type()=="rts object")
+        game::play_scene->add_object(new rts_object());
+}
+
+void controls::delete_selected()
+{
+    for(auto so:cursor::selected_objects)
+    {
+        if(game::play_scene->draggable_objects.find(so.first)!=game::play_scene->draggable_objects.end())
+        {
+            std::clog<<"object#"<<so.second->get_number()<<"(draggable object)"<<" deleted."<<std::endl;
+            delete game::play_scene->draggable_objects[so.first];
+            game::play_scene->draggable_objects.erase(so.first);
+        }
+        if(game::play_scene->physics_objects.find(so.first)!=game::play_scene->physics_objects.end())
+        {
+            std::clog<<"object#"<<so.second->get_number()<<"(physics object)"<<" deleted."<<std::endl;
+            delete game::play_scene->physics_objects[so.first];
+            game::play_scene->physics_objects.erase(so.first);
+        }
+        if(game::play_scene->rts_objects.find(so.first)!=game::play_scene->rts_objects.end())
+        {
+            std::clog<<"object#"<<so.second->get_number()<<"(rts object)"<<" deleted."<<std::endl;
+            delete game::play_scene->rts_objects[so.first];
+            game::play_scene->rts_objects.erase(so.first);
+        }
+    }
+    cursor::selected_objects.clear();
 }
 
 //NOTE: This function uses C++11 "for" loops
@@ -185,21 +353,18 @@ void controls::mouse_click(int button, int state, int x, int y)
         cursor::left_down.set(x,window::height-y);
         cursor::left_click=true;
     }
-
     if(button==GLUT_LEFT_BUTTON && state==GLUT_UP)
     {
         cursor::left_up.set(x,window::height-y);
         cursor::highlighting=false;
         cursor::left_click=false;
     }
-
     if(button==GLUT_RIGHT_BUTTON && state==GLUT_DOWN)
     {
         cursor::highlighting=false;
         cursor::right_click=true;
         cursor::right_down.set(x,window::height-y);
     }
-
     if(button==GLUT_RIGHT_BUTTON && state==GLUT_UP)
     {
         cursor::highlighting=false;
@@ -301,6 +466,42 @@ void controls::special_keys(int key,int x,int y)
     //then we will check them again
     switch(key)
     {
+    case GLUT_KEY_F1:
+        special_states["F1"]=true;
+        break;
+    case GLUT_KEY_F2:
+        special_states["F2"]=true;
+        break;
+    case GLUT_KEY_F3:
+        special_states["F3"]=true;
+        break;
+    case GLUT_KEY_F4:
+        special_states["F4"]=true;
+        break;
+    case GLUT_KEY_F5:
+        special_states["F5"]=true;
+        break;
+    case GLUT_KEY_F6:
+        special_states["F6"]=true;
+        break;
+    case GLUT_KEY_F7:
+        special_states["F7"]=true;
+        break;
+    case GLUT_KEY_F8:
+        special_states["F8"]=true;
+        break;
+    case GLUT_KEY_F9:
+        special_states["F9"]=true;
+        break;
+    case GLUT_KEY_F10:
+        special_states["F10"]=true;
+        break;
+    case GLUT_KEY_F11:
+        special_states["F11"]=true;
+        break;
+    case GLUT_KEY_F12:
+        special_states["F12"]=true;
+        break;
     case GLUT_KEY_UP:
         special_states["up"]=true;
         break;
@@ -313,6 +514,18 @@ void controls::special_keys(int key,int x,int y)
     case GLUT_KEY_RIGHT:
         special_states["right"]=true;
         break;
+    case GLUT_KEY_PAGE_UP:
+        special_states["page up"]=true;
+        break;
+    case GLUT_KEY_PAGE_DOWN:
+        special_states["page down"]=true;
+        break;
+    case GLUT_KEY_HOME:
+        special_states["home"]=true;
+        break;
+    case GLUT_KEY_END:
+        special_states["end"]=true;
+        break;
     case GLUT_KEY_INSERT:
         special_states["insert"]=true;
         break;
@@ -323,7 +536,6 @@ void controls::special_keys(int key,int x,int y)
         if(special_states[key.first])//binded key is pressed
             key.second();//just perform the associated action
     }
-
     for(auto key:game::current_scene->special_toggles)
     {
             if(special_states[key.first])

@@ -23,7 +23,7 @@
 //A physics object has physical properties and inherits the ability to detect collision from the tangible object class
 class physics_object: public clickable_object, public tangible_object
 {
-protected:
+private:
     point2f rest_position;
     float rest_rotation;//the rotation of the object at rest
 public:

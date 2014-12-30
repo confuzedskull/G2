@@ -79,13 +79,32 @@ void scene::add_menu(dropdown_menu* dm)
 
 void scene::switch_menu(int index)
 {
-    for(int i=0;i<menus.size();i++)
+    if(index>=0 && index<menus.size())
     {
-        if(i!=index)
+        for(int i=0;i<menus.size();i++)
+        {
+            if(i!=index)
             menus[i]->hide();
+        }
+        menus[index]->show();
+        current_menu=menus[index];
     }
-    menus[index]->show();
-    current_menu=menus[index];
+    else
+    {
+        std::cerr<<"menu index out of bounds.\n";
+        return;
+    }
+}
+
+void scene::switch_menu(menu* new_menu)
+{
+    for(auto m:menus)
+    {
+        if(m->get_number()!=new_menu->get_number())
+            m->hide();
+    }
+    new_menu->show();
+    current_menu=new_menu;
 }
 
 void scene::bind_key(unsigned char key, int* toggle)
@@ -95,7 +114,9 @@ void scene::bind_key(unsigned char key, int* toggle)
 
 void scene::bind_key(std::string special_key, int* toggle)
 {
-    special_toggles[special_key]=toggle;
+    std::string comparison = "F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12,up,down,left,right,page up,page down,home,end,insert";
+    if(comparison.find(special_key))
+        special_toggles[special_key]=toggle;
 }
 
 void scene::bind_key(unsigned char key, void (*action)())
@@ -105,6 +126,8 @@ void scene::bind_key(unsigned char key, void (*action)())
 
 void scene::bind_key(std::string special_key, void (*action)())
 {
+    std::string comparison = "F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12,up,down,left,right,page up,page down,home,end,insert";
+    if(comparison.find(special_key))
     special_bindings[special_key]=action;
 }
 
@@ -286,42 +309,76 @@ void scene::show_menus()
 {
     for(auto m:menus)//C++11 "for" loop
         m->show();
-    for(auto dm:dropdown_menus)//C++11 "for" loop
-        dm->show();
 }
 
 void scene::hide_menus()
 {
     for(auto m:menus)//C++11 "for" loop
         m->hide();
-    for(auto dm:dropdown_menus)//C++11 "for" loop
-        dm->hide();
 }
 
 void scene::enable_menus()
 {
-    for(auto dm:dropdown_menus)//C++11 "for" loop
-        dm->enable();
+    for(auto m:menus)//C++11 "for" loop
+    {
+        for(auto i:m->items)
+            i->enable();
+    }
 }
 
 void scene::disable_menus()
 {
-    for(auto dm:dropdown_menus)//C++11 "for" loop
-        dm->disable();
+    for(auto m:menus)//C++11 "for" loop
+    {
+        for(auto i:m->items)
+            i->disable();
+    }
 }
 
 void scene::mute_menus()
 {
     for(auto m:menus)
         m->mute();
-    for(auto dm:dropdown_menus)
-        dm->mute();
 }
 
 void scene::unmute_menus()
 {
     for(auto m:menus)
         m->unmute();
+}
+
+void scene::show_dropdown_menus()
+{
+    for(auto dm:dropdown_menus)//C++11 "for" loop
+        dm->show();
+}
+
+void scene::hide_dropdown_menus()
+{
+    for(auto dm:dropdown_menus)//C++11 "for" loop
+        dm->hide();
+}
+
+void scene::enable_dropdown_menus()
+{
+    for(auto dm:dropdown_menus)//C++11 "for" loop
+        dm->enable();
+}
+
+void scene::disable_dropdown_menus()
+{
+    for(auto dm:dropdown_menus)//C++11 "for" loop
+        dm->disable();
+}
+
+void scene::mute_dropdown_menus()
+{
+    for(auto dm:dropdown_menus)
+        dm->mute();
+}
+
+void scene::unmute_dropdown_menus()
+{
     for(auto dm:dropdown_menus)
         dm->unmute();
 }
@@ -388,6 +445,7 @@ void scene::show_all()
     show_buttons();
     show_checkboxes();
     show_menus();
+    show_dropdown_menus();
 }
 
 void scene::hide_all()
@@ -400,6 +458,7 @@ void scene::hide_all()
     hide_buttons();
     hide_checkboxes();
     hide_menus();
+    hide_dropdown_menus();
 }
 
 void scene::enable_all()
@@ -408,6 +467,7 @@ void scene::enable_all()
     enable_checkboxes();
     enable_buttons();
     enable_menus();
+    enable_dropdown_menus();
 }
 
 void scene::disable_all()
@@ -416,6 +476,7 @@ void scene::disable_all()
     disable_checkboxes();
     disable_buttons();
     disable_menus();
+    disable_dropdown_menus();
 }
 
 void scene::mute_all()
@@ -427,6 +488,7 @@ void scene::mute_all()
     mute_checkboxes();
     mute_buttons();
     mute_menus();
+    mute_dropdown_menus();
 }
 
 void scene::unmute_all()
@@ -438,35 +500,29 @@ void scene::unmute_all()
     unmute_checkboxes();
     unmute_buttons();
     unmute_menus();
+    unmute_dropdown_menus();
 }
 
 //NOTE: This function uses C++11 "for" loops
 void scene::render()
 {
     background.render();
-    //render the rts objects
     for(auto r:rts_objects)
         r.second->render();
     middleground.render();
-    //render the draggable objects
     for(auto d:draggable_objects)
         d.second->render();
     foreground.render();
-    //render the physics objects
     for(auto p:physics_objects)
         p.second->render();
-    //render checkboxes
     for(auto c:checkboxes)
         c->render();
-    //render buttons
     for(auto b:buttons)
         b->render();
-    //render menus
     for(auto m:menus)
         m->render();
     for(auto dm:dropdown_menus)
         dm->render();
-    //render text
     for(auto t:labels)
         t->render();
 }
@@ -477,24 +533,18 @@ void scene::update()
     background.update();
     middleground.update();
     foreground.update();
-    //update physics objects
     for(auto p:physics_objects)
         p.second->update();
-    //update rts objects
     for(auto r:rts_objects)
         r.second->update();
-    //update draggable objects
     for(auto d:draggable_objects)
         d.second->update();
-    //update menus
     for(auto m:menus)
         m->update();
     for(auto dm:dropdown_menus)
         dm->update();
-    //update checkboxes
     for(auto c:checkboxes)
         c->update();
-    //update buttons
     for(auto b:buttons)
         b->update();
 }
@@ -610,7 +660,7 @@ void scene::save()
     scene_file.precision(3);
     scene_file.setf(std::ios::fixed);
     //save foreground properties
-    scene_file<<foreground.get_position().x<<' '<<foreground.get_position().y<<std::endl;
+    scene_file<<foreground.get_x()<<' '<<foreground.get_position().y<<std::endl;
     scene_file<<foreground.get_rotation()<<std::endl;
     scene_file<<foreground.get_width()<<' '<<foreground.get_height()<<std::endl;
     scene_file<<foreground.fill_color.str()<<std::endl;
@@ -624,7 +674,7 @@ void scene::save()
     scene_file<<foreground.muted<<std::endl;
     scene_file<<foreground.get_texture()<<std::endl;
     //save middleground properties
-    scene_file<<middleground.get_position().x<<' '<<middleground.get_position().y<<std::endl;
+    scene_file<<middleground.get_x()<<' '<<middleground.get_position().y<<std::endl;
     scene_file<<middleground.get_rotation()<<std::endl;
     scene_file<<middleground.get_width()<<' '<<middleground.get_height()<<std::endl;
     scene_file<<middleground.fill_color.str()<<std::endl;
@@ -638,7 +688,7 @@ void scene::save()
     scene_file<<middleground.muted<<std::endl;
     scene_file<<middleground.get_texture()<<std::endl;
     //save background properties
-    scene_file<<background.get_position().x<<' '<<background.get_position().y<<std::endl;
+    scene_file<<background.get_x()<<' '<<background.get_position().y<<std::endl;
     scene_file<<background.get_rotation()<<std::endl;
     scene_file<<background.get_width()<<' '<<background.get_height()<<std::endl;
     scene_file<<background.fill_color.str()<<std::endl;

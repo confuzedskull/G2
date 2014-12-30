@@ -401,5 +401,5 @@ physics_object::physics_object()
     set_hover_sound(default_hover_sound);
     set_collision_sound(default_collision_sound);
     set_movement_sound(default_movement_sound);
-    std::clog<<"object#"<<number<<"(physics object)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<"(physics object)"<<" created.\n";
 }

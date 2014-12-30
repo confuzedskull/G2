@@ -17,6 +17,7 @@
 #include "checkbox.h"
 #include "cursor.h"
 #include "audio.h"
+#include "ui.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -35,33 +36,24 @@ std::string checkbox::default_texture = "";
 std::string checkbox::default_mask = "";
 std::string checkbox::default_click_sound = "";
 std::string checkbox::default_hover_sound = "";
-std::string checkbox::default_allignment = "left";
 int checkbox::default_margin = 4;
 int checkbox::default_width = 16;
 int checkbox::default_height = 16;
 
-void checkbox::set_label(std::string txt)
-{
-    text.clear();
-    text.add_line(txt);
-    allign_label(text_allignment);
-}
-
-void checkbox::allign_label(std::string allignment)
-{
-    if(allignment=="left")
-        text.set_position(xmin-margin-text.get_width(),position.y-(text.get_height()/2));
-    if(allignment=="right")
-        text.set_position(xmax+margin,position.y);
-    if(allignment=="top")
-        text.set_position(position.x-(text.get_width()/2),ymax+margin);
-    if(allignment=="bottom")
-        text.set_position(position.x-(text.get_width()/2),ymin-margin-text.get_height());
-}
-
 void checkbox::bind_option(int* o)
 {
     option=o;
+}
+
+std::string checkbox::get_type()
+{
+    return "checkbox";
+}
+
+void checkbox::set_label(std::string txt)
+{
+    text.set_text(txt);
+    text.set_position(xmin-margin-(text.get_width()/2),position.y);
 }
 
 void checkbox::mouse_function()
@@ -82,6 +74,12 @@ void checkbox::mouse_function()
         else
             *option=checked;
     }
+}
+
+void checkbox::format()
+{
+    calc_boundaries();
+    text.set_position(xmin-margin-(text.get_width()/2),position.y);
 }
 
 void checkbox::render()
@@ -106,6 +104,7 @@ void checkbox::render()
 
 void checkbox::update()
 {
+    text.visible=visible;
     mouse_function();
 }
 
@@ -122,5 +121,5 @@ checkbox::checkbox()
     set_mask(default_mask);
     set_click_sound(default_click_sound);
     set_hover_sound(default_hover_sound);
-    std::clog<<"object#"<<number<<"(checkbox)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<"(checkbox)"<<" created.\n";
 }

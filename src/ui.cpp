@@ -40,17 +40,16 @@ void ui::hide_text()
 
 void ui::update_text()
 {
-    using namespace std;
+    /*using namespace std;
     label* object_info = game::play_scene->labels[0];
     if(object_info->visible && !cursor::selected_objects.empty())
     {
         unsigned index = cursor::selected_object;
-        object_info->clear();
         object_info->add_line("object #:"+to_string(cursor::left_clicked_object->get_number()));
         object_info->add_line("type: "+cursor::left_clicked_object->get_type());
         object_info->add_line("dimensions: "+to_string(cursor::left_clicked_object->get_width())+'X'+to_string(cursor::left_clicked_object->get_height()));
         object_info->add_line("rotation: "+to_string(cursor::left_clicked_object->get_rotation()));
-        object_info->add_line("current position: "+to_string(cursor::left_clicked_object->get_position().x)+", "+to_string(cursor::left_clicked_object->get_position().y));
+        object_info->add_line("current position: "+to_string(cursor::left_clicked_object->get_x())+", "+to_string(cursor::left_clicked_object->get_position().y));
         if(cursor::left_clicked_object->get_type()=="physics object")//display the following if a physics object is selected
         {
             physics_object* po = game::current_scene->physics_objects[index];
@@ -90,5 +89,5 @@ void ui::update_text()
         game_info->add_line("mouse move: "+to_string(cursor::passive.x)+", "+to_string(cursor::passive.y));
         game_info->add_line("mouse click: "+to_string(cursor::left_down.x)+", "+to_string(cursor::left_down.y));
         game_info->add_line("mouse drag: "+to_string(cursor::left_drag.x)+", "+to_string(cursor::left_drag.y));
-    }
+    }*/
 }

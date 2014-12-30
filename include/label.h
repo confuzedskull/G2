@@ -22,25 +22,29 @@
 #include <sstream>
 
 //A label stores a string which can be formatted and displayed on screen
-class label: public basic_object
+class label: virtual public basic_object
 {
 protected:
-    std::vector<std::string> text;
-    void* font;
+    std::string text;
+    int allignment;
+    void* font;//points to a GLUT font
     int spacing;//the space between each line
     int font_size;
     float font_width;
     float font_height;
 public:
     static std::string default_style;
+    static int default_allignment;
     static int default_size;
     static int default_spacing;
-    void add_line(std::string str);
-    void set_spacing(int space);
+    int get_allignment();
+    color font_color;
+    void allign(int pos);
+    void allign(std::string pos);
+    void set_spacing(int val);
+    void set_text(std::string txt);
     void set_font(std::string style, int size);
-    void clear();
-    void render();//prints the text to the screen
+    void render() override;//prints the text to the screen
     label();
 };
-
 #endif // LABEL_H

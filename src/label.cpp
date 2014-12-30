@@ -29,20 +29,48 @@
 #include <GL/glut.h>
 #endif
 #include <iostream>
+#include <math.h>
 
 std::string label::default_style = "helvetica";
+int label::default_allignment = CENTER;
 int label::default_size = 12;
 int label::default_spacing = 1;
 
-void label::add_line(std::string str)
+int label::get_allignment()
 {
-    text.push_back(str);
-    set_dimensions(font_width*str.length(),font_height);
+    return allignment;
 }
 
-void label::set_spacing(int space)
+void label::allign(int pos)
 {
-    spacing=space;
+    if(pos==LEFT || pos==CENTER || pos==RIGHT)
+        allignment=pos;
+    else
+        std::cerr<<"invalid allignment.\n";
+}
+
+void label::allign(std::string pos)
+{
+    if(pos=="left")
+        allign(LEFT);
+    else if(pos=="right")
+        allign(RIGHT);
+    else if(pos=="center")
+        allign(CENTER);
+}
+
+void label::set_spacing(int val)
+{
+    spacing=val;
+}
+
+void label::set_text(std::string txt)
+{
+    text=txt;
+    if(isless((float)width,font_width*txt.length()))
+        width=(int)(font_width*txt.length());
+    if(isless((float)height,font_height))
+        height=(int)font_height;
 }
 
 void label::set_font(std::string style, int size)
@@ -76,25 +104,37 @@ void label::render()
 {
     if(visible)
     {
-        glColor3f(fill_color.r,fill_color.g,fill_color.b);
-        for(unsigned l=0; l<text.size(); l++)//iterate through each line
+        render_shape();
+        int text_pos;
+        switch(allignment)
         {
-            glRasterPos2f(position.x,position.y-((spacing+font_height)*l));//update the character position
-            for(unsigned c=0; c<text[l].length(); c++)//iterate through each character
-                glutBitmapCharacter(font, text[l][c]);//print the character to the screen
+        case LEFT:
+            text_pos=xmin;
+            break;
+        case CENTER:
+            text_pos=position.x-((text.length()*font_width)/2);
+            break;
+        case RIGHT:
+            text_pos=xmax;
+            break;
         }
+        glColor3f(font_color.r,font_color.g,font_color.b);
+        glRasterPos2f(text_pos,position.y-(font_height/2));//update the character position
+        for(unsigned c=0; c<text.length(); c++)//iterate through each character
+            glutBitmapCharacter(font, text[c]);//print the character to the screen
+        render_border();
     }
-}
-
-void label::clear()
-{
-    text.clear();
 }
 
 label::label()
 {
-    fill_color=BLACK;
+    filled=false;
+    bordered=false;
+    fill_color=YELLOW;
+    font_color=BLACK;
+    set_dimensions(12,12);
+    allign(default_allignment);
     set_font(default_style,default_size);
     spacing=default_spacing;
-    std::clog<<"object#"<<number<<"(label)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<"(label)"<<" created.\n";
 }

@@ -58,6 +58,16 @@ point2f* basic_object::get_positionptr()
     return &position;
 }
 
+float basic_object::get_x()
+{
+    return position.x;
+}
+
+float basic_object::get_y()
+{
+    return position.y;
+}
+
 float basic_object::get_rotation()
 {
     return rotation;
@@ -115,6 +125,19 @@ void basic_object::set_mask(std::string filename)
         mask=filename;
     else
         std::cerr<<filename<<" not found.\n";
+}
+
+void basic_object::set_property(std::string name, int value)
+{
+    if(properties.find(name)!=properties.end())
+        properties[name]=value;
+    else
+        std::cerr<<"property not found.\n";
+}
+
+void basic_object::add_property(std::string name, int value)
+{
+    properties[name]=value;
 }
 
 void basic_object::calc_boundaries()//calculates the limits of the object

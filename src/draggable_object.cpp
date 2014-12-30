@@ -221,5 +221,5 @@ draggable_object::draggable_object()
     set_hover_sound(default_hover_sound);
     set_collision_sound(default_collision_sound);
     set_movement_sound(default_movement_sound);
-    std::clog<<"object#"<<number<<"(draggable object)"<<" created. "<<sizeof(*this)<<" bytes"<<std::endl;
+    std::clog<<"object#"<<number<<"(draggable object)"<<" created.\n";
 }
