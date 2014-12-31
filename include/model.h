@@ -14,30 +14,42 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#ifndef RTS_OBJECT_H
-#define RTS_OBJECT_H
+#ifndef MODEL_H
+#define MODEL_H
 #include "clickable_object.h"
-#include "tangible_object.h"
+#include "physics_object.h"
 
-class rts_object: public clickable_object, public tangible_object
+class model: public clickable_object, public physics_object
 {
 public:
-    static point2i default_position;
-    static int default_width;
-    static int default_height;
     static std::string default_texture;
     static std::string default_mask;
     static std::string default_click_sound;
     static std::string default_hover_sound;
     static std::string default_collision_sound;
     static std::string default_movement_sound;
+    static int default_width;
+    static int default_height;
+    static bool enable_fill;
+    static bool enable_border;
+    static bool enable_texture;
+    static bool enable_mask;
+    static bool enable_dragging;
+    static bool enable_physics;
+    static bool enable_rts_controls;
+    static bool enable_keyboard_controls;
+    static color default_fill_color;
+    static color default_border_color;
+    bool physics_enabled;
+    bool rts_controls;
+    bool keyboard_controls;
     std::string get_type() override;
-    void mouse_function() override;//performs a variety of actions dependent on cursor interaction
-    void update() override;
-    void sync() override;
+    void mouse_function() override;
     void load();
     void save();
-    rts_object();
+    void sync() override;
+    void update() override;
+    model();
 };
 
-#endif // RTS_OBJECT_H
+#endif // MODEL_H

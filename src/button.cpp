@@ -19,30 +19,20 @@
 #include "window.h"
 #include "cursor.h"
 #include "audio.h"
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <GLUT/glut.h>
-#else
-#ifdef _WIN32
-#include <windows.h>
-#endif
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
-#endif
 #include <iostream>
 #include <math.h>
 
-std::string button::default_texture="";
-std::string button::default_mask="";
-std::string button::default_click_sound="";
-std::string button::default_hover_sound="";
-int button::default_margin = 5;
-int button::default_width = 48;
-int button::default_height = 12;
+std::string ui::button::default_texture="";
+std::string ui::button::default_mask="";
+std::string ui::button::default_click_sound="";
+std::string ui::button::default_hover_sound="";
+color ui::button::default_fill_color = ui::default_fill_color;
+color ui::button::default_border_color = ui::default_border_color;
+int ui::button::default_margin = 5;
+int ui::button::default_width = 48;
+int ui::button::default_height = 12;
 
-int button::combined_width()
+int ui::button::combined_width()
 {
     if(text.get_allignment()==LEFT || text.get_allignment()==RIGHT)
         return text.get_width()+margin+width;
@@ -55,7 +45,7 @@ int button::combined_width()
     }
 }
 
-int button::combined_height()
+int ui::button::combined_height()
 {
     if(text.get_allignment()==TOP || text.get_allignment()==BOTTOM)
         return text.get_height()+margin+height;
@@ -68,7 +58,12 @@ int button::combined_height()
     }
 }
 
-void button::format()
+std::string ui::button::get_type()
+{
+    return "button";
+}
+
+void ui::button::format()
 {
     if(width<text.get_width()+(margin*2))
         width=text.get_width()+(margin*2);
@@ -78,25 +73,25 @@ void button::format()
     text.set_position(position.x,position.y);
 }
 
-void button::set_label(std::string txt)
+void ui::button::set_label(std::string txt)
 {
     text.set_text(txt);
     text.set_position(position.x,position.y);
     format();
 }
 
-void button::set_action(void (*act)())
+void ui::button::set_action(void (*act)())
 {
     action=act;
 }
 
-void button::set_action(void (*act)(int),int i)
+void ui::button::set_action(void (*act)(int),int i)
 {
     action1i=act;
     int_param1=i;
 }
 
-void button::mouse_function()
+void ui::button::mouse_function()
 {
     if(visible && enabled)
     {
@@ -118,7 +113,7 @@ void button::mouse_function()
     }
 }
 
-void button::render()
+void ui::button::render()
 {
     if(visible)
     {
@@ -129,26 +124,25 @@ void button::render()
     }
 }
 
-void button::update()
+void ui::button::update()
 {
     text.visible=visible;
     mouse_function();
 }
 
-void button::action_placeholder(){}
+void ui::button::action_placeholder(){}
 
-void button::action_placeholder1i(int i){}
+void ui::button::action_placeholder1i(int i){}
 
-button::button()
+ui::button::button()
 {
-    position.set(0.0f,0.0f);
     set_dimensions(default_width,default_height);
-    fill_color.set(0.75f,0.75f,0.75f);
-    fill_color.changed=false;
+    fill_color=default_fill_color;
+    border_color=default_border_color;
     margin=default_margin;
     text.set_text("click me");
-    action=button::action_placeholder;
-    action1i=button::action_placeholder1i;
+    action=ui::button::action_placeholder;
+    action1i=ui::button::action_placeholder1i;
     bordered=true;
     performed_action=false;
     set_texture(default_texture);
@@ -158,12 +152,12 @@ button::button()
     std::clog<<"object#"<<number<<"(button)"<<" created.\n";
 }
 
-button::button(float x, float y, char* txt, void (*act)(void))
+ui::button::button(float x, float y, char* txt, void (*act)(void))
 {
     position.set(x,y);
     set_dimensions(default_width,default_height);
-    fill_color.set(0.75f,0.75f,0.75f);
-    fill_color.changed=false;
+    fill_color=default_fill_color;
+    border_color=default_border_color;
     margin=default_margin;
     set_label(txt);
     action=act;

@@ -35,6 +35,7 @@ public:
     point2f back();
     point2f left();
     point2f right();
+    std::string get_type() override;
     void orient();//calculates each directional heading
     void rotate(float angle) override;//performs a rotation transformation based on the given angle
     void set_rotation(float angle) override;

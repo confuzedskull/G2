@@ -21,45 +21,49 @@
 #include <math.h>
 #include <iostream>
 
+bool clickable_object::enable_dragging = false;
+
 bool clickable_object::highlighted()
 {
     //if object lies within selection box boundaries, return true
-    if(cursor::highlighting && enabled &&
+    return (enabled && cursor::highlighting &&
         position.x<cursor::xmax && position.x>cursor::xmin &&
-        position.y>cursor::ymax && position.y<cursor::ymin)
-        return true;
-    else
-        return false;
+        position.y>cursor::ymax && position.y<cursor::ymin);
+}
+
+bool clickable_object::dragged()
+{
+    return (enabled && draggable && cursor::left_dragging && !cursor::highlighting &&
+       (cursor::left_drag.x<xmax) && (cursor::left_drag.x>xmin) &&
+       (cursor::left_drag.y<ymax) && (cursor::left_drag.y>ymin));
 }
 
 bool clickable_object::hovered_over()
 {
-    if(!cursor::left_click && enabled &&
+    return (enabled && !cursor::left_clicking &&
        (cursor::passive.x<xmax) && (cursor::passive.x>xmin) &&
-       (cursor::passive.y<ymax) && (cursor::passive.y>ymin))
-        return true;
-    else
-        return false;
+       (cursor::passive.y<ymax) && (cursor::passive.y>ymin));
 }
 
 bool clickable_object::left_clicked()
 {
-    if(cursor::left_click && enabled &&
+    return (enabled && cursor::left_clicking &&
        (cursor::left_down.x<xmax) && (cursor::left_down.x>xmin) &&
-       (cursor::left_down.y<ymax) && (cursor::left_down.y>ymin))
-        return true;
-    else
-        return false;
+       (cursor::left_down.y<ymax) && (cursor::left_down.y>ymin));
 }
 
 bool clickable_object::right_clicked()
 {
-    if(cursor::right_click && enabled &&
+    return (enabled && cursor::right_clicking &&
        (cursor::right_down.x<xmax) && (cursor::right_down.x>xmin) &&
-       (cursor::right_down.y<ymax) && (cursor::right_down.y>ymin))
-        return true;
-    else
-        return false;
+       (cursor::right_down.y<ymax) && (cursor::right_down.y>ymin));
+}
+
+bool clickable_object::double_clicked()
+{
+    return (enabled && cursor::left_clicking && (click_time<1000) &&
+        (cursor::left_down.x<xmax) && (cursor::left_down.x>xmin) &&
+        (cursor::left_down.y<ymax) && (cursor::left_down.y>ymin));
 }
 
 void clickable_object::highlight_function()
@@ -69,6 +73,12 @@ void clickable_object::highlight_function()
         cursor::selected_objects[number]=this;
         selected=true;
     }
+}
+
+void clickable_object::drag_function()
+{
+    if(dragged())
+        set_position(cursor::left_drag.x,cursor::left_drag.y);
 }
 
 void clickable_object::hover_function()
@@ -94,22 +104,19 @@ void clickable_object::left_click_function()
             std::clog<<"object#"<<number<<"(clickable object)"<<" selected"<<std::endl;
         }
         cursor::left_clicked_object=this;
-        cursor::left_clicked_an_object = true;
         cursor::selected_object=number;
         cursor::selected_objects[number]=this;
         selected = true;
     }
     else if(selected)
     {
-        if(cursor::left_click && !cursor::highlighting)
+        if(cursor::left_clicking && !cursor::highlighting)
         {
-            if(cursor::left_clicked_an_object && cursor::selected_object !=number)//clicked another object
+            if(cursor::selected_object!=number)//clicked another object
             {
                 selected = false;
-                cursor::selected_objects.erase(number);
+                cursor::selected_objects.erase(cursor::selected_object);
             }
-            if(!cursor::left_clicked_ui)//clicked nothing
-                selected = false;
         }
     }
 }
@@ -117,16 +124,14 @@ void clickable_object::left_click_function()
 void clickable_object::right_click_function()
 {
     if(right_clicked())//right clicked this object
-    {
         cursor::right_clicked_object=this;
-        cursor::right_clicked_an_object=true;
-    }
 }
 
 void clickable_object::mouse_function()
 {
     if(visible && enabled)
     {
+        drag_function();
         highlight_function();
         left_click_function();
         right_click_function();
@@ -164,7 +169,17 @@ void clickable_object::update()
     mouse_function();
 }
 
+void clickable_object::sync()
+{
+    if(left_clicked())
+        click_time++;
+    else
+        click_time=0;
+}
+
 clickable_object::clickable_object(): basic_object()
 {
     enable();
+    draggable=enable_dragging;
+    click_time=0;
 }

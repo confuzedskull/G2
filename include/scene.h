@@ -16,9 +16,7 @@
 
 #ifndef SCENE_H
 #define SCENE_H
-#include "draggable_object.h"
-#include "physics_object.h"
-#include "rts_object.h"
+#include "model.h"
 #include "label.h"
 #include "checkbox.h"
 #include "button.h"
@@ -36,62 +34,52 @@ public:
     static int total_scenes;
     std::string file_name;
     basic_object foreground, middleground, background;
+    basic_object* current_object;
     basic_object* last_object;
-    menu* current_menu;
-    //maps are used because we need to access the objects by referencing a common identifier (object.number)
-    //pointers are used because everything is created in game::initialize() and we just need to reference them
-    std::map<int,draggable_object*> draggable_objects;
-    std::map<int,physics_object*> physics_objects;
-    std::map<int,rts_object*> rts_objects;
+    ui::menu* current_menu;
+    model* current_model;
+    std::map<int,model*> models;
     std::map<unsigned char, void (*)()> key_bindings;
     std::map<unsigned char, int*> key_toggles;
     std::map<std::string, void (*)()> special_bindings;
     std::map<std::string, int*> special_toggles;
-    std::vector<label*> labels;
-    std::vector<checkbox*> checkboxes;
-    std::vector<button*> buttons;
-    std::vector<menu*> menus;
-    std::vector<dropdown_menu*> dropdown_menus;
-    void add_object(draggable_object*);//add a draggable object to the scene
-    void add_object(physics_object*);//add a physics object to the scene
-    void add_object(rts_object*);//add an rts object to the scene
-    void add_text(label*);//add text object to the scene
-    void add_checkbox(checkbox*);//add checkbox to the scene
-    void add_button(button*);//add button to the scene
-    void add_menu(menu*);//add menu to the scene
-    void add_menu(dropdown_menu*);//add dropdown menu to the scene
+    std::vector<ui::label*> labels;
+    std::vector<ui::checkbox*> checkboxes;
+    std::vector<ui::button*> buttons;
+    std::vector<ui::menu*> menus;
+    std::vector<ui::dropdown_menu*> dropdown_menus;
+    void add_model(model* mdl);//add a model to the scene
+    void add_label(ui::label* lbl);//add label to the scene
+    void add_checkbox(ui::checkbox* cbx);//add checkbox to the scene
+    void add_button(ui::button* btn);//add button to the scene
+    void add_menu(ui::menu* mnu);//add menu to the scene
+    void add_menu(ui::dropdown_menu* ddm);//add dropdown menu to the scene
     void switch_menu(int index);//make the menu at given index current and hide other menus
-    void switch_menu(menu* new_menu);//make given menu current and hide other menus
+    void switch_menu(ui::menu* mnu);//make given menu current and hide other menus
     void bind_key(unsigned char key, int* toggle);//associate a key which will toggle a game option on/off
     void bind_key(std::string special_key, int* toggle);//associate a key which will toggle a game option on/off
     void bind_key(unsigned char key, void (*action)());//associate a key with an action
     void bind_key(std::string special_key, void (*action)());//associate a special key with an action
-    void show_draggable_objects();//show all draggable objects
-    void hide_draggable_objects();//hide all draggable objects
-    void show_physics_objects();//show all physics objects
-    void hide_physics_objects();//hide all physics objects
-    void show_rts_objects();//show all rts objects
-    void hide_rts_objects();//hide all rts objects
-    void show_text();//show the text
-    void hide_text();//hide the text
-    void show_objects();//show all objects
-    void hide_objects();//hide all objects
-    void enable_objects();//enable object mouse interaction
-    void disable_objects();//disable object mouse interaction
-    void mute_objects();
-    void unmute_objects();
+    void show_labels();//show labels
+    void hide_labels();//hide labels
+    void show_models();//show all objects
+    void hide_models();//hide all objects
+    void enable_models();//enable object mouse interaction
+    void disable_models();//disable object mouse interaction
+    void mute_models();//silence model sound
+    void unmute_models();//enable model sound
     void show_checkboxes();//show all checkboxes
     void hide_checkboxes();//hide all checkboxes
     void enable_checkboxes();//enable checkbox mouse interaction
     void disable_checkboxes();//disable checkbox mouse interaction
-    void mute_checkboxes();
-    void unmute_checkboxes();
+    void mute_checkboxes();//disable checkbox sound
+    void unmute_checkboxes();//enable checkbox sound
     void show_buttons();//show all buttons
     void hide_buttons();//hide all buttons
     void enable_buttons();//enable button mouse interaction
     void disable_buttons();//disable button mouse interaction
-    void mute_buttons();
-    void unmute_buttons();
+    void mute_buttons();//disable button sound
+    void unmute_buttons();//enable button sound
     void show_menus();//show all menus
     void hide_menus();//hide all menus
     void enable_menus();//enable all menus
@@ -104,8 +92,8 @@ public:
     void disable_dropdown_menus();//disable all dropdown menus
     void mute_dropdown_menus();//mute all dropdown menus
     void unmute_dropdown_menus();//unmute all dropdown menus
-    void show_textures();
-    void hide_textures();
+    void show_textures();//disable object fill colors and enable textures
+    void hide_textures();//enable object fill colors and disable textures
     void show_all();//show all objects and ui elements
     void hide_all();//hide all objects and ui elements
     void enable_all();//enable all ui elements

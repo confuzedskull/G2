@@ -23,6 +23,11 @@
 
 std::string tangible_object::default_collision_sound="clack.wav";
 
+std::string tangible_object::get_type()
+{
+    return "tangible object";
+}
+
 bool tangible_object::within_range(complex_object target)
 {
     return isless(utilities::distance(position,target.get_position()),(get_radius()+target.get_radius()));

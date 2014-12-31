@@ -36,14 +36,10 @@ public:
     static point2i right_drag;
     static clickable_object* left_clicked_object;
     static clickable_object* right_clicked_object;
-    static bool left_click;
+    static bool left_clicking;
     static bool left_dragging;
-    static bool right_click;
+    static bool right_clicking;
     static bool right_dragging;
-    static bool left_clicked_an_object;
-    static bool left_clicked_ui;
-    static bool right_clicked_an_object;
-    static bool grabbed_an_object;
     static bool highlighting;
     static bool highlighting_enabled;
     static std::map<int,clickable_object*> selected_objects;

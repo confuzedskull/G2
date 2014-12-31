@@ -14,75 +14,68 @@
     You should have received a copy of the GNU General Public License
     along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
 
-#include "rts_object.h"
+#include "model.h"
 #include "cursor.h"
-#include "game.h"
-#include "window.h"
-#include <math.h>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
-point2i rts_object::default_position = point2i(64,window::height*0.5);
-int rts_object::default_width = 64;
-int rts_object::default_height = 64;
-std::string rts_object::default_texture = "";
-std::string rts_object::default_mask = "";
-std::string rts_object::default_click_sound = "";
-std::string rts_object::default_hover_sound = "";
-std::string rts_object::default_collision_sound = "";
-std::string rts_object::default_movement_sound = "";
+std::string model::default_texture = "";
+std::string model::default_mask = "";
+std::string model::default_click_sound = "";
+std::string model::default_hover_sound = "";
+std::string model::default_collision_sound = "";
+std::string model::default_movement_sound = "";
+int model::default_width = 64;
+int model::default_height = 64;
+bool model::enable_fill = false;
+bool model::enable_border = false;
+bool model::enable_texture = true;
+bool model::enable_mask = true;
+bool model::enable_dragging = false;
+bool model::enable_physics = false;
+bool model::enable_rts_controls = false;
+bool model::enable_keyboard_controls = false;
+color model::default_fill_color = GRAY;
+color model::default_border_color = BLACK;
 
-std::string rts_object::get_type()
+std::string model::get_type()
 {
-    return "rts object";
+    return "model";
 }
 
-void rts_object::mouse_function()
+void model::mouse_function()
 {
-    if(visible && enabled)
+    left_click_function();
+    highlight_function();
+    if(draggable)
+        drag_function();
+    if(rts_controls)
     {
-        highlight_function();
-        left_click_function();
-        right_click_function();
-        if(selected)//you can only move an object when it is selected
+        if(selected && cursor::right_clicking && !right_clicked())
         {
-            if(cursor::right_click && !right_clicked())
-            {
-                //get rid of previous rally point
-                if(rally_set)
-                    delete rally;
-                if(cursor::right_clicked_an_object)
-                    rally = cursor::right_clicked_object->get_positionptr();//set rally to reference point because position is always changing
-                else//move to right clicked empty space
-                    rally = new point2f(cursor::right_down.x,cursor::right_down.y);
-                rally_set=true;
-            }
-            if(cursor::right_dragging && !right_clicked())
-            {
-                //get rid of previous rally point
-                if(rally_set)
-                    delete rally;
-                //move to right drag
-                rally = new point2f((float)cursor::right_drag.x,(float)cursor::right_drag.y);
-                rally_set=true;
-            }
+            //get rid of previous rally point
+            if(rally_set)
+                delete rally;
+            //move to right click
+            rally = new point2f(cursor::right_down.x,cursor::right_down.y);
+            rally_set=true;
+        }
+        if(cursor::right_dragging && !right_clicked())
+        {
+            //get rid of previous rally point
+            if(rally_set)
+                delete rally;
+            //move to right drag
+            rally = new point2f(cursor::right_drag.x,cursor::right_drag.y);
+            rally_set=true;
         }
     }
 }
 
-void rts_object::update()
+void model::load()
 {
-    movable_object::update();
-    tangible_object::update();
-    clickable_object::update();
-}
-
-void rts_object::sync()
-{
-    perform_actions()||move_to_rally();
-}
-
-void rts_object::load()
-{
+    std::clog<<file_name;
     std::ifstream object_file(file_name);//access file by name
     if(object_file.bad())//make sure the file is there
     {
@@ -108,10 +101,12 @@ void rts_object::load()
     object_file>>texture;
     object_file>>mask;
     //load clickable object properties
+    object_file>>enabled;
+    object_file>>draggable;
     object_file>>click_sound;
     object_file>>hover_sound;
-    object_file>>movement_sound;
     //load movable object properties
+    object_file>>movement_sound;
     object_file>>speed;
     object_file>>degrees_rotated;
     object_file>>rally_set;
@@ -140,14 +135,40 @@ void rts_object::load()
     object_file>>touched_side[3];
     object_file>>collided;
     object_file>>collision_sound;
+    //load physics objects properties
+    object_file>>rest_position.x>>rest_position.y;
+    object_file>>rest_rotation;
+    object_file>>mass;
+    object_file>>delta_time[0];
+    object_file>>delta_time[1];
+    object_file>>delta_time[2];
+    object_file>>delta_time[3];
+    object_file>>delta_time[4];
+    object_file>>delta_time[5];
+    object_file>>velocity[0].x>>velocity[0].y;
+    object_file>>velocity[1].x>>velocity[1].y;
+    object_file>>angular_velocity[0];
+    object_file>>angular_velocity[1];
+    object_file>>acceleration.x>>acceleration.y;
+    object_file>>angular_acceleration;
+    object_file>>momentum.x>>momentum.y;
+    object_file>>angular_momentum;
+    object_file>>force.x>>force.y;
+    object_file>>friction;
+    object_file>>energy[0];
+    object_file>>energy[1];
+    //save model properties
+    object_file>>physics_enabled;
+    object_file>>rts_controls;
+    object_file>>keyboard_controls;
     object_file.close();
-    std::clog<<"object#"<<get_number()<<"(rts object)"<<" loaded.\n";
+    std::clog<<"object#"<<number<<"(physics object)"<<" loaded.\n";
 }
 
-void rts_object::save()
+void model::save()
 {
     std::stringstream filename;
-    filename<<"./data/objects/object#"<<number<<".rso";
+    filename<<"./data/models/object#"<<number<<".mdl";
     std::ofstream object_file(filename.str());
     if(object_file.bad())
     {
@@ -173,10 +194,12 @@ void rts_object::save()
     object_file<<texture<<std::endl;
     object_file<<mask<<std::endl;
     //save clickable object properties
+    object_file<<enabled<<std::endl;
+    object_file<<draggable<<std::endl;
     object_file<<click_sound<<std::endl;
     object_file<<hover_sound<<std::endl;
-    object_file<<movement_sound<<std::endl;
     //save movable object properties
+    object_file<<movement_sound<<std::endl;
     object_file<<speed<<std::endl;
     object_file<<degrees_rotated<<std::endl;
     object_file<<rally_set<<std::endl;
@@ -199,22 +222,71 @@ void rts_object::save()
     object_file<<touched_side[3]<<std::endl;
     object_file<<collided<<std::endl;
     object_file<<collision_sound<<std::endl;
+    //save physics object properties
+    object_file<<rest_position.x<<' '<<rest_position.y<<std::endl;
+    object_file<<rest_rotation<<std::endl;
+    object_file<<mass<<std::endl;
+    object_file<<delta_time[0]<<std::endl;
+    object_file<<delta_time[1]<<std::endl;
+    object_file<<delta_time[2]<<std::endl;
+    object_file<<delta_time[3]<<std::endl;
+    object_file<<delta_time[4]<<std::endl;
+    object_file<<delta_time[5]<<std::endl;
+    object_file<<velocity[0].x<<' '<<velocity[0].y<<std::endl;
+    object_file<<velocity[1].x<<' '<<velocity[1].y<<std::endl;
+    object_file<<angular_velocity[0]<<std::endl;
+    object_file<<angular_velocity[1]<<std::endl;
+    object_file<<acceleration.x<<' '<<acceleration.y<<std::endl;
+    object_file<<angular_acceleration<<std::endl;
+    object_file<<momentum.x<<' '<<momentum.y<<std::endl;
+    object_file<<angular_momentum<<std::endl;
+    object_file<<force.x<<' '<<force.y<<std::endl;
+    object_file<<friction<<std::endl;
+    object_file<<energy[0]<<std::endl;
+    object_file<<energy[1]<<std::endl;
+    //save model properties
+    object_file<<physics_enabled<<std::endl;
+    object_file<<rts_controls<<std::endl;
+    object_file<<keyboard_controls;
     object_file.close();
-    std::clog<<"object#"<<number<<"(rts object)"<<" saved.\n";
+    std::clog<<"object#"<<number<<"(model)"<<" saved.\n";
 }
 
-rts_object::rts_object(): clickable_object(), tangible_object(), complex_object()
+void model::sync()
 {
-    position.set((float)default_position.x, (float)default_position.y);
-    set_dimensions(default_width,default_height);
-    speed=2.0f;
+    if(physics_enabled)
+    {
+        apply_friction();
+        apply_inertia();
+    }
+    clickable_object::sync();
+    perform_actions()||move_to_rally();
+}
+
+void model::update()
+{
+    if(physics_enabled)
+        calc_physics();
+    movable_object::update();
+    tangible_object::update();
+    clickable_object::update();
+}
+model::model()
+{
+    filled=false;
     textured=true;
     masked=true;
+    draggable=enable_dragging;
+    physics_enabled=enable_physics;
+    rts_controls=enable_rts_controls;
+    keyboard_controls=enable_keyboard_controls;
+    fill_color=default_fill_color;
+    border_color=default_border_color;
+    set_dimensions(default_width,default_height);
     set_texture(default_texture);
     set_mask(default_mask);
     set_click_sound(default_click_sound);
     set_hover_sound(default_hover_sound);
     set_collision_sound(default_collision_sound);
     set_movement_sound(default_movement_sound);
-    std::clog<<"object#"<<number<<"(rts object)"<<" created.\n";
 }

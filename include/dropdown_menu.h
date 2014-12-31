@@ -18,9 +18,10 @@
 #define DROPDOWN_MENU_H
 #include "menu.h"
 #include "button.h"
+#include "ui.h"
 #include <string>
 
-class dropdown_menu: public menu, public button
+class ui::dropdown_menu: public ui::menu, public ui::button
 {
 private:
     bool expanded;
@@ -31,6 +32,9 @@ public:
     static std::string default_click_sound;
     static std::string default_hover_sound;
     static std::string default_layout;
+    static color default_fill_color;
+    static color default_border_color;
+    std::string get_type() override;
     void add_item(button* item) override;
     void mouse_function();
     void expand();

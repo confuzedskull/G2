@@ -24,70 +24,7 @@
 #include <stdlib.h>
 
 //initialize variables
-int ui::overlay_margin = 10;
-
-void ui::show_text()
-{
-    if(game::state==PLAYING)
-    game::play_scene->show_text();
-}
-
-void ui::hide_text()
-{
-    if(game::state==PLAYING)
-    game::play_scene->hide_text();
-}
-
-void ui::update_text()
-{
-    /*using namespace std;
-    label* object_info = game::play_scene->labels[0];
-    if(object_info->visible && !cursor::selected_objects.empty())
-    {
-        unsigned index = cursor::selected_object;
-        object_info->add_line("object #:"+to_string(cursor::left_clicked_object->get_number()));
-        object_info->add_line("type: "+cursor::left_clicked_object->get_type());
-        object_info->add_line("dimensions: "+to_string(cursor::left_clicked_object->get_width())+'X'+to_string(cursor::left_clicked_object->get_height()));
-        object_info->add_line("rotation: "+to_string(cursor::left_clicked_object->get_rotation()));
-        object_info->add_line("current position: "+to_string(cursor::left_clicked_object->get_x())+", "+to_string(cursor::left_clicked_object->get_position().y));
-        if(cursor::left_clicked_object->get_type()=="physics object")//display the following if a physics object is selected
-        {
-            physics_object* po = game::current_scene->physics_objects[index];
-            object_info->add_line("resting position: "+to_string(po->get_resting().x)+", "+to_string(po->get_resting().y));
-            object_info->add_line("mass: "+to_string(po->mass));
-            object_info->add_line("speed: "+to_string(po->speed));
-            object_info->add_line("time moving: "+to_string(po->delta_time[0])+", "+to_string(po->delta_time[1]));
-            object_info->add_line("initial velocity: "+to_string(po->velocity[0].x)+", "+to_string(po->velocity[0].y));
-            object_info->add_line("final velocity: "+to_string(po->velocity[1].x)+", "+to_string(po->velocity[1].y));
-            object_info->add_line("time accelerating: "+to_string(po->delta_time[2])+", "+to_string(po->delta_time[3]));
-            object_info->add_line("acceleration: "+to_string(po->acceleration.x)+", "+to_string(po->acceleration.y));
-            object_info->add_line("momentum: "+to_string(po->momentum.x)+", "+to_string(po->momentum.y));
-            object_info->add_line("force: "+to_string(po->force.x)+", "+to_string(po->force.y));
-            object_info->add_line("potential energy: "+to_string(po->energy[0]));
-            object_info->add_line("kinetic energy: "+to_string(po->energy[1]));
-            object_info->add_line("object touching side L:"+to_string(po->touched_side[0])+"R:"+to_string(po->touched_side[1])
-                                                        +"T:"+to_string(po->touched_side[2])+"B:"+to_string(po->touched_side[3]));
-        }
-        if(cursor::left_clicked_object->get_type()=="draggable object")//display the following if a draggable object is selected
-        {
-            draggable_object* draggable=game::current_scene->draggable_objects[index];
-            object_info->add_line("object touching side"+to_string(draggable->touched_side[0])+to_string(draggable->touched_side[1])+to_string(draggable->touched_side[2])+to_string(draggable->touched_side[3]));
-        }
-        if(cursor::left_clicked_object->get_type()=="rts object")//display the following if a RTS object is selected
-        {
-            rts_object* rtso=game::current_scene->rts_objects[index];
-            object_info->add_line("rally point: "+to_string(rtso->get_rally()->x)+", "+to_string(rtso->get_rally()->y));
-            object_info->add_line("speed: "+to_string(rtso->speed));
-            object_info->add_line("object touching side L:"+to_string(rtso->touched_side[0])+"R:"+to_string(rtso->touched_side[1])+"T:"+to_string(rtso->touched_side[2])+"B:"+to_string(rtso->touched_side[3]));
-        }
-    }
-    label* game_info = game::play_scene->labels[1];
-    if(game_info->visible)
-    {
-        game_info->clear();
-        game_info->add_line("game time: "+to_string(game::time));
-        game_info->add_line("mouse move: "+to_string(cursor::passive.x)+", "+to_string(cursor::passive.y));
-        game_info->add_line("mouse click: "+to_string(cursor::left_down.x)+", "+to_string(cursor::left_down.y));
-        game_info->add_line("mouse drag: "+to_string(cursor::left_drag.x)+", "+to_string(cursor::left_drag.y));
-    }*/
-}
+std::string ui::default_texture = "";
+std::string ui::default_mask = "";
+color ui::default_fill_color = color(0.75,0.75,0.75);
+color ui::default_border_color = BLACK;

@@ -24,21 +24,29 @@ class clickable_object: virtual public basic_object
 protected:
     std::string click_sound;
     std::string hover_sound;
+    int click_time;
 public:
     virtual void mouse_function();//performs a variety of actions dependent on cursor interaction
+    static bool enable_dragging;
+    bool enabled;
+    bool draggable;
     bool highlighted();//checks if the object lies within the cursor selection box
+    bool dragged();//checks if cursor is dragging inside object
     bool hovered_over();//checks if the cursor lies within the this object
     bool left_clicked();//checks if the cursor left clicked inside this object
     bool right_clicked();//checks if the cursor right clicked inside this object
+    bool double_clicked();
     void enable();//allow the mouse function to work
     void disable();//stop running mouse function
     void highlight_function();//function to perform when object is highlighted
+    void drag_function();//function to perform when object is grabbed
     void hover_function();//function to perform when object is hovered over
     void left_click_function();//function to perform when object is left clicked
     void right_click_function();//function to perform when object is right clicked
     void set_click_sound(std::string filename);//sets the sound to be made when clicked
     void set_hover_sound(std::string filename);//sets the sound to be made when hovered over
     void update() override;
+    void sync() override;
     clickable_object();
 };
 #endif // CLICKABLE_H

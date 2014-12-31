@@ -44,43 +44,43 @@ std::map<std::string,bool> controls::special_states;
 
 void controls::move_forward()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=PAUSED)
-    game::play_scene->physics_objects[cursor::selected_object]->move_forward();
+    if(game::play_scene->current_model->keyboard_controls && game::state!=PAUSED)
+        game::play_scene->models[cursor::selected_object]->move_forward();
 }
 
 void controls::move_back()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=PAUSED)
-    game::play_scene->physics_objects[cursor::selected_object]->move_back();
+    if(game::play_scene->current_model->keyboard_controls && game::state!=PAUSED)
+        game::play_scene->models[cursor::selected_object]->move_back();
 }
 
 void controls::move_left()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=PAUSED)
-    game::play_scene->physics_objects[cursor::selected_object]->move_left();
+    if(game::play_scene->current_model->keyboard_controls && game::state!=PAUSED)
+        game::play_scene->models[cursor::selected_object]->move_left();
 }
 
 void controls::move_right()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=PAUSED)
-    game::play_scene->physics_objects[cursor::selected_object]->move_right();
+    if(game::play_scene->current_model->keyboard_controls && game::state!=PAUSED)
+        game::play_scene->models[cursor::selected_object]->move_right();
 }
 
 void controls::turn_left()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=PAUSED)
-    game::play_scene->physics_objects[cursor::selected_object]->turn_left();
+    if(game::play_scene->current_model->keyboard_controls && game::state!=PAUSED)
+        game::play_scene->models[cursor::selected_object]->turn_left();
 }
 
 void controls::turn_right()
 {
-    if(cursor::left_clicked_object->get_type()=="physics object" && game::state!=PAUSED)
-    game::play_scene->physics_objects[cursor::selected_object]->turn_right();
+    if(game::play_scene->current_model->keyboard_controls && game::state!=PAUSED)
+        game::play_scene->models[cursor::selected_object]->turn_right();
 }
 
 void controls::next_item()
 {
-    menu* current_menu = game::current_scene->current_menu;
+    ui::menu* current_menu = game::current_scene->current_menu;
     int i = current_menu->item_selected();
     if(i==-1)
         current_menu->items.front()->selected=true;
@@ -96,7 +96,7 @@ void controls::next_item()
 
 void controls::previous_item()
 {
-    menu* current_menu = game::current_scene->current_menu;
+    ui::menu* current_menu = game::current_scene->current_menu;
     int i = current_menu->item_selected();
     if(i==-1)
         current_menu->items.front()->selected=true;
@@ -114,7 +114,7 @@ void controls::choose_item()
 {
     if(game::current_scene->current_menu->item_selected()!=-1)
     {
-        cursor::left_click=true;
+        cursor::left_clicking=true;
         cursor::left_down.x=(int)game::current_scene->current_menu->current_item->get_x();
         cursor::left_down.y=(int)game::current_scene->current_menu->current_item->get_y();
     }
@@ -125,7 +125,7 @@ void controls::switch_menu(int index)
     game::current_scene->switch_menu(index);
 }
 
-void controls::switch_menu(menu* new_menu)
+void controls::switch_menu(ui::menu* new_menu)
 {
     game::current_scene->switch_menu(new_menu);
 }
@@ -179,34 +179,14 @@ void controls::hide_background()
     game::play_scene->background.hide();
 }
 
-void controls::show_draggable_objects()
+void controls::show_models()
 {
-    game::play_scene->show_draggable_objects();
+    game::play_scene->show_models();
 }
 
-void controls::hide_draggable_objects()
+void controls::hide_models()
 {
-    game::play_scene->hide_draggable_objects();
-}
-
-void controls::show_physics_objects()
-{
-    game::play_scene->show_physics_objects();
-}
-
-void controls::hide_physics_objects()
-{
-    game::play_scene->hide_physics_objects();
-}
-
-void controls::show_rts_objects()
-{
-    game::play_scene->show_rts_objects();
-}
-
-void controls::hide_rts_objects()
-{
-    game::play_scene->hide_rts_objects();
+    game::play_scene->hide_models();
 }
 
 void controls::show_textures()
@@ -229,121 +209,29 @@ void controls::unmute_all()
     game::play_scene->unmute_all();
 }
 
-void controls::add_draggable_object()
+void controls::add_model()
 {
-    draggable_object* new_do = new draggable_object();
-    game::play_scene->add_object(new_do);
-}
-
-void controls::add_physics_object()
-{
-    physics_object* new_po = new physics_object();
-    game::play_scene->add_object(new_po);
-}
-
-void controls::add_rts_object()
-{
-    rts_object* new_rtso = new rts_object();
-    game::play_scene->add_object(new_rtso);
+    game::play_scene->add_model(new model());
 }
 
 void controls::create_object()
 {
-    if(game::play_scene->last_object->get_type()=="draggable object")
-        game::play_scene->add_object(new draggable_object());
-    if(game::play_scene->last_object->get_type()=="physics object")
-        game::play_scene->add_object(new physics_object());
-    if(game::play_scene->last_object->get_type()=="rts object")
-        game::play_scene->add_object(new rts_object());
+    if(game::play_scene->last_object->get_type()=="model")
+        game::play_scene->add_model(new model());
 }
 
 void controls::delete_selected()
 {
     for(auto so:cursor::selected_objects)
     {
-        if(game::play_scene->draggable_objects.find(so.first)!=game::play_scene->draggable_objects.end())
+        if(game::play_scene->models.find(so.first)!=game::play_scene->models.end())
         {
-            std::clog<<"object#"<<so.second->get_number()<<"(draggable object)"<<" deleted."<<std::endl;
-            delete game::play_scene->draggable_objects[so.first];
-            game::play_scene->draggable_objects.erase(so.first);
-        }
-        if(game::play_scene->physics_objects.find(so.first)!=game::play_scene->physics_objects.end())
-        {
-            std::clog<<"object#"<<so.second->get_number()<<"(physics object)"<<" deleted."<<std::endl;
-            delete game::play_scene->physics_objects[so.first];
-            game::play_scene->physics_objects.erase(so.first);
-        }
-        if(game::play_scene->rts_objects.find(so.first)!=game::play_scene->rts_objects.end())
-        {
-            std::clog<<"object#"<<so.second->get_number()<<"(rts object)"<<" deleted."<<std::endl;
-            delete game::play_scene->rts_objects[so.first];
-            game::play_scene->rts_objects.erase(so.first);
+            std::clog<<"object#"<<so.second->get_number()<<"(model)"<<" deleted."<<std::endl;
+            delete game::play_scene->models[so.first];
+            game::play_scene->models.erase(so.first);
         }
     }
     cursor::selected_objects.clear();
-}
-
-//NOTE: This function uses C++11 "for" loops
-void controls::check_clicked()
-{
-    //The only way to check if no objects are being clicked is by checking every object
-    bool left_clicked=false;
-    while(!left_clicked)
-    {
-        for(auto r:game::current_scene->rts_objects)
-            left_clicked=r.second->left_clicked();
-        for(auto d:game::current_scene->draggable_objects)
-            left_clicked=d.second->left_clicked();
-        for(auto p:game::current_scene->physics_objects)
-            left_clicked=p.second->left_clicked();
-        if(!left_clicked)//at this point, no objects have been left clicked so leave the loop
-            break;
-    }
-    cursor::left_clicked_an_object = left_clicked;
-
-    left_clicked=false;
-    while(!left_clicked)
-    {
-        for(auto b:game::current_scene->buttons)
-            left_clicked=b->left_clicked();
-        for(auto cb:game::current_scene->checkboxes)
-            left_clicked=cb->left_clicked();
-        for(auto dm:game::current_scene->dropdown_menus)
-        {
-            left_clicked=dm->left_clicked();
-            left_clicked=dm->item_clicked()!=-1;
-        }
-        if(!left_clicked)//at this point, no objects have been left clicked so leave the loop
-            break;
-    }
-    cursor::left_clicked_ui = left_clicked;
-
-    bool right_clicked=false;
-    while(!right_clicked)
-    {
-        for(auto r:game::current_scene->rts_objects)
-            right_clicked=r.second->right_clicked();
-        for(auto d:game::current_scene->draggable_objects)
-            right_clicked=d.second->right_clicked();
-        for(auto p:game::current_scene->physics_objects)
-            right_clicked=p.second->right_clicked();
-        if(!right_clicked)//at this point, no objects have been right clicked so leave the loop
-            break;
-    }
-    cursor::right_clicked_an_object = right_clicked;
-
-    bool grabbed=false;
-    for(auto d:game::current_scene->draggable_objects)
-    {
-        if(d.second->grabbed())
-        {
-            grabbed=true;
-            break;
-        }
-        else
-            grabbed=false;
-    }
-    cursor::grabbed_an_object = grabbed;
 }
 
 void controls::mouse_click(int button, int state, int x, int y)
@@ -351,24 +239,24 @@ void controls::mouse_click(int button, int state, int x, int y)
     if(button==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
     {
         cursor::left_down.set(x,window::height-y);
-        cursor::left_click=true;
+        cursor::left_clicking=true;
     }
     if(button==GLUT_LEFT_BUTTON && state==GLUT_UP)
     {
         cursor::left_up.set(x,window::height-y);
         cursor::highlighting=false;
-        cursor::left_click=false;
+        cursor::left_clicking=false;
     }
     if(button==GLUT_RIGHT_BUTTON && state==GLUT_DOWN)
     {
         cursor::highlighting=false;
-        cursor::right_click=true;
+        cursor::right_clicking=true;
         cursor::right_down.set(x,window::height-y);
     }
     if(button==GLUT_RIGHT_BUTTON && state==GLUT_UP)
     {
         cursor::highlighting=false;
-        cursor::right_click=false;
+        cursor::right_clicking=false;
         cursor::right_up.set(x,window::height-y);
         cursor::right_dragging=false;
     }
@@ -381,9 +269,9 @@ void controls::mouse_move(int x, int y)
 
 void controls::mouse_drag(int x, int y)
 {
-    if(cursor::left_click)//mouse left button is down
+    if(cursor::left_clicking)//mouse left button is down
     {
-        if(cursor::highlighting_enabled && !cursor::left_clicked_an_object && !cursor::grabbed_an_object)
+        if(cursor::highlighting_enabled)
         {
             //this condition makes it so that the user has to make a rectangle larger than 10x10. That way, highlighting is less sensitive
             if((x>cursor::left_down.x+10) && ((window::height - y)<cursor::left_down.y+10))
@@ -404,7 +292,7 @@ void controls::mouse_drag(int x, int y)
     else
         cursor::left_dragging=false;
 
-    if(cursor::right_click)
+    if(cursor::right_clicking)
     {
         cursor::highlighting=false;
         cursor::right_drag.set(x,(window::height-y));

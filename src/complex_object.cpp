@@ -54,6 +54,11 @@ point2f complex_object::right()
     return point2f(position.x+(rightward.x*half_width),position.y+(rightward.y*half_width));
 }
 
+std::string complex_object::get_type()
+{
+    return "complex object";
+}
+
 void complex_object::orient()
 {
     float deg_rad = 3.14159f/180.0f;

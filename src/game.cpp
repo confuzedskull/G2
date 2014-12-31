@@ -106,32 +106,9 @@ void game::save_settings()
 //NOTE: This function uses C++11 "for" loops
 void game::collision_detection()
 {
-    for(auto a:current_scene->rts_objects)//iterate through rts objects comparing
+    for(auto a:current_scene->models)//iterate through rts objects comparing
     {
-        for(auto b:current_scene->rts_objects)//iterate through rts objects being compared
-        {
-            if(a.first!=b.first && a.second->within_range(*b.second))//make sure compared objects are different and close to each other
-            {
-                a.second->identify_touched(*b.second);
-                a.second->repel(*b.second);
-            }
-        }
-    }
-    for(auto a:current_scene->physics_objects)//iterate through physics objects comparing
-    {
-        for(auto b:current_scene->physics_objects)//iterate through physics objects being compared
-        {
-            if(a.first!=b.first && a.second->within_range(*b.second))//make sure compared objects are different and close to each other
-            {
-                a.second->identify_touched(*b.second);
-                a.second->repel(*b.second);
-                a.second->calc_momentum(*b.second);
-            }
-        }
-    }
-    for(auto a:current_scene->draggable_objects)//iterate through draggable objects comparing
-    {
-        for(auto b:current_scene->draggable_objects)//iterate through draggable objects being compared
+        for(auto b:current_scene->models)//iterate through rts objects being compared
         {
             if(a.first!=b.first && a.second->within_range(*b.second))//make sure compared objects are different and close to each other
             {
@@ -194,7 +171,7 @@ void game::pause()
         cursor::highlighting_enabled=false;
         audio::pause_all();
         controls::switch_menu(0);
-        play_scene->disable_objects();
+        play_scene->disable_models();
         play_scene->disable_buttons();
         play_scene->disable_checkboxes();
         play_scene->disable_dropdown_menus();

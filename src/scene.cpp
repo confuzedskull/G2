@@ -34,47 +34,36 @@
 
 int scene::total_scenes=0;
 
-void scene::add_object(draggable_object* new_do)
+void scene::add_model(model* mdl)
 {
-    last_object=new_do;
-    draggable_objects[new_do->get_number()]=new_do;//add object to scene
+    last_object=mdl;
+    models[mdl->get_number()]=mdl;//add models to scene
 }
 
-void scene::add_object(physics_object* new_po)
+void scene::add_label(ui::label* lbl)
 {
-    last_object=new_po;
-    physics_objects[new_po->get_number()]=new_po;//add object to scene
+
+    labels.push_back(lbl);
 }
 
-void scene::add_object(rts_object* new_rtso)
+void scene::add_checkbox(ui::checkbox* cbx)
 {
-    last_object=new_rtso;
-    rts_objects[new_rtso->get_number()]=new_rtso;//add object to scene
+    checkboxes.push_back(cbx);
 }
 
-void scene::add_text(label* t)
+void scene::add_button(ui::button* btn)
 {
-    labels.push_back(t);
+    buttons.push_back(btn);
 }
 
-void scene::add_checkbox(checkbox* c)
+void scene::add_menu(ui::menu* mnu)
 {
-    checkboxes.push_back(c);
+    menus.push_back(mnu);
 }
 
-void scene::add_button(button* b)
+void scene::add_menu(ui::dropdown_menu* ddm)
 {
-    buttons.push_back(b);
-}
-
-void scene::add_menu(menu* m)
-{
-    menus.push_back(m);
-}
-
-void scene::add_menu(dropdown_menu* dm)
-{
-    dropdown_menus.push_back(dm);
+    dropdown_menus.push_back(ddm);
 }
 
 void scene::switch_menu(int index)
@@ -96,15 +85,15 @@ void scene::switch_menu(int index)
     }
 }
 
-void scene::switch_menu(menu* new_menu)
+void scene::switch_menu(ui::menu* mnu)
 {
     for(auto m:menus)
     {
-        if(m->get_number()!=new_menu->get_number())
+        if(m->get_number()!=mnu->get_number())
             m->hide();
     }
-    new_menu->show();
-    current_menu=new_menu;
+    mnu->show();
+    current_menu=mnu;
 }
 
 void scene::bind_key(unsigned char key, int* toggle)
@@ -131,103 +120,49 @@ void scene::bind_key(std::string special_key, void (*action)())
     special_bindings[special_key]=action;
 }
 
-void scene::show_draggable_objects()
+void scene::show_models()
 {
-    for(auto d:draggable_objects)
-        d.second->show();
+    for(auto m:models)
+        m.second->show();
 }
 
-void scene::hide_draggable_objects()
+void scene::hide_models()
 {
-    for(auto d:draggable_objects)
-        d.second->hide();
+    for(auto m:models)
+        m.second->hide();
 }
 
-void scene::show_physics_objects()
+void scene::enable_models()
 {
-    for(auto p:physics_objects)
-        p.second->show();
+    for(auto m:models)
+        m.second->enable();
 }
 
-void scene::hide_physics_objects()
+void scene::disable_models()
 {
-    for(auto p:physics_objects)
-        p.second->hide();
+    for(auto m:models)
+        m.second->disable();
 }
 
-void scene::show_rts_objects()
+void scene::mute_models()
 {
-    for(auto r:rts_objects)
-        r.second->show();
+    for(auto m:models)
+        m.second->mute();
 }
 
-void scene::hide_rts_objects()
+void scene::unmute_models()
 {
-    for(auto r:rts_objects)
-        r.second->hide();
+    for(auto m:models)
+        m.second->unmute();
 }
 
-void scene::show_objects()
-{
-    show_draggable_objects();
-    show_physics_objects();
-    show_rts_objects();
-}
-
-void scene::hide_objects()
-{
-    hide_draggable_objects();
-    hide_physics_objects();
-    hide_rts_objects();
-}
-
-void scene::enable_objects()
-{
-    for(auto p:physics_objects)
-        p.second->enable();
-    for(auto d:draggable_objects)
-        d.second->enable();
-    for(auto r:rts_objects)
-        r.second->enable();
-}
-
-void scene::disable_objects()
-{
-    for(auto p:physics_objects)
-        p.second->disable();
-    for(auto d:draggable_objects)
-        d.second->disable();
-    for(auto r:rts_objects)
-        r.second->disable();
-}
-
-void scene::mute_objects()
-{
-    for(auto p:physics_objects)
-        p.second->mute();
-    for(auto d:draggable_objects)
-        d.second->mute();
-    for(auto r:rts_objects)
-        r.second->mute();
-}
-
-void scene::unmute_objects()
-{
-    for(auto p:physics_objects)
-        p.second->unmute();
-    for(auto d:draggable_objects)
-        d.second->unmute();
-    for(auto r:rts_objects)
-        r.second->unmute();
-}
-
-void scene::show_text()
+void scene::show_labels()
 {
     for(auto t:labels)//C++11 "for" loop
         t->show();
 }
 
-void scene::hide_text()
+void scene::hide_labels()
 {
     for(auto t:labels)//C++11 "for" loop
         t->hide();
@@ -391,20 +326,10 @@ void scene::show_textures()
     middleground.filled=false;
     foreground.textured=true;
     foreground.filled=false;
-    for(auto r:rts_objects)
+    for(auto m:models)
     {
-        r.second->textured=true;
-        r.second->filled=false;
-    }
-    for(auto d:draggable_objects)
-    {
-        d.second->textured=true;
-        d.second->filled=false;
-    }
-    for(auto p:physics_objects)
-    {
-        p.second->textured=true;
-        p.second->filled=false;
+        m.second->textured=true;
+        m.second->filled=false;
     }
 }
 
@@ -416,20 +341,10 @@ void scene::hide_textures()
     middleground.filled=true;
     foreground.textured=false;
     foreground.filled=true;
-    for(auto r:rts_objects)
+    for(auto m:models)
     {
-        r.second->textured=false;
-        r.second->filled=true;
-    }
-    for(auto d:draggable_objects)
-    {
-        d.second->textured=false;
-        d.second->filled=true;
-    }
-    for(auto p:physics_objects)
-    {
-        p.second->textured=false;
-        p.second->filled=true;
+        m.second->textured=false;
+        m.second->filled=true;
     }
 }
 
@@ -438,10 +353,8 @@ void scene::show_all()
     background.show();
     middleground.show();
     foreground.show();
-    show_draggable_objects();
-    show_physics_objects();
-    show_rts_objects();
-    show_text();
+    show_models();
+    show_labels();
     show_buttons();
     show_checkboxes();
     show_menus();
@@ -453,8 +366,8 @@ void scene::hide_all()
     background.hide();
     middleground.hide();
     foreground.hide();
-    hide_objects();
-    hide_text();
+    hide_models();
+    hide_labels();
     hide_buttons();
     hide_checkboxes();
     hide_menus();
@@ -463,7 +376,7 @@ void scene::hide_all()
 
 void scene::enable_all()
 {
-    enable_objects();
+    enable_models();
     enable_checkboxes();
     enable_buttons();
     enable_menus();
@@ -472,7 +385,7 @@ void scene::enable_all()
 
 void scene::disable_all()
 {
-    disable_objects();
+    disable_models();
     disable_checkboxes();
     disable_buttons();
     disable_menus();
@@ -484,7 +397,7 @@ void scene::mute_all()
     background.mute();
     middleground.mute();
     foreground.mute();
-    mute_objects();
+    mute_models();
     mute_checkboxes();
     mute_buttons();
     mute_menus();
@@ -496,7 +409,7 @@ void scene::unmute_all()
     background.unmute();
     middleground.unmute();
     foreground.unmute();
-    unmute_objects();
+    unmute_models();
     unmute_checkboxes();
     unmute_buttons();
     unmute_menus();
@@ -507,14 +420,10 @@ void scene::unmute_all()
 void scene::render()
 {
     background.render();
-    for(auto r:rts_objects)
-        r.second->render();
+    for(auto m:models)
+        m.second->render();
     middleground.render();
-    for(auto d:draggable_objects)
-        d.second->render();
     foreground.render();
-    for(auto p:physics_objects)
-        p.second->render();
     for(auto c:checkboxes)
         c->render();
     for(auto b:buttons)
@@ -533,12 +442,8 @@ void scene::update()
     background.update();
     middleground.update();
     foreground.update();
-    for(auto p:physics_objects)
-        p.second->update();
-    for(auto r:rts_objects)
-        r.second->update();
-    for(auto d:draggable_objects)
-        d.second->update();
+    for(auto m:models)
+        m.second->update();
     for(auto m:menus)
         m->update();
     for(auto dm:dropdown_menus)
@@ -547,6 +452,8 @@ void scene::update()
         c->update();
     for(auto b:buttons)
         b->update();
+    if(cursor::left_clicked_object->get_type()=="model")
+        current_model=models[cursor::left_clicked_object->get_number()];
 }
 
 void scene::load()
@@ -556,10 +463,8 @@ void scene::load()
     int iparam1,iparam2;//temporary buffers to store ints and use them as parameters for a setter
     std::string sparam1;//temporary buffer to store a string and use it as a parameter for a setter
     std::string filename;
-    //clear all objects before loading
-    draggable_objects.clear();
-    physics_objects.clear();
-    rts_objects.clear();
+    //clear models before loading
+    models.clear();
     //access scene file
     std::ifstream scene_file(file_name.c_str());
     if(scene_file.bad())
@@ -625,28 +530,14 @@ void scene::load()
     while(std::getline(scene_file,filename))
     {
         std::string extension=filename.substr(filename.length()-3,filename.length());//get the file extension
-        filename="./data/objects/"+filename;
+        filename="./data/models/"+filename;
         //identify file type
-        if(extension=="dro")//file is a draggable object
+        if(extension=="mdl")//file is a draggable object
         {
-            draggable_object* d = new draggable_object();
-            d->file_name=filename.c_str();
-            d->load();
-            add_object(d);
-        }
-        if(extension=="pso")//file is a physics object
-        {
-            physics_object* p = new physics_object();
-            p->file_name=filename.c_str();
-            p->load();
-            add_object(p);
-        }
-        if(extension=="rso")//file is a real-time strategy object
-        {
-            rts_object* r = new rts_object();
-            r->file_name=filename.c_str();
-            r->load();
-            add_object(r);
+            model* m = new model();
+            m->file_name=filename.c_str();
+            m->load();
+            add_model(m);
         }
     }
     scene_file.close();
@@ -701,29 +592,14 @@ void scene::save()
     scene_file<<background.selected<<std::endl;
     scene_file<<background.muted<<std::endl;
     scene_file<<background.get_texture()<<std::endl;
-    std::clog<<"saving objects...\n";
-    //save draggable objects
-    for(auto d:draggable_objects)
+    std::clog<<"saving models...\n";
+    //save models
+    for(auto m:models)
     {
-        scene_file<<"object#"<<d.first<<".dro\n";
+        scene_file<<"object#"<<m.first<<".mdl\n";
         scene_file.close();
-        d.second->save();
-    }
-    //save physics objects
-    for(auto p:physics_objects)
-    {
+        m.second->save();
         scene_file.open(file_name.c_str(),std::fstream::app);//the file is already open so we need to append
-        scene_file<<"object#"<<p.first<<".pso\n";
-        scene_file.close();
-        p.second->save();
-    }
-    //save rts objects
-    for(auto r:rts_objects)
-    {
-        scene_file.open(file_name.c_str(),std::fstream::app);//the file is already open so we need to append
-        scene_file<<"object#"<<r.first<<".rso\n";
-        scene_file.close();
-        r.second->save();
     }
     scene_file.close();
     std::clog<<"scene#"<<number<<" saved.\n";
@@ -732,22 +608,15 @@ void scene::save()
 void scene::sync()
 {
     background.sync();
-    //move draggable objects
-    for(auto d:draggable_objects)//C++11 "for" loop
-        d.second->sync();
-    //move rts objects
-    for(auto r:rts_objects)//C++11 "for" loop
-        r.second->sync();
-    //move physics objects
-    for(auto p:physics_objects)//C++11 "for" loop
-        p.second->sync();
+    middleground.sync();
+    foreground.sync();
+    for(auto m:models)//C++11 "for" loop
+        m.second->sync();
 }
 
 void scene::clear()
 {
-    physics_objects.clear();
-    draggable_objects.clear();
-    rts_objects.clear();
+    models.clear();
     labels.clear();
     buttons.clear();
     menus.clear();

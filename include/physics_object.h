@@ -16,14 +16,14 @@
 
 #ifndef PHYSICS_H
 #define PHYSICS_H
-#include "clickable_object.h"
 #include "tangible_object.h"
 #include "physics_vector.h"
+#include "point.h"
 
 //A physics object has physical properties and inherits the ability to detect collision from the tangible object class
-class physics_object: public clickable_object, public tangible_object
+class physics_object: public tangible_object
 {
-private:
+protected:
     point2f rest_position;
     float rest_rotation;//the rotation of the object at rest
 public:
@@ -65,8 +65,6 @@ public:
     void apply_friction();
     void update() override;
     void sync() override;
-    void load();
-    void save();
     physics_object();
 };
 #endif // PHYSICS_H

@@ -20,7 +20,7 @@
 #include "label.h"
 
 //A button displays text and executes a function when clicked
-class button: public clickable_object
+class ui::button: public clickable_object
 {
 protected:
     int int_param1;
@@ -32,7 +32,10 @@ public:
     static int default_margin;
     static int default_width;
     static int default_height;
+    static color default_fill_color;
+    static color default_border_color;
     label text;
+    std::string get_type() override;
     int margin;//space between label and button border
     int combined_width();
     int combined_height();

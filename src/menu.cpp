@@ -18,29 +18,23 @@
 #include "window.h"
 #include "cursor.h"
 #include "ui.h"
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <GLUT/glut.h>
-#else
-#ifdef _WIN32
-#include <windows.h>
-#endif
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
-#endif
-#include <string>
 #include <math.h>
 #include <iostream>
 
-int menu::default_spacing = 10;
-int menu::default_margin = 20;
-std::string menu::default_layout = "vertical";
-std::string menu::default_texture = "";
-std::string menu::default_mask = "";
+int ui::menu::default_spacing = 10;
+int ui::menu::default_margin = 20;
+std::string ui::menu::default_layout = "vertical";
+std::string ui::menu::default_texture = "";
+std::string ui::menu::default_mask = "";
+color ui::menu::default_fill_color = ui::default_fill_color;
+color ui::menu::default_border_color = ui::default_border_color;
 
-int menu::item_selected()
+std::string ui::menu::get_type()
+{
+    return "menu";
+}
+
+int ui::menu::item_selected()
 {
     for(int i=0;i<items.size();i++)
     {
@@ -50,7 +44,7 @@ int menu::item_selected()
     return -1;
 }
 
-int menu::item_clicked()
+int ui::menu::item_clicked()
 {
     for(int i=0;i<items.size();i++)
     {
@@ -60,7 +54,7 @@ int menu::item_clicked()
     return -1;
 }
 
-void menu::format()
+void ui::menu::format()
 {
     int total_width=0;//width of buttons and the spaces between
     int total_height=0;//height of buttons and spaces between
@@ -69,6 +63,8 @@ void menu::format()
         widest=title.get_width();
     else
         widest=subtitle.get_width();
+    if(get_type()=="dropdown menu" && widest<width)
+        widest=width;
     //arrange the items
     for(unsigned i=0;i<items.size();i++)//use regular 'for' loop because 'i' is used as number
     {
@@ -122,20 +118,20 @@ void menu::format()
     subtitle.set_position(position.x,ymax-margin-title.get_height()-spacing-(subtitle.get_height()/2));
 }
 
-void menu::set_title(std::string txt)
+void ui::menu::set_title(std::string txt)
 {
     title.set_text(txt);
     format();
 }
 
-void menu::set_subtitle(std::string txt)
+void ui::menu::set_subtitle(std::string txt)
 {
     subtitle.set_text(txt);
     subtitle.show();
     format();
 }
 
-void menu::set_layout(std::string l)
+void ui::menu::set_layout(std::string l)
 {
     if(l=="vertical" || l=="horizontal")
         layout=l;
@@ -144,13 +140,13 @@ void menu::set_layout(std::string l)
 }
 
 
-void menu::add_item(button* item)
+void ui::menu::add_item(button* item)
 {
     items.push_back(item);
     format();
 }
 
-void menu::render()
+void ui::menu::render()
 {
     if(visible)
     {
@@ -163,7 +159,7 @@ void menu::render()
     }
 }
 
-void menu::update()
+void ui::menu::update()
 {
     for(auto i:items)
     {
@@ -174,13 +170,14 @@ void menu::update()
     }
 }
 
-menu::menu()
+ui::menu::menu()
 {
     set_position(window::center.x,window::center.y);
-    fill_color.set(0.75,0.75,0.75);//make the background dark gray
+    fill_color=default_fill_color;
+    border_color=default_border_color;
     set_texture(default_texture);
     set_mask(default_mask);
-    title.set_text("menu");
+    set_title("menu");
     title.set_font("helvetica",18);
     subtitle.set_font("helvetica",12);
     subtitle.hide();

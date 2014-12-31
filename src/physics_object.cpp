@@ -202,7 +202,6 @@ void physics_object::update()
 {
     movable_object::update();
     tangible_object::update();
-    clickable_object::update();
     calc_physics();
     rest();
 }
@@ -214,180 +213,11 @@ void physics_object::sync()
     apply_friction();
 }
 
-void physics_object::load()
-{
-    std::clog<<file_name;
-    std::ifstream object_file(file_name);//access file by name
-    if(object_file.bad())//make sure the file is there
-    {
-        std::cerr<<"bad file name\n";
-        return;
-    }
-    object_file.precision(3);
-    object_file.setf(std::ios::fixed);
-    //load basic object properties
-    object_file>>position.x>>position.y;
-    object_file>>rotation;
-    object_file>>width>>height;
-    object_file>>fill_color.r>>fill_color.g>>fill_color.b;
-    object_file>>marker_color.r>>marker_color.g>>marker_color.b;
-    object_file>>border_color.r>>border_color.g>>border_color.b;
-    object_file>>filled;
-    object_file>>bordered;
-    object_file>>textured;
-    object_file>>masked;
-    object_file>>visible;
-    object_file>>selected;
-    object_file>>muted;
-    object_file>>texture;
-    object_file>>mask;
-    //load clickable object properties
-    object_file>>click_sound;
-    object_file>>hover_sound;
-    object_file>>movement_sound;
-    //load movable object properties
-    object_file>>speed;
-    object_file>>degrees_rotated;
-    object_file>>rally_set;
-    object_file>>moving_forward;
-    object_file>>moving_backward;
-    object_file>>moving_left;
-    object_file>>moving_right;
-    object_file>>turning_right;
-    object_file>>turning_left;
-    char first_char=' ';
-    while(first_char>0)//not newline or out of bounds
-    {
-        //load the cued actions
-        object_file.get();//eat the null character
-        first_char=object_file.peek();//check the first character of the line
-        if(first_char=='\n')
-            break;
-        std::array<int,3> action;
-        object_file>>action[0]>>action[1]>>action[2];//add action number, times to do, and  times performed
-        action_cue.push(action);//add action to the cue
-    }
-    //load tangible object properties
-    object_file>>touched_side[0];
-    object_file>>touched_side[1];
-    object_file>>touched_side[2];
-    object_file>>touched_side[3];
-    object_file>>collided;
-    object_file>>collision_sound;
-    //load physics objects properties
-    object_file>>rest_position.x>>rest_position.y;
-    object_file>>rest_rotation;
-    object_file>>mass;
-    object_file>>delta_time[0];
-    object_file>>delta_time[1];
-    object_file>>delta_time[2];
-    object_file>>delta_time[3];
-    object_file>>delta_time[4];
-    object_file>>delta_time[5];
-    object_file>>velocity[0].x>>velocity[0].y;
-    object_file>>velocity[1].x>>velocity[1].y;
-    object_file>>angular_velocity[0];
-    object_file>>angular_velocity[1];
-    object_file>>acceleration.x>>acceleration.y;
-    object_file>>angular_acceleration;
-    object_file>>momentum.x>>momentum.y;
-    object_file>>angular_momentum;
-    object_file>>force.x>>force.y;
-    object_file>>friction;
-    object_file>>energy[0];
-    object_file>>energy[1];
-    object_file.close();
-    std::clog<<"object#"<<number<<"(physics object)"<<" loaded.\n";
-}
-
-void physics_object::save()
-{
-    std::stringstream filename;
-    filename<<"./data/objects/object#"<<number<<".pso";
-    std::ofstream object_file(filename.str());
-    if(object_file.bad())
-    {
-        std::cerr<<"bad file name\n";
-        return;
-    }
-    object_file.precision(3);
-    object_file.setf(std::ios::fixed);
-    //save basic object properties
-    object_file<<position.x<<' '<<position.y<<std::endl;
-    object_file<<rotation<<std::endl;
-    object_file<<width<<' '<<height<<std::endl;
-    object_file<<fill_color.str()<<std::endl;
-    object_file<<marker_color.str()<<std::endl;
-    object_file<<border_color.str()<<std::endl;
-    object_file<<filled<<std::endl;
-    object_file<<bordered<<std::endl;
-    object_file<<textured<<std::endl;
-    object_file<<masked<<std::endl;
-    object_file<<visible<<std::endl;
-    object_file<<selected<<std::endl;
-    object_file<<muted<<std::endl;
-    object_file<<texture<<std::endl;
-    object_file<<mask<<std::endl;
-    //save clickable object properties
-    object_file<<click_sound<<std::endl;
-    object_file<<hover_sound<<std::endl;
-    object_file<<movement_sound<<std::endl;
-    //save movable object properties
-    object_file<<speed<<std::endl;
-    object_file<<degrees_rotated<<std::endl;
-    object_file<<rally_set<<std::endl;
-    object_file<<moving_forward<<std::endl;
-    object_file<<moving_backward<<std::endl;
-    object_file<<moving_left<<std::endl;
-    object_file<<moving_right<<std::endl;
-    object_file<<turning_right<<std::endl;
-    object_file<<turning_left<<std::endl;
-    while(!action_cue.empty())
-    {
-        object_file<<action_cue.front().at(0)<<' '<<action_cue.front().at(1)<<' '<<action_cue.front().at(2)<<std::endl;
-        action_cue.pop();
-    }
-    object_file<<std::endl;//add an empty line to signal end of action cue
-    //save tangible object properties
-    object_file<<touched_side[0]<<std::endl;
-    object_file<<touched_side[1]<<std::endl;
-    object_file<<touched_side[2]<<std::endl;
-    object_file<<touched_side[3]<<std::endl;
-    object_file<<collided<<std::endl;
-    object_file<<collision_sound<<std::endl;
-    //save physics object properties
-    object_file<<rest_position.x<<' '<<rest_position.y<<std::endl;
-    object_file<<rest_rotation<<std::endl;
-    object_file<<mass<<std::endl;
-    object_file<<delta_time[0]<<std::endl;
-    object_file<<delta_time[1]<<std::endl;
-    object_file<<delta_time[2]<<std::endl;
-    object_file<<delta_time[3]<<std::endl;
-    object_file<<delta_time[4]<<std::endl;
-    object_file<<delta_time[5]<<std::endl;
-    object_file<<velocity[0].x<<' '<<velocity[0].y<<std::endl;
-    object_file<<velocity[1].x<<' '<<velocity[1].y<<std::endl;
-    object_file<<angular_velocity[0]<<std::endl;
-    object_file<<angular_velocity[1]<<std::endl;
-    object_file<<acceleration.x<<' '<<acceleration.y<<std::endl;
-    object_file<<angular_acceleration<<std::endl;
-    object_file<<momentum.x<<' '<<momentum.y<<std::endl;
-    object_file<<angular_momentum<<std::endl;
-    object_file<<force.x<<' '<<force.y<<std::endl;
-    object_file<<friction<<std::endl;
-    object_file<<energy[0]<<std::endl;
-    object_file<<energy[1]<<std::endl;
-    object_file.close();
-    std::clog<<"object#"<<number<<"(physics object)"<<" saved.\n";
-}
-
 physics_object::physics_object()
 {
     position.set((float)default_position.x, (float)default_position.y);
     set_dimensions(default_width,default_height);
     fill_color=GRAY;
-    textured=true;
-    masked=true;
     set_texture(default_texture);
     set_mask(default_mask);
     rest();
@@ -397,8 +227,6 @@ physics_object::physics_object()
     angular_velocity[0]=0.00f;
     friction=0.01f;
     energy[0]=speed;
-    set_click_sound(default_click_sound);
-    set_hover_sound(default_hover_sound);
     set_collision_sound(default_collision_sound);
     set_movement_sound(default_movement_sound);
     std::clog<<"object#"<<number<<"(physics object)"<<" created.\n";

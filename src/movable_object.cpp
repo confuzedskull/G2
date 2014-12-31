@@ -19,6 +19,11 @@
 
 float movable_object::default_speed=1.0f;
 
+std::string movable_object::get_type()
+{
+    return "movable object";
+}
+
 point2f* movable_object::get_rally()
 {
     return rally;

@@ -68,7 +68,6 @@ public:
     bool masked;//whether the object's texture is masked (has a matching silhouette texture)
     bool visible;//whether the object should be shown or not
     bool selected;//whether the object has been selected or not
-    bool enabled;//whether the object should be updated or not
     bool muted;//whether the object should make sound or not
     void show();//make the object visible
     void hide();//make the object invisible

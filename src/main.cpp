@@ -30,48 +30,31 @@ int main()
     game::add_setting("window","position_x",&window::position.x);
     game::add_setting("window","position_y",&window::position.y);
     game::add_setting("window","refresh_rate",&window::refresh_rate);
-    game::add_setting("ui","overlay_margin",&ui::overlay_margin);
-    game::add_setting("label","default_size",&label::default_size);
-    game::add_setting("label","default_spacing",&label::default_spacing);
-    game::add_setting("menu","default_margin",&menu::default_margin);
-    game::add_setting("menu","default_spacing",&menu::default_spacing);
-    game::add_setting("button","default_width",&button::default_width);
-    game::add_setting("button","default_height",&button::default_height);
-    game::add_setting("button","default_margin",&button::default_margin);
-    game::add_setting("button","default_spacing",&button::default_margin);
-    game::add_setting("checkbox","default_width",&checkbox::default_width);
-    game::add_setting("checkbox","default_height",&checkbox::default_height);
-    game::add_setting("checkbox","default_margin",&checkbox::default_margin);
-    game::add_setting("draggable_object","default_x",&draggable_object::default_position.x);
-    game::add_setting("draggable_object","default_y",&draggable_object::default_position.y);
-    game::add_setting("draggable_object","default_width",&draggable_object::default_width);
-    game::add_setting("draggable_object","default_height",&draggable_object::default_height);
-    game::add_setting("physics_object","default_x",&physics_object::default_position.x);
-    game::add_setting("physics_object","default_y",&physics_object::default_position.y);
-    game::add_setting("physics_object","default_width",&physics_object::default_width);
-    game::add_setting("physics_object","default_height",&physics_object::default_height);
-    game::add_setting("rts_object","default_x",&rts_object::default_position.x);
-    game::add_setting("rts_object","default_y",&rts_object::default_position.y);
-    game::add_setting("rts_object","default_width",&rts_object::default_width);
-    game::add_setting("rts_object","default_height",&rts_object::default_height);
+    game::add_setting("label","default_font_size",&ui::label::default_font_size);
+    game::add_setting("label","default_spacing",&ui::label::default_spacing);
+    game::add_setting("menu","default_margin",&ui::menu::default_margin);
+    game::add_setting("menu","default_spacing",&ui::menu::default_spacing);
+    game::add_setting("button","default_width",&ui::button::default_width);
+    game::add_setting("button","default_height",&ui::button::default_height);
+    game::add_setting("button","default_margin",&ui::button::default_margin);
+    game::add_setting("button","default_spacing",&ui::button::default_margin);
+    game::add_setting("checkbox","default_width",&ui::checkbox::default_width);
+    game::add_setting("checkbox","default_height",&ui::checkbox::default_height);
+    game::add_setting("checkbox","default_margin",&ui::checkbox::default_margin);
+    game::add_setting("model","default_x",&model::default_position.x);
+    game::add_setting("model","default_y",&model::default_position.y);
+    game::add_setting("model","default_width",&model::default_width);
+    game::add_setting("model","default_height",&model::default_height);
     game::add_setting("game","show_info_overlay",0);
-    game::add_setting("game","show_draggable_objects",1);
-    game::add_setting("game","show_physics_objects",1);
-    game::add_setting("game","show_rts_objects",1);
+    game::add_setting("game","show_models",1);
     game::add_setting("game","show_foreground",1);
     game::add_setting("game","show_middleground",0);
     game::add_setting("game","show_background",1);
     game::add_setting("game","show_textures",1);
     game::add_setting("game","mute_all",0);
 //Initialize rules
-    game::add_rule("game","show_info_overlay",1,ui::show_text);
-    game::add_rule("game","show_info_overlay",0,ui::hide_text);
-    game::add_rule("game","show_draggable_objects",1,controls::show_draggable_objects);
-    game::add_rule("game","show_draggable_objects",0,controls::hide_draggable_objects);
-    game::add_rule("game","show_physics_objects",1,controls::show_physics_objects);
-    game::add_rule("game","show_physics_objects",0,controls::hide_physics_objects);
-    game::add_rule("game","show_rts_objects",1,controls::show_rts_objects);
-    game::add_rule("game","show_rts_objects",0,controls::hide_rts_objects);
+    game::add_rule("game","show_models",1,controls::show_models);
+    game::add_rule("game","show_models",0,controls::hide_models);
     game::add_rule("game","show_foreground",1,controls::show_foreground);
     game::add_rule("game","show_foreground",0,controls::hide_foreground);
     game::add_rule("game","show_middleground",1,controls::show_middleground);
@@ -105,13 +88,27 @@ int main()
     graphics::add_image("angrybirds_ground-mask.bmp");
     graphics::add_image("SC2background.bmp");
     graphics::add_image("portals.bmp");
-//Initialize Objects
-    //initialize the physics objects
-    physics_object::default_texture="angrybird.bmp";
-    physics_object::default_mask="angrybird-mask.bmp";
-    physics_object::default_click_sound="angrybird-aheheha.wav";
-    physics_object::default_collision_sound="angrybird-ow.wav";
-    physics_object* po1 = new physics_object();
+//Initialize Models
+    model::default_width=64;
+    model::default_height=64;
+    model::enable_dragging=true;
+    model::default_texture="companioncube.bmp";
+    model::default_mask="companioncube-mask.bmp";
+
+    model* dro1 = new model();
+    dro1->set_position(window::center.x,window::center.y);
+
+    model::default_width=32;
+    model::default_height=32;
+    model::enable_physics=true;
+    model::enable_dragging=false;
+    model::enable_keyboard_controls=true;
+    model::default_texture="angrybird.bmp";
+    model::default_mask="angrybird-mask.bmp";
+    model::default_click_sound="angrybird-aheheha.wav";
+    model::default_collision_sound="angrybird-ow.wav";
+
+    model* po1 = new model();
     po1->set_position(window::center.x-48,window::center.y+48);//set position forward left of window center
     po1->rest();//make sure the resting point matches the new position
     po1->cue_action("wait",50);
@@ -127,7 +124,7 @@ int main()
     po1->cue_action("wait",50);
     po1->cue_action("turn right",30);
 
-    physics_object* po2 = new physics_object();
+    model* po2 = new model();
     po2->set_position(window::center.x+48,window::center.y+48);//set position forward right of window center
     po2->rest();//make sure the resting point matches the new position
     po2->cue_action("wait",50);
@@ -143,7 +140,7 @@ int main()
     po2->cue_action("wait",50);
     po2->cue_action("turn right",30);
 
-    physics_object* po3 = new physics_object();
+    model* po3 = new model();
     po3->set_position(window::center.x+48,window::center.y-48);//set position backward right of window center
     po3->rest();//make sure the resting point matches the new position
     po3->cue_action("wait",50);
@@ -159,7 +156,7 @@ int main()
     po3->cue_action("wait",50);
     po3->cue_action("turn right",30);
 
-    physics_object* po4 = new physics_object();
+    model* po4 = new model();
     po4->set_position(window::center.x-48,window::center.y-48);//set position backward left of window center
     po4->rest();//make sure the resting point matches the new position
     po4->cue_action("wait",50);
@@ -174,176 +171,155 @@ int main()
     po4->cue_action("turn left",30);
     po4->cue_action("wait",50);
     po4->cue_action("turn right",30);
-    //initialize the draggable objects
-    draggable_object::default_texture="companioncube.bmp";
-    draggable_object::default_mask="companioncube-mask.bmp";
-    draggable_object* do1 = new draggable_object();
-    do1->set_position(window::center.x,window::center.y);//set position window center
-    //initialize the rts objects
-    rts_object::default_texture="SC2siegetank.bmp";
-    rts_object::default_mask="SC2siegetank-mask.bmp";
-    rts_object::default_click_sound="siegetank-yessir.wav";
-    rts_object::default_collision_sound="siegetank-move_it.wav";
-    rts_object::default_movement_sound="low_clack.wav";
-    rts_object* rtso1 = new rts_object();
+
+    model::default_width=64;
+    model::default_height=64;
+    model::enable_physics=false;
+    model::enable_rts_controls=true;
+    model::enable_keyboard_controls=false;
+    model::default_texture="SC2siegetank.bmp";
+    model::default_mask="SC2siegetank-mask.bmp";
+    model::default_movement_sound="low_clack.wav";
+    model::default_click_sound="siegetank-yessir.wav";
+    model::default_collision_sound="siegetank-move_it.wav";
+
+    model* rtso1 = new model();
     rtso1->set_position(window::center.x+96,window::center.y);//set position right of window center
     rtso1->fill_color.set("yellow");
 
-    rts_object* rtso2 = new rts_object();
+    model* rtso2 = new model();
     rtso2->set_position(window::center.x,window::center.y-96);//set position below window center
     rtso2->fill_color.set("green");
 
-    rts_object* rtso3 = new rts_object();
+    model* rtso3 = new model();
     rtso3->set_position(window::center.x,window::center.y+96);//set position above window center
     rtso3->fill_color.set("red");
 
-    rts_object* rtso4 = new rts_object();
+    model* rtso4 = new model();
     rtso4->set_position(window::center.x-96,window::center.y);//set position left of window center
     rtso4->fill_color.set("blue");
 //Initialize Text
     //Information Overlay Text
-    label* object_info = new label();
+    ui::label* object_info = new ui::label();
     object_info->set_spacing(20);
-    object_info->set_position(ui::overlay_margin,window::height-20);
-    object_info->hide();//we don't want to see this right away
+    object_info->set_position(50,window::height-20);
 
-    label* game_info = new label();
+    ui::label* game_info = new ui::label();
     game_info->set_spacing(20);
-    game_info->set_position(window::width-(ui::overlay_margin+200),window::height-20);
-    game_info->hide();//we don't want to see this right away
+    game_info->set_position(window::width-200,window::height-20);
 //Initialize Checkboxes
-    checkbox::default_click_sound="click.wav";
-    checkbox::default_hover_sound="swipe.wav";
-    checkbox* mute_all_checkbox = new checkbox();
+    ui::checkbox::default_click_sound="click.wav";
+    ui::checkbox::default_hover_sound="swipe.wav";
+    ui::checkbox* mute_all_checkbox = new ui::checkbox();
     mute_all_checkbox->text.set_text("mute all");
     mute_all_checkbox->bind_option(game::settings["game"]["mute_all"]);
 
-    checkbox* show_textures_checkbox = new checkbox();
+    ui::checkbox* show_textures_checkbox = new ui::checkbox();
     show_textures_checkbox->text.set_text("show textures");
     show_textures_checkbox->bind_option(game::settings["game"]["show_textures"]);
 
-    checkbox* show_foreground_checkbox = new checkbox();
+    ui::checkbox* show_foreground_checkbox = new ui::checkbox();
     show_foreground_checkbox->text.set_text("show foreground");
     show_foreground_checkbox->bind_option(game::settings["game"]["show_foreground"]);
 
-    checkbox* show_middleground_checkbox = new checkbox();
+    ui::checkbox* show_middleground_checkbox = new ui::checkbox();
     show_middleground_checkbox->set_label("show middleground");
     show_middleground_checkbox->bind_option(game::settings["game"]["show_middleground"]);
 
-    checkbox* show_background_checkbox = new checkbox();
+    ui::checkbox* show_background_checkbox = new ui::checkbox();
     show_background_checkbox->set_label("show background");
     show_background_checkbox->bind_option(game::settings["game"]["show_background"]);
 
-    checkbox* show_dos_checkbox = new checkbox();
-    show_dos_checkbox->set_label("show draggable objects");
-    show_dos_checkbox->bind_option(game::settings["game"]["show_draggable_objects"]);
-
-    checkbox* show_pos_checkbox = new checkbox();
-    show_pos_checkbox->set_label("show physics objects");
-    show_pos_checkbox->bind_option(game::settings["game"]["show_physics_objects"]);
-
-    checkbox* show_rtsos_checkbox = new checkbox();
-    show_rtsos_checkbox->set_label("show rts objects");
-    show_rtsos_checkbox->bind_option(game::settings["game"]["show_rts_objects"]);
+    ui::checkbox* show_models_checkbox = new ui::checkbox();
+    show_models_checkbox->set_label("show models");
+    show_models_checkbox->bind_option(game::settings["game"]["show_models"]);
 //Initialize Buttons
     //Main Menu Buttons
-    button::default_click_sound="click.wav";
-    button::default_hover_sound="swipe.wav";
-    button* play_button = new button();
+    ui::button::default_click_sound="click.wav";
+    ui::button::default_hover_sound="swipe.wav";
+    ui::button* play_button = new ui::button();
     play_button->set_label("Play");
     play_button->set_action(game::play);
 
-    button* load_button = new button();
+    ui::button* load_button = new ui::button();
     load_button->set_label("Load");
     load_button->set_action(game::load);
 
-    button* quit_button = new button();
+    ui::button* quit_button = new ui::button();
     quit_button->set_label("Quit");
     quit_button->set_action(controls::switch_menu,2);
     //Quit Menu Buttons
-    button* confirm_quit = new button();
+    ui::button* confirm_quit = new ui::button();
     confirm_quit->set_label("Yes");
     confirm_quit->set_action(game::quit);
 
-    button* cancel_quit = new button();
+    ui::button* cancel_quit = new ui::button();
     cancel_quit->set_label("No");
     cancel_quit->set_action(controls::switch_menu,0);
     //Pause Menu Buttons
-    button* resume_button = new button();
+    ui::button* resume_button = new ui::button();
     resume_button->set_label("Resume");
     resume_button->set_action(game::resume);
 
-    button* save_button = new button();
+    ui::button* save_button = new ui::button();
     save_button->set_label("Save");
     save_button->set_action(game::save);
 
-    button* main_menu_button = new button();
+    ui::button* main_menu_button = new ui::button();
     main_menu_button->set_label("Main Menu");
     main_menu_button->set_action(controls::switch_menu,2);
     //Warning Menu Buttons
-    button* confirm_return_button = new button();
+    ui::button* confirm_return_button = new ui::button();
     confirm_return_button->set_label("Yes");
     confirm_return_button->set_action(controls::switch_scene,0);
 
-    button* cancel_return_button = new button();
+    ui::button* cancel_return_button = new ui::button();
     cancel_return_button->set_label("No");
     cancel_return_button->set_action(controls::switch_menu,0);
     //Game Buttons
-    button* create_po_button = new button();//"po" stands for "physics object"
-    create_po_button->set_label("physics object");
-    create_po_button->set_action(controls::add_physics_object);
-    create_po_button->set_click_sound("pop.wav");
+    ui::button* create_model_button = new ui::button();
+    create_model_button->set_label("model");
+    create_model_button->set_action(controls::add_model);
+    create_model_button->set_click_sound("pop.wav");
 
-    button* create_do_button = new button();//"do" stands for "draggable object"
-    create_do_button->set_label("draggable object");
-    create_do_button->set_action(controls::add_draggable_object);
-    create_do_button->set_click_sound("pop.wav");
-
-    button* create_rtso_button = new button();//"rtso" stands for "real-time strategy object"
-    create_rtso_button->set_label("rts object");
-    create_rtso_button->set_action(controls::add_rts_object);
-    create_rtso_button->set_click_sound("pop.wav");
-
-    button* create_object_button = new button();
+    ui::button* create_object_button = new ui::button();
     create_object_button->set_position(window::width*0.9,window::height*0.1);//put the button on the right side, 1/5th of the way up
     create_object_button->set_label("create object");
     create_object_button->set_action(controls::create_object);
     create_object_button->set_click_sound("pop.wav");
 
-    button* delete_object_button = new button();
+    ui::button* delete_object_button = new ui::button();
     delete_object_button->set_position(window::width*0.9,window::height*0.05);//put the button on the right side, 1/5th of the way up
     delete_object_button->set_label("delete object");
     delete_object_button->set_action(controls::delete_selected);
     delete_object_button->set_click_sound("trash.wav");
 
-    button* menu_button = new button();
+    ui::button* menu_button = new ui::button();
     menu_button->set_position(window::center.x,window::height-20);//put the button at the top middle, just below the top
     menu_button->set_label("Pause");
     menu_button->set_action(game::pause);
 
-    button* settings_button = new button();
+    ui::button* settings_button = new ui::button();
     settings_button->set_label("Settings");
     settings_button->set_action(controls::switch_menu,1);
 
-    button* leave_settings_button = new button();
+    ui::button* leave_settings_button = new ui::button();
     leave_settings_button->set_label("Back");
     leave_settings_button->set_action(controls::switch_menu,0);
 //Initialize Menus
-    dropdown_menu* creation_menu = new dropdown_menu();
-    creation_menu->set_label("create new...");
+    ui::dropdown_menu* creation_menu = new ui::dropdown_menu();
     creation_menu->set_position(window::width*0.9,window::height*0.25);
-    creation_menu->add_item(create_do_button);
-    creation_menu->add_item(create_po_button);
-    creation_menu->add_item(create_rtso_button);
+    creation_menu->set_label("create new...");
+    creation_menu->add_item(create_model_button);
 
-    menu* main_menu = new menu();
+    ui::menu* main_menu = new ui::menu();
     main_menu->set_title("Main Menu");
     main_menu->add_item(play_button);
     main_menu->add_item(load_button);
     main_menu->add_item(settings_button);
     main_menu->add_item(quit_button);
 
-    menu* quit_menu = new menu();
+    ui::menu* quit_menu = new ui::menu();
     quit_menu->set_title("Warning");
     quit_menu->set_subtitle("Are you sure you want to quit?");
     quit_menu->set_layout("horizontal");
@@ -351,20 +327,18 @@ int main()
     quit_menu->add_item(cancel_quit);
     quit_menu->hide();//we don't want to see this right away
 
-    menu* settings_menu = new menu();
+    ui::menu* settings_menu = new ui::menu();
     settings_menu->set_title("Settings");
     settings_menu->add_item(mute_all_checkbox);
     settings_menu->add_item(show_textures_checkbox);
     settings_menu->add_item(show_foreground_checkbox);
     settings_menu->add_item(show_middleground_checkbox);
     settings_menu->add_item(show_background_checkbox);
-    settings_menu->add_item(show_dos_checkbox);
-    settings_menu->add_item(show_pos_checkbox);
-    settings_menu->add_item(show_rtsos_checkbox);
+    settings_menu->add_item(show_models_checkbox);
     settings_menu->add_item(leave_settings_button);
     settings_menu->hide();
 
-    menu* pause_menu = new menu();
+    ui::menu* pause_menu = new ui::menu();
     pause_menu->set_title("Paused");
     pause_menu->add_item(resume_button);
     pause_menu->add_item(save_button);
@@ -372,7 +346,7 @@ int main()
     pause_menu->add_item(main_menu_button);
     pause_menu->hide();//we don't want to see this right away
 
-    menu* leave_menu = new menu();
+    ui::menu* leave_menu = new ui::menu();
     leave_menu->set_title("Warning");
     leave_menu->set_subtitle("Are you sure you want to leave?");
     leave_menu->set_layout("horizontal");
@@ -408,17 +382,17 @@ int main()
     game_screen->foreground.masked=true;
     game_screen->foreground.set_texture("angrybirds_ground.bmp");
     game_screen->foreground.set_mask("angrybirds_ground-mask.bmp");
-    game_screen->add_object(do1);
-    game_screen->add_object(po1);
-    game_screen->add_object(po2);
-    game_screen->add_object(po3);
-    game_screen->add_object(po4);
-    game_screen->add_object(rtso1);
-    game_screen->add_object(rtso2);
-    game_screen->add_object(rtso3);
-    game_screen->add_object(rtso4);
-    game_screen->add_text(object_info);
-    game_screen->add_text(game_info);
+    game_screen->add_model(dro1);
+    game_screen->add_model(po1);
+    game_screen->add_model(po2);
+    game_screen->add_model(po3);
+    game_screen->add_model(po4);
+    game_screen->add_model(rtso1);
+    game_screen->add_model(rtso2);
+    game_screen->add_model(rtso3);
+    game_screen->add_model(rtso4);
+    game_screen->add_label(object_info);
+    game_screen->add_label(game_info);
     game_screen->add_button(delete_object_button);
     game_screen->add_button(create_object_button);
     game_screen->add_button(menu_button);
@@ -432,7 +406,6 @@ int main()
     game_screen->bind_key('d',controls::move_right);
     game_screen->bind_key('q',controls::turn_left);
     game_screen->bind_key('e',controls::turn_right);
-    game_screen->bind_key('i',game::settings["game"]["show_info_overlay"]);
     game_screen->bind_key('\r',controls::choose_item);
     game_screen->bind_key("up",controls::previous_item);
     game_screen->bind_key("down",controls::next_item);

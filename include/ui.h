@@ -17,18 +17,20 @@
 #ifndef UI_H
 #define UI_H
 #include "color.h"
-#include "menu.h"
-#include "label.h"
-#include <vector>
+#include <string>
 
-//This namespace contains functions and variables related to the user interface
+//This namespace contains classes and variables related to the user interface
 namespace ui
 {
-    extern int overlay_margin;//space between window edge and overlay text
-    void check_clicked();//check every clickable object to see if the cursor clicked it
-    void show_text();//makes the text of the current scene visible
-    void hide_text();//makes the text of the current scene invisible
-    void update_text();//updates the text
+    extern std::string default_texture;
+    extern std::string default_mask;
+    extern color default_fill_color;
+    extern color default_border_color;
+    class label;
+    class button;
+    class checkbox;
+    class menu;
+    class dropdown_menu;
 }
 const int CENTER=0;
 const int LEFT=1;

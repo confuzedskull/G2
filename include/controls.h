@@ -42,7 +42,7 @@ namespace controls
     void previous_item();//selects the previous item
     void choose_item();//selects the current item
     void switch_menu(int index);
-    void switch_menu(menu* new_menu);
+    void switch_menu(ui::menu* new_menu);
     void switch_scene(int index);
     void switch_scene(scene* new_scene);
     void show_foreground();
@@ -51,23 +51,16 @@ namespace controls
     void hide_middleground();
     void show_background();
     void hide_background();
-    void show_draggable_objects();//show all draggable objects in play scene
-    void hide_draggable_objects();//hide all draggable objects in play scene
-    void show_physics_objects();//show all physics objects in play scene
-    void hide_physics_objects();//hide all physics objects in play scene
-    void show_rts_objects();//show all rts objects in play scene
-    void hide_rts_objects();//hide all rts objects in play scene
+    void show_models();//show models in play scene
+    void hide_models();//hide models in play scene
     void show_textures();//show all textures
     void hide_textures();//hide all textures
     void mute_all();//mute all sounds
     void unmute_all();//unmute all sounds
-    void add_draggable_object();//add a draggable object to the play scene
-    void add_physics_object();//add a physics object to the play scene
-    void add_rts_object();//add an rts object to the play scene
+    void add_model();//add a model to the play scene
     void create_object();//creates an object of the previously created type
     void delete_selected();//remove the selected object from the game
     //mouse functions
-    void check_clicked();//check if objects are clicked or not
     void mouse_click(int button, int state, int x, int y);//handles mouse clicks
     void mouse_move(int x, int y);//handles mouse movement
     void mouse_drag(int x, int y);//handles mouse drag

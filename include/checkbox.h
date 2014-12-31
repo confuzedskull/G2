@@ -19,7 +19,7 @@
 #include "button.h"
 
 //A checkbox is a button which toggles a value on and off
-class checkbox: public button
+class ui::checkbox: public ui::button
 {
 private:
     int checked;
@@ -31,6 +31,8 @@ public:
     static int default_margin;
     static int default_width;
     static int default_height;
+    static color default_fill_color;
+    static color default_border_color;
     int* option;
     int checkmark_margin;
     color checkmark_color;

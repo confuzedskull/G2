@@ -34,6 +34,7 @@ protected:
 public:
     static float default_speed;
     point2f* get_rally();
+    std::string get_type() override;
     float speed;//rate at which an object moves
     bool moving_forward;
     bool moving_backward;

@@ -26,6 +26,7 @@ protected:
     std::string collision_sound;
 public:
     static std::string default_collision_sound;
+    std::string get_type() override;
     int touched_side[4];/*The number of the touching object is stored in each index. "0" is no object
     Each index corresponds to a side:[1] is left, [2] is right, [3] is front, [4] is back. Index [0] is the center.*/
     bool collided;

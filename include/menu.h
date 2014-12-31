@@ -21,7 +21,7 @@
 #include <vector>
 #include <string>
 
-class menu: virtual public basic_object
+class ui::menu: virtual public basic_object
 {
 protected:
     std::string layout;
@@ -31,7 +31,10 @@ public:
     static std::string default_layout;
     static std::string default_texture;
     static std::string default_mask;
+    static color default_fill_color;
+    static color default_border_color;
     std::vector<button*> items;
+    std::string get_type() override;
     button* current_item;
     label title;
     label subtitle;

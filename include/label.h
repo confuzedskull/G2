@@ -16,13 +16,14 @@
 
 #ifndef LABEL_H
 #define LABEL_H
-#include "basic_object.h"
+#include "clickable_object.h"
+#include "ui.h"
 #include <vector>
 #include <string>
 #include <sstream>
 
 //A label stores a string which can be formatted and displayed on screen
-class label: virtual public basic_object
+class ui::label: public clickable_object
 {
 protected:
     std::string text;
@@ -33,17 +34,23 @@ protected:
     float font_width;
     float font_height;
 public:
-    static std::string default_style;
+    static std::string default_font_style;
     static int default_allignment;
-    static int default_size;
+    static int default_font_size;
     static int default_spacing;
+    static color default_fill_color;
+    static color default_border_color;
+    static color default_font_color;
     int get_allignment();
+    std::string get_type() override;
     color font_color;
     void allign(int pos);
     void allign(std::string pos);
     void set_spacing(int val);
     void set_text(std::string txt);
     void set_font(std::string style, int size);
+    void mouse_function() override;
+    void update() override;
     void render() override;//prints the text to the screen
     label();
 };

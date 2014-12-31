@@ -32,31 +32,33 @@
 #endif
 #include <iostream>
 
-std::string checkbox::default_texture = "";
-std::string checkbox::default_mask = "";
-std::string checkbox::default_click_sound = "";
-std::string checkbox::default_hover_sound = "";
-int checkbox::default_margin = 4;
-int checkbox::default_width = 16;
-int checkbox::default_height = 16;
+std::string ui::checkbox::default_texture = "";
+std::string ui::checkbox::default_mask = "";
+std::string ui::checkbox::default_click_sound = "";
+std::string ui::checkbox::default_hover_sound = "";
+int ui::checkbox::default_margin = 4;
+int ui::checkbox::default_width = 16;
+int ui::checkbox::default_height = 16;
+color ui::checkbox::default_fill_color = ui::default_fill_color;
+color ui::checkbox::default_border_color = ui::default_border_color;
 
-void checkbox::bind_option(int* o)
+void ui::checkbox::bind_option(int* o)
 {
     option=o;
 }
 
-std::string checkbox::get_type()
+std::string ui::checkbox::get_type()
 {
     return "checkbox";
 }
 
-void checkbox::set_label(std::string txt)
+void ui::checkbox::set_label(std::string txt)
 {
     text.set_text(txt);
     text.set_position(xmin-margin-(text.get_width()/2),position.y);
 }
 
-void checkbox::mouse_function()
+void ui::checkbox::mouse_function()
 {
     if(visible && enabled)
     {
@@ -76,13 +78,13 @@ void checkbox::mouse_function()
     }
 }
 
-void checkbox::format()
+void ui::checkbox::format()
 {
     calc_boundaries();
     text.set_position(xmin-margin-(text.get_width()/2),position.y);
 }
 
-void checkbox::render()
+void ui::checkbox::render()
 {
     if(visible)
     {
@@ -102,17 +104,18 @@ void checkbox::render()
     }
 }
 
-void checkbox::update()
+void ui::checkbox::update()
 {
     text.visible=visible;
     mouse_function();
 }
 
-checkbox::checkbox()
+ui::checkbox::checkbox()
 {
     bordered=true;
     set_dimensions(default_width,default_height);
-    fill_color = color(0.75f,0.75f,0.75f);
+    fill_color=default_fill_color;
+    border_color=default_border_color;
     margin=default_margin;
     checked=1;
     checkmark_margin=2;

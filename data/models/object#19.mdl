@@ -1,21 +1,23 @@
-728.000 312.000
+680.000 456.000
 90.000
-32 32
-0.5 0.5 0.5
+64 64
+1 0 0
 0 1 0
 0 0 0
-1
-0
-1
-1
-1
 0
 0
-angrybird.bmp
-angrybird-mask.bmp
-angrybird-aheheha.wav
+1
+1
+1
+0
+0
+SC2siegetank.bmp
+SC2siegetank-mask.bmp
+1
+0
+siegetank-yessir.wav
 
-
+low_clack.wav
 1.000
 0.000
 0
@@ -25,26 +27,14 @@ angrybird-aheheha.wav
 0
 0
 0
-7 50 0
-1 10 0
-7 100 0
-3 10 0
-7 100 0
-2 10 0
-7 100 0
-4 10 0
-7 100 0
-5 30 0
-7 50 0
-6 30 0
 
 -1
 -1
 -1
 -1
 0
-angrybird-ow.wav
-728.000 312.000
+siegetank-move_it.wav
+64.000 431.000
 90.000
 0.015
 0.000
@@ -65,3 +55,6 @@ angrybird-ow.wav
 0.010
 1.000
 0.000
+0
+1
+0

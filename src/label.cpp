@@ -16,6 +16,7 @@
 
 #include "label.h"
 #include "ui.h"
+#include "cursor.h"
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -31,17 +32,25 @@
 #include <iostream>
 #include <math.h>
 
-std::string label::default_style = "helvetica";
-int label::default_allignment = CENTER;
-int label::default_size = 12;
-int label::default_spacing = 1;
+std::string ui::label::default_font_style = "helvetica";
+int ui::label::default_allignment = CENTER;
+int ui::label::default_font_size = 12;
+int ui::label::default_spacing = 1;
+color ui::label::default_fill_color = ui::default_fill_color;
+color ui::label::default_border_color = ui::default_border_color;
+color ui::label::default_font_color = BLACK;
 
-int label::get_allignment()
+int ui::label::get_allignment()
 {
     return allignment;
 }
 
-void label::allign(int pos)
+std::string ui::label::get_type()
+{
+    return "label";
+}
+
+void ui::label::allign(int pos)
 {
     if(pos==LEFT || pos==CENTER || pos==RIGHT)
         allignment=pos;
@@ -49,7 +58,7 @@ void label::allign(int pos)
         std::cerr<<"invalid allignment.\n";
 }
 
-void label::allign(std::string pos)
+void ui::label::allign(std::string pos)
 {
     if(pos=="left")
         allign(LEFT);
@@ -59,12 +68,12 @@ void label::allign(std::string pos)
         allign(CENTER);
 }
 
-void label::set_spacing(int val)
+void ui::label::set_spacing(int val)
 {
     spacing=val;
 }
 
-void label::set_text(std::string txt)
+void ui::label::set_text(std::string txt)
 {
     text=txt;
     if(isless((float)width,font_width*txt.length()))
@@ -73,7 +82,7 @@ void label::set_text(std::string txt)
         height=(int)font_height;
 }
 
-void label::set_font(std::string style, int size)
+void ui::label::set_font(std::string style, int size)
 {
     font_size=size;
     font_width=font_size*0.6;
@@ -100,11 +109,30 @@ void label::set_font(std::string style, int size)
         std::cerr<<"invalid font style\n";
 }
 
-void label::render()
+void ui::label::mouse_function()
+{
+    if(enabled)
+    {
+        if(double_clicked())
+            filled=true;
+        else
+            filled=false;
+        if(selected && dragged())
+            width=cursor::left_up.x-cursor::left_down.x;
+    }
+}
+
+void ui::label::update()
+{
+    mouse_function();
+}
+
+void ui::label::render()
 {
     if(visible)
     {
         render_shape();
+        render_border();
         int text_pos;
         switch(allignment)
         {
@@ -126,15 +154,16 @@ void label::render()
     }
 }
 
-label::label()
+ui::label::label()
 {
     filled=false;
     bordered=false;
-    fill_color=YELLOW;
-    font_color=BLACK;
+    fill_color=default_fill_color;
+    border_color=default_border_color;
+    font_color=default_font_color;
     set_dimensions(12,12);
     allign(default_allignment);
-    set_font(default_style,default_size);
+    set_font(default_font_style,default_font_size);
     spacing=default_spacing;
     std::clog<<"object#"<<number<<"(label)"<<" created.\n";
 }

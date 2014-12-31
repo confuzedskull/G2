@@ -74,10 +74,8 @@ void window::render()
 
 void window::update()
 {
-    ui::update_text();
     game::update();//update game
     cursor::calc_boundaries();//calculate the size of the selection box
-    controls::check_clicked();//check if objects are clicked
     //This condition makes sure events occur at the set refresh rate
     if(isgreaterequal(game::time_elapsed,(double)1/window::refresh_rate))//time elapsed is >= refresh rate
     {

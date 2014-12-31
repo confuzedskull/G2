@@ -19,13 +19,20 @@
 #include "ui.h"
 #include <iostream>
 
-std::string dropdown_menu::default_texture = "";
-std::string dropdown_menu::default_mask = "";
-std::string dropdown_menu::default_click_sound = "";
-std::string dropdown_menu::default_hover_sound = "";
-std::string dropdown_menu::default_layout = "vertical";
+std::string ui::dropdown_menu::default_texture = "";
+std::string ui::dropdown_menu::default_mask = "";
+std::string ui::dropdown_menu::default_click_sound = "";
+std::string ui::dropdown_menu::default_hover_sound = "";
+std::string ui::dropdown_menu::default_layout = "vertical";
+color ui::dropdown_menu::default_fill_color = ui::default_fill_color;
+color ui::dropdown_menu::default_border_color = ui::default_border_color;
 
-void dropdown_menu::add_item(button* item)
+std::string ui::dropdown_menu::get_type()
+{
+    return "dropdown menu";
+}
+
+void ui::dropdown_menu::add_item(button* item)
 {
     item->bordered=false;
     item->text.allign(CENTER);
@@ -37,7 +44,7 @@ void dropdown_menu::add_item(button* item)
     set_dimensions(width,items.front()->get_height());//match menu height to item height
 }
 
-void dropdown_menu::mouse_function()
+void ui::dropdown_menu::mouse_function()
 {
     if(visible && enabled)
     {
@@ -62,7 +69,7 @@ void dropdown_menu::mouse_function()
     }
 }
 
-void dropdown_menu::expand()
+void ui::dropdown_menu::expand()
 {
     for(auto i:items)
     {
@@ -71,7 +78,7 @@ void dropdown_menu::expand()
     }
 }
 
-void dropdown_menu::collapse()
+void ui::dropdown_menu::collapse()
 {
     set_dimensions(width,items.front()->get_height());//shrink to button size
     for(auto i:items)
@@ -81,13 +88,13 @@ void dropdown_menu::collapse()
     }
 }
 
-void dropdown_menu::render()
+void ui::dropdown_menu::render()
 {
     menu::render();
     button::render();
 }
 
-void dropdown_menu::update()
+void ui::dropdown_menu::update()
 {
     for(auto i:items)
     {
@@ -102,7 +109,7 @@ void dropdown_menu::update()
     mouse_function();
 }
 
-dropdown_menu::dropdown_menu()
+ui::dropdown_menu::dropdown_menu()
 {
 	title.hide();
     subtitle.hide();
@@ -113,6 +120,8 @@ dropdown_menu::dropdown_menu()
     menu::margin=0;
     state_toggle=false;
     expanded=false;
+    fill_color=default_fill_color;
+    border_color=default_border_color;
     set_texture(default_texture);
     set_mask(default_mask);
     set_click_sound(default_click_sound);
