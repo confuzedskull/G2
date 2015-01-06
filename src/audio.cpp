@@ -1,19 +1,20 @@
-/*  This file is a part of 2DWorld - The Generic 2D Game Engine
+/*  This file is a part of G2 - The Generic 2D Game Engine
     Copyright (C) 2014  James Nakano
-    2DWorld is free software: you can redistribute it and/or modify
+    G2 is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    2DWorld is distributed in the hope that it will be useful,
+    G2 is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
-    along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
+    along with the rest of G2.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "audio.h"
 #include "utilities.h"
 #include <iostream>
+#include <math.h>
 
 ALCdevice* audio::device;
 ALCcontext* audio::context;
@@ -26,11 +27,11 @@ void audio::initialize()
     //initialize OpenAL
     device = alcOpenDevice(NULL);
     if(!device)
-        std::cerr<<"no sound device\n";
+        std::cerr<<"No sound device.\n";
     context = alcCreateContext(device, NULL);
     alcMakeContextCurrent(context);
     if(!context)
-        std::cerr<<"no sound context\n";
+        std::cerr<<"No sound context.\n";
     //listener settings
     ALfloat listener_position[] = {0.0, 0.0, 0.0};
     ALfloat listener_velocity[] = {0.0, 0.0, 0.0};
@@ -50,7 +51,20 @@ void audio::add_sound(std::string filename)
         sound_file.close();
     }
     else
-        std::cerr<<filename<<" does not exist.\n";
+        std::cerr<<"Sound file: '"<<filename<<"' does not exist.\n";
+}
+
+void audio::set_volume(std::string filename, int percentage)
+{
+    if(sounds.find(filename)!=sounds.end())
+    {
+        if(percentage>=0 && percentage<=100)
+            alSourcef(sounds[filename], AL_GAIN, (float)(percentage/100));
+        else
+            std::cerr<<"Invalid value. Please use a value between 0 and 100.\n";
+    }
+    else
+        std::cerr<<"Sound: '"<<filename<<"' not loaded.\n";
 }
 
 void audio::load(std::string filename)
@@ -65,7 +79,7 @@ void audio::load(std::string filename)
         sound_file.open(filepath.c_str(),std::ios::binary);
     else
     {
-       std::cerr<<filename<<" not found.\n";
+        std::cerr<<"Sound file: '"<<filename<<"' not found.\n";
         return;
     }
     //read file information
@@ -134,7 +148,7 @@ void audio::load(std::string filename)
     alSourcefv(sounds[filename], AL_VELOCITY, source_velocity);
     alSourcei(sounds[filename], AL_LOOPING, AL_FALSE);
     delete[] data;
-    std::clog<<filename<<" loaded.\n";
+    std::clog<<"Sound file: '"<<filename<<"' loaded.\n";
 }
 
 void audio::load_all()
@@ -144,12 +158,23 @@ void audio::load_all()
         load(s.first);
 }
 
+void audio::loop(std::string filename)
+{
+    if(sounds.find(filename)!=sounds.end())
+    {
+        alSourcei(sounds[filename], AL_LOOPING, AL_TRUE);
+        alSourcePlay(sounds[filename]);
+    }
+    else
+        std::cerr<<"Sound file: '"<<filename<<"' not loaded.\n";
+}
+
 void audio::play(std::string filename)
 {
     if(sounds.find(filename)!=sounds.end())
         alSourcePlay(sounds[filename]);
     else
-        std::cerr<<filename<<" not loaded.\n";
+        std::cerr<<"Sound file: '"<<filename<<"' not loaded.\n";
 }
 
 void audio::play_all()
@@ -163,7 +188,7 @@ void audio::pause(std::string filename)
     if(sounds.find(filename)!=sounds.end())
         alSourcePause(sounds[filename]);
     else
-        std::cerr<<filename<<" not loaded.\n";
+        std::cerr<<"Sound file: '"<<filename<<"' not loaded.\n";
 }
 
 void audio::pause_all()
@@ -177,7 +202,7 @@ void audio::stop(std::string filename)
     if(sounds.find(filename)!=sounds.end())
         alSourceStop(sounds[filename]);
     else
-        std::cerr<<filename<<" not loaded.\n";
+        std::cerr<<"Sound file: '"<<filename<<"' not loaded.\n";
 }
 
 void audio::stop_all()

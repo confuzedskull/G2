@@ -1,18 +1,18 @@
-/*  This file is a part of 2DWorld - The Generic 2D Game Engine
+/*  This file is a part of G2 - The Generic 2D Game Engine
     Copyright (C) 2014  James Nakano
 
-    2DWorld is free software: you can redistribute it and/or modify
+    G2 is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    2DWorld is distributed in the hope that it will be useful,
+    G2 is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
+    along with the rest of G2.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "basic_object.h"
 #include "window.h"
@@ -32,6 +32,7 @@
 #endif
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <math.h>
 
 //initialize static variables
@@ -125,19 +126,6 @@ void basic_object::set_mask(std::string filename)
         mask=filename;
     else
         std::cerr<<filename<<" not found.\n";
-}
-
-void basic_object::set_property(std::string name, int value)
-{
-    if(properties.find(name)!=properties.end())
-        properties[name]=value;
-    else
-        std::cerr<<"property not found.\n";
-}
-
-void basic_object::add_property(std::string name, int value)
-{
-    properties[name]=value;
 }
 
 void basic_object::calc_boundaries()//calculates the limits of the object
@@ -276,6 +264,85 @@ void basic_object::render()//draws the object
 void basic_object::update(){}
 
 void basic_object::sync(){}
+
+void basic_object::load()
+{
+    std::clog<<file_name;
+    std::ifstream object_file(file_name);//access file by name
+    if(object_file.bad())//make sure the file is there
+    {
+        std::cerr<<"bad file name\n";
+        return;
+    }
+    object_file.precision(3);
+    object_file.setf(std::ios::fixed);
+    //load basic object properties
+    object_file>>position.x>>position.y;
+    object_file>>rotation;
+    object_file>>width>>height;
+    object_file>>fill_color.r>>fill_color.g>>fill_color.b;
+    object_file>>marker_color.r>>marker_color.g>>marker_color.b;
+    object_file>>border_color.r>>border_color.g>>border_color.b;
+    object_file>>filled;
+    object_file>>bordered;
+    object_file>>textured;
+    object_file>>masked;
+    object_file>>visible;
+    object_file>>selected;
+    object_file>>muted;
+    object_file>>texture;
+    object_file>>mask;
+    object_file.close();
+    std::clog<<"object#"<<number<<"(basic object)"<<" loaded.\n";
+}
+
+void basic_object::save()
+{
+    std::stringstream filename;
+    filename<<"./data/objects/object#"<<number<<".bso";
+    std::ofstream object_file(filename.str());
+    if(object_file.bad())
+    {
+        std::cerr<<"bad file name.\n";
+        return;
+    }
+    object_file.precision(3);
+    object_file.setf(std::ios::fixed);
+    //save basic object properties
+    object_file<<position.x<<' '<<position.y<<std::endl;
+    object_file<<rotation<<std::endl;
+    object_file<<width<<' '<<height<<std::endl;
+    object_file<<fill_color.str()<<std::endl;
+    object_file<<marker_color.str()<<std::endl;
+    object_file<<border_color.str()<<std::endl;
+    object_file<<filled<<std::endl;
+    object_file<<bordered<<std::endl;
+    object_file<<textured<<std::endl;
+    object_file<<masked<<std::endl;
+    object_file<<visible<<std::endl;
+    object_file<<selected<<std::endl;
+    object_file<<muted<<std::endl;
+    object_file<<texture<<std::endl;
+    object_file<<mask<<std::endl;
+    object_file.close();
+    std::clog<<"object#"<<number<<"(basic object)"<<" saved.\n";
+}
+
+void basic_object::set_property(std::string name, int value)
+{
+    if(properties.find(name)!=properties.end())
+        properties[name]=value;
+    else
+        std::cerr<<"property not found.\n";
+}
+
+void basic_object::add_property(std::string name, int value)
+{
+    if(name.find(" ")==std::string::npos)//no spaces found
+        properties[name]=value;
+    else
+        std::cerr<<"cannot include spaces in property name\n";
+}
 
 basic_object::basic_object()
 {

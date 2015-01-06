@@ -1,5 +1,5 @@
-/*  2DWorld - The Generic 2D Game Engine
-    This is a multipurpose 2D game engine created from the ground up using OpenGL and GLUT
+/*  G2 Editor
+    This is an editor designed for the G2 Engine
     Copyright (C) 2014  James Nakano
 
     This program is free software: you can redistribute it and/or modify
@@ -24,47 +24,13 @@
 
 int main()
 {
+    window::title="G2 Editor";
 //Initialize Settings
     game::add_setting("window","width",&window::width);
     game::add_setting("window","height",&window::height);
     game::add_setting("window","position_x",&window::position.x);
     game::add_setting("window","position_y",&window::position.y);
     game::add_setting("window","refresh_rate",&window::refresh_rate);
-    game::add_setting("label","default_font_size",&ui::label::default_font_size);
-    game::add_setting("label","default_spacing",&ui::label::default_spacing);
-    game::add_setting("menu","default_margin",&ui::menu::default_margin);
-    game::add_setting("menu","default_spacing",&ui::menu::default_spacing);
-    game::add_setting("button","default_width",&ui::button::default_width);
-    game::add_setting("button","default_height",&ui::button::default_height);
-    game::add_setting("button","default_margin",&ui::button::default_margin);
-    game::add_setting("button","default_spacing",&ui::button::default_margin);
-    game::add_setting("checkbox","default_width",&ui::checkbox::default_width);
-    game::add_setting("checkbox","default_height",&ui::checkbox::default_height);
-    game::add_setting("checkbox","default_margin",&ui::checkbox::default_margin);
-    game::add_setting("model","default_x",&model::default_position.x);
-    game::add_setting("model","default_y",&model::default_position.y);
-    game::add_setting("model","default_width",&model::default_width);
-    game::add_setting("model","default_height",&model::default_height);
-    game::add_setting("game","show_info_overlay",0);
-    game::add_setting("game","show_models",1);
-    game::add_setting("game","show_foreground",1);
-    game::add_setting("game","show_middleground",0);
-    game::add_setting("game","show_background",1);
-    game::add_setting("game","show_textures",1);
-    game::add_setting("game","mute_all",0);
-//Initialize rules
-    game::add_rule("game","show_models",1,controls::show_models);
-    game::add_rule("game","show_models",0,controls::hide_models);
-    game::add_rule("game","show_foreground",1,controls::show_foreground);
-    game::add_rule("game","show_foreground",0,controls::hide_foreground);
-    game::add_rule("game","show_middleground",1,controls::show_middleground);
-    game::add_rule("game","show_middleground",0,controls::hide_middleground);
-    game::add_rule("game","show_background",1,controls::show_background);
-    game::add_rule("game","show_background",0,controls::hide_background);
-    game::add_rule("game","show_textures",1,controls::show_textures);
-    game::add_rule("game","show_textures",0,controls::hide_textures);
-    game::add_rule("game","mute_all",1,controls::mute_all);
-    game::add_rule("game","mute_all",0,controls::unmute_all);
 //Initialize Sound Effects
     audio::add_sound("clack.wav");
     audio::add_sound("pop.wav");
@@ -76,6 +42,7 @@ int main()
     audio::add_sound("siegetank-yessir.wav");
     audio::add_sound("siegetank-move_it.wav");
     audio::add_sound("low_clack.wav");
+    audio::add_sound("angrybirds_theme.wav");
 //Initialize Textures
     graphics::add_image("confuzedskull.bmp");
     graphics::add_image("angrybird.bmp");
@@ -84,31 +51,33 @@ int main()
     graphics::add_image("companioncube-mask.bmp");
     graphics::add_image("SC2siegetank.bmp");
     graphics::add_image("SC2siegetank-mask.bmp");
-    graphics::add_image("angrybirds_ground.bmp");
-    graphics::add_image("angrybirds_ground-mask.bmp");
-    graphics::add_image("SC2background.bmp");
-    graphics::add_image("portals.bmp");
-//Initialize Models
-    model::default_width=64;
-    model::default_height=64;
-    model::enable_dragging=true;
-    model::default_texture="companioncube.bmp";
-    model::default_mask="companioncube-mask.bmp";
+//Initialize Objects
+    basic_object* home_screen_background = new basic_object();
+    home_screen_background->set_dimensions(window::width,window::height);
+    home_screen_background->fill_color.set(0.25,0.25,0.25);//dark gray
 
-    model* dro1 = new model();
+    basic_object* play_screen_background = new basic_object();
+    play_screen_background->set_dimensions(window::width,window::height);
+    play_screen_background->fill_color.set(BLACK);
+
+    advanced_object* dro1 = new advanced_object();
     dro1->set_position(window::center.x,window::center.y);
+    dro1->set_dimensions(64,64);
+    dro1->drag_detection=true;
+    dro1->set_texture("companioncube.bmp");
+    dro1->set_mask("companioncube-mask.bmp");
+    //set the default values for physics objects
+    advanced_object::default_width=32;
+    advanced_object::default_height=32;
+    advanced_object::enable_physics=true;
+    advanced_object::enable_dragging=false;
+    advanced_object::enable_keyboardcontrols=true;
+    advanced_object::default_texture="angrybird.bmp";
+    advanced_object::default_mask="angrybird-mask.bmp";
+    advanced_object::default_clicksound="angrybird-aheheha.wav";
+    advanced_object::default_collisionsound="angrybird-ow.wav";
 
-    model::default_width=32;
-    model::default_height=32;
-    model::enable_physics=true;
-    model::enable_dragging=false;
-    model::enable_keyboard_controls=true;
-    model::default_texture="angrybird.bmp";
-    model::default_mask="angrybird-mask.bmp";
-    model::default_click_sound="angrybird-aheheha.wav";
-    model::default_collision_sound="angrybird-ow.wav";
-
-    model* po1 = new model();
+    advanced_object* po1 = new advanced_object();
     po1->set_position(window::center.x-48,window::center.y+48);//set position forward left of window center
     po1->rest();//make sure the resting point matches the new position
     po1->cue_action("wait",50);
@@ -124,7 +93,7 @@ int main()
     po1->cue_action("wait",50);
     po1->cue_action("turn right",30);
 
-    model* po2 = new model();
+    advanced_object* po2 = new advanced_object();
     po2->set_position(window::center.x+48,window::center.y+48);//set position forward right of window center
     po2->rest();//make sure the resting point matches the new position
     po2->cue_action("wait",50);
@@ -140,7 +109,7 @@ int main()
     po2->cue_action("wait",50);
     po2->cue_action("turn right",30);
 
-    model* po3 = new model();
+    advanced_object* po3 = new advanced_object();
     po3->set_position(window::center.x+48,window::center.y-48);//set position backward right of window center
     po3->rest();//make sure the resting point matches the new position
     po3->cue_action("wait",50);
@@ -156,7 +125,7 @@ int main()
     po3->cue_action("wait",50);
     po3->cue_action("turn right",30);
 
-    model* po4 = new model();
+    advanced_object* po4 = new advanced_object();
     po4->set_position(window::center.x-48,window::center.y-48);//set position backward left of window center
     po4->rest();//make sure the resting point matches the new position
     po4->cue_action("wait",50);
@@ -171,35 +140,34 @@ int main()
     po4->cue_action("turn left",30);
     po4->cue_action("wait",50);
     po4->cue_action("turn right",30);
+    //set the default values for rts objects
+    advanced_object::default_width=64;
+    advanced_object::default_height=64;
+    advanced_object::enable_physics=false;
+    advanced_object::enable_rtscontrols=true;
+    advanced_object::enable_keyboardcontrols=false;
+    advanced_object::default_texture="SC2siegetank.bmp";
+    advanced_object::default_mask="SC2siegetank-mask.bmp";
+    advanced_object::default_movementsound="low_clack.wav";
+    advanced_object::default_clicksound="siegetank-yessir.wav";
+    advanced_object::default_collisionsound="siegetank-move_it.wav";
 
-    model::default_width=64;
-    model::default_height=64;
-    model::enable_physics=false;
-    model::enable_rts_controls=true;
-    model::enable_keyboard_controls=false;
-    model::default_texture="SC2siegetank.bmp";
-    model::default_mask="SC2siegetank-mask.bmp";
-    model::default_movement_sound="low_clack.wav";
-    model::default_click_sound="siegetank-yessir.wav";
-    model::default_collision_sound="siegetank-move_it.wav";
-
-    model* rtso1 = new model();
+    advanced_object* rtso1 = new advanced_object();
     rtso1->set_position(window::center.x+96,window::center.y);//set position right of window center
     rtso1->fill_color.set("yellow");
 
-    model* rtso2 = new model();
+    advanced_object* rtso2 = new advanced_object();
     rtso2->set_position(window::center.x,window::center.y-96);//set position below window center
     rtso2->fill_color.set("green");
 
-    model* rtso3 = new model();
+    advanced_object* rtso3 = new advanced_object();
     rtso3->set_position(window::center.x,window::center.y+96);//set position above window center
     rtso3->fill_color.set("red");
 
-    model* rtso4 = new model();
+    advanced_object* rtso4 = new advanced_object();
     rtso4->set_position(window::center.x-96,window::center.y);//set position left of window center
     rtso4->fill_color.set("blue");
 //Initialize Text
-    //Information Overlay Text
     ui::label* object_info = new ui::label();
     object_info->set_spacing(20);
     object_info->set_position(50,window::height-20);
@@ -208,35 +176,13 @@ int main()
     game_info->set_spacing(20);
     game_info->set_position(window::width-200,window::height-20);
 //Initialize Checkboxes
-    ui::checkbox::default_click_sound="click.wav";
-    ui::checkbox::default_hover_sound="swipe.wav";
-    ui::checkbox* mute_all_checkbox = new ui::checkbox();
-    mute_all_checkbox->text.set_text("mute all");
-    mute_all_checkbox->bind_option(game::settings["game"]["mute_all"]);
-
-    ui::checkbox* show_textures_checkbox = new ui::checkbox();
-    show_textures_checkbox->text.set_text("show textures");
-    show_textures_checkbox->bind_option(game::settings["game"]["show_textures"]);
-
-    ui::checkbox* show_foreground_checkbox = new ui::checkbox();
-    show_foreground_checkbox->text.set_text("show foreground");
-    show_foreground_checkbox->bind_option(game::settings["game"]["show_foreground"]);
-
-    ui::checkbox* show_middleground_checkbox = new ui::checkbox();
-    show_middleground_checkbox->set_label("show middleground");
-    show_middleground_checkbox->bind_option(game::settings["game"]["show_middleground"]);
-
-    ui::checkbox* show_background_checkbox = new ui::checkbox();
-    show_background_checkbox->set_label("show background");
-    show_background_checkbox->bind_option(game::settings["game"]["show_background"]);
-
-    ui::checkbox* show_models_checkbox = new ui::checkbox();
-    show_models_checkbox->set_label("show models");
-    show_models_checkbox->bind_option(game::settings["game"]["show_models"]);
+    ui::checkbox::default_clicksound="click.wav";
+    ui::checkbox::default_hoversound="swipe.wav";
 //Initialize Buttons
+    //set some default values
+    ui::button::default_clicksound="click.wav";
+    ui::button::default_hoversound="swipe.wav";
     //Main Menu Buttons
-    ui::button::default_click_sound="click.wav";
-    ui::button::default_hover_sound="swipe.wav";
     ui::button* play_button = new ui::button();
     play_button->set_label("Play");
     play_button->set_action(game::play);
@@ -276,41 +222,93 @@ int main()
     ui::button* cancel_return_button = new ui::button();
     cancel_return_button->set_label("No");
     cancel_return_button->set_action(controls::switch_menu,0);
-    //Game Buttons
-    ui::button* create_model_button = new ui::button();
-    create_model_button->set_label("model");
-    create_model_button->set_action(controls::add_model);
-    create_model_button->set_click_sound("pop.wav");
-
-    ui::button* create_object_button = new ui::button();
-    create_object_button->set_position(window::width*0.9,window::height*0.1);//put the button on the right side, 1/5th of the way up
-    create_object_button->set_label("create object");
-    create_object_button->set_action(controls::create_object);
-    create_object_button->set_click_sound("pop.wav");
-
-    ui::button* delete_object_button = new ui::button();
-    delete_object_button->set_position(window::width*0.9,window::height*0.05);//put the button on the right side, 1/5th of the way up
-    delete_object_button->set_label("delete object");
-    delete_object_button->set_action(controls::delete_selected);
-    delete_object_button->set_click_sound("trash.wav");
-
-    ui::button* menu_button = new ui::button();
-    menu_button->set_position(window::center.x,window::height-20);//put the button at the top middle, just below the top
-    menu_button->set_label("Pause");
-    menu_button->set_action(game::pause);
 
     ui::button* settings_button = new ui::button();
     settings_button->set_label("Settings");
     settings_button->set_action(controls::switch_menu,1);
-
+    //Settings Menu Buttons
     ui::button* leave_settings_button = new ui::button();
     leave_settings_button->set_label("Back");
     leave_settings_button->set_action(controls::switch_menu,0);
+
+    ui::button* music_muted_button = new ui::button();
+    music_muted_button->set_label("muted");
+    music_muted_button->set_action(audio::set_volume,"angrybirds_theme.wav",0);
+
+    ui::button* music_low_button = new ui::button();
+    music_low_button->set_label("low");
+    music_low_button->set_action(audio::set_volume,"angrybirds_theme.wav",25);
+
+    ui::button* music_medium_button = new ui::button();
+    music_medium_button->set_label("medium");
+    music_medium_button->set_action(audio::set_volume,"angrybirds_theme.wav",50);
+
+    ui::button* music_high_button = new ui::button();
+    music_high_button->set_label("high");
+    music_high_button->set_action(audio::set_volume,"angrybirds_theme.wav",75);
+
+    ui::button* ambience_muted_button = new ui::button();
+    ambience_muted_button->set_label("muted");
+    ambience_muted_button->set_action(audio::set_volume,"angrybirds_theme.wav",0);
+
+    ui::button* ambience_low_button = new ui::button();
+    ambience_low_button->set_label("low");
+    ambience_low_button->set_action(audio::set_volume,"angrybirds_theme.wav",25);
+
+    ui::button*ambience_medium_button = new ui::button();
+    ambience_medium_button->set_label("medium");
+    ambience_medium_button->set_action(audio::set_volume,"angrybirds_theme.wav",50);
+
+    ui::button* ambience_high_button = new ui::button();
+    ambience_high_button->set_label("high");
+    ambience_high_button->set_action(audio::set_volume,"angrybirds_theme.wav",75);
+
+    ui::button* sfx_muted_button = new ui::button();
+    sfx_muted_button->set_label("muted");
+    sfx_muted_button->set_action(audio::set_volume,"angrybirds_theme.wav",0);
+
+    ui::button* sfx_low_button = new ui::button();
+    sfx_low_button->set_label("low");
+    sfx_low_button->set_action(audio::set_volume,"angrybirds_theme.wav",25);
+
+    ui::button*sfx_medium_button = new ui::button();
+    sfx_medium_button->set_label("medium");
+    sfx_medium_button->set_action(audio::set_volume,"angrybirds_theme.wav",50);
+
+    ui::button* sfx_high_button = new ui::button();
+    sfx_high_button->set_label("high");
+    sfx_high_button->set_action(audio::set_volume,"angrybirds_theme.wav",75);
+    //Play Scene Buttons
+    ui::button* pause_button = new ui::button();
+    pause_button->set_position(window::center.x,window::height-20);//put the button at the top middle, just below the top
+    pause_button->set_label("Pause");
+    pause_button->set_action(game::pause);
+
+    ui::button* delete_object_button = new ui::button();
+    delete_object_button->set_position(window::width*0.9,window::height*0.05);//put the button on the right side, 1/5th of the way up
+    delete_object_button->set_label("delete object");
+    delete_object_button->set_clicksound("trash.wav");
 //Initialize Menus
-    ui::dropdown_menu* creation_menu = new ui::dropdown_menu();
-    creation_menu->set_position(window::width*0.9,window::height*0.25);
-    creation_menu->set_label("create new...");
-    creation_menu->add_item(create_model_button);
+    ui::dropdown_menu* music_volume_menu = new ui::dropdown_menu();
+    music_volume_menu->set_label("Music Volume");
+    music_volume_menu->add_item(music_muted_button);
+    music_volume_menu->add_item(music_low_button);
+    music_volume_menu->add_item(music_medium_button);
+    music_volume_menu->add_item(music_high_button);
+
+    ui::dropdown_menu* ambience_volume_menu = new ui::dropdown_menu();
+    ambience_volume_menu->set_label("Ambience Volume");
+    ambience_volume_menu->add_item(ambience_muted_button);
+    ambience_volume_menu->add_item(ambience_low_button);
+    ambience_volume_menu->add_item(ambience_medium_button);
+    ambience_volume_menu->add_item(ambience_high_button);
+
+    ui::dropdown_menu* sfx_volume_menu = new ui::dropdown_menu();
+    sfx_volume_menu->set_label("SFX Volume");
+    sfx_volume_menu->add_item(sfx_muted_button);
+    sfx_volume_menu->add_item(sfx_low_button);
+    sfx_volume_menu->add_item(sfx_medium_button);
+    sfx_volume_menu->add_item(sfx_high_button);
 
     ui::menu* main_menu = new ui::menu();
     main_menu->set_title("Main Menu");
@@ -329,14 +327,12 @@ int main()
 
     ui::menu* settings_menu = new ui::menu();
     settings_menu->set_title("Settings");
-    settings_menu->add_item(mute_all_checkbox);
-    settings_menu->add_item(show_textures_checkbox);
-    settings_menu->add_item(show_foreground_checkbox);
-    settings_menu->add_item(show_middleground_checkbox);
-    settings_menu->add_item(show_background_checkbox);
-    settings_menu->add_item(show_models_checkbox);
+    settings_menu->set_layout("horizontal");
+    settings_menu->add_item(music_volume_menu);
+    settings_menu->add_item(ambience_volume_menu);
+    settings_menu->add_item(sfx_volume_menu);
     settings_menu->add_item(leave_settings_button);
-    settings_menu->hide();
+    settings_menu->hide();//we don't want to see this right away
 
     ui::menu* pause_menu = new ui::menu();
     pause_menu->set_title("Paused");
@@ -353,9 +349,26 @@ int main()
     leave_menu->add_item(confirm_return_button);
     leave_menu->add_item(cancel_return_button);
     leave_menu->hide();//we don't want to see this right away
+
+    ui::dropdown_menu* creation_menu = new ui::dropdown_menu();
+    creation_menu->set_position(window::width*0.9,window::height*0.5);
+    creation_menu->set_label("create object...");
+    creation_menu->add_item("basic object",game::add_bso);
+    creation_menu->add_item("complex object",game::add_cpo);
+    creation_menu->add_item("mobile object",game::add_mbo);
+    creation_menu->add_item("smart object",game::add_smo);
+    creation_menu->add_item("interactive object",game::add_iao);
+    creation_menu->add_item("advanced object",game::add_avo);
+    creation_menu->add_item("label",game::add_label);
+    creation_menu->add_item("button",game::add_button);
+    creation_menu->add_item("checkbox",game::add_checkbox);
+    creation_menu->add_item("menu",game::add_menu);
+    creation_menu->add_item("dropdown",game::add_dropdown);
+
+    interactive_object::enable_dragging=true;
 //Initialize Scenes
     scene* home_screen = new scene();
-    home_screen->foreground.fill_color.set(0.25,0.25,0.25);
+    home_screen->add_object(home_screen_background);
     home_screen->add_menu(main_menu);
     home_screen->add_menu(settings_menu);
     home_screen->add_menu(quit_menu);
@@ -365,37 +378,26 @@ int main()
     home_screen->bind_key("left",controls::previous_item);
     home_screen->bind_key("right",controls::next_item);
     home_screen->bind_key('\r',controls::choose_item);
-    game::scenes.push_back(home_screen);//add to scenes
+    game::add_scene(home_screen);
     game::main_scene=home_screen;//make this the main scene
-    game::current_scene=home_screen;//start the game with this screen
+    game::current_scene=home_screen;//start with this scene
 
     scene* game_screen = new scene();
-    game_screen->background.set_dimensions(window::width,window::height);
-    game_screen->background.textured=true;
-    game_screen->background.set_texture("SC2background.bmp");
-    game_screen->middleground.set_dimensions(window::width/4,window::height/3);
-    game_screen->middleground.textured=true;
-    game_screen->middleground.set_texture("portals.bmp");
-    game_screen->foreground.set_position(window::center.x,window::center.y-(window::height/3));
-    game_screen->foreground.set_dimensions(window::width,window::height/3);
-    game_screen->foreground.textured=true;
-    game_screen->foreground.masked=true;
-    game_screen->foreground.set_texture("angrybirds_ground.bmp");
-    game_screen->foreground.set_mask("angrybirds_ground-mask.bmp");
-    game_screen->add_model(dro1);
-    game_screen->add_model(po1);
-    game_screen->add_model(po2);
-    game_screen->add_model(po3);
-    game_screen->add_model(po4);
-    game_screen->add_model(rtso1);
-    game_screen->add_model(rtso2);
-    game_screen->add_model(rtso3);
-    game_screen->add_model(rtso4);
+    game_screen->set_music("angrybirds_theme.wav");
+    game_screen->add_object(play_screen_background);
+    game_screen->add_object(dro1);
+    game_screen->add_object(po1);
+    game_screen->add_object(po2);
+    game_screen->add_object(po3);
+    game_screen->add_object(po4);
+    game_screen->add_object(rtso1);
+    game_screen->add_object(rtso2);
+    game_screen->add_object(rtso3);
+    game_screen->add_object(rtso4);
     game_screen->add_label(object_info);
     game_screen->add_label(game_info);
     game_screen->add_button(delete_object_button);
-    game_screen->add_button(create_object_button);
-    game_screen->add_button(menu_button);
+    game_screen->add_button(pause_button);
     game_screen->add_menu(pause_menu);
     game_screen->add_menu(settings_menu);
     game_screen->add_menu(leave_menu);
@@ -411,10 +413,8 @@ int main()
     game_screen->bind_key("down",controls::next_item);
     game_screen->bind_key("left",controls::previous_item);
     game_screen->bind_key("right",controls::next_item);
-    game_screen->bind_key("insert",controls::create_object);
-    game_screen->bind_key(127,controls::delete_selected);//127 is the delete key
     game_screen->bind_key(27, game::pause);//27 is the 'esc' key
     game::play_scene=game_screen;
-    game::scenes.push_back(game_screen);//add to scenes
+    game::add_scene(game_screen);
     game::initialize();//start the game
 }

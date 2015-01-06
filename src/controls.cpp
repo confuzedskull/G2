@@ -1,18 +1,18 @@
-/*  This file is a part of 2DWorld - The Generic 2D Game Engine
+/*  This file is a part of G2 - The Generic 2D Game Engine
     Copyright (C) 2014  James Nakano
 
-    2DWorld is free software: you can redistribute it and/or modify
+    G2 is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    2DWorld is distributed in the hope that it will be useful,
+    G2 is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
+    along with the rest of G2.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "controls.h"
 #include "cursor.h"
@@ -30,8 +30,8 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #endif
-#include <math.h>
-#include <string.h>
+#include <cmath>
+#include <cstring>
 #include <iostream>
 
 //initialize variables
@@ -44,80 +44,62 @@ std::map<std::string,bool> controls::special_states;
 
 void controls::move_forward()
 {
-    if(game::play_scene->current_model->keyboard_controls && game::state!=PAUSED)
-        game::play_scene->models[cursor::selected_object]->move_forward();
+    if(game::play_scene->player->keyboard_controls && game::state!=PAUSED)
+        game::play_scene->player->move_forward();
 }
 
 void controls::move_back()
 {
-    if(game::play_scene->current_model->keyboard_controls && game::state!=PAUSED)
-        game::play_scene->models[cursor::selected_object]->move_back();
+    if(game::play_scene->player->keyboard_controls && game::state!=PAUSED)
+        game::play_scene->player->move_back();
 }
 
 void controls::move_left()
 {
-    if(game::play_scene->current_model->keyboard_controls && game::state!=PAUSED)
-        game::play_scene->models[cursor::selected_object]->move_left();
+    if(game::play_scene->player->keyboard_controls && game::state!=PAUSED)
+        game::play_scene->player->move_left();
 }
 
 void controls::move_right()
 {
-    if(game::play_scene->current_model->keyboard_controls && game::state!=PAUSED)
-        game::play_scene->models[cursor::selected_object]->move_right();
+    if(game::play_scene->player->keyboard_controls && game::state!=PAUSED)
+        game::play_scene->player->move_right();
 }
 
 void controls::turn_left()
 {
-    if(game::play_scene->current_model->keyboard_controls && game::state!=PAUSED)
-        game::play_scene->models[cursor::selected_object]->turn_left();
+    if(game::play_scene->player->keyboard_controls && game::state!=PAUSED)
+        game::play_scene->player->turn_left();
 }
 
 void controls::turn_right()
 {
-    if(game::play_scene->current_model->keyboard_controls && game::state!=PAUSED)
-        game::play_scene->models[cursor::selected_object]->turn_right();
+    if(game::play_scene->player->keyboard_controls && game::state!=PAUSED)
+        game::play_scene->player->turn_right();
 }
 
 void controls::next_item()
 {
-    ui::menu* current_menu = game::current_scene->current_menu;
-    int i = current_menu->item_selected();
-    if(i==-1)
-        current_menu->items.front()->selected=true;
-    else
-    {
-        current_menu->items[i]->selected=false;
-        if((i+1)<current_menu->items.size())//close to end
-            current_menu->items[i+1]->selected=true;
-        else
-            current_menu->items.front()->selected=true;
-    }
+    cursor::passive.x=(int)game::current_scene->current_menu->next_item->get_x();
+    cursor::passive.y=(int)game::current_scene->current_menu->next_item->get_y();
 }
 
 void controls::previous_item()
 {
-    ui::menu* current_menu = game::current_scene->current_menu;
-    int i = current_menu->item_selected();
-    if(i==-1)
-        current_menu->items.front()->selected=true;
-    else
-    {
-        current_menu->items[i]->selected=false;
-        if((i-1)>=0)
-            current_menu->items[i-1]->selected=true;
-        else
-            current_menu->items.back()->selected=true;
-    }
+    cursor::passive.x=(int)game::current_scene->current_menu->previous_item->get_x();
+    cursor::passive.y=(int)game::current_scene->current_menu->previous_item->get_y();
 }
 
 void controls::choose_item()
 {
-    if(game::current_scene->current_menu->item_selected()!=-1)
-    {
-        cursor::left_clicking=true;
-        cursor::left_down.x=(int)game::current_scene->current_menu->current_item->get_x();
-        cursor::left_down.y=(int)game::current_scene->current_menu->current_item->get_y();
-    }
+    cursor::left_clicking=true;
+    cursor::left_down.x=(int)game::current_scene->current_menu->current_item->get_x();
+    cursor::left_down.y=(int)game::current_scene->current_menu->current_item->get_y();
+}
+
+void controls::hide_menu(int index)
+{
+    game::current_scene->menus[index]->hide();
 }
 
 void controls::switch_menu(int index)
@@ -135,7 +117,6 @@ void controls::switch_scene(int index)
     if(index>=0 && index<game::scenes.size())
     {
         cursor::reset();
-        game::scenes[index]->switch_menu(0);
         game::current_scene=game::scenes[index];
     }
     else
@@ -145,93 +126,7 @@ void controls::switch_scene(int index)
 void controls::switch_scene(scene* new_scene)
 {
     cursor::reset();
-    new_scene->switch_menu(0);
     game::current_scene=new_scene;
-}
-
-
-void controls::show_foreground()
-{
-    game::play_scene->foreground.show();
-}
-void controls::hide_foreground()
-{
-    game::play_scene->foreground.hide();
-}
-
-void controls::show_middleground()
-{
-    game::play_scene->middleground.show();
-}
-
-void controls::hide_middleground()
-{
-    game::play_scene->middleground.hide();
-}
-
-void controls::show_background()
-{
-    game::play_scene->background.show();
-}
-
-void controls::hide_background()
-{
-    game::play_scene->background.hide();
-}
-
-void controls::show_models()
-{
-    game::play_scene->show_models();
-}
-
-void controls::hide_models()
-{
-    game::play_scene->hide_models();
-}
-
-void controls::show_textures()
-{
-    game::play_scene->show_textures();
-}
-
-void controls::hide_textures()
-{
-    game::play_scene->hide_textures();
-}
-
-void controls::mute_all()
-{
-    game::play_scene->mute_all();
-}
-
-void controls::unmute_all()
-{
-    game::play_scene->unmute_all();
-}
-
-void controls::add_model()
-{
-    game::play_scene->add_model(new model());
-}
-
-void controls::create_object()
-{
-    if(game::play_scene->last_object->get_type()=="model")
-        game::play_scene->add_model(new model());
-}
-
-void controls::delete_selected()
-{
-    for(auto so:cursor::selected_objects)
-    {
-        if(game::play_scene->models.find(so.first)!=game::play_scene->models.end())
-        {
-            std::clog<<"object#"<<so.second->get_number()<<"(model)"<<" deleted."<<std::endl;
-            delete game::play_scene->models[so.first];
-            game::play_scene->models.erase(so.first);
-        }
-    }
-    cursor::selected_objects.clear();
 }
 
 void controls::mouse_click(int button, int state, int x, int y)

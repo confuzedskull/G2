@@ -1,18 +1,18 @@
-/*  This file is a part of 2DWorld - The Generic 2D Game Engine
+/*  This file is a part of G2 - The Generic 2D Game Engine
     Copyright (C) 2014  James Nakano
 
-    2DWorld is free software: you can redistribute it and/or modify
+    G2 is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    2DWorld is distributed in the hope that it will be useful,
+    G2 is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
+    along with the rest of G2.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "cursor.h"
 #include "window.h"
@@ -38,15 +38,15 @@ point2i cursor::right_drag = point2i(0.0,0.0);
 point2i cursor::passive = point2i(0.0,0.0);
 point2i cursor::left_down = point2i(0.0,0.0);
 point2i cursor::right_down = point2i(0.0,0.0);
-clickable_object* cursor::left_clicked_object = new clickable_object();
-clickable_object* cursor::right_clicked_object = new clickable_object();
+interactive_object* cursor::left_clicked_object = new interactive_object();
+interactive_object* cursor::right_clicked_object = new interactive_object();
 bool cursor::left_clicking = false;
 bool cursor::right_clicking = false;
 bool cursor::highlighting = false;
 bool cursor::highlighting_enabled = false;
 bool cursor::left_dragging = false;
 bool cursor::right_dragging = false;
-std::map<int,clickable_object*> cursor::selected_objects;
+std::map<int,interactive_object*> cursor::selected_objects;
 int cursor::xmax = 0;
 int cursor::xmin = 0;
 int cursor::ymax = 0;
@@ -97,8 +97,8 @@ void cursor::reset()
     right_up.set(0,0);
     left_drag.set(0,0);
     right_drag.set(0,0);
-    left_clicked_object = new clickable_object();
-    right_clicked_object = new clickable_object();
+    left_clicked_object = new interactive_object();
+    right_clicked_object = new interactive_object();
     left_clicking = false;
     right_clicking = false;
     left_dragging = false;

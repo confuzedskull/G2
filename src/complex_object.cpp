@@ -1,21 +1,24 @@
-/*  This file is a part of 2DWorld - The Generic 2D Game Engine
+/*  This file is a part of G2 - The Generic 2D Game Engine
     Copyright (C) 2014  James Nakano
 
-    2DWorld is free software: you can redistribute it and/or modify
+    G2 is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    2DWorld is distributed in the hope that it will be useful,
+    G2 is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
+    along with the rest of G2.  If not, see <http://www.gnu.org/licenses/>.*/
+
 #include "complex_object.h"
 #include "utilities.h"
 #include <math.h>
+#include <sstream>
+#include <fstream>
 #include <iostream>
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
@@ -113,6 +116,83 @@ void complex_object::render()
         mark_selected();
         glPopMatrix();//reset transformation matrix
     }
+}
+
+void complex_object::save()
+{
+    std::stringstream filename;
+    filename<<"./data/objects/object#"<<number<<".cpo";
+    std::ofstream object_file(filename.str());
+    if(object_file.bad())
+    {
+        std::cerr<<"bad file name\n";
+        return;
+    }
+    object_file.precision(3);
+    object_file.setf(std::ios::fixed);
+    //save basic object properties
+    object_file<<position.x<<' '<<position.y<<std::endl;
+    object_file<<rotation<<std::endl;
+    object_file<<width<<' '<<height<<std::endl;
+    object_file<<fill_color.str()<<std::endl;
+    object_file<<marker_color.str()<<std::endl;
+    object_file<<border_color.str()<<std::endl;
+    object_file<<filled<<std::endl;
+    object_file<<bordered<<std::endl;
+    object_file<<textured<<std::endl;
+    object_file<<masked<<std::endl;
+    object_file<<visible<<std::endl;
+    object_file<<selected<<std::endl;
+    object_file<<muted<<std::endl;
+    object_file<<texture<<std::endl;
+    object_file<<mask<<std::endl;
+    for(auto p:properties)
+        object_file<<p.first<<' '<<p.second<<std::endl;
+    object_file<<std::endl;
+    object_file.close();
+    std::clog<<"object#"<<number<<"(complex object)"<<" saved.\n";
+}
+
+void complex_object::load()
+{
+    std::ifstream object_file(file_name);//access file by name
+    if(object_file.bad())//make sure the file is there
+    {
+        std::cerr<<"bad file name\n";
+        return;
+    }
+    object_file.precision(3);
+    object_file.setf(std::ios::fixed);
+    //load basic object properties
+    object_file>>position.x>>position.y;
+    object_file>>rotation;
+    object_file>>width>>height;
+    object_file>>fill_color.r>>fill_color.g>>fill_color.b;
+    object_file>>marker_color.r>>marker_color.g>>marker_color.b;
+    object_file>>border_color.r>>border_color.g>>border_color.b;
+    object_file>>filled;
+    object_file>>bordered;
+    object_file>>textured;
+    object_file>>masked;
+    object_file>>visible;
+    object_file>>selected;
+    object_file>>muted;
+    object_file>>texture;
+    object_file>>mask;
+    char first_char=' ';
+     //load custom properties
+    while(first_char>0)//not newline or out of bounds
+    {
+        std::string name;
+        int value;
+        object_file.get();//eat the null character
+        first_char=object_file.peek();//check the first character of the line
+        if(first_char=='\n')
+            break;
+        object_file>>name>>value;
+        add_property(name,value);
+    }
+    std::clog<<"object#"<<number<<"(complex object)"<<" loaded.\n";
 }
 
 complex_object::complex_object()

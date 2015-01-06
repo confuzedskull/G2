@@ -1,15 +1,15 @@
-/*  This file is a part of 2DWorld - The Generic 2D Game Engine
+/*  This file is a part of G2 - The Generic 2D Game Engine
     Copyright (C) 2014  James Nakano
-    2DWorld is free software: you can redistribute it and/or modify
+    G2 is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    2DWorld is distributed in the hope that it will be useful,
+    G2 is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
-    along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
+    along with the rest of G2.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "utilities.h"
 #include <cmath>
@@ -75,4 +75,24 @@ float utilities::distance(point2i A, point2f B)
 float utilities::distance(point2f A, point2i B)
 {
     return (sqrt(pow((B.x - A.x),2) + pow((B.y - A.y),2)));
+}
+
+void utilities::increment(int* value)
+{
+    *value++;
+}
+
+void utilities::increment(float* value)
+{
+    *value+=0.1f;
+}
+
+void utilities::decrement(int* value)
+{
+    *value--;
+}
+
+void utilities::decrement(float* value)
+{
+    *value-=0.1f;
 }

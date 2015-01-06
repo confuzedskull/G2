@@ -1,18 +1,18 @@
-/*  This file is a part of 2DWorld - The Generic 2D Game Engine
+/*  This file is a part of G2 - The Generic 2D Game Engine
     Copyright (C) 2014  James Nakano
 
-    2DWorld is free software: you can redistribute it and/or modify
+    G2 is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    2DWorld is distributed in the hope that it will be useful,
+    G2 is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
+    along with the rest of G2.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #ifndef CURSOR_H
 #define CURSOR_H
@@ -34,15 +34,15 @@ public:
     static point2i right_down;
     static point2i right_up;
     static point2i right_drag;
-    static clickable_object* left_clicked_object;
-    static clickable_object* right_clicked_object;
+    static interactive_object* left_clicked_object;
+    static interactive_object* right_clicked_object;
     static bool left_clicking;
     static bool left_dragging;
     static bool right_clicking;
     static bool right_dragging;
     static bool highlighting;
     static bool highlighting_enabled;
-    static std::map<int,clickable_object*> selected_objects;
+    static std::map<int,interactive_object*> selected_objects;
     static int xmin,xmax,ymin,ymax;
     static int selected_object;
     static int objects_selected();

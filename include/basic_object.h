@@ -1,18 +1,18 @@
-/*  This file is a part of 2DWorld - The Generic 2D Game Engine
+/*  This file is a part of G2 - The Generic 2D Game Engine
     Copyright (C) 2014  James Nakano
 
-    2DWorld is free software: you can redistribute it and/or modify
+    G2 is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    2DWorld is distributed in the hope that it will be useful,
+    G2 is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
+    along with the rest of G2.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #ifndef BASICOBJECT_H
 #define BASICOBJECT_H
@@ -44,6 +44,8 @@ public:
     virtual void render();//draws the object
     virtual void update();//update CPU-regulated functions
     virtual void sync();//update clock-regulated functions
+    virtual void save();//save object data to file
+    virtual void load();//load object data from file
     virtual void mark_selected();//visually indicate that the object is selected
     virtual void rotate(float angle);//increments the object's rotation by the given angle
     virtual void set_rotation(float angle);//changes the object's rotation to the given angle
@@ -75,12 +77,12 @@ public:
     void unmute();//make the object audible
     void render_border();//draw the border
     void render_texture();//apply the texture
-    void add_property(std::string name, int value);
     void set_position(int x, int y);
     void set_dimensions(int w, int h);
     void set_texture(std::string filename);
     void set_mask(std::string filename);
     void set_property(std::string name, int value);
+    void add_property(std::string name, int value);
     basic_object();
     basic_object(int x, int y, int w, int h);
     basic_object(int x, int y, int w, int h, color c);

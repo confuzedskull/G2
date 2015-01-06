@@ -1,15 +1,15 @@
-/*  This file is a part of 2DWorld - The Generic 2D Game Engine
+/*  This file is a part of G2 - The Generic 2D Game Engine
     Copyright (C) 2014  James Nakano
-    2DWorld is free software: you can redistribute it and/or modify
+    G2 is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    2DWorld is distributed in the hope that it will be useful,
+    G2 is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
-    along with the rest of 2DWorld.  If not, see <http://www.gnu.org/licenses/>.*/
+    along with the rest of G2.  If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "game.h"
 #include "window.h"
@@ -32,7 +32,67 @@ scene* game::main_scene = new scene();
 scene* game::play_scene = new scene();
 std::vector<scene*> game::scenes;
 std::map<std::string, game::setting> game::settings;
-std::map<std::string, game::rule> game::rules;
+
+void game::add_bso()
+{
+    current_scene->add_object(new basic_object());
+}
+
+void game::add_cpo()
+{
+    current_scene->add_object(new complex_object());
+}
+
+void game::add_mbo()
+{
+    current_scene->add_object(new mobile_object());
+}
+
+void game::add_smo()
+{
+    current_scene->add_object(new smart_object());
+}
+
+void game::add_iao()
+{
+    current_scene->add_object(new interactive_object());
+}
+
+void game::add_avo()
+{
+    current_scene->add_object(new advanced_object());
+}
+
+void game::add_label()
+{
+    current_scene->add_label(new ui::label());
+}
+
+void game::add_button()
+{
+    current_scene->add_button(new ui::button());
+}
+
+void game::add_checkbox()
+{
+    current_scene->add_checkbox(new ui::checkbox());
+}
+
+void game::add_menu()
+{
+    current_scene->add_menu(new ui::menu());
+}
+
+void game::add_dropdown()
+{
+    current_scene->add_dropdown(new ui::dropdown_menu());
+}
+
+
+void game::add_scene(scene* scn)
+{
+    scenes.push_back(scn);
+}
 
 void game::add_setting(std::string section, std::string property, int value)
 {
@@ -49,11 +109,6 @@ void game::add_setting(std::string section, std::string property, int value)
 void game::add_setting(std::string section, std::string property, int* variable)
 {
     settings[section][property]=variable;
-}
-
-void game::add_rule(std::string section, std::string property, int value, void (*action)())
-{
-    rules[section][property][value]=action;
 }
 
 void game::load_settings()
@@ -106,14 +161,14 @@ void game::save_settings()
 //NOTE: This function uses C++11 "for" loops
 void game::collision_detection()
 {
-    for(auto a:current_scene->models)//iterate through rts objects comparing
+    for(auto a:current_scene->advanced_objects)//iterate through rts objects comparing
     {
-        for(auto b:current_scene->models)//iterate through rts objects being compared
+        for(auto b:current_scene->advanced_objects)//iterate through rts objects being compared
         {
-            if(a.first!=b.first && a.second->within_range(*b.second))//make sure compared objects are different and close to each other
+            if(a->get_number()!=b->get_number() && a->within_range(*b))//make sure compared objects are different and close to each other
             {
-                a.second->identify_touched(*b.second);
-                a.second->repel(*b.second);
+                a->identify_touched(*b);
+                a->repel(*b);
             }
         }
     }
@@ -156,8 +211,6 @@ void game::play()
         state=PLAYING;
         cursor::reset();
         cursor::highlighting_enabled=true;
-        play_scene->enable_all();
-        play_scene->hide_menus();
         current_scene=play_scene;//open game screen
         std::clog<<"game started.\n";
     }
@@ -171,10 +224,6 @@ void game::pause()
         cursor::highlighting_enabled=false;
         audio::pause_all();
         controls::switch_menu(0);
-        play_scene->disable_models();
-        play_scene->disable_buttons();
-        play_scene->disable_checkboxes();
-        play_scene->disable_dropdown_menus();
         std::clog<<"game paused.\n";
     }
 }
@@ -183,10 +232,8 @@ void game::resume()
 {
     state=PLAYING;
     cursor::highlighting_enabled=true;
-    play_scene->enable_all();
-    play_scene->menus[0]->hide();//hide pause menu
-    play_scene->menus[1]->hide();//hide warning menu
-    play_scene->current_menu=play_scene->dropdown_menus[0];//set the creation menu as current
+    controls::switch_menu(0);
+    controls::hide_menu(0);
     std::clog<<"game resumed.\n";
 }
 
@@ -196,6 +243,18 @@ void game::load()
     state=LOADING;
     time=0.0;
     time_elapsed=0.0;
+    std::ifstream game_file("./data/game.dat");
+    std::string filename;
+    while(std::getline(game_file,filename))
+    {
+        filename="./data/scenes/"+filename;
+        scene* s = new scene();
+        s->file_name=filename;
+        s->load();
+        scenes.push_back(s);
+        filename.clear();
+    }
+    game_file.close();
     play_scene->load();
     std::clog<<"game loaded.\n";
     play();
@@ -205,7 +264,14 @@ void game::save()
 {
     std::clog<<"saving game...\n";
     state=SAVING;
-    play_scene->save();
+    std::ofstream game_file("./data/game.dat");
+    for(auto s:scenes)
+    {
+        game_file.open("./data/game.dat",std::fstream::app);//the file is already open so we need to append
+        game_file<<s->file_name<<std::endl;
+        game_file.close();
+        s->save();
+    }
     std::clog<<"game saved.\n";
 }
 
@@ -227,24 +293,6 @@ void game::update()
         collision_detection();//apply collision effects
     }
     current_scene->update();//update scene
-    //process settings
-    for(auto sect:settings)//iterate through sections
-    {
-        for(auto sett:sect.second)//iterate through settings
-        {
-            if(rules.find(sect.first)!=rules.end())//section exists
-            {
-                if(rules[sect.first].find(sett.first)!=rules[sect.first].end())//matching rule exists
-                {
-                    for(auto val:rules[sect.first][sett.first])//iterate through the rules
-                    {
-                        if(*sett.second == val.first)//setting value matches rule value
-                            val.second();//perform associated action
-                    }
-                }
-            }
-        }
-    }
 }
 
 void game::quit()

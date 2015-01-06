@@ -1,48 +1,19 @@
-680.000 120.000
-0.000
-1360 240
-0.5 0.5 0.5
-0 0 0
-0 0 0
-1
-0
-1
-1
-0
-0
-angrybirds_ground.bmp
-680.000 360.000
-0.000
-340 240
-0.25 0.25 0.25
-0 0 0
-0 0 0
-1
-0
-1
-1
-0
-0
-portals.bmp
-680.000 360.000
-0.000
-1360 720
-0 0 0
-0 0 0
-0 0 0
-1
-0
-1
-1
-0
-0
-SC2background.bmp
-object#12.mdl
-object#13.mdl
-object#14.mdl
-object#15.mdl
-object#16.mdl
-object#17.mdl
-object#18.mdl
-object#19.mdl
-object#20.mdl
+angrybirds_theme.wav
+
+object#5.avo
+object#6.avo
+object#7.avo
+object#8.avo
+object#9.avo
+object#10.avo
+object#11.avo
+object#12.avo
+object#13.avo
+object#14.lbl
+object#15.lbl
+object#66.btn
+object#64.btn
+object#89.mnu
+object#86.mnu
+object#92.mnu
+object#95.mnu
